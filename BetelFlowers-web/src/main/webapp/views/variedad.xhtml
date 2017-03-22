@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registar Variedad">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="idSespe" value="Especie:"/>
+                    <p:selectOneMenu id="idSespe" required="true" style="width: 85%" 
+                                     value="#{variedadBean.nuevo.especie.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue=""
+                                      noSelectionOption="false"/>
+                        <f:selectItems value="#{especieBean.especies}" var="especie" 
+                                       itemLabel="#{especie.nombre}" itemValue="#{especie.codigo}" />
+                    </p:selectOneMenu>
+                    <p:message for="idSespe" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="nomVari" value="Nombre"/>
+                    <p:inputText id="nomVari" required="true" style="width: 100%" 
+                                 value="#{variedadBean.nuevo.nombre}"/>
+                    <p:message for="nomVari" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="colorVari" value="Color:"/>
+                    <p:colorPicker id="colorVari" required="true" value="#{variedadBean.nuevo.color}" /> 
+                    <p:message for="colorVari" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="tmpVida" value="Dias de vida:"/>
+                    <p:spinner id="tmpVida" required="true" value="#{variedadBean.nuevo.tiempoVida}"
+                               min="1" max="30"/>
+                    <p:message for="tmpVida" display="tooltip" severity="error"/>
+
+                    <p:outputLabel value="Foto:"/>
+                    <p:commandButton value="Agregar"
+                                     oncomplete="PF('dlgFoto').show()"/>
+                    <p:outputLabel value=""/>
+                    <p:graphicImage id="imgM" value="#{variedadBean.nuevo.urlFoto}"
+                                    width="80px" height="80px" alt="Betel"/>
+
+                </h:panelGrid>
+
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fvari:dtvari, :fadd:messages" 
+                                     actionListener="#{variedadBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>  
+        <h:form id="fvari">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtvari" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{variedadBean.variedades}"
+                             var="variedad">
+
+                    <f:facet name="header">
+                        <h:outputText value="Variedades"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{variedad.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                               timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Foto" style="text-align: center">
+                        <p:graphicImage value="#{variedad.urlFoto}"
+                                        width="80px" height="80px"/>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{variedad.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Nombre" style="text-align: center">
+                        <h:outputText value="#{variedad.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Color" style="text-align: center">
+                        <h:commandButton value=" " disabled="true" 
+                                         style="background-color: #{variedad.color}"/>
+                    </p:column>
+                    <p:column headerText="Dias de Vida" style="text-align: center">
+                        <h:outputText value="#{variedad.tiempoVida}"/>
+                    </p:column>
+                    <p:column headerText="Especie" style="text-align: center">
+                        <h:outputText value="#{variedad.especie.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center">
+                        <h:outputText value="#{variedad.username}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center">
+                        <p:commandButton value="Editar" update=":fedit:editVari, :fadd:messages"
+                                         oncomplete="PF('dlgModifyVari').show()">
+                            <f:setPropertyActionListener value="#{variedad}" target="#{variedadBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteVari, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteVari').show()">
+                            <f:setPropertyActionListener value="#{variedad}" target="#{variedadBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Variedad" widgetVar="dlgModifyVari" resizable="false" modal="true">
+                <p:outputPanel id="editVari">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <h:panelGrid columns="6" cellpadding="5">
+                            <p:outputLabel for="idmSespe" value="Especie:"/>
+                            <p:selectOneMenu id="idmSespe" style="width: 85%" 
+                                             value="#{variedadBean.selected.especie.codigo}">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{especieBean.especies}" var="espe" 
+                                               itemLabel="#{espe.nombre}" itemValue="#{espe.codigo}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value=""/>
+
+                            <p:outputLabel for="nomVari" value="Nombre" />
+                            <p:inputText id="nomVari" required="true" style="width: 100%" 
+                                         value="#{variedadBean.selected.nombre}"/>
+                            <p:message for="nomVari" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="colorVari" value="Color:"/>
+                            <p:colorPicker id="colorVari" required="true" value="#{variedadBean.selected.color}" /> 
+                            <p:message for="colorVari" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="tmpVida" value="Dias de vida:"/>
+                            <p:spinner id="tmpVida" required="true" value="#{variedadBean.selected.tiempoVida}"
+                                       min="1" max="30"/>
+                            <p:message for="tmpVida" display="tooltip" severity="error"/>
+
+                            <p:outputLabel value="Foto:"/>
+                            <p:commandButton value="Agregar"
+                                             oncomplete="PF('dlguFoto').show()"/>
+                        </h:panelGrid>
+                        <p:graphicImage id="imgM" value="#{variedadBean.selected.urlFoto}"
+                                        width="80px" height="80px"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd, :fadd:messages, :fvari:dtvari" 
+                                     actionListener="#{variedadBean.modify(evt)}"/>
+
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Variedad" widgetVar="dlgDeleteVari" resizable="false" modal="true">
+                <p:outputPanel id="deleteVari">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Fecha:"/>
+                            <p:outputLabel value="#{variedadBean.selected.lastChange}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                                   timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </p:outputLabel>
+
+                            <p:outputLabel value="Nombre:"/>
+                            <p:outputLabel value="#{variedadBean.selected.nombre}"/>
+
+                            <p:outputLabel value="Color:"/>
+                            <h:commandButton value=" " disabled="true" 
+                                             style="background-color: #{variedadBean.selected.color}"/>
+
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{variedadBean.selected.codigo}"/>
+
+                            <p:outputLabel value="Username:"/>
+                            <p:outputLabel value="#{variedadBean.selected.username}"/>
+                        </h:panelGrid>
+                        <p:graphicImage value="#{variedadBean.selected.urlFoto}"
+                                        width="80px" height="80px"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd, :fadd:messages, :fvari:dtvari" 
+                                     actionListener="#{variedadBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="imgSave">
+            <p:dialog widgetVar="dlgFoto" header="Añadir Imagen" minHeight="40" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false">
+                <h:panelGrid columns="2" cellpadding="6">
+                    <h:outputLabel value="Imagen:"/>
+                    <p:fileUpload fileUploadListener="#{variedadBean.handleSaveFoto}" mode="advanced" label="Cargar"
+                                  update=":imgSave:messages" auto="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                </h:panelGrid>  
+                <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" update=":imgSave, :fadd:imgM" /> 
+                </f:facet> 
+            </p:dialog>
+        </h:form>
+        <h:form id="imgUpdate">
+            <p:dialog widgetVar="dlguFoto" header="Añadir Imagen" minHeight="40" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false">
+                <h:panelGrid columns="2" cellpadding="6">
+                    <h:outputLabel value="Imagen:"/>
+                    <p:fileUpload fileUploadListener="#{variedadBean.handleUpdateFoto}" mode="advanced" label="Cargar"
+                                  update=":imgUpdate:messages" auto="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                </h:panelGrid>  
+                <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" update=":imgUpdate, :fedit:imgM" /> 
+                </f:facet> 
+            </p:dialog>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

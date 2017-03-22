@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:dataTable id="dtvari" var="variedad" 
+                         value="#{detalleVariedadBean.variedades}" 
+                         selectionMode="single"
+                         selection="#{detalleVariedadBean.selected}" 
+                         rowKey="#{variedad.codigo}">
+
+                <p:ajax event="rowSelect" listener="#{detalleVariedadBean.onRowSelect}" update=":fdetail:outDetail"/>
+
+                <f:facet name="header">
+                    <h:outputText value="Variedades"/>
+                </f:facet>
+                <p:column headerText="Fecha" style="text-align: center">
+                    <h:outputText value="#{variedad.lastChange}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                           timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Codigo" style="text-align: center">
+                    <h:outputText value="#{variedad.codigo}"/>
+                </p:column>
+                <p:column headerText="Foto" style="text-align: center">
+                    <p:graphicImage value="#{variedad.urlFoto}"
+                                    width="80px" height="80px"/>
+                </p:column>
+                <p:column headerText="Nombre" style="text-align: center">
+                    <h:outputText value="#{variedad.nombre}"/>
+                </p:column>
+                <p:column headerText="Color" style="text-align: center">
+                    <h:commandButton value=" " disabled="true" 
+                                     style="background-color: #{variedad.color}"/>
+                </p:column>
+                <p:column headerText="Usuario" style="text-align: center">
+                    <h:outputText value="#{variedad.username}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form id="fdetail">
+            <p:panel header="Caracteristicas de Variedad">
+                <p:outputPanel id="outDetail">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:panelGrid>
+                            <p:graphicImage name="img/flor.png" alt="Betel"
+                                            rendered="#{detalleVariedadBean.activeTab}"
+                                            width="80px" height="80px"/>
+                            <p:graphicImage value="#{detalleVariedadBean.selected.urlFoto}" 
+                                            rendered="#{not empty detalleVariedadBean.selected}" alt="Betel"
+                                            width="80px" height="80px"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:outputText value="Especie:"/>
+                            <h:outputText value="#{detalleVariedadBean.selected.especie.nombre}"/>
+
+                            <h:outputText value="Variedad:"/>
+                            <h:outputText value="#{detalleVariedadBean.selected.nombre}"/>
+
+                            <h:outputText value="Codigo:"/>
+                            <h:outputText value="#{detalleVariedadBean.selected.codigo}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:tabView orientation="left">
+                        <p:tab title="Puntos de Corte">
+                            <p:dataTable id="dtpc" var="pc" rows="5"
+                                         paginator="true"
+                                         paginatorPosition="Bottom"
+                                         value="#{detalleVariedadBean.selected.puntosCorte}">
+
+                                <f:facet name="header">
+                                    <h:outputText value="Detalle"/>    
+                                </f:facet>
+                                <p:column headerText="Descripcion" style="text-align: center; width: auto">
+                                    <h:outputText value="#{pc}"/>
+                                </p:column>
+                                <p:column headerText="Modificar" style="width:auto; text-align: center">
+                                    <p:commandButton value="Editar" update=":modyTxt:outTxt, :modyTxt:btnIn, :modyTxt:btnUp, :modyTxt:btnDel" 
+                                                     style="width: auto" oncomplete="PF('dlgModyTxt').show()"
+                                                     actionListener="#{detalleVariedadBean.puntoCorte.modifyState()}">
+                                        <f:setPropertyActionListener value="#{pc}" 
+                                                                     target="#{detalleVariedadBean.puntoCorte.nuevo}"/>
+                                        <f:setPropertyActionListener value="#{pc}" 
+                                                                     target="#{detalleVariedadBean.puntoCorte.selected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Nuevo" disabled="#{detalleVariedadBean.activeTab}"
+                                                     update=":modyTxt:outTxt, :modyTxt:btnIn, :modyTxt:btnUp, :modyTxt:btnDel"
+                                                     oncomplete="PF('dlgModyTxt').show()"/>
+                                </f:facet>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Longitud / Grado">
+                            <p:dataTable id="dtlo" var="lo" rows="5"
+                                         paginator="true"
+                                         paginatorPosition="Bottom"
+                                         value="#{detalleVariedadBean.selected.longitudes}">
+
+                                <f:facet name="header">
+                                    <h:outputText value="Detalle"/>    
+                                </f:facet>
+                                <p:column headerText="Tamaño" style="text-align: center; width: auto">
+                                    <h:outputText value="#{lo}"/>
+                                </p:column>
+                                <p:column headerText="Modificar" style="width:auto; text-align: center">
+                                    <p:commandButton value="Editar" update=":modyNumL, :modyNumL:btnIn, :modyNumL:btnUp, :modyNumL:btnDel" 
+                                                     style="width: auto" oncomplete="PF('dlgModyNumL').show()"
+                                                     actionListener="#{detalleVariedadBean.longitud.modifyState()}">
+                                        <f:setPropertyActionListener value="#{lo}" 
+                                                                     target="#{detalleVariedadBean.longitud.nuevo}"/>
+                                        <f:setPropertyActionListener value="#{lo}" 
+                                                                     target="#{detalleVariedadBean.longitud.selected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Nuevo" disabled="#{detalleVariedadBean.activeTab}"
+                                                     update=":modyNumL:outTxt, :modyNumL:btnIn, :modyNumL:btnUp, :modyNumL:btnDel"
+                                                     oncomplete="PF('dlgModyNumL').show()"/>
+                                </f:facet>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Ramos">
+                            <p:dataTable id="dtrm" var="rm" rows="5"
+                                         paginator="true"
+                                         paginatorPosition="Bottom"
+                                         value="#{detalleVariedadBean.selected.ramos}">
+
+                                <f:facet name="header">
+                                    <h:outputText value="Detalle"/>    
+                                </f:facet>
+                                <p:column headerText="Numero de Tallos" style="text-align: center; width: auto">
+                                    <h:outputText value="#{rm}"/>
+                                </p:column>
+                                <p:column headerText="Modificar" style="width:auto; text-align: center">
+                                    <p:commandButton value="Editar" update=":modyNumR, :modyNumR:btnIn, :modyNumR:btnUp, :modyNumR:btnDel" 
+                                                     style="width: auto" oncomplete="PF('dlgModyNumR').show()"
+                                                     actionListener="#{detalleVariedadBean.ramo.modifyState()}">
+                                        <f:setPropertyActionListener value="#{rm}" 
+                                                                     target="#{detalleVariedadBean.ramo.nuevo}"/>
+                                        <f:setPropertyActionListener value="#{rm}" 
+                                                                     target="#{detalleVariedadBean.ramo.selected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Nuevo" disabled="#{detalleVariedadBean.activeTab}"
+                                                     update=":modyNumR:outTxt, :modyNumR:btnIn, :modyNumR:btnUp, :modyNumR:btnDel"
+                                                     oncomplete="PF('dlgModyNumR').show()"/>
+                                </f:facet>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+                </p:outputPanel>
+            </p:panel>
+        </h:form>
+        <h:form id="modyTxt">
+            <p:dialog header="Punto de Corte" widgetVar="dlgModyTxt" width="400" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                <p:outputLabel id="outTxt">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="txt" value="Descripcion:"/>
+                        <p:inputText id="txt" value="#{detalleVariedadBean.puntoCorte.nuevo}"/>
+                    </h:panelGrid>
+                </p:outputLabel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" id="btnIn" update=":modyTxt, :fdetail:outDetail"
+                                     disabled="#{detalleVariedadBean.puntoCorte.insert}"
+                                     actionListener="#{detalleVariedadBean.puntoCorte.add(evt)}"/>
+                    <p:commandButton value="Cancelar" update=":modyTxt, :modyTxt:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     actionListener="#{detalleVariedadBean.puntoCorte.close(evt)}"/>
+                    <p:commandButton value="Eliminar" id="btnDel" update=":modyTxt, :modyTxt:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.puntoCorte.delete}"
+                                     actionListener="#{detalleVariedadBean.puntoCorte.remove(evt)}"/>
+                    <p:commandButton value="Actualizar" id="btnUp" update=":modyTxt, :modyTxt:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.puntoCorte.update}"
+                                     actionListener="#{detalleVariedadBean.puntoCorte.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="modyNumL">
+            <p:dialog header="Longitud" widgetVar="dlgModyNumL" width="400" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                <p:outputLabel id="outTxt">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="txt" value="Descripcion:"/>
+                        <p:spinner id="txt" value="#{detalleVariedadBean.longitud.nuevo}"
+                                   min="20" stepFactor="5" max="200"/>
+                    </h:panelGrid>
+                </p:outputLabel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" id="btnIn" update=":modyNumL, :fdetail:outDetail"
+                                     disabled="#{detalleVariedadBean.longitud.insert}"
+                                     actionListener="#{detalleVariedadBean.longitud.add(evt)}"/>
+                    <p:commandButton value="Cancelar" update=":modyNumL, :modyNumL:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     actionListener="#{detalleVariedadBean.longitud.close(evt)}"/>
+                    <p:commandButton value="Eliminar" id="btnDel" update=":modyNumL, :modyNumL:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.longitud.delete}"
+                                     actionListener="#{detalleVariedadBean.longitud.remove(evt)}"/>
+                    <p:commandButton value="Actualizar" id="btnUp" update=":modyNumL, :modyNumL:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.longitud.update}"
+                                     actionListener="#{detalleVariedadBean.longitud.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="modyNumR">
+            <p:dialog header="Ramo" widgetVar="dlgModyNumR" width="400" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                <p:outputLabel id="outTxt">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="txt" value="Descripcion:"/>
+                        <p:spinner id="txt" value="#{detalleVariedadBean.ramo.nuevo}"
+                                   min="1" max="100"/>
+                    </h:panelGrid>
+                </p:outputLabel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" id="btnIn" update=":modyNumR, :fdetail:outDetail"
+                                     disabled="#{detalleVariedadBean.ramo.insert}"
+                                     actionListener="#{detalleVariedadBean.ramo.add(evt)}"/>
+                    <p:commandButton value="Cancelar" update=":modyNumR, :modyNumR:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     actionListener="#{detalleVariedadBean.ramo.close(evt)}"/>
+                    <p:commandButton value="Eliminar" id="btnDel" update=":modyNumR, :modyNumR:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.ramo.delete}"
+                                     actionListener="#{detalleVariedadBean.ramo.remove(evt)}"/>
+                    <p:commandButton value="Actualizar" id="btnUp" update=":modyNumR, :modyNumR:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.ramo.update}"
+                                     actionListener="#{detalleVariedadBean.ramo.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

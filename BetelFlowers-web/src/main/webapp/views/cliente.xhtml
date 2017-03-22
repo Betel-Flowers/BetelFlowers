@@ -1,0 +1,357 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+
+        <h:form id="fadd">
+            <p:panel header="Registrar Cliente">
+                <h:panelGrid cellpadding="5">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="nombreContacto" value="Nombre de contacto:"/>
+                    <p:inputText id="nombreContacto" required="true" 
+                                 value="#{clienteBean.nuevo.nombreContacto}"/>
+                    <p:message for="nombreContacto" display="tooltip" severity="error"/>
+
+                    <p:outputLabel value="Tipo:"/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <h:outputText value="Comercializadora: " />
+                        <p:selectBooleanCheckbox id="comer" value="#{clienteBean.nuevo.comercializadora}">
+                            <p:ajax update=":fadd:ext, :fadd:local" listener="#{clienteBean.onlyComerzializadora()}" />
+                        </p:selectBooleanCheckbox>
+                        <h:outputText value="Exteriror: " />
+                        <p:selectBooleanCheckbox id="ext" value="#{clienteBean.nuevo.exterior}">
+                            <p:ajax update=":fadd:local, :fadd:comer" listener="#{clienteBean.onlyExterior()}" />
+                        </p:selectBooleanCheckbox>
+                        <h:outputText value="Local: " />
+                        <p:selectBooleanCheckbox id="local" value="#{clienteBean.nuevo.local}">
+                            <p:ajax update=":fadd:ext, :fadd:comer" listener="#{clienteBean.onlyLocal()}" />
+                        </p:selectBooleanCheckbox>
+                    </h:panelGrid>
+                    <p:outputLabel value=""/>
+
+                    <p:outputLabel for="nombres" value="Nombres:"/>
+                    <p:inputText id="nombres" required="true"
+                                 value="#{clienteBean.nuevo.nombres}"/>
+                    <p:message for="nombres" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="apellidos" value="Apellidos:"/>
+                    <p:inputText id="apellidos" required="true"
+                                 value="#{clienteBean.nuevo.apellidos}"/>
+                    <p:message for="apellidos" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="ruc" value="Cedula/RUC/Pasaporte:"/>
+                    <p:inputText id="ruc" required="true"
+                                 value="#{clienteBean.nuevo.ruc}"/>
+                    <p:message for="ruc" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="pais" value="Pais:"/>
+                    <p:selectOneMenu id="pais" required="true"
+                                     value="#{clienteBean.nuevo.ciudad.pais.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{paisBean.paices}" var="pass"
+                                       itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
+                        <p:ajax update=":fadd:ciudad" listener="#{clienteBean.changePais}"/>
+                    </p:selectOneMenu>
+                    <p:message for="pais" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="ciudad" value="Ciudad:"/>
+                    <p:selectOneMenu id="ciudad" required="true"
+                                     value="#{clienteBean.nuevo.ciudad.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{clienteBean.ciudades}" var="ciud"
+                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="ciudad" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:outputLabel for="direccion" value="Direccion:"/>
+                    <p:inputTextarea id="direccion" required="true" style="width: 190%" 
+                                     value="#{clienteBean.nuevo.direccion}"/>
+                    <p:message for="direccion" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="diasPago" value="Dias de Pago:"/>
+                    <p:spinner id="diasPago" required="true"
+                               min="1" max="30"
+                               value="#{clienteBean.nuevo.diasPago}"/>
+                    <p:message for="diasPago" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="limiteCredito" value="Limite de Credito:"/>
+                    <p:spinner id="limiteCredito" required="true"
+                               min="1" stepFactor="0.1" max="50000"
+                               value="#{clienteBean.nuevo.limiteCredito}"/>
+                    <p:message for="limiteCredito" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="diasCredito" value="Dias de Credito:"/>
+                    <p:spinner id="diasCredito" required="true"
+                               min="1" max="30"
+                               value="#{clienteBean.nuevo.diasCredito}"/>
+                    <p:message for="diasCredito" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="impuesto" value="Impuestos:"/>
+                    <p:selectBooleanCheckbox id="impuesto" value="#{clienteBean.nuevo.impuestos}"/>
+                    <p:message for="impuesto" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <h:panelGrid columns="1" cellspacing="5">
+                    <p:outputPanel id="outDetail">
+                        <p:tabView orientation="left">
+                            <p:tab title="Telefonos">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="telefonos" var="tlf" rows="4"
+                                                 paginator="true"
+                                                 paginatorPosition="Bottom"
+                                                 value="#{clienteBean.telefono.telefonos}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Lista"/>
+                                        </f:facet>
+                                        <p:column headerText="Tipo">
+                                            <h:outputText value="#{tlf.tipo}" />
+                                        </p:column>
+                                        <p:column headerText="Numero">
+                                            <h:outputText value="#{tlf.numero}" />
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":fadd:outDetail"
+                                                             icon="ui-icon-close" title="Eliminar">
+                                                <f:setPropertyActionListener value="#{tlf}" target="#{clienteBean.telefono.selected}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton value="Agregar" update=":fedit1:outTlf"
+                                                             oncomplete="PF('dlgTelefono').show()"/>
+                                        </f:facet>   
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Correos">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="correos" var="email" rows="4"
+                                                 paginator="true"
+                                                 paginatorPosition="Bottom"
+                                                 value="#{clienteBean.correo.correos}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Lista"/>
+                                        </f:facet>
+                                        <p:column headerText="Tipo">
+                                            <h:outputText value="#{email.tipo}" />
+                                        </p:column>
+                                        <p:column headerText="e-mail">
+                                            <h:outputText value="#{email.email}" />
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":fadd:outDetail"
+                                                             icon="ui-icon-close" title="Eliminar">
+                                                <f:setPropertyActionListener value="#{email}" target="#{clienteBean.correo.selected}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton value="Agregar" update=":fedit2:outEmail"
+                                                             oncomplete="PF('dlgCorreo').show()"/>
+                                        </f:facet>   
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Cajas">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="cajas" var="cja" rows="4"
+                                                 paginator="true"
+                                                 paginatorPosition="Bottom"
+                                                 value="#{clienteBean.caja.cajas}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Lista"/>
+                                        </f:facet>
+                                        <p:column headerText="Marca">
+                                            <h:outputText value="#{cja.marca}" />
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":fadd:outDetail"
+                                                             icon="ui-icon-close" title="Eliminar">
+                                                <f:setPropertyActionListener value="#{cja}" target="#{clienteBean.caja.selected}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton value="Agregar" update=":fedit3:outCaja"
+                                                             oncomplete="PF('dlgCaja').show()"/>
+                                        </f:facet>   
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Sub-Clientes">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="dtSubCli" var="subCli" rows="5"
+                                                 paginator="true" tableStyle="width: auto"
+                                                 paginatorPosition="Bottom"
+                                                 value="#{clienteBean.subCliente.subClientes}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Sub-Clientes"/>
+                                        </f:facet>
+                                        <p:column headerText="Fecha" style="text-align: center">
+                                            <h:outputText value="#{subCli.lastChange}">
+                                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Codigo" style="text-align: center">
+                                            <h:outputText value="#{subCli.codigo}"/>
+                                        </p:column>
+                                        <p:column headerText="Nombre de Contacto" style="text-align: center">
+                                            <h:outputText value="#{subCli.nombreContacto}"/>
+                                        </p:column>
+                                        <p:column headerText="Representante" style="text-align: center">
+                                            <h:outputText value="#{subCli.nombres} #{subCli.apellidos}"/>
+                                        </p:column>
+                                        <p:column headerText="Tipo" style="text-align: center">
+                                            <h:outputText value="Comercializadora" rendered="#{subCli.comercializadora}"/>
+                                            <h:outputText value="Exterior" rendered="#{subCli.exterior}"/>
+                                            <h:outputText value="Local" rendered="#{subCli.local}"/>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton value="Agregar" update=":fedit4:outSubCliente"
+                                                             oncomplete="PF('dlgSubCliente').show()"/>
+                                        </f:facet>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+                    </p:outputPanel>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fadd:messages"
+                                     actionListener="#{clienteBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit1">
+            <p:dialog header="Agregar Telefono" widgetVar="dlgTelefono" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outTlf">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="etelefono" value="Numero:"/>
+                        <p:inputText id="etelefono" required="true" 
+                                     value="#{clienteBean.telefono.nuevo.numero}"/>
+                        <p:message for="etelefono" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="tipoTelefono" value="Tipo:"/>
+                        <p:selectOneMenu id="tipoTelefono" required="true" 
+                                         value="#{clienteBean.telefono.nuevo.tipo}">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Facturacion" itemValue="Facturacion"/>
+                            <f:selectItem itemLabel="Cobranzas" itemValue="Cobranzas"/>
+                            <f:selectItem itemLabel="Ventas" itemValue="Ventas"/>
+                            <f:selectItem itemLabel="Alterno" itemValue="Alterno"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipoTelefono" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" update=":fedit1, :fadd:messages, :fadd:outDetail" 
+                                     actionListener="#{clienteBean.telefono.add(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fedit2"> 
+            <p:dialog header="Agregar Correo" widgetVar="dlgCorreo" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outEmail">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="ecorreo" value="Numero:"/>
+                        <p:inputText id="ecorreo" required="true" 
+                                     value="#{clienteBean.correo.nuevo.email}"/>
+                        <p:message for="ecorreo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="tipoCorreo" value="Tipo:"/>
+                        <p:selectOneMenu id="tipoCorreo" required="true" 
+                                         value="#{clienteBean.correo.nuevo.tipo}">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Facturacion" itemValue="Facturacion"/>
+                            <f:selectItem itemLabel="Cobranzas" itemValue="Cobranzas"/>
+                            <f:selectItem itemLabel="Ventas" itemValue="Ventas"/>
+                            <f:selectItem itemLabel="Alterno" itemValue="Alterno"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipoCorreo" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" update=":fedit2, :fadd:messages, :fadd:outDetail" 
+                                     actionListener="#{clienteBean.correo.add(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fedit3"> 
+            <p:dialog header="Agregar Caja" widgetVar="dlgCaja" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outCaja">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="ecajas" value="Marca:"/>
+                        <p:inputText id="ecajas" required="true" 
+                                     value="#{clienteBean.caja.nuevo.marca}"/>
+                        <p:message for="ecajas" display="tooltip" severity="error"/>
+
+
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" update=":fedit3, :fadd:messages, :fadd:outDetail" 
+                                     actionListener="#{clienteBean.caja.add(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fedit4"> 
+            <p:dialog header="Agregar Sub-Cliente" widgetVar="dlgSubCliente" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outSubCliente">
+                    <h:panelGrid style="margin: 0 auto;">
+                        <p:dataTable id="dtCli" var="cli" rows="5"
+                                     paginator="true" tableStyle="width: auto"
+                                     paginatorPosition="Bottom"
+                                     value="#{clienteBean.clientes}"
+                                     selectionMode="single"
+                                     selection="#{clienteBean.subCliente.nuevo}"
+                                     rowKey="#{cli.codigo}">
+                            <p:ajax event="rowSelect" listener="#{clienteBean.onRowSelect}"/>
+                            <f:facet name="header">
+                                <h:outputText value="Clientes"/>
+                            </f:facet>
+                            <p:column headerText="Fecha" style="text-align: center">
+                                <h:outputText value="#{cli.lastChange}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{cli.codigo}" headerText="Codigo" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{cli.codigo}"/>
+                            </p:column>
+                            <p:column filterBy="#{cli.ruc}" headerText="Cedula/RUC/Pasaporte" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{cli.ruc}"/>
+                            </p:column>
+                            <p:column headerText="Nombre de Contacto" style="text-align: center">
+                                <h:outputText value="#{cli.nombreContacto}"/>
+                            </p:column>
+                            <p:column headerText="Representante" style="text-align: center">
+                                <h:outputText value="#{cli.nombres} #{cli.apellidos}"/>
+                            </p:column>
+                            <p:column headerText="Tipo" style="text-align: center">
+                                <h:outputText value="Comercializadora" rendered="#{cli.comercializadora}"/>
+                                <h:outputText value="Exterior" rendered="#{cli.exterior}"/>
+                                <h:outputText value="Local" rendered="#{cli.local}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton value="Agregar" update=":fedit4, :fadd:messages, :fadd:outDetail"
+                                                 actionListener="#{clienteBean.subCliente.add(evt)}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

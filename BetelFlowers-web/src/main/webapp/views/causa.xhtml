@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registrar Causa">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="descripcion" value="Causa:"/>
+                    <p:inputText id="descripcion" required="true" 
+                                 value="#{causaBean.nuevo.descripcion}"/>
+                    <p:message for="descripcion" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fdtcau:dtcau, :fadd:messages" 
+                                     actionListener="#{causaBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fdtcau">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtcau" var="cau" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{causaBean.causas}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Causas"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center;width: auto">
+                        <h:outputText value="#{cau.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center;width: auto">
+                        <h:outputText value="#{cau.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Causa" style="text-align: center;width: auto">
+                        <h:outputText value="#{cau.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center;width: auto">
+                        <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyBloq').show()">
+                            <f:setPropertyActionListener value="#{cau}" target="#{causaBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center;width: auto">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteBloq').show()">
+                            <f:setPropertyActionListener value="#{cau}" target="#{causaBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Causa" widgetVar="dlgModifyBloq" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="edescripcion" value="Causa:"/>
+                        <p:inputText id="edescripcion" required="true" 
+                                     value="#{causaBean.selected.descripcion}"/>
+                        <p:message for="edescripcion" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtcau:dtcau" 
+                                     actionListener="#{causaBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Causa" widgetVar="dlgDeleteBloq" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="deleteEspe">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Causa:"/>
+                        <p:outputLabel value="#{causaBean.selected.descripcion}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtcau:dtcau" 
+                                     actionListener="#{causaBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

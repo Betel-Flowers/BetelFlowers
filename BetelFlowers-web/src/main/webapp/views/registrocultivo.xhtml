@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registro Flor Cultivo">
+                <h:panelGrid style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+
+                    <p:outputLabel for="bloque" value="Bloque:"/>
+                    <p:selectOneMenu id="bloque" required="true" style="width: 85%" 
+                                     value="#{registroCultivoBean.nuevo.bloque.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{bloqueBean.bloques}" var="bl" itemLabel="#{bl.descripcion}"
+                                       itemValue="#{bl.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="bloque" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="variedad" value="Variedad:"/>
+                    <p:selectOneMenu id="variedad" required="true" style="width: 85%"
+                                     value="#{registroCultivoBean.nuevo.variedad.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
+                                       itemValue="#{va.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="variedad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel value="Recipiente:"/>
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <h:outputText value="Malla: " />
+                        <p:selectBooleanCheckbox id="checkM" value="#{registroCultivoBean.nuevo.malla}">
+                            <p:ajax update=":fadd:checkT" listener="#{registroCultivoBean.onlyMalla()}" />
+                        </p:selectBooleanCheckbox>
+                        <h:outputText value="Tina: " />
+                        <p:selectBooleanCheckbox id="checkT" value="#{registroCultivoBean.nuevo.tina}">
+                            <p:ajax update=":fadd:checkM" listener="#{registroCultivoBean.onlyTina()}" />
+                        </p:selectBooleanCheckbox>
+                    </h:panelGrid>
+                    <p:outputLabel value=""/>
+
+                    <p:outputLabel for="regCant" value="Numero de recipientes:"/>
+                    <p:spinner id="regCant" value="#{registroCultivoBean.nuevo.numeroRecipientes}"
+                               min="1" max="500" required="true"/>
+                    <p:message for="regCant" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="regNumT" value="Numero de Tallos por recipiente:"/>
+                    <p:spinner id="regNumT" value="#{registroCultivoBean.nuevo.numeroTallosRecipiente}"
+                               min="1" max="500" required="true"/>
+                    <p:message for="regNumT" display="tooltip" severity="error"/>
+
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fdtregCul:dtregCul, :fadd:messages" 
+                                     actionListener="#{registroCultivoBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fdtregCul">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtregCul" var="regCul" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{registroCultivoBean.registrosCultivo}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Flor del Cultivo"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center;width: auto">
+                        <h:outputText value="#{regCul.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Bloque" style="text-align: center;width: auto">
+                        <h:outputText value="#{regCul.bloque.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Variedad" style="text-align: center;width: auto">
+                        <h:outputText value="#{regCul.variedad.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Recipiente" style="text-align: center;width: auto">
+                        <h:outputText value="Malla" rendered="#{regCul.malla}"/>
+                        <h:outputText value="Tina" rendered="#{regCul.tina}"/>
+                    </p:column>
+                    <p:column headerText="Num. Recipientes" style="text-align: center;width: auto">
+                        <h:outputText value="#{regCul.numeroRecipientes}"/>
+                    </p:column>
+                    <p:column headerText="Num. Tallos por Recipiente" style="text-align: center;width: auto">
+                        <h:outputText value="#{regCul.numeroTallosRecipiente}"/>
+                    </p:column>
+                    <p:column headerText="Total Tallos" style="text-align: center;width: auto">
+                        <h:outputText value="#{regCul.totalNumeroTallos}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center;width: auto">
+                        <h:outputText value="#{regCul.username}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center;width: auto">
+                        <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyBloq').show()">
+                            <f:setPropertyActionListener value="#{regCul}" target="#{registroCultivoBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Registro Flor Cultivo" widgetVar="dlgModifyBloq" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="bloque" value="Bloque:"/>
+                        <p:selectOneMenu id="bloque" required="true" style="width: 85%" 
+                                         value="#{registroCultivoBean.selected.bloque.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{bloqueBean.bloques}" var="bl" itemLabel="#{bl.descripcion}"
+                                           itemValue="#{bl.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="bloque" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="variedad" value="Variedad:"/>
+                        <p:selectOneMenu id="variedad" required="true" style="width: 85%" 
+                                         value="#{registroCultivoBean.selected.variedad.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
+                                           itemValue="#{va.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="variedad" display="tooltip" severity="error"/>
+
+                        <p:outputLabel value="Recipiente:"/>
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <h:outputText value="Malla: " />
+                            <p:selectBooleanCheckbox id="checkM" value="#{registroCultivoBean.selected.malla}">
+                                <p:ajax update=":fedit:checkT" listener="#{registroCultivoBean.onlyMallaSelect()}" />
+                            </p:selectBooleanCheckbox>
+                            <h:outputText value="Tina: " />
+                            <p:selectBooleanCheckbox id="checkT" value="#{registroCultivoBean.selected.tina}">
+                                <p:ajax update=":fedit:checkM" listener="#{registroCultivoBean.onlyTinaSelect()}" />
+                            </p:selectBooleanCheckbox>
+                        </h:panelGrid>
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel for="regCant" value="Numero de recipientes:"/>
+                        <p:spinner id="regCant" value="#{registroCultivoBean.selected.numeroRecipientes}"
+                                   min="1" max="500" required="true"/>
+                        <p:message for="regCant" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="regNumT" value="Numero de Tallos por recipiente:"/>
+                        <p:spinner id="regNumT" value="#{registroCultivoBean.selected.numeroTallosRecipiente}"
+                                   min="1" max="500" required="true"/>
+                        <p:message for="regNumT" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtregCul:dtregCul" 
+                                     actionListener="#{registroCultivoBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

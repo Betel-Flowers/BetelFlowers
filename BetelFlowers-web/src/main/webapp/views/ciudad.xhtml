@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registrar Ciudad">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="pais" value="Pais:"/>
+                    <p:selectOneMenu id="pais" required="true" value="#{ciudadBean.nuevo.pais.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{paisBean.paices}" var="pas" itemLabel="#{pas.nombre}"
+                                       itemValue="#{pas.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="pais" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="nombre" value="Nombre:"/>
+                    <p:inputText id="nombre" required="true" 
+                                 value="#{ciudadBean.nuevo.nombre}"/>
+                    <p:message for="nombre" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fdtpas:dtpas, :fadd:messages" 
+                                     actionListener="#{ciudadBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fdtpas">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtpas" var="ciu" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{ciudadBean.ciudades}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Ciudades"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center;width: auto">
+                        <h:outputText value="#{ciu.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Pais" style="text-align: center;width: auto">
+                        <h:outputText value="#{ciu.pais.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Nombre" style="text-align: center;width: auto">
+                        <h:outputText value="#{ciu.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center;width: auto">
+                        <h:outputText value="#{ciu.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center;width: auto">
+                        <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyCiud').show()">
+                            <f:setPropertyActionListener value="#{ciu}" target="#{ciudadBean.selected}" />
+                            <f:setPropertyActionListener value="#{ciu}" target="#{ciudadBean.nuevo}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center;width: auto">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteCiud').show()">
+                            <f:setPropertyActionListener value="#{ciu}" target="#{ciudadBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Ciudad" widgetVar="dlgModifyCiud" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="pais" value="Pais:"/>
+                        <p:selectOneMenu id="pais" required="true" value="#{ciudadBean.nuevo.pais.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{paisBean.paices}" var="pass" itemLabel="#{pass.nombre}"
+                                           itemValue="#{pass.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="pais" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="enombre" value="Nombre:"/>
+                        <p:inputText id="enombre" required="true" 
+                                     value="#{ciudadBean.selected.nombre}"/>
+                        <p:message for="enombre" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtpas:dtpas" 
+                                     actionListener="#{ciudadBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Ciudad" widgetVar="dlgDeleteCiud" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="deleteEspe">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Nombre:"/>
+                        <p:outputLabel value="#{ciudadBean.selected.nombre}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtpas:dtpas" 
+                                     actionListener="#{ciudadBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

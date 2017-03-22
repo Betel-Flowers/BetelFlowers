@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registrar Especie">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="nomEspe" value="Nombre:"/>
+                    <p:inputText id="nomEspe" required="true" 
+                                 value="#{especieBean.nuevo.nombre}"/>
+                    <p:message for="nomEspe" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="codAdu" value="Codigo Aduana:"/>
+                    <p:inputText id="codAdu" required="true"
+                                 value="#{especieBean.nuevo.codAduana}"/>
+                    <p:message for="codAdu" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="codNan" value="Codigo Nandina:"/>
+                    <p:inputText id="codNan" required="true"
+                                 value="#{especieBean.nuevo.codNandina}"/>
+                    <p:message for="codNan" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fespecie:dtespecie, :fadd:messages" 
+                                     actionListener="#{especieBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fespecie">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtespecie" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{especieBean.especies}"
+                             var="especie">
+
+                    <f:facet name="header">
+                        <h:outputText value="Especies"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{especie.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                               timeZone="#{calendarioUtil.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{especie.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Nombre" style="text-align: center">
+                        <h:outputText value="#{especie.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Cod. Aduana" style="text-align: center">
+                        <h:outputText value="#{especie.codAduana}"/>
+                    </p:column>
+                    <p:column headerText="Cod. Nandina" style="text-align: center">
+                        <h:outputText value="#{especie.codNandina}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="text-align: center">
+                        <h:outputText value="#{especie.username}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center">
+                        <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyEspe').show()">
+                            <f:setPropertyActionListener value="#{especie}" target="#{especieBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteEspe').show()">
+                            <f:setPropertyActionListener value="#{especie}" target="#{especieBean.selected}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Especie" widgetVar="dlgModifyEspe" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="enomEspe" value="Nombre:"/>
+                        <p:inputText id="enomEspe" required="true" 
+                                     value="#{especieBean.selected.nombre}"/>
+                        <p:message for="enomEspe" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ecodAdu" value="Codigo Aduana:"/>
+                        <p:inputText id="ecodAdu" required="true"
+                                     value="#{especieBean.selected.codAduana}"/>
+                        <p:message for="ecodAdu" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ecodNan" value="Codigo Nandina:"/>
+                        <p:inputText id="ecodNan" required="true"
+                                     value="#{especieBean.selected.codNandina}"/>
+                        <p:message for="ecodNan" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fespecie:dtespecie" 
+                                     actionListener="#{especieBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Especie" widgetVar="dlgDeleteEspe" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="deleteEspe">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Nombre:"/>
+                        <p:outputLabel value="#{especieBean.selected.nombre}"/>
+
+                        <p:outputLabel value="Codigo Aduana:"/>
+                        <p:outputLabel value="#{especieBean.selected.codAduana}"/>
+
+                        <p:outputLabel value="Codigo Nandina:"/>
+                        <p:outputLabel value="#{especieBean.selected.codNandina}"/>
+
+                        <p:outputLabel value="Username:"/>
+                        <p:outputLabel value="#{especieBean.selected.username}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fespecie:dtespecie" 
+                                     actionListener="#{especieBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
