@@ -18,6 +18,7 @@ import com.betel.flowers.web.bean.util.Telefonos;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -33,12 +34,13 @@ import org.primefaces.event.SelectEvent;
 @Named(value = "clienteBean")
 @ViewScoped
 public class ClienteBean implements Serializable {
-    
+
     private static final long serialVersionUID = 1862686713183898998L;
-    
+
     private Cliente nuevo;
     private Cliente nuevoSelected;
     private Cliente selected;
+    private Cliente removeSelected;
     private List<Cliente> clientes;
     private List<Ciudad> ciudades;
     private Telefonos telefono;
@@ -46,14 +48,14 @@ public class ClienteBean implements Serializable {
     private Cajas caja;
     private SubCliente subCliente;
     private Boolean activeSelectedCliente;
-    
+
     @Inject
     private ClienteService clienteService;
     @Inject
     private PaisService paisService;
     @Inject
     private CiudadService ciudadService;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new Cliente();
@@ -71,7 +73,7 @@ public class ClienteBean implements Serializable {
             this.clientes = new ArrayList<>();
         }
     }
-    
+
     public void add(ActionEvent evt) {
         if (!this.telefono.getTelefonos().isEmpty()) {
             if (!this.correo.getCorreos().isEmpty()) {
@@ -83,6 +85,7 @@ public class ClienteBean implements Serializable {
                 Boolean exito = this.clienteService.insert(this.nuevo);
                 if (exito) {
                     FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                    this.removeDuplicateSubClientes();
                     this.nuevo.setSubClientes(this.subCliente.getSubClientes());
                     this.clienteService.addSubCliente(this.nuevo);
                     this.init();
@@ -97,23 +100,38 @@ public class ClienteBean implements Serializable {
             FacesUtil.addMessageError(null, "Ingrese un telefono.");
         }
     }
-    
+
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
-            this.selected.setCiudad(this.nuevoSelected.getCiudad());
-            Boolean exito = this.clienteService.update(this.selected);
-            if (exito) {
-                FacesUtil.addMessageInfo("Se ha modifcado con exito.");
-                this.init();
+            if (!this.telefono.getTelefonos().isEmpty()) {
+                if (!this.correo.getCorreos().isEmpty()) {
+                    this.selected.setTelefonos(this.telefono.getTelefonos());
+                    this.selected.setCorreos(this.correo.getCorreos());
+                    this.selected.setCajas(this.caja.getCajas());
+                    Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevoSelected.getCiudad());
+                    this.selected.setCiudad(mciudad);
+                    Boolean exito = this.clienteService.update(this.selected);
+                    if (exito) {
+                        FacesUtil.addMessageInfo("Se ha modifcado con exito.");
+                        this.removeDuplicateSubClientes();
+                        this.selected.setSubClientes(this.subCliente.getSubClientes());
+                        this.clienteService.addSubCliente(this.selected);
+                        this.init();
+                    } else {
+                        FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
+                        this.init();
+                    }
+                } else {
+                    FacesUtil.addMessageError(null, "Ingrese un correo.");
+                }
             } else {
-                FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
-                this.init();
+                FacesUtil.addMessageError(null, "Ingrese un telefono.");
             }
         } else {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
             Boolean exito = this.clienteService.deteleFlag(this.selected);
@@ -128,11 +146,22 @@ public class ClienteBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
+    private void removeDuplicateSubClientes() {
+        if (this.subCliente.getSubClientes() != null
+                && !this.subCliente.getSubClientes().isEmpty()) {
+            HashSet hs = new HashSet();
+            hs.addAll(this.subCliente.getSubClientes());
+            this.subCliente.getSubClientes().clear();
+            this.subCliente.getSubClientes().addAll(hs);
+        }
+    }
+
     public void onRowSelect(SelectEvent event) {
         this.selected = (Cliente) event.getObject();
         if (this.selected != null) {
             this.setNuevoSelected(this.selected);
+            this.setRemoveSelected(this.selected);
             changePaisSelected();
             this.subCliente.setNuevo(this.selected);
             this.telefono.setTelefonos(this.selected.getTelefonos());
@@ -140,10 +169,17 @@ public class ClienteBean implements Serializable {
             this.caja.setCajas(this.selected.getCajas());
             this.subCliente.setSubClientes(this.selected.getSubClientes());
             this.activeSelectedCliente = Boolean.FALSE;
-            this.removeMyRegister(this.selected);
+            this.removeMyRegister(this.removeSelected);
         }
     }
-    
+
+    public void onRowSelectSubCliente(SelectEvent event) {
+        this.selected = (Cliente) event.getObject();
+        if (this.selected != null) {
+            this.subCliente.setNuevo(this.selected);
+        }
+    }
+
     private void removeMyRegister(Cliente select) {
         if (this.clientes != null && !this.clientes.isEmpty()) {
             this.clientes.remove(select);
@@ -151,7 +187,7 @@ public class ClienteBean implements Serializable {
             FacesUtil.addMessageInfo("Porfavor vuelva a intentarlo.");
         }
     }
-    
+
     public void changePais() {
         if (this.nuevo.getCiudad().getPais().getCodigo() != null) {
             this.ciudades = new ArrayList<>();
@@ -159,7 +195,7 @@ public class ClienteBean implements Serializable {
             this.ciudades = this.ciudadService.obtenerListPais(mpais);
         }
     }
-    
+
     public void changePaisSelected() {
         if (this.nuevoSelected.getCiudad().getPais().getCodigo() != null) {
             this.ciudades = new ArrayList<>();
@@ -167,115 +203,123 @@ public class ClienteBean implements Serializable {
             this.ciudades = this.ciudadService.obtenerListPais(mpais);
         }
     }
-    
+
     public void onlyComerzializadora() {
         this.nuevo.setLocal(Boolean.FALSE);
         this.nuevo.setExterior(Boolean.FALSE);
     }
-    
+
     public void onlyExterior() {
         this.nuevo.setComercializadora(Boolean.FALSE);
         this.nuevo.setLocal(Boolean.FALSE);
     }
-    
+
     public void onlyLocal() {
         this.nuevo.setComercializadora(Boolean.FALSE);
         this.nuevo.setExterior(Boolean.FALSE);
     }
-    
+
     public void onlySelectComerzializadora() {
         this.selected.setLocal(Boolean.FALSE);
         this.selected.setExterior(Boolean.FALSE);
     }
-    
+
     public void onlySelectExterior() {
         this.selected.setComercializadora(Boolean.FALSE);
         this.selected.setLocal(Boolean.FALSE);
     }
-    
+
     public void onlySelectLocal() {
         this.selected.setComercializadora(Boolean.FALSE);
         this.selected.setExterior(Boolean.FALSE);
     }
-    
+
     public Cliente getNuevo() {
         return nuevo;
     }
-    
+
     public void setNuevo(Cliente nuevo) {
         this.nuevo = nuevo;
     }
-    
+
     public Cliente getNuevoSelected() {
         return nuevoSelected;
     }
-    
+
     public void setNuevoSelected(Cliente nuevoSelected) {
         this.nuevoSelected = nuevoSelected;
     }
-    
+
     public Cliente getSelected() {
         return selected;
     }
-    
+
     public void setSelected(Cliente selected) {
         this.selected = selected;
     }
-    
+
     public List<Cliente> getClientes() {
         return clientes;
     }
-    
+
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-    
+
     public List<Ciudad> getCiudades() {
         return ciudades;
     }
-    
+
     public void setCiudades(List<Ciudad> ciudades) {
         this.ciudades = ciudades;
     }
-    
+
     public Telefonos getTelefono() {
         return telefono;
     }
-    
+
     public void setTelefono(Telefonos telefono) {
         this.telefono = telefono;
     }
-    
+
     public Correos getCorreo() {
         return correo;
     }
-    
+
     public Cajas getCaja() {
         return caja;
     }
-    
+
     public void setCorreo(Correos correo) {
         this.correo = correo;
     }
-    
+
     public void setCaja(Cajas caja) {
         this.caja = caja;
     }
-    
+
     public SubCliente getSubCliente() {
         return subCliente;
     }
-    
+
     public void setSubCliente(SubCliente subCliente) {
         this.subCliente = subCliente;
     }
-    
+
     public Boolean getActiveSelectedCliente() {
         return activeSelectedCliente;
     }
-    
+
     public void setActiveSelectedCliente(Boolean activeSelectedCliente) {
         this.activeSelectedCliente = activeSelectedCliente;
     }
-    
+
+    public Cliente getRemoveSelected() {
+        return removeSelected;
+    }
+
+    public void setRemoveSelected(Cliente removeSelected) {
+        this.removeSelected = removeSelected;
+    }
+
 }

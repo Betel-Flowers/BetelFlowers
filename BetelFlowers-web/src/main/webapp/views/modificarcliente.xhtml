@@ -59,15 +59,15 @@
                         <h:panelGrid columns="6" cellpadding="5">
                             <h:outputText value="Comercializadora: " />
                             <p:selectBooleanCheckbox id="comer" value="#{clienteBean.selected.comercializadora}">
-                                <p:ajax update=":fcli:ext, :fcli:local" listener="#{clienteBean.onlyComerzializadora()}" />
+                                <p:ajax update=":fcli:ext, :fcli:local" listener="#{clienteBean.onlySelectComerzializadora()}" />
                             </p:selectBooleanCheckbox>
                             <h:outputText value="Exteriror: " />
                             <p:selectBooleanCheckbox id="ext" value="#{clienteBean.selected.exterior}">
-                                <p:ajax update=":fcli:local, :fcli:comer" listener="#{clienteBean.onlyExterior()}" />
+                                <p:ajax update=":fcli:local, :fcli:comer" listener="#{clienteBean.onlySelectExterior()}" />
                             </p:selectBooleanCheckbox>
                             <h:outputText value="Local: " />
                             <p:selectBooleanCheckbox id="local" value="#{clienteBean.selected.local}">
-                                <p:ajax update=":fcli:ext, :fcli:comer" listener="#{clienteBean.onlyLocal()}" />
+                                <p:ajax update=":fcli:ext, :fcli:comer" listener="#{clienteBean.onlySelectLocal()}" />
                             </p:selectBooleanCheckbox>
                         </h:panelGrid>
                         <p:outputLabel value=""/>
@@ -367,7 +367,7 @@
                                      selectionMode="single"
                                      selection="#{clienteBean.subCliente.nuevo}"
                                      rowKey="#{cli.codigo}">
-                            <p:ajax event="rowSelect" listener="#{clienteBean.onRowSelect}"/>
+                            <p:ajax event="rowSelect" listener="#{clienteBean.onRowSelectSubCliente}"/>
                             <f:facet name="header">
                                 <h:outputText value="Clientes"/>
                             </f:facet>

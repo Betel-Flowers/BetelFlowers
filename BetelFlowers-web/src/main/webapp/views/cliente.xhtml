@@ -120,7 +120,8 @@
                                         </p:column>
                                         <p:column style="width:32px;text-align: center">
                                             <p:commandButton update=":fadd:outDetail"
-                                                             icon="ui-icon-close" title="Eliminar">
+                                                             icon="ui-icon-close" title="Eliminar"
+                                                             actionListener="#{clienteBean.telefono.remove(evt,tlf)}">
                                                 <f:setPropertyActionListener value="#{tlf}" target="#{clienteBean.telefono.selected}" />
                                             </p:commandButton>
                                         </p:column>
@@ -148,7 +149,8 @@
                                         </p:column>
                                         <p:column style="width:32px;text-align: center">
                                             <p:commandButton update=":fadd:outDetail"
-                                                             icon="ui-icon-close" title="Eliminar">
+                                                             icon="ui-icon-close" title="Eliminar"
+                                                             actionListener="#{clienteBean.correo.remove(evt,email)}">
                                                 <f:setPropertyActionListener value="#{email}" target="#{clienteBean.correo.selected}" />
                                             </p:commandButton>
                                         </p:column>
@@ -173,7 +175,8 @@
                                         </p:column>
                                         <p:column style="width:32px;text-align: center">
                                             <p:commandButton update=":fadd:outDetail"
-                                                             icon="ui-icon-close" title="Eliminar">
+                                                             icon="ui-icon-close" title="Eliminar"
+                                                             actionListener="#{clienteBean.caja.remove(evt, cja)}">
                                                 <f:setPropertyActionListener value="#{cja}" target="#{clienteBean.caja.selected}" />
                                             </p:commandButton>
                                         </p:column>
@@ -211,6 +214,13 @@
                                             <h:outputText value="Comercializadora" rendered="#{subCli.comercializadora}"/>
                                             <h:outputText value="Exterior" rendered="#{subCli.exterior}"/>
                                             <h:outputText value="Local" rendered="#{subCli.local}"/>
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":fadd:outDetail"
+                                                             icon="ui-icon-close" title="Eliminar"
+                                                             actionListener="#{clienteBean.subCliente.remove(evt, subCli)}">
+                                                <f:setPropertyActionListener value="#{subcli}" target="#{clienteBean.subCliente.selected}" />
+                                            </p:commandButton>
                                         </p:column>
                                         <f:facet name="footer">
                                             <p:commandButton value="Agregar" update=":fedit4:outSubCliente"
@@ -316,7 +326,7 @@
                                      selectionMode="single"
                                      selection="#{clienteBean.subCliente.nuevo}"
                                      rowKey="#{cli.codigo}">
-                            <p:ajax event="rowSelect" listener="#{clienteBean.onRowSelect}"/>
+                            <p:ajax event="rowSelect" listener="#{clienteBean.onRowSelectSubCliente}"/>
                             <f:facet name="header">
                                 <h:outputText value="Clientes"/>
                             </f:facet>
