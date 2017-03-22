@@ -22,7 +22,8 @@ import org.mongodb.morphia.annotations.Reference;
  */
 @Entity(value = "Cliente", noClassnameStored = true)
 @Indexes({
-    @Index(fields = @Field("codigo"))})
+    @Index(fields = @Field("codigo")),
+    @Index(fields = @Field("ruc"))})
 public class Cliente extends BaseEntity {
 
     private String codigo;
