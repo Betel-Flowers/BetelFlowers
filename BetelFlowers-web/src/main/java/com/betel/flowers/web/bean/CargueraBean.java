@@ -5,10 +5,10 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.Dae;
-import com.betel.flowers.model.Pais;
-import com.betel.flowers.service.DaeService;
-import com.betel.flowers.service.PaisService;
+import com.betel.flowers.model.BodegaVirtual;
+import com.betel.flowers.model.Carguera;
+import com.betel.flowers.service.BodegaVirtualService;
+import com.betel.flowers.service.CargueraService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,35 +23,35 @@ import javax.inject.Inject;
  *
  * @author luis
  */
-@Named(value = "daeBean")
+@Named(value = "cargueraBean")
 @ViewScoped
-public class DaeBean implements Serializable {
+public class CargueraBean implements Serializable {
 
-    private static final long serialVersionUID = -3009525467369921956L;
+    private static final long serialVersionUID = 8503479427821744033L;
 
-    private Dae nuevo;
-    private Dae selected;
-    private List<Dae> daes;
+    private Carguera nuevo;
+    private Carguera selected;
+    private List<Carguera> cargueras;
 
     @Inject
-    private DaeService daeService;
+    private CargueraService cargueraService;
     @Inject
-    private PaisService paisService;
+    private BodegaVirtualService bodegaService;
 
     @PostConstruct
     public void init() {
-        this.nuevo = new Dae();
+        this.nuevo = new Carguera();
         this.selected = null;
-        this.daes = this.daeService.obtenerListFlag(1);
-        if (this.daes == null) {
-            this.daes = new ArrayList<>();
+        this.cargueras = this.cargueraService.obtenerListFlag(1);
+        if (this.cargueras == null) {
+            this.cargueras = new ArrayList<>();
         }
     }
 
     public void add(ActionEvent evt) {
-        Pais mpais = this.paisService.findByCodigo(this.nuevo.getPais());
-        this.nuevo.setPais(mpais);
-        Boolean exito = this.daeService.insert(this.nuevo);
+        BodegaVirtual mbodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
+        this.nuevo.setBodega(mbodega);
+        Boolean exito = this.cargueraService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.init();
@@ -63,9 +63,9 @@ public class DaeBean implements Serializable {
 
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
-            Pais mpais = this.paisService.findByCodigo(this.nuevo.getPais());
-            this.selected.setPais(mpais);
-            Boolean exito = this.daeService.update(this.selected);
+            BodegaVirtual mbodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
+            this.selected.setBodega(mbodega);
+            Boolean exito = this.cargueraService.update(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
                 this.init();
@@ -80,7 +80,7 @@ public class DaeBean implements Serializable {
 
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
-            Boolean exito = this.daeService.deteleFlag(this.selected);
+            Boolean exito = this.cargueraService.deteleFlag(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
@@ -93,28 +93,28 @@ public class DaeBean implements Serializable {
         }
     }
 
-    public Dae getNuevo() {
+    public Carguera getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(Dae nuevo) {
+    public void setNuevo(Carguera nuevo) {
         this.nuevo = nuevo;
     }
 
-    public Dae getSelected() {
+    public Carguera getSelected() {
         return selected;
     }
 
-    public void setSelected(Dae selected) {
+    public void setSelected(Carguera selected) {
         this.selected = selected;
     }
 
-    public List<Dae> getDaes() {
-        return daes;
+    public List<Carguera> getCargueras() {
+        return cargueras;
     }
 
-    public void setDaes(List<Dae> daes) {
-        this.daes = daes;
+    public void setCargueras(List<Carguera> cargueras) {
+        this.cargueras = cargueras;
     }
-
+    
 }

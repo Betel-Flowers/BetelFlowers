@@ -13,14 +13,16 @@
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel for="fechaApertura" value="Descripcion:"/>
-                    <p:inputText id="fechaApertura" required="true" 
-                                 value="#{daeBean.nuevo.fechaApertura}"/>
+                    <p:outputLabel for="fechaApertura" value="Fecha Apertura:"/>
+                    <p:calendar id="fechaApertura" required="true" pattern="dd/MM/yyyy HH:mm:ss a"
+                                timeZone="#{calendarioBean.calenadario.timeZone}"
+                                value="#{daeBean.nuevo.fechaApertura}" showOn="button" />
                     <p:message for="fechaApertura" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="fechaCaducidad" value="Ubicacion:"/>
-                    <p:inputText id="fechaCaducidad" required="true"
-                                 value="#{daeBean.nuevo.fechaCaducidad}"/>
+                    <p:outputLabel for="fechaCaducidad" value="Fecha Caducidad:"/>
+                    <p:calendar id="fechaCaducidad" required="true" pattern="dd/MM/yyyy HH:mm:ss a"
+                                timeZone="#{calendarioBean.calenadario.timeZone}"
+                                value="#{daeBean.nuevo.fechaCaducidad}" showOn="button" />
                     <p:message for="fechaCaducidad" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="codigoDAE" value="Codigo DAE:"/>
@@ -56,17 +58,23 @@
                     </f:facet>
                     <p:column headerText="Fecha" style="text-align: center">
                         <h:outputText value="#{dae.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Codigo" style="text-align: center">
                         <h:outputText value="#{dae.codigo}"/>
                     </p:column>
                     <p:column headerText="Fecha Apertura" style="text-align: center">
-                        <h:outputText value="#{dae.fechaApertura}"/>
+                        <h:outputText value="#{dae.fechaApertura}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                               timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Fecha Caducidad" style="text-align: center">
-                        <h:outputText value="#{dae.fechaCaducidad}"/>
+                        <h:outputText value="#{dae.fechaCaducidad}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                               timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Codigo DAE" style="text-align: center">
                         <h:outputText value="#{dae.codigoDAE}"/>
@@ -77,7 +85,8 @@
                     <p:column headerText="Modificar" style="text-align: center">
                         <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
                                          oncomplete="PF('dlgModifyDAE').show()">
-                            <f:setPropertyActionListener value="#{dae}" target="#{daeBean.selected}" />
+                            <f:setPropertyActionListener value="#{dae}" target="#{daeBean.selected}"/>
+                            <f:setPropertyActionListener value="#{dae}" target="#{daeBean.nuevo}"/>
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="Borrar" style="text-align: center">
@@ -94,14 +103,16 @@
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="editEspe">
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel for="fechaApertura" value="Descripcion:"/>
-                        <p:inputText id="fechaApertura" required="true" 
-                                     value="#{daeBean.selected.fechaApertura}"/>
+                        <p:outputLabel for="fechaApertura" value="Fecha Apertura:"/>
+                        <p:calendar id="fechaApertura" required="true" pattern="dd/MM/yyyy HH:mm:ss a"
+                                    timeZone="#{calendarioBean.calenadario.timeZone}"
+                                    value="#{daeBean.selected.fechaApertura}" showOn="button" />
                         <p:message for="fechaApertura" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="fechaCaducidad" value="Ubicacion:"/>
-                        <p:inputText id="fechaCaducidad" required="true"
-                                     value="#{daeBean.selected.fechaCaducidad}"/>
+                        <p:outputLabel for="fechaCaducidad" value="Fecha Caducidad:"/>
+                        <p:calendar id="fechaCaducidad" required="true" pattern="dd/MM/yyyy HH:mm:ss a"
+                                    timeZone="#{calendarioBean.calenadario.timeZone}"
+                                    value="#{daeBean.selected.fechaCaducidad}" showOn="button" />
                         <p:message for="fechaCaducidad" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="codigoDAE" value="Codigo DAE:"/>
@@ -111,7 +122,7 @@
 
                         <p:outputLabel for="pais" value="Pais de Destino:"/>
                         <p:selectOneMenu id="pais" required="true"
-                                         value="#{daeBean.selected.pais.codigo}">
+                                         value="#{daeBean.nuevo.pais.codigo}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{paisBean.paices}" var="pass" 
                                            itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
@@ -131,13 +142,17 @@
                 <p:outputPanel id="deleteEspe">
                     <p:outputLabel value="Se eliminara el siguiente registro:"/>
                     <h:panelGrid columns="2" cellpadding="5">
-                        <p:outputLabel for="fechaApertura" value="Descripcion:"/>
-                        <p:outputLabel id="fechaApertura" 
-                                       value="#{daeBean.nuevo.fechaApertura}"/>
+                        <p:outputLabel value="Fecha Apertura:"/>
+                        <h:outputText id="fechaApertura" value="#{daeBean.nuevo.fechaApertura}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                               timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
 
-                        <p:outputLabel for="fechaCaducidad" value="Ubicacion:"/>
-                        <p:outputLabel id="fechaCaducidad"
-                                       value="#{daeBean.nuevo.fechaCaducidad}"/>
+                        <p:outputLabel value="Fecha Caducidad:"/>
+                        <h:outputText id="fechaCaducidad" value="#{daeBean.nuevo.fechaCaducidad}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" 
+                                               timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
 
                         <p:outputLabel for="codigoDAE" value="Codigo DAE:"/>
                         <p:outputLabel id="codigoDAE"
