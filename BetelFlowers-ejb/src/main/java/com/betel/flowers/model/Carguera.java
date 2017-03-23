@@ -6,7 +6,6 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
-import java.util.Date;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
@@ -18,22 +17,24 @@ import org.mongodb.morphia.annotations.Reference;
  *
  * @author luis
  */
-@Entity(value = "Dae", noClassnameStored = true)
+@Entity(value = "Carguera", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class Dae extends BaseEntity{
+public class Carguera extends BaseEntity {
 
     private Integer codigo;
-    private Date fechaApertura;
-    private Date fechaCaducidad;
-    private String codigoDAE;
+    private String nombre;
+    private String ruc;
+    private String telefono;
+    private String correo1;
+    private String correo2;
     private Integer flag;
 
     @Reference
-    private Pais pais;
-    
-    public Dae() {
-        this.pais = new Pais();
+    private BodegaVirtual bodega;
+
+    public Carguera() {
+        this.bodega = new BodegaVirtual();
     }
 
     public Integer getCodigo() {
@@ -44,36 +45,52 @@ public class Dae extends BaseEntity{
         this.codigo = codigo;
     }
 
-    public Date getFechaApertura() {
-        return fechaApertura;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setFechaApertura(Date fechaApertura) {
-        this.fechaApertura = fechaApertura;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Date getFechaCaducidad() {
-        return fechaCaducidad;
+    public String getRuc() {
+        return ruc;
     }
 
-    public void setFechaCaducidad(Date fechaCaducidad) {
-        this.fechaCaducidad = fechaCaducidad;
+    public void setRuc(String ruc) {
+        this.ruc = ruc;
     }
 
-    public String getCodigoDAE() {
-        return codigoDAE;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setCodigoDAE(String codigoDAE) {
-        this.codigoDAE = codigoDAE;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
-    public Pais getPais() {
-        return pais;
+    public String getCorreo1() {
+        return correo1;
     }
 
-    public void setPais(Pais pais) {
-        this.pais = pais;
+    public void setCorreo1(String correo1) {
+        this.correo1 = correo1;
+    }
+
+    public String getCorreo2() {
+        return correo2;
+    }
+
+    public void setCorreo2(String correo2) {
+        this.correo2 = correo2;
+    }
+
+    public BodegaVirtual getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(BodegaVirtual bodega) {
+        this.bodega = bodega;
     }
 
     public Integer getFlag() {
@@ -86,8 +103,8 @@ public class Dae extends BaseEntity{
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + Objects.hashCode(this.codigo);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -102,7 +119,7 @@ public class Dae extends BaseEntity{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Dae other = (Dae) obj;
+        final Carguera other = (Carguera) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -111,6 +128,6 @@ public class Dae extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Dae{" + "codigo=" + codigo + ", fechaApertura=" + fechaApertura + ", fechaCaducidad=" + fechaCaducidad + ", codigoDAE=" + codigoDAE + ", pais=" + pais + '}';
+        return "Carguera{" + "codigo=" + codigo + ", nombre=" + nombre + ", ruc=" + ruc + ", telefono=" + telefono + ", correo1=" + correo1 + ", correo2=" + correo2 + ", bodega=" + bodega + '}';
     }
 }
