@@ -275,7 +275,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Actualizar" update=":fcli, :fcli:messages"
+                    <p:commandButton value="Actualizar" update=":fcli, :fcli:messages, :flist, :flist:dtCli"
                                      actionListener="#{clienteBean.modify(evt)}"/>
                 </f:facet>
             </p:panel>
@@ -394,7 +394,8 @@
                                 <h:outputText value="Local" rendered="#{cli.local}"/>
                             </p:column>
                             <f:facet name="footer">
-                                <p:commandButton value="Agregar" update=":fedit4, :fcli:messages, :fcli:outDetail"
+                                <p:commandButton value="Agregar" update=":fedit4, :fedit4:outSubCliente, 
+                                                 :fcli:messages, :fcli:outDetail"
                                                  actionListener="#{clienteBean.subCliente.add(evt)}"/>
                             </f:facet>
                         </p:dataTable>

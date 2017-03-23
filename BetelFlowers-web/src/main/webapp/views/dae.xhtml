@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registrar Dae">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="fechaApertura" value="Descripcion:"/>
+                    <p:inputText id="fechaApertura" required="true" 
+                                 value="#{daeBean.nuevo.fechaApertura}"/>
+                    <p:message for="fechaApertura" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="fechaCaducidad" value="Ubicacion:"/>
+                    <p:inputText id="fechaCaducidad" required="true"
+                                 value="#{daeBean.nuevo.fechaCaducidad}"/>
+                    <p:message for="fechaCaducidad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="codigoDAE" value="Codigo DAE:"/>
+                    <p:inputText id="codigoDAE" required="true"
+                                 value="#{daeBean.nuevo.codigoDAE}"/>
+                    <p:message for="codigoDAE" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="pais" value="Pais de Destino:"/>
+                    <p:selectOneMenu id="pais" required="true"
+                                     value="#{daeBean.nuevo.pais.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{paisBean.paices}" var="pass" 
+                                       itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="pais" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fdtdae:dtdae, :fadd:messages" 
+                                     actionListener="#{daeBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fdtdae">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtdae" var="dae" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{daeBean.daes}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Daes"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{dae.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{dae.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Apertura" style="text-align: center">
+                        <h:outputText value="#{dae.fechaApertura}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Caducidad" style="text-align: center">
+                        <h:outputText value="#{dae.fechaCaducidad}"/>
+                    </p:column>
+                    <p:column headerText="Codigo DAE" style="text-align: center">
+                        <h:outputText value="#{dae.codigoDAE}"/>
+                    </p:column>
+                    <p:column headerText="Pais" style="text-align: center">
+                        <h:outputText value="#{dae.pais.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center">
+                        <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyDAE').show()">
+                            <f:setPropertyActionListener value="#{dae}" target="#{daeBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteDAE').show()">
+                            <f:setPropertyActionListener value="#{dae}" target="#{daeBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Dae" widgetVar="dlgModifyDAE" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="fechaApertura" value="Descripcion:"/>
+                        <p:inputText id="fechaApertura" required="true" 
+                                     value="#{daeBean.selected.fechaApertura}"/>
+                        <p:message for="fechaApertura" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="fechaCaducidad" value="Ubicacion:"/>
+                        <p:inputText id="fechaCaducidad" required="true"
+                                     value="#{daeBean.selected.fechaCaducidad}"/>
+                        <p:message for="fechaCaducidad" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="codigoDAE" value="Codigo DAE:"/>
+                        <p:inputText id="codigoDAE" required="true"
+                                     value="#{daeBean.selected.codigoDAE}"/>
+                        <p:message for="codigoDAE" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="pais" value="Pais de Destino:"/>
+                        <p:selectOneMenu id="pais" required="true"
+                                         value="#{daeBean.selected.pais.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{paisBean.paices}" var="pass" 
+                                           itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="pais" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtdae:dtdae" 
+                                     actionListener="#{daeBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Dae" widgetVar="dlgDeleteDAE" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="deleteEspe">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="fechaApertura" value="Descripcion:"/>
+                        <p:outputLabel id="fechaApertura" 
+                                       value="#{daeBean.nuevo.fechaApertura}"/>
+
+                        <p:outputLabel for="fechaCaducidad" value="Ubicacion:"/>
+                        <p:outputLabel id="fechaCaducidad"
+                                       value="#{daeBean.nuevo.fechaCaducidad}"/>
+
+                        <p:outputLabel for="codigoDAE" value="Codigo DAE:"/>
+                        <p:outputLabel id="codigoDAE"
+                                       value="#{daeBean.nuevo.codigoDAE}"/>
+
+                        <p:outputLabel for="pais" value="Pais de Destino:"/>
+                        <p:outputLabel id="pais"
+                                       value="#{daeBean.nuevo.pais.codigo}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtdae:dtdae" 
+                                     actionListener="#{daeBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

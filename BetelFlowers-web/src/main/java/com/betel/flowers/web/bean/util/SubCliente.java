@@ -38,6 +38,7 @@ public class SubCliente implements Serializable {
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
                 this.nuevo = new Cliente();
+                this.selected = null;
             } else {
                 FacesUtil.addMessageError(null, "No se ha agregado.");
             }

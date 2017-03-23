@@ -110,12 +110,11 @@ public class ClienteBean implements Serializable {
                     this.selected.setCajas(this.caja.getCajas());
                     Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevoSelected.getCiudad());
                     this.selected.setCiudad(mciudad);
+                    this.removeDuplicateSubClientes();
+                    this.selected.setSubClientes(this.subCliente.getSubClientes());
                     Boolean exito = this.clienteService.update(this.selected);
                     if (exito) {
                         FacesUtil.addMessageInfo("Se ha modifcado con exito.");
-                        this.removeDuplicateSubClientes();
-                        this.selected.setSubClientes(this.subCliente.getSubClientes());
-                        this.clienteService.addSubCliente(this.selected);
                         this.init();
                     } else {
                         FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
@@ -169,22 +168,13 @@ public class ClienteBean implements Serializable {
             this.caja.setCajas(this.selected.getCajas());
             this.subCliente.setSubClientes(this.selected.getSubClientes());
             this.activeSelectedCliente = Boolean.FALSE;
-            this.removeMyRegister(this.removeSelected);
         }
     }
 
     public void onRowSelectSubCliente(SelectEvent event) {
-        this.selected = (Cliente) event.getObject();
-        if (this.selected != null) {
-            this.subCliente.setNuevo(this.selected);
-        }
-    }
-
-    private void removeMyRegister(Cliente select) {
-        if (this.clientes != null && !this.clientes.isEmpty()) {
-            this.clientes.remove(select);
-        } else {
-            FacesUtil.addMessageInfo("Porfavor vuelva a intentarlo.");
+        this.subCliente.setSelected((Cliente) event.getObject());
+        if (this.subCliente.getSelected() != null) {
+            this.subCliente.setNuevo(this.subCliente.getSelected());
         }
     }
 
