@@ -30,6 +30,7 @@ public class StockVenta extends BaseEntity {
     private String puntoCorte;
     private Integer totalTallos;
     private Double precio;
+    private Double subtotal;
     private String barcode;
     private String username;
     private Integer flag;
@@ -40,6 +41,10 @@ public class StockVenta extends BaseEntity {
     private TipoCaja caja;
 
     public StockVenta() {
+        this.precio = 0.0;
+        this.numeroCajas = 1;
+        this.numeroRamos = 1;
+        this.numeroTallosRamo = 1;
         this.variedad = new Variedad();
         this.caja = new TipoCaja();
     }
@@ -61,7 +66,7 @@ public class StockVenta extends BaseEntity {
     }
 
     public Integer getTotalTallos() {
-        return totalTallos;
+        return getNumeroRamos() * getNumeroTallosRamo() * getNumeroCajas();
     }
 
     public void setTotalTallos(Integer totalTallos) {
@@ -90,6 +95,14 @@ public class StockVenta extends BaseEntity {
 
     public void setCaja(TipoCaja caja) {
         this.caja = caja;
+    }
+
+    public Double getSubtotal() {
+        return getPrecio() * (double) (getTotalTallos()) * (double) (getNumeroCajas());
+    }
+
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
     }
 
     public String getBarcode() {
