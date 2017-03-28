@@ -11,27 +11,23 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexes;
-import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
  * @author luis
  */
-@Entity(value = "Motivo", noClassnameStored = true)
+@Entity(value = "TipoCaja", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class Motivo extends BaseEntity{
+public class TipoCaja extends BaseEntity{
 
     private Integer codigo;
-    private String descripcion;
+    private String tipo;
+    private Double valor;
     private String username;
     private Integer flag;
-    
-    @Reference
-    private Causa causa;
 
-    public Motivo() {
-        this.causa = new Causa();
+    public TipoCaja() {
     }
 
     public Integer getCodigo() {
@@ -42,20 +38,20 @@ public class Motivo extends BaseEntity{
         this.codigo = codigo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public Causa getCausa() {
-        return causa;
+    public Double getValor() {
+        return valor;
     }
 
-    public void setCausa(Causa causa) {
-        this.causa = causa;
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 
     public String getUsername() {
@@ -76,8 +72,8 @@ public class Motivo extends BaseEntity{
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.codigo);
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -92,7 +88,7 @@ public class Motivo extends BaseEntity{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Motivo other = (Motivo) obj;
+        final TipoCaja other = (TipoCaja) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -101,6 +97,7 @@ public class Motivo extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Motivo{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", flag=" + flag + ", causa=" + causa + '}';
+        return "TipoCaja{" + "codigo=" + codigo + ", tipo=" + tipo + ", flag=" + flag + '}';
     }
+    
 }

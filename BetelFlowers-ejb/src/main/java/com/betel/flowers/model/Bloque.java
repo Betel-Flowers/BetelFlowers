@@ -25,6 +25,7 @@ public class Bloque extends BaseEntity {
     private String descripcion;
     private String ubicacion;
     private Double area;
+    private String username;
     private Integer flag;
 
     public Bloque() {
@@ -60,6 +61,14 @@ public class Bloque extends BaseEntity {
 
     public void setArea(Double area) {
         this.area = area;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Integer getFlag() {

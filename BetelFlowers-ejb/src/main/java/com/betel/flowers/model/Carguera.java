@@ -28,6 +28,7 @@ public class Carguera extends BaseEntity {
     private String telefono;
     private String correo1;
     private String correo2;
+    private String username;
     private Integer flag;
 
     @Reference
@@ -91,6 +92,14 @@ public class Carguera extends BaseEntity {
 
     public void setBodega(BodegaVirtual bodega) {
         this.bodega = bodega;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Integer getFlag() {

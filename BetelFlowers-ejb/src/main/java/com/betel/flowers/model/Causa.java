@@ -23,6 +23,7 @@ public class Causa extends BaseEntity {
 
     private Integer codigo;
     private String descripcion;
+    private String username;
     private Integer flag;
 
     public Causa() {
@@ -42,6 +43,14 @@ public class Causa extends BaseEntity {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Integer getFlag() {

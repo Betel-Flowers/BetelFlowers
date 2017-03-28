@@ -27,6 +27,7 @@ public class Dae extends BaseEntity{
     private Date fechaApertura;
     private Date fechaCaducidad;
     private String codigoDAE;
+    private String username;
     private Integer flag;
 
     @Reference
@@ -74,6 +75,14 @@ public class Dae extends BaseEntity{
 
     public void setPais(Pais pais) {
         this.pais = pais;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Integer getFlag() {

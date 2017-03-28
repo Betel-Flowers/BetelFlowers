@@ -24,6 +24,7 @@ public class Ciudad extends BaseEntity {
 
     private Integer codigo;
     private String nombre;
+    private String username;
     private Integer flag;
 
     @Reference
@@ -63,6 +64,14 @@ public class Ciudad extends BaseEntity {
 
     public void setPais(Pais pais) {
         this.pais = pais;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
