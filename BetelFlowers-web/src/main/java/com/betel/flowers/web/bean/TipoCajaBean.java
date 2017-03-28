@@ -5,10 +5,8 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.BodegaVirtual;
-import com.betel.flowers.model.Carguera;
-import com.betel.flowers.service.BodegaVirtualService;
-import com.betel.flowers.service.CargueraService;
+import com.betel.flowers.model.TipoCaja;
+import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,35 +21,32 @@ import javax.inject.Inject;
  *
  * @author luis
  */
-@Named(value = "cargueraBean")
+@Named(value = "tipoCajaBean")
 @ViewScoped
-public class CargueraBean implements Serializable {
+public class TipoCajaBean implements Serializable{
 
-    private static final long serialVersionUID = 8503479427821744033L;
+    private static final long serialVersionUID = -6582571527078632747L;
 
-    private Carguera nuevo;
-    private Carguera selected;
-    private List<Carguera> cargueras;
+    private TipoCaja nuevo;
+    private TipoCaja selected;
+    private List<TipoCaja> tipoCajas;
 
     @Inject
-    private CargueraService cargueraService;
-    @Inject
-    private BodegaVirtualService bodegaService;
+    private TipoCajaService tipoCajaService;
 
     @PostConstruct
     public void init() {
-        this.nuevo = new Carguera();
+        this.nuevo = new TipoCaja();
+        this.nuevo.setUsername("usertest");
         this.selected = null;
-        this.cargueras = this.cargueraService.obtenerListFlag(1);
-        if (this.cargueras == null) {
-            this.cargueras = new ArrayList<>();
+        this.tipoCajas = this.tipoCajaService.obtenerListFlag(1);
+        if (this.tipoCajas == null) {
+            this.tipoCajas = new ArrayList<>();
         }
     }
 
     public void add(ActionEvent evt) {
-        BodegaVirtual mbodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
-        this.nuevo.setBodega(mbodega);
-        Boolean exito = this.cargueraService.insert(this.nuevo);
+        Boolean exito = this.tipoCajaService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.init();
@@ -63,9 +58,7 @@ public class CargueraBean implements Serializable {
 
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
-            BodegaVirtual mbodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
-            this.selected.setBodega(mbodega);
-            Boolean exito = this.cargueraService.update(this.selected);
+            Boolean exito = this.tipoCajaService.update(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
                 this.init();
@@ -80,7 +73,7 @@ public class CargueraBean implements Serializable {
 
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
-            Boolean exito = this.cargueraService.deteleFlag(this.selected);
+            Boolean exito = this.tipoCajaService.deteleFlag(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
@@ -92,29 +85,29 @@ public class CargueraBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
-    public Carguera getNuevo() {
+
+    public TipoCaja getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(Carguera nuevo) {
+    public void setNuevo(TipoCaja nuevo) {
         this.nuevo = nuevo;
     }
 
-    public Carguera getSelected() {
+    public TipoCaja getSelected() {
         return selected;
     }
 
-    public void setSelected(Carguera selected) {
+    public void setSelected(TipoCaja selected) {
         this.selected = selected;
     }
 
-    public List<Carguera> getCargueras() {
-        return cargueras;
+    public List<TipoCaja> getTipoCajas() {
+        return tipoCajas;
     }
 
-    public void setCargueras(List<Carguera> cargueras) {
-        this.cargueras = cargueras;
+    public void setTipoCajas(List<TipoCaja> tipoCajas) {
+        this.tipoCajas = tipoCajas;
     }
-
+    
 }

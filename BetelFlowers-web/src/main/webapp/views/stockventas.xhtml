@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./menu.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registrar Stock Venta">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="numCajas" value="Numero de Cajas:"/>
+                    <p:spinner id="numCajas" required="true" min="0" stepFactor="0.01" max="100"
+                               value="#{stockVentasBean.nuevo.numeroCajas}"/>
+                    <p:message for="numCajas" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="variedad" value="Variedad:"/>
+                    <p:selectOneMenu id="variedad" required="true" style="width: 100%" 
+                                     value="#{stockVentasBean.nuevo.variedad.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
+                                       itemValue="#{va.codigo}"/>
+                        <p:ajax listener="#{stockVentasBean.loadVariedad}" 
+                                update=":fadd:cantidad, :fadd:ramos, :fadd:longitud, :fadd:puntoCorte" />
+                    </p:selectOneMenu>
+                    <p:message for="variedad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="cantidad" value="Numero de Ramos:"/>
+                    <p:spinner id="cantidad" value="#{registroExportacionBean.nuevo.numeroRamos}"
+                               min="1" max="500" required="true"/>
+                    <p:message for="cantidad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="ramos" value="Ramos de:"/>
+                    <p:selectOneMenu id="ramos" required="true" style="width: 100%" 
+                                     value="#{stockVentasBean.nuevo.numeroTallosRamo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{stockVentasBean.nuevo.variedad.ramos}"
+                                       var="rm" itemLabel="#{rm}" itemValue="#{rm}"/>
+                    </p:selectOneMenu>
+                    <p:message for="ramos" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="longitud" value="Longitud:"/>
+                    <p:selectOneMenu id="longitud" required="true" style="width: 100%" 
+                                     value="#{stockVentasBean.nuevo.longitud}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{stockVentasBean.nuevo.variedad.longitudes}"
+                                       var="lo" itemLabel="#{lo}" itemValue="#{lo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="longitud" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="puntoCorte" value="Punto de Corte:"/>
+                    <p:selectOneMenu id="puntoCorte" required="true" style="width: 100%" 
+                                     value="#{stockVentasBean.nuevo.puntoCorte}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{stockVentasBean.nuevo.variedad.puntosCorte}"
+                                       var="pc" itemLabel="#{pc}" itemValue="#{pc}"/>
+                    </p:selectOneMenu>
+                    <p:message for="puntoCorte" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="valor" value="Percio:"/>
+                    <p:spinner id="valor" required="true" min="0" stepFactor="0.01" max="100"
+                               value="#{stockVentasBean.nuevo.precio}"/>
+                    <p:message for="valor" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fdttipc:dttipc, :fadd:messages" 
+                                     actionListener="#{tipoCajaBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fdttipc">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dttipc" var="tipc" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{tipoCajaBean.tipoCajas}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Stock Ventas"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{tipc.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{tipc.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Tipo" style="text-align: center">
+                        <h:outputText value="#{tipc.tipo}"/>
+                    </p:column>
+                    <p:column headerText="Valor" style="text-align: center">
+                        <h:outputText value="#{tipc.valor}"/>
+                    </p:column>
+                    <p:column headerText="Username" style="text-align: center">
+                        <h:outputText value="#{tipc.username}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center">
+                        <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyBloq').show()">
+                            <f:setPropertyActionListener value="#{tipc}" target="#{tipoCajaBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteBloq').show()">
+                            <f:setPropertyActionListener value="#{tipc}" target="#{tipoCajaBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Stock Venta" widgetVar="dlgModifyBloq" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="tipo" value="Tipo:"/>
+                        <p:inputText id="tipo" required="true" 
+                                     value="#{tipoCajaBean.selected.tipo}"/>
+                        <p:message for="tipo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="valor" value="Valor:"/>
+                        <p:spinner id="valor" required="true" min="0" stepFactor="0.01" max="100"
+                                   value="#{tipoCajaBean.selected.valor}"/>
+                        <p:message for="valor" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdttipc:dttipc" 
+                                     actionListener="#{tipoCajaBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Stock Venta" widgetVar="dlgDeleteBloq" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="deleteEspe">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Codigo:"/>
+                        <p:outputLabel value="#{tipoCajaBean.selected.codigo}"/>
+
+                        <p:outputLabel value="Tipo:"/>
+                        <p:outputLabel value="#{tipoCajaBean.selected.tipo}"/>
+
+                        <p:outputLabel value="Valor:"/>
+                        <p:outputLabel value="#{tipoCajaBean.selected.valor}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdttipc:dttipc" 
+                                     actionListener="#{tipoCajaBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
