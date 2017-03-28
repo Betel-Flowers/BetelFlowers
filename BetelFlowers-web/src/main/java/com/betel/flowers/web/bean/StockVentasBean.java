@@ -5,9 +5,13 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.BodegaVirtual;
+import com.betel.flowers.model.RegistroExportacion;
 import com.betel.flowers.model.StockVenta;
+import com.betel.flowers.model.TipoCaja;
 import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.StockVentasService;
+import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  *
@@ -26,22 +31,26 @@ import javax.inject.Inject;
 @Named(value = "stockVentasBean")
 @ViewScoped
 public class StockVentasBean {
-    
+
     private StockVenta nuevo;
     private StockVenta selected;
+    private StockVenta remove;
     private List<StockVenta> stockVentas;
     private List<StockVenta> stockVentasG;
-    
+    private Boolean gerated;
+
     @Inject
     private StockVentasService stockVentaService;
     @Inject
     private VariedadService variedadService;
-    
+    @Inject
+    private TipoCajaService tipoCajaService;
+
     @PostConstruct
     public void init() {
         this.nuevo = new StockVenta();
-        this.nuevo.setUsername("usertes");
-        this.selected = null;
+        this.nuevo.setUsername("usertest");
+        this.selected = new StockVenta();
         this.stockVentas = new ArrayList<>();
         this.stockVentasG = this.stockVentaService.obtenerListFlag(1);
         if (this.stockVentasG == null) {
@@ -50,7 +59,81 @@ public class StockVentasBean {
             Collections.reverse(this.stockVentasG);
         }
     }
-    
+
+    public void generateContainer(ActionEvent evt) {
+        Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
+        TipoCaja caja = this.tipoCajaService.findByCodigo(this.nuevo.getCaja());
+        this.nuevo.setVariedad(variedad);
+        this.nuevo.setCaja(caja);
+        this.nuevo.setCodigo(this.generatedTempCode());
+        Boolean exito = this.stockVentas.add(this.nuevo);
+        if (exito) {
+            FacesUtil.addMessageInfo("Se ha guardado con exito.");
+            this.nuevo = new StockVenta();
+            this.nuevo.setUsername("usertest");//usertest
+            this.nuevo.setVariedad(new Variedad());
+            this.nuevo.setCaja(new TipoCaja());
+            this.stateGenetated();
+        } else {
+            FacesUtil.addMessageError(null, "No se ha guardado.");
+        }
+    }
+
+    public void updateContainer(ActionEvent evt) {
+        if (this.selected != null) {
+            Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad());
+            TipoCaja caja = this.tipoCajaService.findByCodigo(this.selected.getCaja());
+            this.selected.setVariedad(variedad);
+            this.selected.setCaja(caja);
+            int index = this.stockVentas.indexOf(this.selected);
+            Boolean exito = this.stockVentas.remove(this.remove);
+            this.stockVentas.add(index, this.selected);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha modifcado con exito.");
+                this.stateGenetated();
+                this.selected = new StockVenta();
+                this.remove = null;
+            } else {
+                FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
+            }
+        } else {
+            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+        }
+    }
+
+    public void removeContainer(ActionEvent evt) {
+        if (this.selected != null && this.remove != null) {
+            this.remove = selected;
+            Boolean exito = this.stockVentas.remove(this.remove);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha eliminado con exito.");
+                this.stateGenetated();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha eliminado con exito..");
+            }
+        } else {
+            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+        }
+    }
+
+    private Integer generatedTempCode() {
+        Integer number = 0;
+        number = new Integer(RandomStringUtils.randomNumeric(4));
+        return number;
+    }
+
+    private void stateGenetated() {
+        if (this.stockVentas == null || this.stockVentas.isEmpty()) {
+            this.gerated = Boolean.TRUE;
+        } else {
+            this.gerated = Boolean.FALSE;
+        }
+    }
+
+    public void enviarOriginalRegister(ActionEvent evt, StockVenta select) {
+        this.remove = select;
+    }
+
     public void add(ActionEvent evt) {
         Boolean exito = this.stockVentaService.insert(this.nuevo);
         if (exito) {
@@ -61,7 +144,7 @@ public class StockVentasBean {
             this.init();
         }
     }
-    
+
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
             Boolean exito = this.stockVentaService.update(this.selected);
@@ -76,7 +159,7 @@ public class StockVentasBean {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
             Boolean exito = this.stockVentaService.deteleFlag(this.selected);
@@ -91,7 +174,7 @@ public class StockVentasBean {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     public void loadVariedad() {
         Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad().getCodigo());
         if (variedad.getCodigo() != null) {
@@ -105,37 +188,45 @@ public class StockVentasBean {
             this.selected.setVariedad(variedad);
         }
     }
-    
+
     public StockVenta getNuevo() {
         return nuevo;
     }
-    
+
     public void setNuevo(StockVenta nuevo) {
         this.nuevo = nuevo;
     }
-    
+
     public StockVenta getSelected() {
         return selected;
     }
-    
+
     public void setSelected(StockVenta selected) {
         this.selected = selected;
     }
-    
+
     public List<StockVenta> getStockVentas() {
         return stockVentas;
     }
-    
+
     public void setStockVentas(List<StockVenta> stockVentas) {
         this.stockVentas = stockVentas;
     }
-    
+
     public List<StockVenta> getStockVentasG() {
         return stockVentasG;
     }
-    
+
     public void setStockVentasG(List<StockVenta> stockVentasG) {
         this.stockVentasG = stockVentasG;
     }
-    
+
+    public Boolean getGerated() {
+        return gerated;
+    }
+
+    public void setGerated(Boolean gerated) {
+        this.gerated = gerated;
+    }
+
 }

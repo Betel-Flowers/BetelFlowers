@@ -14,10 +14,19 @@
                 </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:outputLabel for="numCajas" value="Numero de Cajas:"/>
-                    <p:spinner id="numCajas" required="true" min="0" stepFactor="0.01" max="100"
+                    <p:spinner id="numCajas" required="true" min="1" max="100"
                                value="#{stockVentasBean.nuevo.numeroCajas}"/>
                     <p:message for="numCajas" display="tooltip" severity="error"/>
-                    
+
+                    <p:outputLabel for="tipoCaja" value="Tipo de Caja:"/>
+                    <p:selectOneMenu id="tipoCaja" required="true" style="width: 100%" 
+                                     value="#{stockVentasBean.nuevo.caja.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="cajat" itemLabel="#{cajat.tipo} #{cajat.valor}"
+                                       itemValue="#{cajat.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="tipoCaja" display="tooltip" severity="error"/>
+
                     <p:outputLabel for="variedad" value="Variedad:"/>
                     <p:selectOneMenu id="variedad" required="true" style="width: 100%" 
                                      value="#{stockVentasBean.nuevo.variedad.codigo}">
@@ -30,7 +39,7 @@
                     <p:message for="variedad" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="cantidad" value="Numero de Ramos:"/>
-                    <p:spinner id="cantidad" value="#{registroExportacionBean.nuevo.numeroRamos}"
+                    <p:spinner id="cantidad" value="#{stockVentasBean.nuevo.numeroRamos}"
                                min="1" max="500" required="true"/>
                     <p:message for="cantidad" display="tooltip" severity="error"/>
 
@@ -60,102 +69,184 @@
                                        var="pc" itemLabel="#{pc}" itemValue="#{pc}"/>
                     </p:selectOneMenu>
                     <p:message for="puntoCorte" display="tooltip" severity="error"/>
-                    
+
                     <p:outputLabel for="valor" value="Percio:"/>
-                    <p:spinner id="valor" required="true" min="0" stepFactor="0.01" max="100"
+                    <p:spinner id="valor" required="true" prefix="$ "
+                               min="0.01" stepFactor="0.01" max="100"
                                value="#{stockVentasBean.nuevo.precio}"/>
                     <p:message for="valor" display="tooltip" severity="error"/>
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Guardar" update=":fadd, :fdttipc:dttipc, :fadd:messages" 
-                                     actionListener="#{tipoCajaBean.add(evt)}"/>
+                    <p:commandButton value="Agregar" update=":fadd, :fdetSV:dtstkvs, :fadd:messages" 
+                                     actionListener="#{stockVentasBean.generateContainer(evt)}"/>
                 </f:facet>
             </p:panel>
         </h:form>
-        <h:form id="fdttipc">
+        <h:form id="fsave">
+            <p:panel style="align-content: center; text-align: center">
+                <p:commandButton value="Enviar" update=":fadd, :fdtstkv:dtstkv, :fadd:messages" 
+                                 actionListener="#{stockVentasBean.add(evt)}"/>
+            </p:panel>
+        </h:form>
+        <h:form id="fdetSV">
             <h:panelGrid style="margin: 0 auto;">
-                <p:dataTable id="dttipc" var="tipc" rows="5"
+                <p:dataTable id="dtstkvs" var="stkvs" rows="5"
                              paginator="true" tableStyle="width: auto"
                              paginatorPosition="Bottom"
-                             value="#{tipoCajaBean.tipoCajas}">
-
+                             value="#{stockVentasBean.stockVentas}">
                     <f:facet name="header">
                         <h:outputText value="Stock Ventas"/>
                     </f:facet>
-                    <p:column headerText="Fecha" style="text-align: center">
-                        <h:outputText value="#{tipc.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
-                        </h:outputText>
+                    <p:column headerText="Foto" style="text-align: center">
+                        <p:graphicImage value="#{stkvs.variedad.urlFoto}"
+                                        width="80px" height="80px"/>
                     </p:column>
-                    <p:column headerText="Codigo" style="text-align: center">
-                        <h:outputText value="#{tipc.codigo}"/>
+                    <p:column headerText="Tipo Caja" style="text-align: center">
+                        <h:outputText value="#{stkvs.caja.tipo} #{stkvs.caja.valor}"/>
                     </p:column>
-                    <p:column headerText="Tipo" style="text-align: center">
-                        <h:outputText value="#{tipc.tipo}"/>
+                    <p:column headerText="Cajas" style="text-align: center">
+                        <h:outputText value="#{stkvs.numeroCajas}"/>
                     </p:column>
-                    <p:column headerText="Valor" style="text-align: center">
-                        <h:outputText value="#{tipc.valor}"/>
+                    <p:column headerText="Variedad" style="text-align: center">
+                        <h:outputText value="#{stkvs.variedad.nombre}"/>
                     </p:column>
-                    <p:column headerText="Username" style="text-align: center">
-                        <h:outputText value="#{tipc.username}"/>
+                    <p:column headerText="Precio" style="text-align: center">
+                        <h:outputText value="$ #{stkvs.precio}"/>
+                    </p:column>
+                    <p:column headerText="Ramos" style="text-align: center">
+                        <h:outputText value="#{stkvs.numeroRamos}"/>
+                    </p:column>
+                    <p:column headerText="Tallos" style="text-align: center">
+                        <h:outputText value="#{stkvs.numeroTallosRamo}"/>
+                    </p:column>
+                    <p:column headerText="Total Tallos" style="text-align: center">
+                        <h:outputText value="#{stkvs.totalTallos}"/>
+                    </p:column>
+                    <p:column headerText="Sub-Total" style="text-align: center">
+                        <h:outputText value="$ #{stkvs.subtotal}"/>
+                    </p:column>
+                    <p:column headerText="Longitud" style="text-align: center">
+                        <h:outputText value="#{stkvs.longitud}"/>
                     </p:column>
                     <p:column headerText="Modificar" style="text-align: center">
                         <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
-                                         oncomplete="PF('dlgModifyBloq').show()">
-                            <f:setPropertyActionListener value="#{tipc}" target="#{tipoCajaBean.selected}" />
+                                         actionListener="#{stockVentasBean.enviarOriginalRegister(evt, stkvs)}"
+                                         oncomplete="PF('dlgModifyStVn').show()">
+                            <f:setPropertyActionListener value="#{stkvs}" target="#{stockVentasBean.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="Borrar" style="text-align: center">
-                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
-                                         oncomplete="PF('dlgDeleteBloq').show()">
-                            <f:setPropertyActionListener value="#{tipc}" target="#{tipoCajaBean.selected}" />
+                        <p:commandButton value="Eliminar" update=":fadd:messages"
+                                         actionListener="#{stockVentasBean.removeContainer(evt)}">
+                            <f:setPropertyActionListener value="#{stkvs}" target="#{stockVentasBean.selected}" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
+        <h:form id="fdtstkv">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtstkv" var="stkv" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{tipoCajaBean.tipoCajas}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Lista Stock's Enviados"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{stkv.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{stkv.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Tipo" style="text-align: center">
+                        <h:outputText value="#{stkv.tipo}"/>
+                    </p:column>
+                    <p:column headerText="Valor" style="text-align: center">
+                        <h:outputText value="#{stkv.valor}"/>
+                    </p:column>
+                    <p:column headerText="Username" style="text-align: center">
+                        <h:outputText value="#{stkv.username}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
         <h:form id="fedit">
-            <p:dialog header="Modificar Stock Venta" widgetVar="dlgModifyBloq" resizable="false" 
+            <p:dialog header="Modificar Stock Venta" widgetVar="dlgModifyStVn" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="editEspe">
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel for="tipo" value="Tipo:"/>
-                        <p:inputText id="tipo" required="true" 
-                                     value="#{tipoCajaBean.selected.tipo}"/>
-                        <p:message for="tipo" display="tooltip" severity="error"/>
+                        <p:outputLabel for="numCajas" value="Numero de Cajas:"/>
+                        <p:spinner id="numCajas" required="true" min="1" max="100"
+                                   value="#{stockVentasBean.selected.numeroCajas}"/>
+                        <p:message for="numCajas" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="valor" value="Valor:"/>
-                        <p:spinner id="valor" required="true" min="0" stepFactor="0.01" max="100"
-                                   value="#{tipoCajaBean.selected.valor}"/>
+                        <p:outputLabel for="tipoCaja" value="Tipo de Caja:"/>
+                        <p:selectOneMenu id="tipoCaja" required="true" 
+                                         value="#{stockVentasBean.selected.caja.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="cajat" itemLabel="#{cajat.tipo} #{cajat.valor}"
+                                           itemValue="#{cajat.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipoCaja" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="variedad" value="Variedad:"/>
+                        <p:selectOneMenu id="variedad" required="true" 
+                                         value="#{stockVentasBean.selected.variedad.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
+                                           itemValue="#{va.codigo}"/>
+                            <p:ajax listener="#{stockVentasBean.loadVariedadSelected}" 
+                                    update=":fedit:cantidad, :fedit:ramos, :fedit:longitud, :fedit:puntoCorte" />
+                        </p:selectOneMenu>
+                        <p:message for="variedad" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="cantidad" value="Numero de Ramos:"/>
+                        <p:spinner id="cantidad" value="#{stockVentasBean.selected.numeroRamos}"
+                                   min="1" max="500" required="true"/>
+                        <p:message for="cantidad" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="ramos" value="Ramos de:"/>
+                        <p:selectOneMenu id="ramos" required="true" 
+                                         value="#{stockVentasBean.selected.numeroTallosRamo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{stockVentasBean.selected.variedad.ramos}"
+                                           var="rm" itemLabel="#{rm}" itemValue="#{rm}"/>
+                        </p:selectOneMenu>
+                        <p:message for="ramos" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="longitud" value="Longitud:"/>
+                        <p:selectOneMenu id="longitud" required="true" 
+                                         value="#{stockVentasBean.selected.longitud}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{stockVentasBean.selected.variedad.longitudes}"
+                                           var="lo" itemLabel="#{lo}" itemValue="#{lo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="longitud" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="puntoCorte" value="Punto de Corte:"/>
+                        <p:selectOneMenu id="puntoCorte" required="true" 
+                                         value="#{stockVentasBean.selected.puntoCorte}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{stockVentasBean.selected.variedad.puntosCorte}"
+                                           var="pc" itemLabel="#{pc}" itemValue="#{pc}"/>
+                        </p:selectOneMenu>
+                        <p:message for="puntoCorte" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="valor" value="Percio:"/>
+                        <p:spinner id="valor" required="true" prefix="$ "
+                                   min="0.01" stepFactor="0.01" max="100"
+                                   value="#{stockVentasBean.selected.precio}"/>
                         <p:message for="valor" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdttipc:dttipc" 
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtstkv:dtstkv" 
                                      actionListener="#{tipoCajaBean.modify(evt)}"/>
-                </f:facet>
-            </p:dialog>
-        </h:form>
-        <h:form id="fdelete">
-            <p:dialog header="Eliminar Stock Venta" widgetVar="dlgDeleteBloq" resizable="false" 
-                      modal="true" showEffect="fade" hideEffect="fade">
-                <p:outputPanel id="deleteEspe">
-                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
-                    <h:panelGrid columns="2" cellpadding="5">
-                        <p:outputLabel value="Codigo:"/>
-                        <p:outputLabel value="#{tipoCajaBean.selected.codigo}"/>
-
-                        <p:outputLabel value="Tipo:"/>
-                        <p:outputLabel value="#{tipoCajaBean.selected.tipo}"/>
-
-                        <p:outputLabel value="Valor:"/>
-                        <p:outputLabel value="#{tipoCajaBean.selected.valor}"/>
-                    </h:panelGrid>
-                </p:outputPanel>
-                <f:facet name="footer">
-                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdttipc:dttipc" 
-                                     actionListener="#{tipoCajaBean.remove(evt)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>
