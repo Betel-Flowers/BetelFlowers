@@ -85,7 +85,8 @@
         </h:form>
         <h:form id="fsave">
             <p:panel style="align-content: center; text-align: center">
-                <p:commandButton value="Enviar" update=":fadd, :fdtstkv:dtstkv, :fadd:messages" 
+                <p:commandButton value="Enviar" update=":fadd, :fdtstkv:dtstkv, :fadd:messages"
+                                 disabled="#{stockVentasBean.gerated}"
                                  actionListener="#{stockVentasBean.add(evt)}"/>
             </p:panel>
         </h:form>
@@ -129,6 +130,9 @@
                     <p:column headerText="Longitud" style="text-align: center">
                         <h:outputText value="#{stkvs.longitud}"/>
                     </p:column>
+                    <p:column headerText="Punto Corte" style="text-align: center">
+                        <h:outputText value="#{stkvs.puntoCorte}"/>
+                    </p:column>
                     <p:column headerText="Modificar" style="text-align: center">
                         <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
                                          actionListener="#{stockVentasBean.enviarOriginalRegister(evt, stkvs)}"
@@ -138,7 +142,7 @@
                     </p:column>
                     <p:column headerText="Borrar" style="text-align: center">
                         <p:commandButton value="Eliminar" update=":fadd:messages"
-                                         actionListener="#{stockVentasBean.removeContainer(evt)}">
+                                         actionListener="#{stockVentasBean.removeContainer(evt,stkvs)}">
                             <f:setPropertyActionListener value="#{stkvs}" target="#{stockVentasBean.selected}" />
                         </p:commandButton>
                     </p:column>
@@ -150,7 +154,7 @@
                 <p:dataTable id="dtstkv" var="stkv" rows="5"
                              paginator="true" tableStyle="width: auto"
                              paginatorPosition="Bottom"
-                             value="#{tipoCajaBean.tipoCajas}">
+                             value="#{stockVentasBean.stockVentasG}">
 
                     <f:facet name="header">
                         <h:outputText value="Lista Stock's Enviados"/>
@@ -163,11 +167,39 @@
                     <p:column headerText="Codigo" style="text-align: center">
                         <h:outputText value="#{stkv.codigo}"/>
                     </p:column>
-                    <p:column headerText="Tipo" style="text-align: center">
-                        <h:outputText value="#{stkv.tipo}"/>
+                    <p:column headerText="Foto" style="text-align: center">
+                        <p:graphicImage value="#{stkv.variedad.urlFoto}"
+                                        width="80px" height="80px"/>
                     </p:column>
-                    <p:column headerText="Valor" style="text-align: center">
-                        <h:outputText value="#{stkv.valor}"/>
+                    <p:column headerText="Tipo Caja" style="text-align: center">
+                        <h:outputText value="#{stkv.caja.tipo} #{stkv.caja.valor}"/>
+                    </p:column>
+                    <p:column headerText="Cajas" style="text-align: center">
+                        <h:outputText value="#{stkv.numeroCajas}"/>
+                    </p:column>
+                    <p:column headerText="Variedad" style="text-align: center">
+                        <h:outputText value="#{stkv.variedad.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Precio" style="text-align: center">
+                        <h:outputText value="$ #{stkv.precio}"/>
+                    </p:column>
+                    <p:column headerText="Ramos" style="text-align: center">
+                        <h:outputText value="#{stkv.numeroRamos}"/>
+                    </p:column>
+                    <p:column headerText="Tallos" style="text-align: center">
+                        <h:outputText value="#{stkv.numeroTallosRamo}"/>
+                    </p:column>
+                    <p:column headerText="Total Tallos" style="text-align: center">
+                        <h:outputText value="#{stkv.totalTallos}"/>
+                    </p:column>
+                    <p:column headerText="Sub-Total" style="text-align: center">
+                        <h:outputText value="$ #{stkv.subtotal}"/>
+                    </p:column>
+                    <p:column headerText="Longitud" style="text-align: center">
+                        <h:outputText value="#{stkv.longitud}"/>
+                    </p:column>
+                    <p:column headerText="Punto Corte" style="text-align: center">
+                        <h:outputText value="#{stkv.puntoCorte}"/>
                     </p:column>
                     <p:column headerText="Username" style="text-align: center">
                         <h:outputText value="#{stkv.username}"/>
@@ -245,8 +277,8 @@
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtstkv:dtstkv" 
-                                     actionListener="#{tipoCajaBean.modify(evt)}"/>
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdetSV:dtstkvs" 
+                                     actionListener="#{stockVentasBean.updateContainer(evt)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>

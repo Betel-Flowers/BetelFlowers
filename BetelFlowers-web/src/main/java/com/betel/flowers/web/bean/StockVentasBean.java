@@ -5,8 +5,6 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.BodegaVirtual;
-import com.betel.flowers.model.RegistroExportacion;
 import com.betel.flowers.model.StockVenta;
 import com.betel.flowers.model.TipoCaja;
 import com.betel.flowers.model.Variedad;
@@ -14,6 +12,7 @@ import com.betel.flowers.service.StockVentasService;
 import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.util.FacesUtil;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +29,9 @@ import org.apache.commons.lang3.RandomStringUtils;
  */
 @Named(value = "stockVentasBean")
 @ViewScoped
-public class StockVentasBean {
+public class StockVentasBean implements Serializable {
+
+    private static final long serialVersionUID = -6549694294186350254L;
 
     private StockVenta nuevo;
     private StockVenta selected;
@@ -52,6 +53,7 @@ public class StockVentasBean {
         this.nuevo.setUsername("usertest");
         this.selected = new StockVenta();
         this.stockVentas = new ArrayList<>();
+        this.gerated = Boolean.TRUE;
         this.stockVentasG = this.stockVentaService.obtenerListFlag(1);
         if (this.stockVentasG == null) {
             this.stockVentasG = new ArrayList<>();
@@ -80,7 +82,7 @@ public class StockVentasBean {
     }
 
     public void updateContainer(ActionEvent evt) {
-        if (this.selected != null) {
+        if (this.selected != null && this.remove != null) {
             Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad());
             TipoCaja caja = this.tipoCajaService.findByCodigo(this.selected.getCaja());
             this.selected.setVariedad(variedad);
@@ -101,9 +103,9 @@ public class StockVentasBean {
         }
     }
 
-    public void removeContainer(ActionEvent evt) {
-        if (this.selected != null && this.remove != null) {
-            this.remove = selected;
+    public void removeContainer(ActionEvent evt, StockVenta select) {
+        this.remove = select;
+        if (this.remove != null) {
             Boolean exito = this.stockVentas.remove(this.remove);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
@@ -134,8 +136,37 @@ public class StockVentasBean {
         this.remove = select;
     }
 
+    private Boolean allInserts() {
+        Boolean exito = Boolean.FALSE;
+        if (this.stockVentas != null && !this.stockVentas.isEmpty()) {
+            for (int i = 0; i < this.stockVentas.size(); i++) {
+                exito = this.stockVentaService.insert(this.stockVentas.get(i));
+                if (!exito) {
+                    exito = Boolean.FALSE;
+                    break;
+                }
+            }
+        }
+        return exito;
+    }
+
+    private void generatedBarcode() {
+        if (this.stockVentas != null && !this.stockVentas.isEmpty()) {
+            int size = this.stockVentas.size();
+            int length = this.stockVentasG.size();
+            String code = RandomStringUtils.randomNumeric(2);
+            String barcode = "BETEL-SK" + code + "" + size + "" + length;
+            for (int i = 0; i < size; i++) {
+                Integer total = this.stockVentas.get(i).getTotalTallos();
+                this.stockVentas.get(i).setTotalTallos(total);
+                this.stockVentas.get(i).setBarcode(barcode);
+            }
+        }
+    }
+
     public void add(ActionEvent evt) {
-        Boolean exito = this.stockVentaService.insert(this.nuevo);
+        this.generatedBarcode();
+        Boolean exito = this.allInserts();
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.init();

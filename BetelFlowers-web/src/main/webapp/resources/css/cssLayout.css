@@ -18,14 +18,14 @@
     float: left;
     background-color: transparent;
     padding: 5px;
-    width: 150px;
+    width: 100px;
 }
 
 #right {
     float: right;
     background-color: transparent;
     padding: 5px;
-    width: 150px;
+    width: 100px;
 }
 
 .center_content {
@@ -37,25 +37,25 @@
 .left_content {
     background-color: transparent;
     padding: 5px;
-    margin-left: 170px;
+    margin-left: 180px;
 }
 
 .right_content {
     background-color: transparent;
     padding: 5px;
-    margin: 0px 170px 0px 170px;
+    margin: 0px 180px 0px 180px;
 }
 
 #top a:link, #top a:visited {
-  color: white;
-  font-weight : bold;
-  text-decoration: none;
+    color: white;
+    font-weight : bold;
+    text-decoration: none;
 }
 
 #top a:link:hover, #top a:visited:hover  {
-  color: black;
-  font-weight : bold;
-  text-decoration : underline;
+    color: black;
+    font-weight : bold;
+    text-decoration : underline;
 }
 
 
