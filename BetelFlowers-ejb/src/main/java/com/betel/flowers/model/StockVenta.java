@@ -98,7 +98,7 @@ public class StockVenta extends BaseEntity {
     }
 
     public Double getSubtotal() {
-        return getPrecio() * (double) (getTotalTallos()) * (double) (getNumeroCajas());
+        return getPrecio() * (double) (getTotalTallos());
     }
 
     public void setSubtotal(Double subtotal) {
