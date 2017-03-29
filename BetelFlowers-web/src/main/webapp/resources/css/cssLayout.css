@@ -18,14 +18,14 @@
     float: left;
     background-color: transparent;
     padding: 5px;
-    width: 100px;
+    width: 80px;
 }
 
 #right {
     float: right;
     background-color: transparent;
     padding: 5px;
-    width: 100px;
+    width: 80px;
 }
 
 .center_content {
@@ -37,13 +37,14 @@
 .left_content {
     background-color: transparent;
     padding: 5px;
-    margin-left: 180px;
+    margin-left: 90px;
 }
 
 .right_content {
+    position: relative;
     background-color: transparent;
     padding: 5px;
-    margin: 0px 180px 0px 180px;
+    margin: 0px 90px 0px 90px;
 }
 
 #top a:link, #top a:visited {

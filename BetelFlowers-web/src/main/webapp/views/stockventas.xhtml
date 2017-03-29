@@ -78,14 +78,14 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Agregar" update=":fadd, :fdetSV:dtstkvs, :fadd:messages" 
+                    <p:commandButton value="Agregar" update=":fadd, :fsave:btnSend :fdetSV:dtstkvs, :fadd:messages" 
                                      actionListener="#{stockVentasBean.generateContainer(evt)}"/>
                 </f:facet>
             </p:panel>
         </h:form>
         <h:form id="fsave">
             <p:panel style="align-content: center; text-align: center">
-                <p:commandButton value="Enviar" update=":fadd, :fdtstkv:dtstkv, :fadd:messages"
+                <p:commandButton id="btnSend" value="Enviar" update=":fadd, :fdtstkv:dtstkv, :fadd:messages"
                                  disabled="#{stockVentasBean.gerated}"
                                  actionListener="#{stockVentasBean.add(evt)}"/>
             </p:panel>
@@ -113,7 +113,10 @@
                         <h:outputText value="#{stkvs.variedad.nombre}"/>
                     </p:column>
                     <p:column headerText="Precio" style="text-align: center">
-                        <h:outputText value="$ #{stkvs.precio}"/>
+                        <h:outputText value="$ "/>
+                        <h:outputText value="#{stkvs.precio}">
+                            <f:convertNumber minFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Ramos" style="text-align: center">
                         <h:outputText value="#{stkvs.numeroRamos}"/>
@@ -125,7 +128,10 @@
                         <h:outputText value="#{stkvs.totalTallos}"/>
                     </p:column>
                     <p:column headerText="Sub-Total" style="text-align: center">
-                        <h:outputText value="$ #{stkvs.subtotal}"/>
+                        <h:outputText value="$ "/>
+                        <h:outputText value="#{stkvs.subtotal}">
+                            <f:convertNumber minFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Longitud" style="text-align: center">
                         <h:outputText value="#{stkvs.longitud}"/>
@@ -141,12 +147,12 @@
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="Borrar" style="text-align: center">
-                        <p:commandButton value="Eliminar" update=":fadd:messages"
+                        <p:commandButton value="Eliminar" update=":fdetSV:dtstkvs, :fsave:btnSend, :fadd:messages"
                                          actionListener="#{stockVentasBean.removeContainer(evt,stkvs)}">
                             <f:setPropertyActionListener value="#{stkvs}" target="#{stockVentasBean.selected}" />
                         </p:commandButton>
                     </p:column>
-                </p:dataTable>
+                </p:dataTable> 
             </h:panelGrid>
         </h:form>
         <h:form id="fdtstkv">
@@ -181,7 +187,10 @@
                         <h:outputText value="#{stkv.variedad.nombre}"/>
                     </p:column>
                     <p:column headerText="Precio" style="text-align: center">
-                        <h:outputText value="$ #{stkv.precio}"/>
+                        <h:outputText value="$ "/>
+                        <h:outputText value="#{stkv.precio}">
+                            <f:convertNumber minFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Ramos" style="text-align: center">
                         <h:outputText value="#{stkv.numeroRamos}"/>
@@ -193,7 +202,10 @@
                         <h:outputText value="#{stkv.totalTallos}"/>
                     </p:column>
                     <p:column headerText="Sub-Total" style="text-align: center">
-                        <h:outputText value="$ #{stkv.subtotal}"/>
+                        <h:outputText value="$ "/>
+                        <h:outputText value="#{stkv.subtotal}">
+                            <f:convertNumber minFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Longitud" style="text-align: center">
                         <h:outputText value="#{stkv.longitud}"/>
