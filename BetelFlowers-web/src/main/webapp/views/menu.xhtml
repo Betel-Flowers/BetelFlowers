@@ -8,10 +8,9 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Betel Flowers - Menu</title>
         <h:outputStylesheet name="css/default.css"/>
         <h:outputStylesheet name="css/cssLayout.css"/>
-        <h:outputScript name="js/jquery-3.1.1.min.js"/>
-        <title>Betel Flowers - Menu</title>
     </h:head>
 
     <h:body>
@@ -60,10 +59,12 @@
                             </p:submenu>
 
                             <p:submenu label="Ventas">
+                                <p:menuitem value="Registrar Venta" outcome="/faces/views/registrarventa"/>
                                 <p:menuitem value="Stock de Ventas" outcome="/faces/views/stockventas"/>
                                 <p:menuitem value="Tipos de Caja" outcome="/faces/views/tipocaja"/>
                                 <p:menuitem value="DAEs" outcome="/faces/views/dae"/>
                                 <p:menuitem value="Cargueras" outcome="/faces/views/carguera"/>
+                                <p:menuitem value="Puertos" outcome="/faces/views/puerto"/>
                             </p:submenu>
 
                             <f:facet name="options">
