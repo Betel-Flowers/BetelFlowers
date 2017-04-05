@@ -2,31 +2,44 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
         <title>Betel Flowers - Iniciar</title>
-        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/resources/css/style.css"/>
-        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/resources/scss/style.scss"/>
-        <link rel='stylesheet' href="#{facesContext.externalContext.requestContextPath}/resources/css/bootstrap.min.css"/>
     </h:head>
-    <h:body>
-        <div class="wrapper">
-            <form class="form-signin">       
-                <div align="center">
-                    <p:graphicImage name="/img/logo.png"/>
-                </div>
-                <h2 class="form-signin-heading"></h2>
-                <p:inputText id="username" styleClass="form-control" placeholder="Username" required="true"/>
-                <p:message for="username" display="tooltip" severity="error"/>
-
-                <p:password id="password" styleClass="form-control" placeholder="Password" required="true"/>
-                <p:message for="password" display="tooltip" severity="error"/>
-
-                <p:messages id="msgs"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                <p:commandButton styleClass="btn-lg btn-block" value="Iniciar"/> 
-                <h2 class="form-signin-heading"></h2>
-            </form>
+    <h:body styleClass="containerLogin">
+        <div class="logo-container">
+            <h:graphicImage name="img/logo.png" id="PageLogo"/>
         </div>
+        <div class="ui-g">
+            <p:panel header="Iniciar Sesión" styleClass="panel-login">
+                <div class="ui-g-12" style="padding-top:35px;">
+                    <p:inputText placeholder="Usuario" style="width:60%;"/><br/>
+                </div>
+                <div class="ui-g-12" style="padding-top:10px;">
+                    <p:password placeholder="Password" style="width:60%"/>
+                </div>
+                <p:commandButton id="loginButton" value="Iniciar"/>
+            </p:panel>
+            <div class="ui-g-12 footer-login">
+                <span>Betel-Flowers by Softlutions</span><br/>
+                <span>All rights reserved.</span>
+            </div>
+        </div>
+
+        <style type="text/css">
+            html {height: 100%;}
+            .ui-button-text, .ui-button-text-only .ui-button-text{padding:8px !important; transition:none !important;}
+            .ui-panel .ui-panel-title {font-size: 17px;}
+        </style>
+
+        <h:outputStylesheet name="css/layout-green.css" library="icarus-layout" />
         <script type="text/javascript">
             function handleLoginRequest(xhr, status, args) {
                 if (args.validationFailed || !args.loggedIn) {

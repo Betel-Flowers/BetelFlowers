@@ -5,6 +5,7 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.Bloque;
 import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.BloqueService;
@@ -38,26 +39,26 @@ import org.primefaces.model.UploadedFile;
 @Named(value = "variedadBean")
 @ViewScoped
 public class VariedadBean implements Serializable {
-
+    
     private static final long serialVersionUID = 720235995057834086L;
     private static final Logger LOG = Logger.getLogger(FacesUtil.class.getName());
-
+    
     private Variedad nuevo;
     private Variedad selected;
     private List<Variedad> variedades;
-
+    
     private static final Integer sizeImage = 208896;
     private UploadedFile file;
-
+    
     private String urlSelected;
-
+    
     @Inject
     private VariedadService variedadService;
     @Inject
     private EspecieService especieService;
     @Inject
     private BloqueService bloqueServie;
-
+    
     @PostConstruct
     public void init() {
         this.nuevo = new Variedad();
@@ -70,15 +71,17 @@ public class VariedadBean implements Serializable {
             this.variedades = new ArrayList<>();
         }
     }
-
+    
     private String codigoFoto() {
         GregorianCalendar calendario = new GregorianCalendar();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
         return "BETEL-V" + RandomStringUtils.randomNumeric(4) + "-IMG-" + format.format(calendario.getTime());
     }
-
+    
     public void add(ActionEvent evt) {
         Especie especie = this.especieService.findByCodigo(this.nuevo.getEspecie());
+        Bloque bloque = this.bloqueServie.findByCodigo(this.nuevo.getBloque());
+        this.nuevo.setBloque(bloque);
         this.nuevo.setEspecie(especie);
         Boolean exito = this.variedadService.insert(this.nuevo);
         if (exito) {
@@ -89,10 +92,12 @@ public class VariedadBean implements Serializable {
             this.init();
         }
     }
-
+    
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
             Especie especie = this.especieService.findByCodigo(this.selected.getEspecie());
+            Bloque bloque = this.bloqueServie.findByCodigo(this.nuevo.getBloque());
+            this.selected.setBloque(bloque);
             this.selected.setEspecie(especie);
             Boolean exito = this.variedadService.update(this.selected);
             if (exito) {
@@ -106,7 +111,7 @@ public class VariedadBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-
+    
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
             Boolean exito = variedadService.deteleFlag(this.selected);
@@ -121,7 +126,7 @@ public class VariedadBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-
+    
     public void savefoto(ActionEvent evt) {
         if (this.getFile() != null) {
             if ((getFile().getFileName().endsWith(".png")
@@ -148,10 +153,10 @@ public class VariedadBean implements Serializable {
                     //log.level.error("Error al subir la imagen", ex);
                 }
             }
-
+            
         }
     }
-
+    
     public void handleSaveFoto(FileUploadEvent event) {
         this.setFile(event.getFile());
         if (this.getFile() != null) {
@@ -180,10 +185,10 @@ public class VariedadBean implements Serializable {
                     //log.level.error("Error al subir la imagen", ex);
                 }
             }
-
+            
         }
     }
-
+    
     public void updatefoto(ActionEvent evt) {
         if (this.getFile() != null) {
             if ((getFile().getFileName().endsWith(".png")
@@ -210,10 +215,10 @@ public class VariedadBean implements Serializable {
                     //log.level.error("Error al subir la imagen", ex);
                 }
             }
-
+            
         }
     }
-
+    
     public void handleUpdateFoto(FileUploadEvent event) {
         this.setFile(event.getFile());
         if (this.getFile() != null) {
@@ -242,48 +247,48 @@ public class VariedadBean implements Serializable {
                     //log.level.error("Error al subir la imagen", ex);
                 }
             }
-
+            
         }
     }
-
+    
     public Variedad getNuevo() {
         return nuevo;
     }
-
+    
     public void setNuevo(Variedad nuevo) {
         this.nuevo = nuevo;
     }
-
+    
     public Variedad getSelected() {
         return selected;
     }
-
+    
     public void setSelected(Variedad selected) {
         this.selected = selected;
     }
-
+    
     public List<Variedad> getVariedades() {
         return variedades;
     }
-
+    
     public void setVariedades(List<Variedad> variedades) {
         this.variedades = variedades;
     }
-
+    
     public UploadedFile getFile() {
         return file;
     }
-
+    
     public void setFile(UploadedFile file) {
         this.file = file;
     }
-
+    
     public String getUrlSelected() {
         return urlSelected;
     }
-
+    
     public void setUrlSelected(String urlSelected) {
         this.urlSelected = urlSelected;
     }
-
+    
 }

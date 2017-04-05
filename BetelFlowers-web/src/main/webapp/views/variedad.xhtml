@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./menu.xhtml"
+                template="./betel/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -23,6 +23,16 @@
                     </p:selectOneMenu>
                     <p:message for="idSespe" display="tooltip" severity="error"/>
 
+                    <p:outputLabel for="idBloq" value="Bloque:"/>
+                    <p:selectOneMenu id="idBloq" required="true" style="width: 85%" 
+                                     value="#{variedadBean.nuevo.bloque.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue=""
+                                      noSelectionOption="false"/>
+                        <f:selectItems value="#{bloqueBean.bloques}" var="bloq" 
+                                       itemLabel="#{bloq.numero}" itemValue="#{bloq.codigo}" />
+                    </p:selectOneMenu>
+                    <p:message for="idBloq" display="tooltip" severity="error"/>
+                    
                     <p:outputLabel for="nomVari" value="Nombre"/>
                     <p:inputText id="nomVari" required="true" style="width: 100%" 
                                  value="#{variedadBean.nuevo.nombre}"/>
@@ -90,6 +100,9 @@
                     <p:column headerText="Especie" style="text-align: center">
                         <h:outputText value="#{variedad.especie.nombre}"/>
                     </p:column>
+                    <p:column headerText="Bloque" style="text-align: center">
+                        <h:outputText value="#{variedad.bloque.numero}"/>
+                    </p:column>
                     <p:column headerText="Usuario" style="text-align: center">
                         <h:outputText value="#{variedad.username}"/>
                     </p:column>
@@ -97,6 +110,7 @@
                         <p:commandButton value="Editar" update=":fedit:editVari, :fadd:messages"
                                          oncomplete="PF('dlgModifyVari').show()">
                             <f:setPropertyActionListener value="#{variedad}" target="#{variedadBean.selected}"/>
+                            <f:setPropertyActionListener value="#{variedad}" target="#{variedadBean.nuevo}"/>
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="Borrar" style="text-align: center">
@@ -119,6 +133,15 @@
                                 <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                 <f:selectItems value="#{especieBean.especies}" var="espe" 
                                                itemLabel="#{espe.nombre}" itemValue="#{espe.codigo}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value=""/>
+                            
+                            <p:outputLabel for="idmBloq" value="Bloque:"/>
+                            <p:selectOneMenu id="idmBloq" style="width: 85%" 
+                                             value="#{variedadBean.nuevo.bloque.codigo}">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bloqueBean.bloques}" var="bloq" 
+                                               itemLabel="#{bloq.numero}" itemValue="#{bloq.codigo}" />
                             </p:selectOneMenu>
                             <p:outputLabel value=""/>
 

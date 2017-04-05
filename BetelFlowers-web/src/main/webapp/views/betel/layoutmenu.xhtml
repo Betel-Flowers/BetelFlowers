@@ -1,0 +1,52 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pi="http://primefaces.org/icarus">
+
+
+    <h:form id="menuform">
+
+        <pi:menu widgetVar="IcarusMenu">
+            <p:submenu label="Producto">
+                <p:menuitem value="Bloques" outcome="/faces/views/bloque"/>
+                <p:menuitem value="Especies" outcome="/faces/views/especie"/>
+                <p:menuitem value="Variedades" outcome="/faces/views/variedad"/>
+                <p:menuitem value="Detalles de Variedad" outcome="/faces/views/detallevariedad"/>
+            </p:submenu>
+
+            <p:submenu label="Bodega">
+                <p:menuitem value="Cuartos Frios" outcome="/faces/views/cuartofrio"/>
+                <p:menuitem value="Blodegas Virtuales" outcome="/faces/views/bodega"/>
+            </p:submenu>
+
+            <p:submenu label="Poscosecha">
+                <p:menuitem value="Registro Flor del Cultivo" outcome="/faces/views/registrocultivo"/>
+                <p:menuitem value="Registro Exportacion" outcome="/faces/views/registroexportacion"/>
+                <p:menuitem value="Registro Nacional" outcome="/faces/views/registronacional"/>
+                <p:menuitem value="Registro Causas" outcome="/faces/views/causa"/>
+                <p:menuitem value="Registro Motivos" outcome="/faces/views/motivo"/>
+            </p:submenu>
+
+            <p:submenu label="Clientes">
+                <p:menuitem value="Registro Cliente" outcome="/faces/views/cliente"/>
+                <p:menuitem value="Actulizar Cliente" outcome="/faces/views/modificarcliente"/>
+                <p:menuitem value="Registro Pais" outcome="/faces/views/pais"/>
+                <p:menuitem value="Registro Ciudad" outcome="/faces/views/ciudad"/>
+            </p:submenu>
+
+            <p:submenu label="Ventas">
+                <p:menuitem value="Registrar Venta" outcome="/faces/views/registrarventa"/>
+                <p:menuitem value="Stock de Ventas" outcome="/faces/views/stockventas"/>
+                <p:menuitem value="Tipos de Caja" outcome="/faces/views/tipocaja"/>
+                <p:menuitem value="DAEs" outcome="/faces/views/dae"/>
+                <p:menuitem value="Cargueras" outcome="/faces/views/carguera"/>
+                <p:menuitem value="Puertos" outcome="/faces/views/puerto"/>
+            </p:submenu>
+        </pi:menu>
+
+    </h:form>
+
+</ui:composition>
