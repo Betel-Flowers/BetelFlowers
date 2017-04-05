@@ -38,6 +38,8 @@ public class Variedad extends BaseEntity {
 
     @Reference
     private Especie especie;
+    @Reference
+    private Bloque bloque;
 
     public Variedad() {
         this.urlFoto = "/resources/img/flor.png";
@@ -45,6 +47,7 @@ public class Variedad extends BaseEntity {
         this.longitudes = new ArrayList<>();
         this.puntosCorte = new ArrayList<>();
         this.especie = new Especie();
+        this.bloque = new Bloque();
     }
 
     public String getCodigo() {
@@ -141,6 +144,14 @@ public class Variedad extends BaseEntity {
 
     public void setEspecie(Especie especie) {
         this.especie = especie;
+    }
+
+    public Bloque getBloque() {
+        return bloque;
+    }
+
+    public void setBloque(Bloque bloque) {
+        this.bloque = bloque;
     }
 
     @Override

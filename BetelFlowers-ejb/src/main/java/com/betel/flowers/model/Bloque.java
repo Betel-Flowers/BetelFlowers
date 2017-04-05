@@ -22,8 +22,7 @@ import org.mongodb.morphia.annotations.Indexes;
 public class Bloque extends BaseEntity {
 
     private Integer codigo;
-    private String descripcion;
-    private String ubicacion;
+    private Integer numero;
     private Double area;
     private String username;
     private Integer flag;
@@ -39,20 +38,12 @@ public class Bloque extends BaseEntity {
         this.codigo = codigo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public Integer getNumero() {
+        return numero;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
     public Double getArea() {
@@ -106,7 +97,7 @@ public class Bloque extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Bloque{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", ubucaicion=" + ubicacion + ", area=" + area + ", flag=" + flag + '}';
+        return "Bloque{" + "codigo=" + codigo + ", numero=" + numero + ", area=" + area + ", username=" + username + ", flag=" + flag + '}';
     }
-
+    
 }
