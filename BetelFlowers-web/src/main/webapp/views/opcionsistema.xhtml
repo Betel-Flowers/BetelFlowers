@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./betel/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registrar Opciones del Sistema">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="submenu" value="Submenu label:"/>
+                    <p:inputText id="submenu" required="true" 
+                                 value="#{opcionSistemaBean.nuevo.submenu_label}"/>
+                    <p:message for="submenu" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="menuitemvalue" value="Menuitem value:"/>
+                    <p:inputText id="menuitemvalue" required="true" 
+                               value="#{opcionSistemaBean.nuevo.menuitem_value}"/>
+                    <p:message for="menuitemvalue" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="menuitemoutcome" value="Menuitem outcome:"/>
+                    <p:inputText id="menuitemoutcome" required="true" 
+                               value="#{opcionSistemaBean.nuevo.menuitem_outcome}"/>
+                    <p:message for="menuitemoutcome" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar" update=":fadd, :fdtopcSis:dtopcSis, :fadd:messages" 
+                                     actionListener="#{opcionSistemaBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fdtopcSis">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtopcSis" var="opcSis" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{opcionSistemaBean.opcionSistemas}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Opciones del Sistema"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{opcSis.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{opcSis.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Submenu" style="text-align: center">
+                        <h:outputText value="#{opcSis.submenu_label}"/>
+                    </p:column>
+                    <p:column headerText="Menuitem value" style="text-align: center">
+                        <h:outputText value="#{opcSis.menuitem_value}"/>
+                    </p:column>
+                    <p:column headerText="Menuitem outcome" style="text-align: center">
+                        <h:outputText value="#{opcSis.menuitem_outcome}"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center">
+                        <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyOpcSis').show()">
+                            <f:setPropertyActionListener value="#{opcSis}" target="#{opcionSistemaBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteOpcSis').show()">
+                            <f:setPropertyActionListener value="#{opcSis}" target="#{opcionSistemaBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Modificar Opciones del Sistema" widgetVar="dlgModifyOpcSis" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="submenu" value="Submenu label:"/>
+                        <p:inputText id="submenu" required="true" 
+                                   value="#{opcionSistemaBean.nuevo.submenu_label}"/>
+                        <p:message for="submenu" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="menuitemvalue" value="Menuitem value:"/>
+                        <p:inputText id="menuitemvalue" required="true" 
+                                   value="#{opcionSistemaBean.nuevo.menuitem_value}"/>
+                        <p:message for="menuitemvalue" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="menuitemoutcome" value="Menuitem outcome:"/>
+                        <p:inputText id="menuitemoutcome" required="true" 
+                                   value="#{opcionSistemaBean.nuevo.menuitem_outcome}"/>
+                        <p:message for="menuitemoutcome" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtopcSis:dtopcSis" 
+                                     actionListener="#{opcionSistemaBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Opciones del Sistema" widgetVar="dlgDeleteOpcSis" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="deleteEspe">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Submenu label:"/>
+                        <p:outputLabel value="#{opcionSistemaBean.selected.submenu_label}"/>
+
+                        <p:outputLabel value="Menuitem value:"/>
+                        <p:outputLabel value="#{opcionSistemaBean.selected.menuitem_value}"/>
+
+                        <p:outputLabel value="Menuitem outcome:"/>
+                        <p:outputLabel value="#{opcionSistemaBean.selected.menuitem_outcome}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtopcSis:dtopcSis" 
+                                     actionListener="#{opcionSistemaBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
