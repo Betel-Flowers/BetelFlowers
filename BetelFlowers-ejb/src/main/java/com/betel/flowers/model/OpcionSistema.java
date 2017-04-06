@@ -6,35 +6,28 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexes;
-import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
  * @author luis
  */
-@Entity(value = "TipoUsuario", noClassnameStored = true)
+@Entity(value = "OpcionSistema", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class TipoUsuario extends BaseEntity{
-
+public class OpcionSistema extends BaseEntity{
+    
     private Integer codigo;
-    private String nombreTipo;
-    private Boolean admin;
+    private String submenu_label;
+    private String menuitem_value;
+    private String menuitem_outcome;
     private Integer flag;
 
-    @Reference
-    private List<OpcionSistema> opcionesSistema;
-
-    public TipoUsuario() {
-        this.opcionesSistema = new ArrayList<>();
+    public OpcionSistema() {
     }
 
     public Integer getCodigo() {
@@ -44,21 +37,29 @@ public class TipoUsuario extends BaseEntity{
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
-
-    public String getNombreTipo() {
-        return nombreTipo;
+   
+    public String getSubmenu_label() {
+        return submenu_label;
     }
 
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
+    public void setSubmenu_label(String submenu_label) {
+        this.submenu_label = submenu_label;
     }
 
-    public Boolean getAdmin() {
-        return admin;
+    public String getMenuitem_value() {
+        return menuitem_value;
     }
 
-    public void setAdmin(Boolean admin) {
-        this.admin = admin;
+    public void setMenuitem_value(String menuitem_value) {
+        this.menuitem_value = menuitem_value;
+    }
+
+    public String getMenuitem_outcome() {
+        return menuitem_outcome;
+    }
+
+    public void setMenuitem_outcome(String menuitem_outcome) {
+        this.menuitem_outcome = menuitem_outcome;
     }
 
     public Integer getFlag() {
@@ -69,18 +70,10 @@ public class TipoUsuario extends BaseEntity{
         this.flag = flag;
     }
 
-    public List<OpcionSistema> getOpcionesSistema() {
-        return opcionesSistema;
-    }
-
-    public void setOpcionesSistema(List<OpcionSistema> opcionesSistema) {
-        this.opcionesSistema = opcionesSistema;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.codigo);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -95,7 +88,7 @@ public class TipoUsuario extends BaseEntity{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final TipoUsuario other = (TipoUsuario) obj;
+        final OpcionSistema other = (OpcionSistema) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -104,7 +97,7 @@ public class TipoUsuario extends BaseEntity{
 
     @Override
     public String toString() {
-        return "TipoUsuario{" + "codigo=" + codigo + ", nombreTipo=" + nombreTipo + ", flag=" + flag + ", opcionesSistema=" + opcionesSistema + '}';
+        return "OpcionSistema{" + "codigo=" + codigo + ", submenu_label=" + submenu_label + ", menuitem_value=" + menuitem_value + ", menuitem_outcome=" + menuitem_outcome + '}';
     }
-
+    
 }
