@@ -32,7 +32,9 @@ public class Variedad extends BaseEntity {
     private String tiempoVida;
     private List<Integer> ramos;
     private List<Integer> longitudes;
+    private List<String> glongitudes;
     private List<String> puntosCorte;
+    private Boolean girasol;
     private String username;
     private Integer flag;
 
@@ -45,9 +47,11 @@ public class Variedad extends BaseEntity {
         this.urlFoto = "/resources/img/flor.png";
         this.ramos = new ArrayList<>();
         this.longitudes = new ArrayList<>();
+        this.glongitudes = new ArrayList<>();
         this.puntosCorte = new ArrayList<>();
         this.especie = new Especie();
         this.bloque = new Bloque();
+        this.girasol = Boolean.FALSE;
     }
 
     public String getCodigo() {
@@ -98,6 +102,14 @@ public class Variedad extends BaseEntity {
         this.tiempoVida = tiempoVida;
     }
 
+    public Boolean getGirasol() {
+        return girasol;
+    }
+
+    public void setGirasol(Boolean girasol) {
+        this.girasol = girasol;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -128,6 +140,14 @@ public class Variedad extends BaseEntity {
 
     public void setLongitudes(List<Integer> longitudes) {
         this.longitudes = longitudes;
+    }
+
+    public List<String> getGlongitudes() {
+        return glongitudes;
+    }
+
+    public void setGlongitudes(List<String> glongitudes) {
+        this.glongitudes = glongitudes;
     }
 
     public List<String> getPuntosCorte() {

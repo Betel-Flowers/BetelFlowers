@@ -32,7 +32,7 @@ public class BloqueService implements Serializable {
 
     public Boolean insert(Bloque bloque) {
         Boolean exito = Boolean.FALSE;
-        Bloque axu = this.findByCodigo(bloque);
+        Bloque axu = this.findByNumero(bloque);
         if (axu.getId() == null) {
             bloque.setCodigo(this.obtenerCodigo());
             bloque.setFlag(1);
@@ -82,6 +82,17 @@ public class BloqueService implements Serializable {
         Bloque find = new Bloque();
         Query<Bloque> result = this.ds.find(Bloque.class).
                 field("codigo").equal(bloque).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+    
+    public Bloque findByNumero(Bloque bloque) {
+        Bloque find = new Bloque();
+        Query<Bloque> result = this.ds.find(Bloque.class).
+                field("numero").equal(bloque.getNumero()).
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);

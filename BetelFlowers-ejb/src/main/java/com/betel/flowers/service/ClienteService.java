@@ -32,7 +32,7 @@ public class ClienteService implements Serializable {
 
     public Boolean insert(Cliente cliente) {
         Boolean exito = Boolean.FALSE;
-        Cliente axu = findByCedula(cliente);
+        Cliente axu = findByCodigo(cliente);
         if (axu.getId() == null) {
             cliente.setCodigo(obtenerCodigo());
             cliente.setFlag(1);

@@ -112,6 +112,7 @@ public class PaisService implements Serializable{
         );
         UpdateOperations<Pais> update = this.ds.createUpdateOperations(Pais.class);
         update.set("nombre", pais.getNombre()).
+                set("codigoPais", pais.getCodigoPais()).
                 set("flag", pais.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

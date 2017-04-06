@@ -18,7 +18,8 @@ import org.mongodb.morphia.annotations.Indexes;
  */
 @Entity(value = "Bloque", noClassnameStored = true)
 @Indexes({
-    @Index(fields = @Field("codigo"))})
+    @Index(fields = @Field("codigo")),
+    @Index(fields = @Field("numero"))})
 public class Bloque extends BaseEntity {
 
     private Integer codigo;
@@ -99,5 +100,5 @@ public class Bloque extends BaseEntity {
     public String toString() {
         return "Bloque{" + "codigo=" + codigo + ", numero=" + numero + ", area=" + area + ", username=" + username + ", flag=" + flag + '}';
     }
-    
+
 }

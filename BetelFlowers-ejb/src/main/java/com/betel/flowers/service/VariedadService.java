@@ -46,8 +46,9 @@ public class VariedadService implements Serializable {
     public Boolean add(Variedad variedad) {
         Boolean exito = Boolean.FALSE;
         if (variedad.getRamos().isEmpty()
-                && variedad.getLongitudes().isEmpty()
-                && variedad.getPuntosCorte().isEmpty()) {
+                && variedad.getPuntosCorte().isEmpty()
+                && (variedad.getLongitudes().isEmpty()
+                || variedad.getGlongitudes().isEmpty())) {
             this.ds.save(variedad);
             exito = Boolean.TRUE;
         } else {
@@ -139,6 +140,7 @@ public class VariedadService implements Serializable {
         UpdateOperations<Variedad> update = this.ds.createUpdateOperations(Variedad.class);
         update.set("ramos", variedad.getRamos()).
                 set("longitudes", variedad.getLongitudes()).
+                set("glongitudes", variedad.getGlongitudes()).
                 set("puntosCorte", variedad.getPuntosCorte());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
@@ -159,7 +161,9 @@ public class VariedadService implements Serializable {
                 set("tiempoVida", variedad.getTiempoVida()).
                 set("ramos", variedad.getRamos()).
                 set("longitudes", variedad.getLongitudes()).
+                set("glongitudes", variedad.getGlongitudes()).
                 set("puntosCorte", variedad.getPuntosCorte()).
+                set("girasol", variedad.getGirasol()).
                 set("username", variedad.getUsername()).
                 set("flag", variedad.getFlag());
         UpdateResults results = this.ds.update(query, update);
