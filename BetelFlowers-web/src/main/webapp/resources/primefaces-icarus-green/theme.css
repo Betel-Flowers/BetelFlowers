@@ -1878,7 +1878,7 @@
     color: #fff;
     visibility: visible; }
 .ui-chkbox .ui-chkbox-box.ui-state-active .ui-chkbox-icon:before {
-    content: "icono-es"; }
+    content: "\f00c"; }
 .ui-chkbox .ui-chkbox-box.ui-state-focus {
     background-color: #D8E6B2; }
 .ui-chkbox .ui-chkbox-box.ui-state-focus .ui-icon-check {
@@ -1893,7 +1893,7 @@
     color: #fff;
     visibility: visible; }
 .ui-chkbox .ui-chkbox-box.ui-state-focus .ui-icon-check:before {
-    content: "icono-es"; }
+    content: "\f00c"; }
 
 /* ManyCheckbox */
 .ui-selectmanycheckbox .ui-grid-row > div,
@@ -2264,7 +2264,7 @@
     width: 13px;
     padding-left: 1px; }
 .ui-datepicker.ui-widget-content .ui-datepicker-header .ui-datepicker-prev span:before {
-    content: "icono-es"; }
+    content: "\f060"; }
 .ui-datepicker.ui-widget-content .ui-datepicker-header .ui-datepicker-next {
     cursor: pointer; }
 .ui-datepicker.ui-widget-content .ui-datepicker-header .ui-datepicker-next span {
@@ -2282,7 +2282,7 @@
     width: 13px;
     padding-left: 2px; }
 .ui-datepicker.ui-widget-content .ui-datepicker-header .ui-datepicker-next span:before {
-    content: "icono-es"; }
+    content: "\f061"; }
 .ui-datepicker.ui-widget-content .ui-datepicker-calendar td.ui-datepicker-today a {
     background: #d8d8d8;
     color: #4a4a4a; }
@@ -2313,7 +2313,7 @@
     color: #fff;
     padding-top: 2px; }
 .ui-calendar.ui-trigger-calendar .ui-datepicker-trigger .ui-icon-calendar:before {
-    content: "icono-es"; }
+    content: "\f073"; }
 .ui-calendar .ui-inputfield.ui-corner-all {
     -moz-border-radius-topright: 0;
     -webkit-border-top-right-radius: 0;

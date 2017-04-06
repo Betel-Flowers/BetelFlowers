@@ -32,7 +32,7 @@
                                        itemLabel="#{bloq.numero}" itemValue="#{bloq.codigo}" />
                     </p:selectOneMenu>
                     <p:message for="idBloq" display="tooltip" severity="error"/>
-                    
+
                     <p:outputLabel for="nomVari" value="Nombre"/>
                     <p:inputText id="nomVari" required="true" style="width: 100%" 
                                  value="#{variedadBean.nuevo.nombre}"/>
@@ -46,6 +46,10 @@
                     <p:spinner id="tmpVida" required="true" value="#{variedadBean.nuevo.tiempoVida}"
                                min="1" max="30"/>
                     <p:message for="tmpVida" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="mGirasol" value="Girasol: " />
+                    <p:selectBooleanCheckbox id="mGirasol" value="#{variedadBean.nuevo.girasol}" />
+                    <p:outputLabel value=""/>
 
                     <p:outputLabel value="Foto:"/>
                     <p:commandButton value="Agregar"
@@ -135,7 +139,7 @@
                                                itemLabel="#{espe.nombre}" itemValue="#{espe.codigo}" />
                             </p:selectOneMenu>
                             <p:outputLabel value=""/>
-                            
+
                             <p:outputLabel for="idmBloq" value="Bloque:"/>
                             <p:selectOneMenu id="idmBloq" style="width: 85%" 
                                              value="#{variedadBean.nuevo.bloque.codigo}">
@@ -158,6 +162,10 @@
                             <p:spinner id="tmpVida" required="true" value="#{variedadBean.selected.tiempoVida}"
                                        min="1" max="30"/>
                             <p:message for="tmpVida" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="emGirasol" value="Girasol: " />
+                            <p:selectBooleanCheckbox id="emGirasol" value="#{variedadBean.selected.girasol}" />
+                            <p:outputLabel value=""/>
 
                             <p:outputLabel value="Foto:"/>
                             <p:commandButton value="Agregar"

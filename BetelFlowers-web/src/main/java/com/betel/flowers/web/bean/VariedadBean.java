@@ -47,7 +47,7 @@ public class VariedadBean implements Serializable {
     private Variedad selected;
     private List<Variedad> variedades;
     
-    private static final Integer sizeImage = 208896;
+    private static final Integer sizeImage = 5500000;
     private UploadedFile file;
     
     private String urlSelected;
@@ -184,6 +184,8 @@ public class VariedadBean implements Serializable {
                 } catch (IOException ex) {
                     //log.level.error("Error al subir la imagen", ex);
                 }
+            }else{
+                FacesUtil.addMessageWarn(null,"Tamaño maximo de imagen 5.5 MB.");
             }
             
         }
@@ -246,6 +248,8 @@ public class VariedadBean implements Serializable {
                 } catch (IOException ex) {
                     //log.level.error("Error al subir la imagen", ex);
                 }
+            }else{
+                FacesUtil.addMessageWarn(null,"Tamaño maximo de imagen 5.5 MB.");
             }
             
         }

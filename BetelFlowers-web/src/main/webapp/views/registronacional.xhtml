@@ -37,8 +37,9 @@
                     <p:message for="numTallos" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="fechaCla" value="Fecha de clasificacion:"/>
-                    <p:calendar id="fechaCla" required="true" value="#{registroNacionalBean.nuevo.fechaClasificacion}" 
-                                showOn="button" pattern="dd/MM/yyy HH:mm:ss a" />
+                    <p:calendar id="fechaCla" required="true" 
+                                value="#{registroNacionalBean.nuevo.fechaClasificacion}" 
+                                showOn="button" pattern="dd/MM/yyy" />
                     <p:message for="fechaCla" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="observa" value="Observacion:"/>

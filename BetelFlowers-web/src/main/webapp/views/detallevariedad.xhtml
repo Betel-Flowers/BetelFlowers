@@ -101,7 +101,7 @@
                         </p:tab>
                         <p:tab title="Longitud / Grado">
                             <p:dataTable id="dtlo" var="lo" rows="5"
-                                         paginator="true"
+                                         paginator="true" rendered="#{not detalleVariedadBean.selected.girasol}"
                                          paginatorPosition="Bottom"
                                          value="#{detalleVariedadBean.selected.longitudes}">
 
@@ -125,6 +125,34 @@
                                     <p:commandButton value="Nuevo" disabled="#{detalleVariedadBean.activeTab}"
                                                      update=":modyNumL:outTxt, :modyNumL:btnIn, :modyNumL:btnUp, :modyNumL:btnDel"
                                                      oncomplete="PF('dlgModyNumL').show()"/>
+                                </f:facet>
+                            </p:dataTable>
+
+                            <p:dataTable id="dtglo" var="glo" rows="5"
+                                         paginator="true" rendered="#{detalleVariedadBean.selected.girasol}"
+                                         paginatorPosition="Bottom"
+                                         value="#{detalleVariedadBean.selected.glongitudes}">
+
+                                <f:facet name="header">
+                                    <h:outputText value="Detalle"/>    
+                                </f:facet>
+                                <p:column headerText="Grado" style="text-align: center; width: auto">
+                                    <h:outputText value="#{glo}"/>
+                                </p:column>
+                                <p:column headerText="Modificar" style="width:auto; text-align: center">
+                                    <p:commandButton value="Editar" update=":modyTextL, :modyTextL:btnIn, :modyTextL:btnUp, :modyTextL:btnDel" 
+                                                     style="width: auto" oncomplete="PF('dlgModyTextL').show()"
+                                                     actionListener="#{detalleVariedadBean.glongitud.modifyState()}">
+                                        <f:setPropertyActionListener value="#{glo}" 
+                                                                     target="#{detalleVariedadBean.glongitud.nuevo}"/>
+                                        <f:setPropertyActionListener value="#{glo}" 
+                                                                     target="#{detalleVariedadBean.glongitud.selected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Nuevo" disabled="#{detalleVariedadBean.activeTab}"
+                                                     update=":modyTextL:outTxt, :modyTextL:btnIn, :modyTextL:btnUp, :modyTextL:btnDel"
+                                                     oncomplete="PF('dlgModyTextL').show()"/>
                                 </f:facet>
                             </p:dataTable>
                         </p:tab>
@@ -213,6 +241,33 @@
                                      style="float: right"
                                      disabled="#{detalleVariedadBean.longitud.update}"
                                      actionListener="#{detalleVariedadBean.longitud.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="modyTextL">
+            <p:dialog header="Grado" widgetVar="dlgModyTextL" width="400" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false" closable="false">
+                <p:outputLabel id="outTxt">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="txt" value="Descripcion:"/>
+                        <p:inputText id="txt" value="#{detalleVariedadBean.glongitud.nuevo}"/>
+                    </h:panelGrid>
+                </p:outputLabel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" id="btnIn" update=":modyTextL, :fdetail:outDetail"
+                                     disabled="#{detalleVariedadBean.glongitud.insert}"
+                                     actionListener="#{detalleVariedadBean.glongitud.add(evt)}"/>
+                    <p:commandButton value="Cancelar" update=":modyTextL, :modyTextL:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     actionListener="#{detalleVariedadBean.glongitud.close(evt)}"/>
+                    <p:commandButton value="Eliminar" id="btnDel" update=":modyTextL, :modyTextL:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.glongitud.delete}"
+                                     actionListener="#{detalleVariedadBean.glongitud.remove(evt)}"/>
+                    <p:commandButton value="Actualizar" id="btnUp" update=":modyTextL, :modyTextL:btnIn :fdetail:outDetail"
+                                     style="float: right"
+                                     disabled="#{detalleVariedadBean.glongitud.update}"
+                                     actionListener="#{detalleVariedadBean.glongitud.modify(evt)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>

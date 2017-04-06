@@ -7,6 +7,7 @@ package com.betel.flowers.web.bean;
 
 import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.VariedadService;
+import com.betel.flowers.web.bean.util.Glongitud;
 import com.betel.flowers.web.bean.util.Longitud;
 import com.betel.flowers.web.bean.util.PuntoCorte;
 import com.betel.flowers.web.bean.util.Ramo;
@@ -28,24 +29,25 @@ import org.primefaces.event.SelectEvent;
 public class DetalleVariedadBean implements Serializable {
 
     private static final long serialVersionUID = -6401802996273637969L;
-    
+
     private List<Variedad> variedades;
     private Variedad selected;
     private Ramo ramo;
     private Longitud longitud;
+    private Glongitud glongitud;
     private PuntoCorte puntoCorte;
     private Boolean activeTab;
-    
+
     @Inject
     private VariedadService variedadService;
-    
+
     @PostConstruct
     public void init() {
         this.selected = null;
         this.variedades = this.variedadService.obtenerListFlag(1);
         this.setActiveTab(Boolean.TRUE);
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         this.selected = (Variedad) event.getObject();
         this.setActiveTab(Boolean.FALSE);
@@ -61,20 +63,24 @@ public class DetalleVariedadBean implements Serializable {
             this.selected.setPuntosCorte(new ArrayList<String>());
         }
         this.puntoCorte = new PuntoCorte(this.selected);
+        if (this.selected.getGlongitudes() == null) {
+            this.selected.setGlongitudes(new ArrayList<String>());
+        }
+        this.glongitud = new Glongitud(this.selected);
     }
-    
+
     public List<Variedad> getVariedades() {
         return variedades;
     }
-    
+
     public void setVariedades(List<Variedad> variedades) {
         this.variedades = variedades;
     }
-    
+
     public Variedad getSelected() {
         return selected;
     }
-    
+
     public void setSelected(Variedad selected) {
         this.selected = selected;
     }
@@ -95,6 +101,14 @@ public class DetalleVariedadBean implements Serializable {
         this.longitud = longitud;
     }
 
+    public Glongitud getGlongitud() {
+        return glongitud;
+    }
+
+    public void setGlongitud(Glongitud glongitud) {
+        this.glongitud = glongitud;
+    }
+
     public PuntoCorte getPuntoCorte() {
         return puntoCorte;
     }
@@ -110,6 +124,5 @@ public class DetalleVariedadBean implements Serializable {
     public void setActiveTab(Boolean activeTab) {
         this.activeTab = activeTab;
     }
-
 
 }

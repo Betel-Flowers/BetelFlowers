@@ -17,6 +17,11 @@
                     <p:inputText id="nombre" required="true" 
                                  value="#{paisBean.nuevo.nombre}"/>
                     <p:message for="nombre" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="codigoPais" value="Codigo:"/>
+                    <p:inputText id="codigoPais" required="true" 
+                                 value="#{paisBean.nuevo.codigoPais}"/>
+                    <p:message for="codigoPais" display="tooltip" severity="error"/>
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
@@ -46,6 +51,9 @@
                     <p:column headerText="Nombre" style="text-align: center">
                         <h:outputText value="#{pais.nombre}"/>
                     </p:column>
+                    <p:column headerText="Codigo Pais" style="text-align: center">
+                        <h:outputText value="#{pais.codigoPais}"/>
+                    </p:column>
                     <p:column headerText="Modificar" style="text-align: center">
                         <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
                                          oncomplete="PF('dlgModifyPais').show()">
@@ -66,10 +74,15 @@
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="editEspe">
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel for="edescripcion" value="Descripcion:"/>
-                        <p:inputText id="edescripcion" required="true" 
+                        <p:outputLabel for="enombre" value="Nombre:"/>
+                        <p:inputText id="enombre" required="true" 
                                      value="#{paisBean.selected.nombre}"/>
-                        <p:message for="edescripcion" display="tooltip" severity="error"/>
+                        <p:message for="enombre" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="codigoPais" value="Codigo:"/>
+                        <p:inputText id="codigoPais" required="true" 
+                                     value="#{paisBean.selected.codigoPais}"/>
+                        <p:message for="codigoPais" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
@@ -84,8 +97,11 @@
                 <p:outputPanel id="deleteEspe">
                     <p:outputLabel value="Se eliminara el siguiente registro:"/>
                     <h:panelGrid columns="2" cellpadding="5">
-                        <p:outputLabel value="Descripcion:"/>
+                        <p:outputLabel value="Nombre:"/>
                         <p:outputLabel value="#{paisBean.selected.nombre}"/>
+                        
+                        <p:outputLabel value="Codigo:"/>
+                        <p:outputLabel value="#{paisBean.selected.codigoPais}"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
