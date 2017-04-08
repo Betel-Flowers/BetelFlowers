@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./betel/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:panel header="Registrar Tipo Usuario">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="nombre" value="Nombre:"/>
+                    <p:inputText id="nombre" required="true" 
+                                 value="#{tipoUsuarioBean.nuevo.nombre}"/>
+                    <p:outputLabel value=""/>
+
+                    <p:outputLabel for="admin" value="Admin:"/>
+                    <p:selectBooleanCheckbox id="admin" value="#{tipoUsuarioBean.nuevo.admin}">
+                        <p:ajax update=":fadd:outAdmin"/>
+                    </p:selectBooleanCheckbox>
+                    <p:outputLabel value=""/>
+                </h:panelGrid>
+                <p:outputPanel id="outAdmin">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:commandButton value="Agregar Opciones" 
+                                         update=":fopc:outOpcs" disabled="#{tipoUsuarioBean.nuevo.admin}"
+                                         oncomplete="PF('dlgSelectTipUs').show()"/>
+
+                        <p:outputLabel value="El tipo de usuario tiene acceso a todas las opciones del sistema."
+                                       rendered="#{tipoUsuarioBean.nuevo.admin}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <p:commandButton value="Guardar"
+                                     update=":fadd, :fdttipUs:dttipUs, :fadd:messages" 
+                                     actionListener="#{tipoUsuarioBean.add(evt)}"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+        <h:form id="fselect">
+            <p:outputPanel id="outChek">
+                <h:panelGrid style="margin: 0 auto;">                   
+                    <p:dataTable id="chekOpcSelect" var="opcselect" rows="5" 
+                                 widgetVar="chekOpcSelectTable" 
+                                 rendered="#{not tipoUsuarioBean.nuevo.admin}"
+                                 paginator="true" tableStyle="width: auto"
+                                 value="#{tipoUsuarioBean.selectOpcionSistemas}" 
+                                 rowKey="#{opcselect.codigo}">
+                        <f:facet name="header">
+                            <h:outputText value="Opciones del sistema seleccionadas"/>
+                        </f:facet>
+                        <p:column headerText="Fecha" style="text-align: center">
+                            <h:outputText value="#{opcs.lastChange}">
+                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Codigo" style="text-align: center">
+                            <h:outputText value="#{opcs.codigo}"/>
+                        </p:column>
+                        <p:column headerText="Menu">
+                            <h:outputText value="#{opcselect.submenu_label}" />
+                        </p:column>
+                        <p:column headerText="Opcion">
+                            <h:outputText value="#{opcselect.menuitem_value}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:outputPanel>
+        </h:form>
+        <h:form id="fdttipUs">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dttipUs" var="tipUs" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{tipoUsuarioBean.tipoUsuarios}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Tipo Usuarios"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{tipUs.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    +      <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{tipUs.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Tipo" style="text-align: center">
+                        <h:outputText value="#{tipUs.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Admin" style="text-align: center">
+                        <h:outputText value="SI" rendered="#{tipUs.admin}"/>
+                        <h:outputText value="NO" rendered="#{not tipUs.admin}"/>
+                    </p:column>
+                    <p:column headerText="Username" style="text-align: center">
+                        <h:outputText value="#{tipUs.username}"/>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center">
+                        <p:commandButton value="Eliminar" update=":fdelete:deleteEspe, :fadd:messages"
+                                         oncomplete="PF('dlgDeleteTipUs').show()">
+                            <f:setPropertyActionListener value="#{tipUs}" target="#{tipoUsuarioBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fdelete">
+            <p:dialog header="Eliminar Tipo Usuario" widgetVar="dlgDeleteTipUs" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="deleteEspe">
+                    <p:outputLabel value="Se eliminara el siguiente registro:"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel value="Tipo:"/>
+                        <p:outputLabel value="#{tipoUsuarioBean.selected.nombre}"/>
+
+                        <p:outputLabel value="Admin:"/>
+                        <h:outputText value="SI" rendered="#{tipoUsuarioBean.selected.admin}"/>
+                        <h:outputText value="NO" rendered="#{not tipoUsuarioBean.selected.admin}"/>
+                    </h:panelGrid>
+                    <p:dataList value="#{tipoUsuarioBean.selected.opcionesSistema}" 
+                                var="opc">
+                        <f:facet name="header">
+                            <h:outputText value="Opciones del Sistema"/>
+                        </f:facet>
+                        <h:outputText value="Menu: "/>
+                        <h:outputText value="#{opc.submenu_label} "/>
+                        <h:outputText value="Opcion: "/>
+                        <h:outputText value="#{opc.menuitem_value}"/>
+                    </p:dataList>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdttipUs:dttipUs" 
+                                     actionListener="#{tipoUsuarioBean.remove(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fopc">
+            <p:dialog header="Opciones del Sistema" widgetVar="dlgSelectTipUs" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outOpcs">
+                    <p:outputLabel value="Seleccione opciones del sistema para el tipo de usuario a ser creado."/>
+                    <h:panelGrid style="margin: 0 auto;">
+                        <p:dataTable id="chekOpc" var="opcs" rows="5" widgetVar="chekOpcTable" 
+                                     rendered="#{not tipoUsuarioBean.nuevo.admin}"
+                                     paginator="true" tableStyle="width: auto"
+                                     value="#{opcionSistemaBean.opcionSistemas}" 
+                                     selection="#{tipoUsuarioBean.selectOpcionSistemas}" 
+                                     rowKey="#{opcs.codigo}" style="margin-bottom:0">
+                            <f:facet name="header">
+                                <h:outputText value="Opciones del Sistema"/>
+                            </f:facet>
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                            <p:column headerText="Fecha" style="text-align: center">
+                                <h:outputText value="#{opcs.lastChange}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Codigo" style="text-align: center">
+                                <h:outputText value="#{opcs.codigo}"/>
+                            </p:column>
+                            <p:column filterBy="#{opcs.submenu_label}" headerText="Menu" filterMatchMode="exact">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('chekOpcTable').filter()" >
+                                        <f:selectItem itemLabel="Selecionar" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{opcionSistemaBean.selectOpionMenu}" var="chOpc"
+                                                       itemLabel="#{chOpc.submenu_label}" itemValue="#{chOpc.submenu_label}"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{opcs.submenu_label}" />
+                            </p:column>
+                            <p:column headerText="Opcion">
+                                <h:outputText value="#{opcs.menuitem_value}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:outputPanel>          
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

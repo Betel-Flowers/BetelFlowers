@@ -84,17 +84,17 @@
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel for="submenu" value="Submenu label:"/>
                         <p:inputText id="submenu" required="true" 
-                                   value="#{opcionSistemaBean.nuevo.submenu_label}"/>
+                                   value="#{opcionSistemaBean.selected.submenu_label}"/>
                         <p:message for="submenu" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="menuitemvalue" value="Menuitem value:"/>
                         <p:inputText id="menuitemvalue" required="true" 
-                                   value="#{opcionSistemaBean.nuevo.menuitem_value}"/>
+                                   value="#{opcionSistemaBean.selected.menuitem_value}"/>
                         <p:message for="menuitemvalue" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="menuitemoutcome" value="Menuitem outcome:"/>
                         <p:inputText id="menuitemoutcome" required="true" 
-                                   value="#{opcionSistemaBean.nuevo.menuitem_outcome}"/>
+                                   value="#{opcionSistemaBean.selected.menuitem_outcome}"/>
                         <p:message for="menuitemoutcome" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>

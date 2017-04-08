@@ -5,6 +5,7 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.OpcionSistema;
 import com.betel.flowers.model.TipoUsuario;
 import com.betel.flowers.service.TipoUsuarioService;
 import com.betel.flowers.web.util.FacesUtil;
@@ -23,13 +24,14 @@ import javax.inject.Inject;
  */
 @Named(value = "tipoUsuarioBean")
 @ViewScoped
-public class TipoUsuarioBean implements Serializable{
+public class TipoUsuarioBean implements Serializable {
 
     private static final long serialVersionUID = -1803758222416450208L;
-    
+
     private TipoUsuario nuevo;
     private TipoUsuario selected;
     private List<TipoUsuario> tipoUsuarios;
+    private List<OpcionSistema> selectOpcionSistemas;
 
     @Inject
     private TipoUsuarioService tipoUsuarioService;
@@ -37,7 +39,9 @@ public class TipoUsuarioBean implements Serializable{
     @PostConstruct
     public void init() {
         this.nuevo = new TipoUsuario();
+        this.nuevo.setUsername("usertest"); //usertest
         this.selected = null;
+        this.selectOpcionSistemas = null;
         this.tipoUsuarios = this.tipoUsuarioService.obtenerListFlag(1);
         if (this.tipoUsuarios == null) {
             this.tipoUsuarios = new ArrayList<>();
@@ -45,13 +49,25 @@ public class TipoUsuarioBean implements Serializable{
     }
 
     public void add(ActionEvent evt) {
-        Boolean exito = this.tipoUsuarioService.insert(this.nuevo);
-        if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
-            this.init();
+        if (this.selectOpcionSistemas != null && !this.selectOpcionSistemas.isEmpty() || this.nuevo.getAdmin()) {
+            if (this.nuevo.getNombre() != null && !this.nuevo.getNombre().equals("")) {
+                Boolean exito = this.tipoUsuarioService.insert(this.nuevo);
+                if (exito) {
+                    if (!this.nuevo.getAdmin()) {
+                        this.nuevo.setOpcionesSistema(this.selectOpcionSistemas);
+                        this.tipoUsuarioService.add(this.nuevo);
+                    }
+                    FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                    this.init();
+                } else {
+                    FacesUtil.addMessageError(null, "No se ha guardado.");
+                    this.init();
+                }
+            } else {
+                FacesUtil.addMessageInfo("Ingrese un nombre al tipo de usuario");
+            }
         } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
-            this.init();
+            FacesUtil.addMessageWarn(null, "Seleccione las opciones del sistema para el tipo de usuario a crear.");
         }
     }
 
@@ -108,5 +124,13 @@ public class TipoUsuarioBean implements Serializable{
     public void setTipoUsuarios(List<TipoUsuario> tipoUsuarios) {
         this.tipoUsuarios = tipoUsuarios;
     }
-    
+
+    public List<OpcionSistema> getSelectOpcionSistemas() {
+        return selectOpcionSistemas;
+    }
+
+    public void setSelectOpcionSistemas(List<OpcionSistema> selectOpcionSistemas) {
+        this.selectOpcionSistemas = selectOpcionSistemas;
+    }
+
 }

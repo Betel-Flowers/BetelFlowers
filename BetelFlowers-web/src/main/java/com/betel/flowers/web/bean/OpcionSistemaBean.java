@@ -5,7 +5,6 @@
  */
 package com.betel.flowers.web.bean;
 
-
 import com.betel.flowers.model.OpcionSistema;
 import com.betel.flowers.service.OpcionSistemaService;
 import com.betel.flowers.web.util.FacesUtil;
@@ -24,13 +23,14 @@ import javax.inject.Inject;
  */
 @Named(value = "opcionSistemaBean")
 @ViewScoped
-public class OpcionSistemaBean implements Serializable{
-    
+public class OpcionSistemaBean implements Serializable {
+
     private static final long serialVersionUID = 2464916801436130583L;
-    
+
     private OpcionSistema nuevo;
     private OpcionSistema selected;
     private List<OpcionSistema> opcionSistemas;
+    private List<OpcionSistema> selectOpionMenu;
 
     @Inject
     private OpcionSistemaService opcionSistemaService;
@@ -40,6 +40,7 @@ public class OpcionSistemaBean implements Serializable{
         this.nuevo = new OpcionSistema();
         this.selected = null;
         this.opcionSistemas = this.opcionSistemaService.obtenerListFlag(1);
+        this.selectOpionMenu = this.opcionSistemaService.obtenerListFlagSelectOptionMenu(1);
         if (this.opcionSistemas == null) {
             this.opcionSistemas = new ArrayList<>();
         }
@@ -109,5 +110,13 @@ public class OpcionSistemaBean implements Serializable{
     public void setOpcionSistemas(List<OpcionSistema> opcionSistemas) {
         this.opcionSistemas = opcionSistemas;
     }
-    
+
+    public List<OpcionSistema> getSelectOpionMenu() {
+        return selectOpionMenu;
+    }
+
+    public void setSelectOpionMenu(List<OpcionSistema> selectOpionMenu) {
+        this.selectOpionMenu = selectOpionMenu;
+    }
+
 }
