@@ -9,7 +9,6 @@ import com.mongo.persistance.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -23,17 +22,19 @@ import org.mongodb.morphia.annotations.Reference;
 @Entity(value = "TipoUsuario", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class TipoUsuario extends BaseEntity{
+public class TipoUsuario extends BaseEntity {
 
     private Integer codigo;
-    private String nombreTipo;
+    private String nombre;
     private Boolean admin;
+    private String username;
     private Integer flag;
 
     @Reference
     private List<OpcionSistema> opcionesSistema;
 
     public TipoUsuario() {
+        this.admin = Boolean.FALSE;
         this.opcionesSistema = new ArrayList<>();
     }
 
@@ -45,12 +46,12 @@ public class TipoUsuario extends BaseEntity{
         this.codigo = codigo;
     }
 
-    public String getNombreTipo() {
-        return nombreTipo;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Boolean getAdmin() {
@@ -59,6 +60,14 @@ public class TipoUsuario extends BaseEntity{
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Integer getFlag() {
@@ -104,7 +113,7 @@ public class TipoUsuario extends BaseEntity{
 
     @Override
     public String toString() {
-        return "TipoUsuario{" + "codigo=" + codigo + ", nombreTipo=" + nombreTipo + ", flag=" + flag + ", opcionesSistema=" + opcionesSistema + '}';
+        return "TipoUsuario{" + "codigo=" + codigo + ", nombre=" + nombre + ", admin=" + admin + ", username=" + username + ", flag=" + flag + ", opcionesSistema=" + opcionesSistema + '}';
     }
-
+    
 }

@@ -42,6 +42,28 @@ public class TipoUsuarioService implements Serializable {
         return exito;
     }
 
+    public Boolean add(TipoUsuario tipoUsuario) {
+        Boolean exito = Boolean.FALSE;
+        if (tipoUsuario.getOpcionesSistema().isEmpty()) {
+            this.ds.save(tipoUsuario);
+            exito = Boolean.TRUE;
+        } else {
+            updateList(tipoUsuario);
+        }
+        return exito;
+    }
+
+    public Boolean updateList(TipoUsuario tipoUsuario) {
+        Query<TipoUsuario> query = this.ds.createQuery(TipoUsuario.class);
+        query.and(
+                query.criteria("codigo").equal(tipoUsuario.getCodigo())
+        );
+        UpdateOperations<TipoUsuario> update = this.ds.createUpdateOperations(TipoUsuario.class);
+        update.set("opcionesSistema", tipoUsuario.getOpcionesSistema());
+        UpdateResults results = this.ds.update(query, update);
+        return results.getUpdatedExisting();
+    }
+
     private Integer obtenerCodigo() {
         List<TipoUsuario> tipoUsuarios = this.ds.find(TipoUsuario.class).asList();
         if (tipoUsuarios == null) {
@@ -111,7 +133,7 @@ public class TipoUsuarioService implements Serializable {
                 query.criteria("codigo").equal(tipoUsuario.getCodigo())
         );
         UpdateOperations<TipoUsuario> update = this.ds.createUpdateOperations(TipoUsuario.class);
-        update.set("nombreTipo", tipoUsuario.getNombreTipo()).
+        update.set("nombre", tipoUsuario.getNombre()).
                 set("admin", tipoUsuario.getAdmin()).
                 set("opcionesSistema", tipoUsuario.getOpcionesSistema()).
                 set("flag", tipoUsuario.getFlag());

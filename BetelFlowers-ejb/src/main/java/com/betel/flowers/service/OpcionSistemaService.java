@@ -23,10 +23,10 @@ import org.mongodb.morphia.query.UpdateResults;
  */
 @Stateless
 @LocalBean
-public class OpcionSistemaService implements Serializable{
+public class OpcionSistemaService implements Serializable {
 
     private static final long serialVersionUID = 6611791515208970477L;
-    
+
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
 
@@ -67,6 +67,31 @@ public class OpcionSistemaService implements Serializable{
         return list;
     }
 
+    public List<OpcionSistema> obtenerListFlagSelectOptionMenu(Integer flag) {
+        List<OpcionSistema> list = new ArrayList<>();
+        Query<OpcionSistema> result = this.ds.find(OpcionSistema.class).
+                field("flag").equal(flag);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+            list = this.selectSubmenuLabel(list);
+        }
+        return list;
+    }
+
+    private List<OpcionSistema> selectSubmenuLabel(List<OpcionSistema> menu) {
+
+        List<OpcionSistema> unique = new ArrayList<>();
+        if (menu != null && !menu.isEmpty()) {
+            unique.add(menu.get(0));
+            for (int i = 0; i < menu.size(); i++) {
+                if (!(menu.get(i).getSubmenu_label().equals(unique.get(unique.size() - 1).getSubmenu_label()))) {
+                    unique.add(menu.get(i));
+                }
+            }
+        }
+        return unique;
+    }
+
     public OpcionSistema findByCodigo(OpcionSistema opcionSistema) {
         OpcionSistema find = new OpcionSistema();
         Query<OpcionSistema> result = this.ds.find(OpcionSistema.class).
@@ -104,7 +129,7 @@ public class OpcionSistemaService implements Serializable{
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
-    
+
     public Boolean update(OpcionSistema opcionSistema) {
         Query<OpcionSistema> query = this.ds.createQuery(OpcionSistema.class);
         query.and(
