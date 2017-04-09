@@ -21,22 +21,22 @@ import org.mongodb.morphia.annotations.Reference;
 @Entity(value = "Usuario", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class Usuario extends BaseEntity{
-    
+public class Usuario extends BaseEntity {
+
     private Integer codigo;
     private String username;
     private String password;
     private Boolean estado;
     private Integer flag;
-    
+
     @Reference
     private TipoUsuario tipoUsuario;
     @Embedded
     private InformacionPersonal infoPersonal;
 
     public Usuario() {
-        this.tipoUsuario = new TipoUsuario();
         this.infoPersonal = new InformacionPersonal();
+        this.estado = Boolean.FALSE;
     }
 
     public Integer getCodigo() {
@@ -124,5 +124,5 @@ public class Usuario extends BaseEntity{
     public String toString() {
         return "Usuario{" + "codigo=" + codigo + ", username=" + username + ", password=" + password + ", estado=" + estado + ", flag=" + flag + ", tipoUsuario=" + tipoUsuario + ", infoPersonal=" + infoPersonal + '}';
     }
-    
+
 }

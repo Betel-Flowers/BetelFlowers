@@ -23,8 +23,10 @@ public class InformacionPersonal {
     private String email;
     private String urlFoto;
     private String codigoFoto;
+    private Boolean loadFoto;
 
     public InformacionPersonal() {
+        this.loadFoto = Boolean.TRUE;
     }
 
     public String getNombres() {
@@ -89,6 +91,14 @@ public class InformacionPersonal {
 
     public void setCodigoFoto(String codigoFoto) {
         this.codigoFoto = codigoFoto;
+    }
+
+    public Boolean getLoadFoto() {
+        return loadFoto;
+    }
+
+    public void setLoadFoto(Boolean loadFoto) {
+        this.loadFoto = loadFoto;
     }
     
 }
