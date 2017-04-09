@@ -20,7 +20,7 @@
 
                     <p:outputLabel for="admin" value="Admin:"/>
                     <p:selectBooleanCheckbox id="admin" value="#{tipoUsuarioBean.nuevo.admin}">
-                        <p:ajax update=":fadd:outAdmin"/>
+                        <p:ajax update=":fadd:outAdmin, :fselect:outChek"/>
                     </p:selectBooleanCheckbox>
                     <p:outputLabel value=""/>
                 </h:panelGrid>
@@ -38,7 +38,7 @@
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                     <p:commandButton value="Guardar"
-                                     update=":fadd, :fdttipUs:dttipUs, :fadd:messages" 
+                                     update=":fadd, :fdttipUs:dttipUs, :fselect:outChek, :fadd:messages" 
                                      actionListener="#{tipoUsuarioBean.add(evt)}"/>
                 </f:facet>
             </p:panel>
@@ -47,7 +47,7 @@
             <p:outputPanel id="outChek">
                 <h:panelGrid style="margin: 0 auto;">                   
                     <p:dataTable id="chekOpcSelect" var="opcselect" rows="5" 
-                                 widgetVar="chekOpcSelectTable" 
+                                 paginatorPosition="Bottom" 
                                  rendered="#{not tipoUsuarioBean.nuevo.admin}"
                                  paginator="true" tableStyle="width: auto"
                                  value="#{tipoUsuarioBean.selectOpcionSistemas}" 
@@ -56,12 +56,12 @@
                             <h:outputText value="Opciones del sistema seleccionadas"/>
                         </f:facet>
                         <p:column headerText="Fecha" style="text-align: center">
-                            <h:outputText value="#{opcs.lastChange}">
+                            <h:outputText value="#{opcselect.lastChange}">
                                 <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Codigo" style="text-align: center">
-                            <h:outputText value="#{opcs.codigo}"/>
+                            <h:outputText value="#{opcselect.codigo}"/>
                         </p:column>
                         <p:column headerText="Menu">
                             <h:outputText value="#{opcselect.submenu_label}" />
@@ -144,10 +144,9 @@
             <p:dialog header="Opciones del Sistema" widgetVar="dlgSelectTipUs" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="outOpcs">
-                    <p:outputLabel value="Seleccione opciones del sistema para el tipo de usuario a ser creado."/>
                     <h:panelGrid style="margin: 0 auto;">
-                        <p:dataTable id="chekOpc" var="opcs" rows="5" widgetVar="chekOpcTable" 
-                                     rendered="#{not tipoUsuarioBean.nuevo.admin}"
+                        <p:dataTable id="chekOpc" var="opcs" rows="5" 
+                                     widgetVar="chekOpcTable" paginatorPosition="Bottom"
                                      paginator="true" tableStyle="width: auto"
                                      value="#{opcionSistemaBean.opcionSistemas}" 
                                      selection="#{tipoUsuarioBean.selectOpcionSistemas}" 
@@ -178,6 +177,10 @@
                                 <h:outputText value="#{opcs.menuitem_value}" />
                             </p:column>
                         </p:dataTable>
+                        <f:facet name="footer">
+                            <p:commandButton value="Agregar" process="chekOpc" 
+                                             update=":fopc, :fopc:chekOpc, :fselect:chekOpcSelect"/>
+                        </f:facet>
                     </h:panelGrid>
                 </p:outputPanel>          
             </p:dialog>

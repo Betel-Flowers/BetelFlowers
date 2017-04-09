@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Betel Flowers - Registrarse</title>
+    </h:head>
+    <h:body styleClass="containerLogin">
+        <div class="logo-container">
+            <h:graphicImage name="img/logo.png" id="PageLogo"/>
+        </div>
+        <div class="ui-g">
+            <p:panel header="Registrarse" styleClass="panel-login">
+                <div align="left">
+                    <h:form id="register">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="user" value="Username:"/>
+                            <p:inputText id="user" required="true" 
+                                         value="#{registerBean.nuevo.username}"/>
+                            <p:message for="user" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="password" value="Password:"/>
+                            <p:password id="password" promptLabel="Por favor, introduzca un password" 
+                                        weakLabel="Debil" required="true"
+                                        value="#{registerBean.nuevo.password}"
+                                        goodLabel="Buena" strongLabel="Fuerte" feedback="true"/>
+                            <p:message for="password" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="cpassword" value="Confirmiar Password:"/>
+                            <p:password id="cpassword" required="true"
+                                        value="#{registerBean.cpassword}"/>
+                            <p:message for="cpassword" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="nombres" value="Nombres:"/>
+                            <p:inputText id="nombres" required="true"
+                                         value="#{registerBean.nuevo.infoPersonal.nombres}"/>
+                            <p:message for="nombres" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="apellidos" value="Apellidos:"/>
+                            <p:inputText id="apellidos" required="true"
+                                         value="#{registerBean.nuevo.infoPersonal.apellidos}"/>
+                            <p:message for="apellidos" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="cedula" value="Cedula/Pasaporte:"/>
+                            <p:inputText id="cedula" required="true"
+                                         value="#{registerBean.nuevo.infoPersonal.cedula}">
+                                <f:validateLongRange minimum="10"/>
+                            </p:inputText>
+                            <p:message for="cedula" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="movil" value="Movil:"/>
+                            <p:inputText id="movil" required="true"
+                                         value="#{registerBean.nuevo.infoPersonal.movil}">
+                                <f:validateLongRange minimum="10"/>
+                            </p:inputText>
+                            <p:message for="movil" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="email" value="e-mail:"/>
+                            <p:inputText id="email" required="true"
+                                         value="#{registerBean.nuevo.infoPersonal.email}">
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                            <p:message for="email" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                        <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    </h:form>
+                </div>
+                <p:commandButton id="loginButton" value="Registrarse" update=":register, :register:messages"
+                                 actionListener="#{registerBean.add(evt)}"/>
+            </p:panel>
+            <div class="ui-g-12 footer-login">
+                <span>Betel-Flowers by Softlutions</span><br/>
+                <span>All rights reserved.</span>
+            </div>
+        </div>
+
+        <style type="text/css">
+            html {height: 100%;}
+            .ui-button-text, .ui-button-text-only .ui-button-text{padding:8px !important; transition:none !important;}
+            .ui-panel .ui-panel-title {font-size: 17px;}
+        </style>
+
+        <h:outputStylesheet name="css/layout-green.css" library="icarus-layout" />
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.validationFailed || !args.loggedIn) {
+                    jQuery('#login-form').effect("shake", {times: 5}, 100);
+                } else {
+                    location.href = args.ruta;
+                }
+            }
+        </script>
+    </h:body>
+</html>
