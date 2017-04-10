@@ -26,7 +26,8 @@ public class InformacionPersonal {
     private Boolean loadFoto;
 
     public InformacionPersonal() {
-        this.loadFoto = Boolean.TRUE;
+        this.loadFoto = Boolean.FALSE;
+        this.urlFoto = "/resources/img/user.png";
     }
 
     public String getNombres() {

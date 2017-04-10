@@ -130,13 +130,14 @@ public class TipoUsuarioService implements Serializable {
     public TipoUsuario findByNombre(TipoUsuario tipoUsuario) {
         TipoUsuario find = new TipoUsuario();
         Query<TipoUsuario> result = this.ds.find(TipoUsuario.class).
-                field("nombre").equal(tipoUsuario.getNombre());
+                field("nombre").equal(tipoUsuario.getNombre()).
+                field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);
         }
         return find;
     }
-
+   
     public void delete(TipoUsuario tipoUsuario) {
         this.ds.delete(tipoUsuario);
     }

@@ -63,7 +63,7 @@ public class UsuarioService implements Serializable {
 
     public Boolean existsUsername(Usuario usuario) {
         Boolean find = Boolean.FALSE;
-        Usuario user = this.findByUsername(usuario.getUsername());
+        Usuario user = this.findByUsername(usuario);
         if (user.getId() != null) {
             find = Boolean.TRUE;
         }
@@ -72,7 +72,7 @@ public class UsuarioService implements Serializable {
 
     public Boolean stateUsername(Usuario usuario) {
         Boolean state = Boolean.FALSE;
-        Usuario user = this.findByUsername(usuario.getUsername());
+        Usuario user = this.findByUsername(usuario);
         if (user.getId() != null) {
             state = user.getEstado();
         }
@@ -81,7 +81,7 @@ public class UsuarioService implements Serializable {
 
     public Boolean checkPassword(Usuario usuario) {
         Boolean password = Boolean.FALSE;
-        Usuario user = this.findByUsername(usuario.getUsername());
+        Usuario user = this.findByUsername(usuario);
         if (user.getId() != null) {
             String inputPasswordUser = DigestUtils.md5Hex(usuario.getPassword());
             if (user.getPassword().equals(inputPasswordUser)) {
@@ -138,17 +138,7 @@ public class UsuarioService implements Serializable {
         }
         return find;
     }
-
-    public Usuario findByUsername(String Username) {
-        Usuario find = new Usuario();
-        Query<Usuario> result = this.ds.find(Usuario.class).
-                field("username").equal(Username);
-        if (result.asList() != null && !result.asList().isEmpty()) {
-            find = result.asList().get(0);
-        }
-        return find;
-    }
-
+   
     public Usuario findByEmail(String email) {
         Usuario find = new Usuario();
         Query<Usuario> result = this.ds.find(Usuario.class).
