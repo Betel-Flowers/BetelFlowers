@@ -5,7 +5,9 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.TipoUsuario;
 import com.betel.flowers.model.Usuario;
+import com.betel.flowers.service.TipoUsuarioService;
 import com.betel.flowers.service.UsuarioService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
@@ -33,10 +35,13 @@ public class LoginBean implements Serializable {
     private CredencialBean session;
     @Inject
     private UsuarioService usuarioService;
+    @Inject
+    private TipoUsuarioService tipoUsuarioService;
 
     @PostConstruct
     public void init() {
         this.usuario = new Usuario();
+        this.createAdmin();
     }
 
     public void login(ActionEvent evt) {
@@ -46,7 +51,8 @@ public class LoginBean implements Serializable {
         if (this.usuarioService.existsUsername(this.usuario)) {
             if (this.usuarioService.stateUsername(this.usuario)) {
                 if (this.usuarioService.checkPassword(this.usuario)) {
-                    this.session.startSession(this.usuario);
+                    Usuario loginUser = this.usuarioService.findByUsername(this.usuario.getUsername());
+                    this.session.startSession(loginUser);
                     url = url + "/faces/views/betel.xhtml";
                     LoggedIn = Boolean.TRUE;
                     this.init();
@@ -61,6 +67,32 @@ public class LoginBean implements Serializable {
         }
         context.addCallbackParam("loggedIn", LoggedIn);
         context.addCallbackParam("ruta", url);
+    }
+
+    private void createAdmin() {
+        Usuario adminBetel = new Usuario();
+        adminBetel.setEstado(Boolean.TRUE);
+        adminBetel.setUsername("admin.betel.2017");
+        adminBetel.setPassword("admin.betel.2017");
+        adminBetel.setFlag(2);
+        adminBetel.getInfoPersonal().setApellidos("admin");
+        adminBetel.getInfoPersonal().setNombres("admin");
+        adminBetel.getInfoPersonal().setCedula("0000000000");
+        adminBetel.getInfoPersonal().setMovil("0000000000");
+        TipoUsuario tipo = new TipoUsuario();
+        tipo.setNombre("Admin");
+        tipo.setAdmin(Boolean.TRUE);
+        tipo.setFlag(2);
+        TipoUsuario mTipo = this.tipoUsuarioService.findByNombre(tipo);
+        if (mTipo.getId() == null) {
+            this.tipoUsuarioService.insert(tipo);
+        }
+        Usuario mUsername = this.usuarioService.findByUsername(adminBetel);
+        if (mUsername.getId() == null) {
+            this.usuarioService.insert(adminBetel);
+            adminBetel.setTipoUsuario(mTipo);
+            this.usuarioService.add(adminBetel);
+        }
     }
 
     public Usuario getUsuario() {
