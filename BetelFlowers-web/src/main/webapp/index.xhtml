@@ -19,13 +19,24 @@
         </div>
         <div class="ui-g">
             <p:panel header="Iniciar Sesión" styleClass="panel-login">
-                <div class="ui-g-12" style="padding-top:35px;">
-                    <p:inputText placeholder="Usuario" style="width:60%;"/><br/>
-                </div>
-                <div class="ui-g-12" style="padding-top:10px;">
-                    <p:password placeholder="Password" style="width:60%"/>
-                </div>
-                <p:commandButton id="loginButton" value="Iniciar"/>
+                <h:form id="flogin">
+                    <div class="ui-g-12" style="padding-top:35px;">
+                        <p:inputText id="username" placeholder="Username" style="width:60%;"
+                                     required="true"
+                                     value="#{loginBean.usuario.username}"/>
+                        <br/>
+                    </div>
+                    <div class="ui-g-12" style="padding-top:10px;">
+                        <p:password id="password" placeholder="Password" style="width:60%"
+                                    required="true"
+                                    value="#{loginBean.usuario.password}"/>
+                    </div>
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </h:form>
+                <p:commandButton id="loginButton" value="Iniciar"
+                                 update=":flogin, :flogin:messages"
+                                 actionListener="#{loginBean.login(evt)}"
+                                 oncomplete="handleLoginRequest(xhr, status, args)"/>
             </p:panel>
             <div class="ui-g-12 footer-login">
                 <span>Betel-Flowers by Softlutions</span><br/>
@@ -43,7 +54,7 @@
         <script type="text/javascript">
             function handleLoginRequest(xhr, status, args) {
                 if (args.validationFailed || !args.loggedIn) {
-                    jQuery('#login-form').effect("shake", {times: 5}, 100);
+                    jQuery('#flogin').effect("shake", {times: 5}, 100);
                 } else {
                     location.href = args.ruta;
                 }

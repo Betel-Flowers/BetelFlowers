@@ -7,7 +7,6 @@ package com.betel.flowers.web.bean;
 
 import com.betel.flowers.model.OpcionSistema;
 import com.betel.flowers.model.Usuario;
-import com.betel.flowers.service.OpcionSistemaService;
 import com.betel.flowers.web.bean.util.menu.ItemMenu;
 import com.betel.flowers.web.bean.util.menu.SubMenu;
 import javax.inject.Named;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -40,9 +38,6 @@ public class CredencialBean implements Serializable {
     private List<SubMenu> menu = new ArrayList<>();
     private String layoutmenu;
 
-    @Inject
-    private OpcionSistemaService opcionSistemaService;
-
     private void init() {
         this.userSession = new Usuario();
         this.piMenu = new DefaultMenuModel();
@@ -52,8 +47,8 @@ public class CredencialBean implements Serializable {
 
     public void startSession(Usuario usuario) {
         this.userSession = usuario;
-        this.loadLayoutMenu(this.userSession);
         this.loadDataSession(this.userSession);
+        this.loadLayoutMenu(this.userSession);
     }
 
     private void loadLayoutMenu(Usuario usuario) {
@@ -61,7 +56,7 @@ public class CredencialBean implements Serializable {
             this.layoutmenu = "layoutmenu.xhtml";
         } else {
             this.layoutmenu = "layoutusermenu.xhtml";
-            this.loadMenu(this.userSession);
+            this.loadMenu(usuario);
             this.createMenu();
         }
     }
@@ -74,7 +69,7 @@ public class CredencialBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().
                 put("admin", usuario.getTipoUsuario().getAdmin());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().
-                put("tipoUsuario", usuario.getTipoUsuario().getNombre());
+                put("tipoUsuarioCodigo", usuario.getTipoUsuario().getCodigo());
     }
 
     private void loadMenu(Usuario usuario) {
