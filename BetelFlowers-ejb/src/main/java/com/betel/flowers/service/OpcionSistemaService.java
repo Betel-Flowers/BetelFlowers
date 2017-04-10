@@ -67,6 +67,20 @@ public class OpcionSistemaService implements Serializable {
         return list;
     }
 
+    public List<String> obtenerUrlsAdmin() {
+        List<String> urls = new ArrayList<>();
+        List<OpcionSistema> list = this.obtenerListFlag(1);
+        for (OpcionSistema opc : list) {
+            urls.add(opc.getMenuitem_outcome() + ".xhtml");
+        }
+        urls.add("/faces/views/betel.xhtml");
+        urls.add("/faces/register.xhtml");
+        urls.add("/faces/index.xhtml");
+        urls.add("/faces/loginPage");
+        urls.add("/");
+        return urls;
+    }
+
     public List<OpcionSistema> obtenerListFlagSelectOptionMenu(Integer flag) {
         List<OpcionSistema> list = new ArrayList<>();
         Query<OpcionSistema> result = this.ds.find(OpcionSistema.class).

@@ -25,12 +25,12 @@ import org.mongodb.morphia.query.UpdateResults;
 @Stateless
 @LocalBean
 public class UsuarioService implements Serializable {
-    
+
     private static final long serialVersionUID = 7359478675389151589L;
-    
+
     private MongoPersistence conn = new MongoPersistence();
     private Datastore ds = conn.context();
-    
+
     public Boolean insert(Usuario usuario) {
         Boolean exito = Boolean.FALSE;
         Usuario axu = this.findByCodigo(usuario);
@@ -44,7 +44,7 @@ public class UsuarioService implements Serializable {
         }
         return exito;
     }
-    
+
     private Integer obtenerCodigo() {
         List<Usuario> usuarios = this.ds.find(Usuario.class).asList();
         if (usuarios == null) {
@@ -54,12 +54,42 @@ public class UsuarioService implements Serializable {
         Integer number = 1000 + 1 * size;
         return number;
     }
-    
+
+    public Boolean existsUsername(Usuario usuario) {
+        Boolean find = Boolean.FALSE;
+        Usuario user = this.findByUsername(usuario);
+        if (user.getId() != null) {
+            find = Boolean.TRUE;
+        }
+        return find;
+    }
+
+    public Boolean stateUsername(Usuario usuario) {
+        Boolean state = Boolean.FALSE;
+        Usuario user = this.findByUsername(usuario);
+        if (user.getId() != null) {
+            state = user.getEstado();
+        }
+        return state;
+    }
+
+    public Boolean checkPassword(Usuario usuario) {
+        Boolean password = Boolean.FALSE;
+        Usuario user = this.findByUsername(usuario);
+        if (user.getId() != null) {
+            String inputPasswordUser = DigestUtils.md5Hex(usuario.getPassword());
+            if (user.getPassword().equals(inputPasswordUser)) {
+                password = Boolean.TRUE;
+            }
+        }
+        return password;
+    }
+
     public List<Usuario> obtenerLista() {
         List<Usuario> usuarios = this.ds.find(Usuario.class).asList();
         return usuarios;
     }
-    
+
     public List<Usuario> obtenerListFlag(Integer flag) {
         List<Usuario> list = new ArrayList<>();
         Query<Usuario> result = this.ds.find(Usuario.class).
@@ -69,7 +99,7 @@ public class UsuarioService implements Serializable {
         }
         return list;
     }
-    
+
     public Usuario findByCodigo(Usuario usuario) {
         Usuario find = new Usuario();
         Query<Usuario> result = this.ds.find(Usuario.class).
@@ -80,7 +110,7 @@ public class UsuarioService implements Serializable {
         }
         return find;
     }
-    
+
     public Usuario findByCodigo(Integer usuario) {
         Usuario find = new Usuario();
         Query<Usuario> result = this.ds.find(Usuario.class).
@@ -91,7 +121,7 @@ public class UsuarioService implements Serializable {
         }
         return find;
     }
-    
+
     public Usuario findByUsername(Usuario usuario) {
         Usuario find = new Usuario();
         Query<Usuario> result = this.ds.find(Usuario.class).
@@ -102,7 +132,7 @@ public class UsuarioService implements Serializable {
         }
         return find;
     }
-    
+
     public Usuario findByEmail(String email) {
         Usuario find = new Usuario();
         Query<Usuario> result = this.ds.find(Usuario.class).
@@ -113,11 +143,11 @@ public class UsuarioService implements Serializable {
         }
         return find;
     }
-    
+
     public void delete(Usuario usuario) {
         this.ds.delete(usuario);
     }
-    
+
     public Boolean deteleFlag(Usuario usuario) {
         Query<Usuario> query = this.ds.createQuery(Usuario.class);
         usuario.setFlag(0);
@@ -129,7 +159,7 @@ public class UsuarioService implements Serializable {
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
-    
+
     public Boolean update(Usuario usuario) {
         Query<Usuario> query = this.ds.createQuery(Usuario.class);
         query.and(

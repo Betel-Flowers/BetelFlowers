@@ -5,6 +5,7 @@
  */
 package com.betel.flowers.service;
 
+import com.betel.flowers.model.OpcionSistema;
 import com.betel.flowers.model.TipoUsuario;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
@@ -87,6 +88,21 @@ public class TipoUsuarioService implements Serializable {
             list = result.asList();
         }
         return list;
+    }
+    
+    public List<String> obtenerUrlsTipoUsuario(Integer codigo) {
+        List<String> urls = new ArrayList<>();
+        TipoUsuario tipo = this.findByCodigo(codigo);
+        List<OpcionSistema> list = tipo.getOpcionesSistema();
+        for (OpcionSistema opc : list) {
+            urls.add(opc.getMenuitem_outcome() + ".xhtml");
+        }
+        urls.add("/faces/views/betel.xhtml");
+        urls.add("/faces/register.xhtml");
+        urls.add("/faces/index.xhtml");
+        urls.add("/faces/loginPage");
+        urls.add("/");
+        return urls;
     }
 
     public TipoUsuario findByCodigo(TipoUsuario tipoUsuario) {
