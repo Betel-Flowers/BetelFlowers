@@ -55,9 +55,15 @@ public class UsuarioService implements Serializable {
         return number;
     }
 
+    public void add(Usuario usuario) {
+        if (usuario.getTipoUsuario() != null) {
+            this.ds.save(usuario);
+        }
+    }
+
     public Boolean existsUsername(Usuario usuario) {
         Boolean find = Boolean.FALSE;
-        Usuario user = this.findByUsername(usuario);
+        Usuario user = this.findByUsername(usuario.getUsername());
         if (user.getId() != null) {
             find = Boolean.TRUE;
         }
@@ -66,7 +72,7 @@ public class UsuarioService implements Serializable {
 
     public Boolean stateUsername(Usuario usuario) {
         Boolean state = Boolean.FALSE;
-        Usuario user = this.findByUsername(usuario);
+        Usuario user = this.findByUsername(usuario.getUsername());
         if (user.getId() != null) {
             state = user.getEstado();
         }
@@ -75,7 +81,7 @@ public class UsuarioService implements Serializable {
 
     public Boolean checkPassword(Usuario usuario) {
         Boolean password = Boolean.FALSE;
-        Usuario user = this.findByUsername(usuario);
+        Usuario user = this.findByUsername(usuario.getUsername());
         if (user.getId() != null) {
             String inputPasswordUser = DigestUtils.md5Hex(usuario.getPassword());
             if (user.getPassword().equals(inputPasswordUser)) {
@@ -127,6 +133,16 @@ public class UsuarioService implements Serializable {
         Query<Usuario> result = this.ds.find(Usuario.class).
                 field("username").equal(usuario.getUsername()).
                 field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+
+    public Usuario findByUsername(String Username) {
+        Usuario find = new Usuario();
+        Query<Usuario> result = this.ds.find(Usuario.class).
+                field("username").equal(Username);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);
         }
