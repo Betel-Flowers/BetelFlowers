@@ -51,7 +51,7 @@ public class LoginBean implements Serializable {
         if (this.usuarioService.existsUsername(this.usuario)) {
             if (this.usuarioService.stateUsername(this.usuario)) {
                 if (this.usuarioService.checkPassword(this.usuario)) {
-                    Usuario loginUser = this.usuarioService.findByUsername(this.usuario.getUsername());
+                    Usuario loginUser = this.usuarioService.findByUsername(this.usuario);
                     this.session.startSession(loginUser);
                     url = url + "/faces/views/betel.xhtml";
                     LoggedIn = Boolean.TRUE;
@@ -70,28 +70,33 @@ public class LoginBean implements Serializable {
     }
 
     private void createAdmin() {
-        Usuario adminBetel = new Usuario();
-        adminBetel.setEstado(Boolean.TRUE);
-        adminBetel.setUsername("admin.betel.2017");
-        adminBetel.setPassword("admin.betel.2017");
-        adminBetel.setFlag(2);
-        adminBetel.getInfoPersonal().setApellidos("admin");
-        adminBetel.getInfoPersonal().setNombres("admin");
-        adminBetel.getInfoPersonal().setCedula("0000000000");
-        adminBetel.getInfoPersonal().setMovil("0000000000");
-        TipoUsuario tipo = new TipoUsuario();
-        tipo.setNombre("Admin");
-        tipo.setAdmin(Boolean.TRUE);
-        tipo.setFlag(2);
-        TipoUsuario mTipo = this.tipoUsuarioService.findByNombre(tipo);
-        if (mTipo.getId() == null) {
-            this.tipoUsuarioService.insert(tipo);
-        }
-        Usuario mUsername = this.usuarioService.findByUsername(adminBetel);
-        if (mUsername.getId() == null) {
-            this.usuarioService.insert(adminBetel);
-            adminBetel.setTipoUsuario(mTipo);
-            this.usuarioService.add(adminBetel);
+        Usuario admin = new Usuario();
+        admin.setEstado(Boolean.TRUE);
+        admin.setUsername("admin.betel.2017");
+        admin.setPassword("admin.betel.2017");
+        admin = this.usuarioService.findByUsername(admin);
+        if (admin.getCodigo() == null && admin.getTipoUsuario() == null) {
+            TipoUsuario tipo = new TipoUsuario();
+            tipo.setNombre("Admin");
+            tipo.setAdmin(Boolean.TRUE);
+            TipoUsuario mTipo = this.tipoUsuarioService.findByNombre(tipo);
+            if (mTipo.getId() == null) {
+                this.tipoUsuarioService.insert(tipo);
+            }
+            Usuario adminBetel = new Usuario();
+            adminBetel.setEstado(Boolean.TRUE);
+            adminBetel.setUsername("admin.betel.2017");
+            adminBetel.setPassword("admin.betel.2017");
+            adminBetel.getInfoPersonal().setApellidos("admin");
+            adminBetel.getInfoPersonal().setNombres("admin");
+            adminBetel.getInfoPersonal().setCedula("0000000000");
+            adminBetel.getInfoPersonal().setMovil("0000000000");
+            Usuario mUsername = this.usuarioService.findByUsername(adminBetel);
+            if (mUsername.getId() == null) {
+                TipoUsuario mTipoAdmin = this.tipoUsuarioService.findByNombre(tipo);
+                adminBetel.setTipoUsuario(mTipoAdmin);
+                this.usuarioService.insert(adminBetel);
+            }
         }
     }
 

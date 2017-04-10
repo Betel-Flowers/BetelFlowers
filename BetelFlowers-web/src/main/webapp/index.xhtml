@@ -31,7 +31,9 @@
                                     required="true"
                                     value="#{loginBean.usuario.password}"/>
                     </div>
-                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    <h:panelGrid style="margin: 0 auto;">
+                        <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                    </h:panelGrid>
                 </h:form>
                 <p:commandButton id="loginButton" value="Iniciar"
                                  update=":flogin, :flogin:messages"

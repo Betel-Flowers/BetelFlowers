@@ -2,10 +2,106 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./betel/template.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">
-        
+    <ui:define name="content">        
+        <h:form id="fdtuser">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtuser" var="user" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{usuarioBean.usuarios}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Usuarios"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{user.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Codigo" style="text-align: center">
+                        <h:outputText value="#{user.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Foto" style="text-align: center">
+                        <p:graphicImage value="#{user.infoPersonal.urlFoto}"
+                                        width="80px" height="80px"/>
+                    </p:column>
+                    <p:column headerText="Username" style="text-align: center">
+                        <h:outputText value="#{user.username}"/>
+                    </p:column>
+                    <p:column headerText="Propietario" style="text-align: center">
+                        <h:outputText value="#{user.infoPersonal.nombres} #{user.infoPersonal.apellidos}"/>
+                    </p:column>
+                    <p:column headerText="Cedula/Pasaporte" style="text-align: center">
+                        <h:outputText value="#{user.infoPersonal.cedula}"/>
+                    </p:column>
+                    <p:column headerText="Movil" style="text-align: center">
+                        <h:outputText value="#{user.infoPersonal.movil}"/>
+                    </p:column>
+                    <p:column headerText="E-mail" style="text-align: center">
+                        <h:outputText value="#{user.infoPersonal.email}"/>
+                    </p:column>
+                    <p:column headerText="Habilitado" style="text-align: center">
+                        <p:selectBooleanCheckbox value="#{user.estado}" disabled="false"/>
+                    </p:column>
+                    <p:column headerText="Habilitar" style="text-align: center">
+                        <p:commandButton value="Activar" update=":fedit:editEspe, :fadd:messages"
+                                         oncomplete="PF('dlgModifyBloq').show()">
+                            <f:setPropertyActionListener value="#{user}" target="#{usuarioBean.selected}" />
+                            <f:setPropertyActionListener value="#{user}" target="#{usuarioBean.nuevo}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fedit">
+            <p:dialog header="Habilitar Usuario" widgetVar="dlgModifyBloq" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="editEspe">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel value="Username:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.username}"/>
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Propietario:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.infoPersonal.nombres} #{usuarioBean.selected.infoPersonal.apellidos}"/>
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Cedula/Pasaporte:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.infoPersonal.cedula}"/>
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Movil:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.infoPersonal.movil}"/>
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="E-mail:"/>
+                        <p:outputLabel value="#{usuarioBean.selected.infoPersonal.email}"/>
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel for="userEstado" value="Estado:"/>
+                        <p:selectBooleanCheckbox id="userEstado" value="#{usuarioBean.selected.estado}"/>
+                        <p:message for="userEstado" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="tipoUser" value="Area:"/>
+                        <p:selectOneMenu id="tipoUser" required="true"
+                                         value="#{usuarioBean.nuevo.tipoUsuario.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{tipoUsuarioBean.tipoUsuarios}" var="tipU"
+                                           itemLabel="#{tipU.nombre}" itemValue="#{tipU.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipoUser" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Habilitar" update=":fedit, :fadd:messages, :fdtuser:dtuser" 
+                                     actionListener="#{usuarioBean.modify(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>
