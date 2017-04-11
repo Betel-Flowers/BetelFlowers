@@ -7,15 +7,19 @@
 
     <div id="top-bar-wrapper">
         <div id="top-bar">
+            <div class="search-bar">
+                
+            </div>
+            
             <div class="top-bar-profile">
                 <div class="profile-name">
-                    <span>
-                        <h:outputText value="#{credencialBean.userSession.infoPersonal.nombres} #{credencialBean.userSession.infoPersonal.apellidos}"/>
-                    </span><br/>
+                    <span><h:outputText value="#{credencialBean.userSession.infoPersonal.nombres} #{credencialBean.userSession.infoPersonal.apellidos}"/></span><br/>
                     <h:outputText value="#{credencialBean.userSession.tipoUsuario.nombre}"/>
                 </div>
                 <a href="#" id="profile-image">
-                    <h:graphicImage value="#{credencialBean.userSession.infoPersonal.urlFoto}" width="56px" height="50px" style="border: 0 none;"/>
+                    <h:graphicImage value="#{credencialBean.userSession.infoPersonal.urlFoto}" 
+                                    width="50px" height="56px"
+                                    library="icarus-layout" style="border: 0 none;"/>
                 </a>
                 <ul class="top-submenu animated flipInX">
                     <li>
@@ -45,6 +49,7 @@
                     </li>
                 </ul>
             </div>
+
         </div>
     </div>
 

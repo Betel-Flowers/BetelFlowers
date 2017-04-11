@@ -6,7 +6,10 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">        
+    <ui:define name="content">
+        <h:form id="fadd">
+            <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+        </h:form>        
         <h:form id="fdtuser">
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtuser" var="user" rows="5"
@@ -45,7 +48,7 @@
                         <h:outputText value="#{user.infoPersonal.email}"/>
                     </p:column>
                     <p:column headerText="Habilitado" style="text-align: center">
-                        <p:selectBooleanCheckbox value="#{user.estado}" disabled="false"/>
+                        <p:selectBooleanCheckbox value="#{user.estado}" disabled="true"/>
                     </p:column>
                     <p:column headerText="Habilitar" style="text-align: center">
                         <p:commandButton value="Activar" update=":fedit:editEspe, :fadd:messages"
@@ -86,7 +89,7 @@
                         <p:selectBooleanCheckbox id="userEstado" value="#{usuarioBean.selected.estado}"/>
                         <p:message for="userEstado" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="tipoUser" value="Area:"/>
+                        <p:outputLabel for="tipoUser" value="Tipo de Usuario:"/>
                         <p:selectOneMenu id="tipoUser" required="true"
                                          value="#{usuarioBean.nuevo.tipoUsuario.codigo}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
@@ -94,10 +97,15 @@
                                            itemLabel="#{tipU.nombre}" itemValue="#{tipU.codigo}"/>
                         </p:selectOneMenu>
                         <p:message for="tipoUser" display="tooltip" severity="error"/>
+
+                        <p:outputLabel value=""/>
+                        <p:graphicImage value="#{usuarioBean.selected.infoPersonal.urlFoto}"
+                                        width="80px" height="80px" alt="Betel"/>
+                        <p:outputLabel value=""/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Habilitar" update=":fedit, :fadd:messages, :fdtuser:dtuser" 
+                    <p:commandButton value="Actualizar" update=":fedit, :fadd:messages, :fdtuser:dtuser" 
                                      actionListener="#{usuarioBean.modify(evt)}"/>
                 </f:facet>
             </p:dialog>
