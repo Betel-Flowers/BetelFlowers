@@ -89,7 +89,6 @@ public class RegistroNacionalService implements Serializable {
         update.set("numeroTallos", registroNacional.getNumeroTallos()).
                 set("fechaClasificacion", registroNacional.getFechaClasificacion()).
                 set("bodega", registroNacional.getBodega()).
-                set("observacion", registroNacional.getObservacion()).
                 set("detalle", registroNacional.getDetalle()).
                 set("variedad", registroNacional.getVariedad()).
                 set("username", registroNacional.getUsername());

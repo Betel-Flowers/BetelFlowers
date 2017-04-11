@@ -29,7 +29,6 @@ public class RegistroNacional extends BaseEntity {
     private Integer codigo;
     private Date fechaClasificacion;
     private Integer numeroTallos;
-    private String observacion;
     private String username;
     private Integer flag;
 
@@ -68,14 +67,6 @@ public class RegistroNacional extends BaseEntity {
 
     public void setNumeroTallos(Integer numeroTallos) {
         this.numeroTallos = numeroTallos;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
     }
 
     public String getUsername() {
@@ -145,7 +136,7 @@ public class RegistroNacional extends BaseEntity {
 
     @Override
     public String toString() {
-        return "RegistroNacional{" + "codigo=" + codigo + ", fechaClasificacion=" + fechaClasificacion + ", numeroTallos=" + numeroTallos + ", observacion=" + observacion + ", username=" + username + ", bodega=" + bodega + ", variedad=" + variedad + ", detalle=" + detalle + '}';
+        return "RegistroNacional{" + "codigo=" + codigo + ", fechaClasificacion=" + fechaClasificacion + ", numeroTallos=" + numeroTallos + ", username=" + username + ", flag=" + flag + ", bodega=" + bodega + ", variedad=" + variedad + ", detalle=" + detalle + '}';
     }
 
 }

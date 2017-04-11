@@ -115,5 +115,5 @@ public class TipoUsuario extends BaseEntity {
     public String toString() {
         return "TipoUsuario{" + "codigo=" + codigo + ", nombre=" + nombre + ", admin=" + admin + ", username=" + username + ", flag=" + flag + ", opcionesSistema=" + opcionesSistema + '}';
     }
-    
+
 }

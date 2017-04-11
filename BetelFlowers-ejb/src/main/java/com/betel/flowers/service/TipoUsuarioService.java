@@ -97,6 +97,7 @@ public class TipoUsuarioService implements Serializable {
         for (OpcionSistema opc : list) {
             urls.add(opc.getMenuitem_outcome() + ".xhtml");
         }
+        urls.add("/faces/views/perfil.xhtml");
         urls.add("/faces/views/betel.xhtml");
         urls.add("/faces/register.xhtml");
         urls.add("/faces/index.xhtml");
