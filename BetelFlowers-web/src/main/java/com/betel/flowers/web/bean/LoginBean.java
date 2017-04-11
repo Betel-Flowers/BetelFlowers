@@ -60,7 +60,7 @@ public class LoginBean implements Serializable {
                     FacesUtil.addMessageError(null, "Username y/o contrseña incorreoctos.");
                 }
             } else {
-                FacesUtil.addMessageInfo("El no esta habilitado porfavor comuniquese con el administrador.");
+                FacesUtil.addMessageInfo("El usuario no esta habilitado porfavor comuniquese con el administrador.");
             }
         } else {
             FacesUtil.addMessageError(null, "El usuario no se encuentra registrado.");

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./betel/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="fperfil">
+            <p:panel header="Perfil de usuario">
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="nombres" value="Nombres:"/>
+                    <p:inputText id="nombres" required="true"
+                                 value="#{credencialBean.userSession.infoPersonal.nombres}"/>
+                    <p:message for="nombres" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="apellidos" value="Apellidos:"/>
+                    <p:inputText id="apellidos" required="true"
+                                 value="#{credencialBean.userSession.infoPersonal.apellidos}"/>
+                    <p:message for="apellidos" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="cedula" value="Cedula/Pasaporte:"/>
+                    <p:inputText id="cedula" required="true"
+                                 value="#{credencialBean.userSession.infoPersonal.cedula}">
+                        <f:validateLongRange minimum="10"/>
+                    </p:inputText>
+                    <p:message for="cedula" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="movil" value="Movil:"/>
+                    <p:inputText id="movil" required="true"
+                                 value="#{credencialBean.userSession.infoPersonal.movil}">
+                        <f:validateLongRange minimum="10"/>
+                    </p:inputText>
+                    <p:message for="movil" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="email" value="e-mail:"/>
+                    <p:inputText id="email" required="true"
+                                 value="#{credencialBean.userSession.infoPersonal.email}">
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+                </h:panelGrid>
+                <p:separator/>
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="password" value="Password:"/>
+                    <p:password id="password" promptLabel="Por favor, introduzca un password" 
+                                weakLabel="Debil" required="true"
+                                value="#{credencialBean.userSession.password}"
+                                goodLabel="Buena" strongLabel="Fuerte" feedback="true"/>
+                    <p:message for="password" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="cpassword" value="Confirmiar Password:"/>
+                    <p:password id="cpassword" required="true"
+                                value="#{credencialBean.cpassword}"/>
+                    <p:message for="cpassword" display="tooltip" severity="error"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

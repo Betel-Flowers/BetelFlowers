@@ -37,6 +37,7 @@ public class CredencialBean implements Serializable {
     private MenuModel piMenu = new DefaultMenuModel();
     private List<SubMenu> menu = new ArrayList<>();
     private String layoutmenu;
+    private String cpassword;
 
     private void init() {
         this.userSession = new Usuario();
@@ -159,6 +160,14 @@ public class CredencialBean implements Serializable {
 
     public void setLayoutmenu(String layoutmenu) {
         this.layoutmenu = layoutmenu;
+    }
+
+    public String getCpassword() {
+        return cpassword;
+    }
+
+    public void setCpassword(String cpassword) {
+        this.cpassword = cpassword;
     }
 
 }

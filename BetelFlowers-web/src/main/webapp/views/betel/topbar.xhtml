@@ -8,9 +8,9 @@
     <div id="top-bar-wrapper">
         <div id="top-bar">
             <div class="search-bar">
-                
+
             </div>
-            
+
             <div class="top-bar-profile">
                 <div class="profile-name">
                     <span><h:outputText value="#{credencialBean.userSession.infoPersonal.nombres} #{credencialBean.userSession.infoPersonal.apellidos}"/></span><br/>
@@ -23,29 +23,17 @@
                 </a>
                 <ul class="top-submenu animated flipInX">
                     <li>
-                        <a href="#">
+                        <h:link outcome="/faces/views/perfil">
                             <i class="fa fa-fw fa-user"></i>
-                            <span>Profile</span>
-                        </a>
+                            <span>Perfil</span>
+                        </h:link>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="top-submenu-icon fa fa-fw fa-calendar"></i>
-                            <span>Calendar</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="top-submenu-icon fa fa-fw fa-envelope"></i>
-                            <span>Messages</span>
-                            <span class="top-submenu-badge">5</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
+                        <p:commandLink actionListener="#{credencialBean.logout(event)}"
+                                       oncomplete="handleLoginRequest(xhr, status, args)">
                             <i class="top-submenu-icon fa fa-fw fa-close"></i>
-                            <span>Log Out</span>
-                        </a>
+                            <span>Salir</span>
+                        </p:commandLink>
                     </li>
                 </ul>
             </div>

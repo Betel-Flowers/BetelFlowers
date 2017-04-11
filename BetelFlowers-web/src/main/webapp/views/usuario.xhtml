@@ -2,9 +2,9 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./betel/template.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <ui:define name="content">
         <h:form id="fadd">
@@ -25,12 +25,9 @@
                             <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Codigo" style="text-align: center">
-                        <h:outputText value="#{user.codigo}"/>
-                    </p:column>
                     <p:column headerText="Foto" style="text-align: center">
                         <p:graphicImage value="#{user.infoPersonal.urlFoto}"
-                                        width="80px" height="80px"/>
+                                        width="50px" height="50px"/>
                     </p:column>
                     <p:column headerText="Username" style="text-align: center">
                         <h:outputText value="#{user.username}"/>
@@ -85,7 +82,7 @@
                         <p:outputLabel value="#{usuarioBean.selected.infoPersonal.email}"/>
                         <p:outputLabel value=""/>
 
-                        <p:outputLabel for="userEstado" value="Estado:"/>
+                        <p:outputLabel for="userEstado" value="Habilitar:"/>
                         <p:selectBooleanCheckbox id="userEstado" value="#{usuarioBean.selected.estado}"/>
                         <p:message for="userEstado" display="tooltip" severity="error"/>
 
@@ -99,7 +96,7 @@
                         <p:message for="tipoUser" display="tooltip" severity="error"/>
 
                         <p:outputLabel value=""/>
-                        <p:graphicImage value="#{usuarioBean.selected.infoPersonal.urlFoto}"
+                        <p:graphicImage value="#{usuarioBean.nuevo.infoPersonal.urlFoto}"
                                         width="80px" height="80px" alt="Betel"/>
                         <p:outputLabel value=""/>
                     </h:panelGrid>

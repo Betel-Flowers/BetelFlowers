@@ -26,18 +26,18 @@ import javax.inject.Inject;
 @Named(value = "usuarioBean")
 @ViewScoped
 public class UsuarioBean implements Serializable {
-    
+
     private static final long serialVersionUID = 4274035870937539865L;
-    
+
     private Usuario nuevo;
     private Usuario selected;
     private List<Usuario> usuarios;
-    
+
     @Inject
     private UsuarioService usuarioService;
     @Inject
     private TipoUsuarioService tipoUsuarioService;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new Usuario();
@@ -48,7 +48,7 @@ public class UsuarioBean implements Serializable {
             this.usuarios = new ArrayList<>();
         }
     }
-    
+
     public void add(ActionEvent evt) {
         Boolean exito = this.usuarioService.insert(this.nuevo);
         if (exito) {
@@ -59,10 +59,11 @@ public class UsuarioBean implements Serializable {
             this.init();
         }
     }
-    
+
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
             TipoUsuario tipo = this.tipoUsuarioService.findByCodigo(this.nuevo.getTipoUsuario());
+            this.selected.setTipoUsuario(tipo);
             Boolean exito = this.usuarioService.update(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
@@ -75,7 +76,7 @@ public class UsuarioBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
             Boolean exito = this.usuarioService.deteleFlag(this.selected);
@@ -90,27 +91,27 @@ public class UsuarioBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     public Usuario getNuevo() {
         return nuevo;
     }
-    
+
     public void setNuevo(Usuario nuevo) {
         this.nuevo = nuevo;
     }
-    
+
     public Usuario getSelected() {
         return selected;
     }
-    
+
     public void setSelected(Usuario selected) {
         this.selected = selected;
     }
-    
+
     public List<Usuario> getUsuarios() {
         return usuarios;
     }
-    
+
     public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }

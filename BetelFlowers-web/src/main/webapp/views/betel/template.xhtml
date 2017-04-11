@@ -21,26 +21,33 @@
 
     <h:body>
         <div class="wrapper">
-            
+
             <div id="sidebar-wrapper">
                 <ui:include src="sidebarheader.xhtml" />
-                            
+
                 <div class="sidebar-nav nano">
                     <div class="nano-content sidebar-scroll-content">
                         <ui:include src="#{credencialBean.layoutmenu}" />
                     </div>
                 </div>
             </div>   
-            
+
             <ui:include src="topbar.xhtml" />         
-            
+
             <div id="main-wrapper">
                 <div class="main-content">
                     <ui:insert name="content"></ui:insert>
                 </div>
             </div>
         </div>
-        
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.loggerOut) {
+                    location.href = args.ruta;
+                }
+            }
+        </script>
+
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
             <f:facet name="start">
                 <p:graphicImage name="images/preloader.gif" library="icarus-layout" style="width: 32px;"/>
@@ -50,11 +57,10 @@
                 <h:outputText value="" />
             </f:facet>
         </p:ajaxStatus>
-        
+
         <h:outputStylesheet name="css/animate.css" library="icarus-layout" />
         <h:outputStylesheet name="css/nanoscroller.css" library="icarus-layout" />
         <h:outputStylesheet name="css/layout-green.css" library="icarus-layout" />
-        <h:outputStylesheet name="css/betel.css" library="icarus-layout" />
     </h:body>
 
 </html>

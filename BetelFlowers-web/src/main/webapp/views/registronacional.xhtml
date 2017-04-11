@@ -41,10 +41,6 @@
                                 value="#{registroNacionalBean.nuevo.fechaClasificacion}" 
                                 showOn="button" pattern="dd/MM/yyy" />
                     <p:message for="fechaCla" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="observa" value="Observacion:"/>
-                    <p:inputText id="observa" required="true" value="#{registroNacionalBean.nuevo.observacion}"/>
-                    <p:message for="observa" display="tooltip" severity="error"/>
                 </h:panelGrid>
                 <h:panelGrid columns="5" cellpadding="5">
                     <p:outputLabel for="causa" value="Causas"/>
@@ -122,9 +118,6 @@
                     <p:column headerText="Numero Tallos" style="text-align: center">
                         <h:outputText value="#{regNac.numeroTallos}"/>
                     </p:column>
-                    <p:column headerText="Observacion" style="text-align: center">
-                        <h:outputText value="#{regNac.observacion}"/>
-                    </p:column>
                     <p:column headerText="Causas y Motivos" style="text-align: center">
                         <p:commandLink value="Detalle" update=":fsdetail:outSdetail" 
                                        actionListener="#{registroNacionalBean.sendSelectedClicDetail(evt, regNac)}"
@@ -171,10 +164,6 @@
                         <p:calendar id="fechaCla" required="true" value="#{registroNacionalBean.selected.fechaClasificacion}" 
                                     showOn="button" pattern="dd/MM/yyy HH:mm:ss a" />
                         <p:message for="fechaCla" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="observa" value="Observacion:"/>
-                        <p:inputText id="observa" required="true" value="#{registroNacionalBean.selected.observacion}"/>
-                        <p:message for="observa" display="tooltip" severity="error"/>
                     </h:panelGrid>
                     <h:panelGrid style="margin: 0 auto;">
                         <p:dataTable id="mdtdet" var="mdet" rows="2"
