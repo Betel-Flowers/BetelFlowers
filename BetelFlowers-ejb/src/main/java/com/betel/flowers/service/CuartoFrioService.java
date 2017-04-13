@@ -114,7 +114,6 @@ public class CuartoFrioService implements Serializable {
         );
         UpdateOperations<CuartoFrio> update = this.ds.createUpdateOperations(CuartoFrio.class);
         update.set("descripcion", cuartoFrio.getDescripcion()).
-                set("ubicacion", cuartoFrio.getUbicacion()).
                 set("username", cuartoFrio.getUsername()).
                 set("flag", cuartoFrio.getFlag());
         UpdateResults results = this.ds.update(query, update);

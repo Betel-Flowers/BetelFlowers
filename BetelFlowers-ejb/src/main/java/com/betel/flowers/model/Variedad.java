@@ -41,7 +41,7 @@ public class Variedad extends BaseEntity {
     @Reference
     private Especie especie;
     @Reference
-    private Bloque bloque;
+    private List<Bloque> bloques;
 
     public Variedad() {
         this.urlFoto = "/resources/img/flor.png";
@@ -50,7 +50,6 @@ public class Variedad extends BaseEntity {
         this.glongitudes = new ArrayList<>();
         this.puntosCorte = new ArrayList<>();
         this.especie = new Especie();
-        this.bloque = new Bloque();
         this.girasol = Boolean.FALSE;
     }
 
@@ -158,20 +157,20 @@ public class Variedad extends BaseEntity {
         this.puntosCorte = puntosCorte;
     }
 
+    public List<Bloque> getBloques() {
+        return bloques;
+    }
+
+    public void setBloques(List<Bloque> bloques) {
+        this.bloques = bloques;
+    }
+
     public Especie getEspecie() {
         return especie;
     }
 
     public void setEspecie(Especie especie) {
         this.especie = especie;
-    }
-
-    public Bloque getBloque() {
-        return bloque;
-    }
-
-    public void setBloque(Bloque bloque) {
-        this.bloque = bloque;
     }
 
     @Override

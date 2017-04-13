@@ -23,7 +23,6 @@ public class CuartoFrio extends BaseEntity {
 
     private Integer codigo;
     private String descripcion;
-    private String ubicacion;
     private String username;
     private Integer flag;
 
@@ -44,14 +43,6 @@ public class CuartoFrio extends BaseEntity {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
     }
 
     public String getUsername() {
@@ -97,7 +88,7 @@ public class CuartoFrio extends BaseEntity {
 
     @Override
     public String toString() {
-        return "CuartoFrio{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", ubicacion=" + ubicacion + ", username=" + username + ", flag=" + flag + '}';
+        return "CuartoFrio{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", username=" + username + ", flag=" + flag + '}';
     }
-    
+
 }

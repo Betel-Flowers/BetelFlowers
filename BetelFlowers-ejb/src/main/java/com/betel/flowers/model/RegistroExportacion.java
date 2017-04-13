@@ -26,6 +26,7 @@ public class RegistroExportacion extends BaseEntity {
     private Integer numeroRamos;
     private Integer numeroTallosRamo;
     private Integer longitud;
+    private String glongitud;
     private String puntoCorte;
     private Integer totalTallos;
     private String barcode;
@@ -74,6 +75,14 @@ public class RegistroExportacion extends BaseEntity {
 
     public void setLongitud(Integer longitud) {
         this.longitud = longitud;
+    }
+
+    public String getGlongitud() {
+        return glongitud;
+    }
+
+    public void setGlongitud(String glongitud) {
+        this.glongitud = glongitud;
     }
 
     public String getPuntoCorte() {

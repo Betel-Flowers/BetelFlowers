@@ -138,7 +138,7 @@ public class UsuarioService implements Serializable {
         }
         return find;
     }
-   
+
     public Usuario findByEmail(String email) {
         Usuario find = new Usuario();
         Query<Usuario> result = this.ds.find(Usuario.class).
@@ -166,14 +166,26 @@ public class UsuarioService implements Serializable {
         return results.getUpdatedExisting();
     }
 
+    public Boolean updatePassword(Usuario usuario) {
+        Query<Usuario> query = this.ds.createQuery(Usuario.class);
+        usuario.setPassword(DigestUtils.md5Hex(usuario.getPassword()));
+        query.and(
+                query.criteria("codigo").equal(usuario.getCodigo())
+        );
+        UpdateOperations<Usuario> update = this.ds.createUpdateOperations(Usuario.class);
+        update.set("password", usuario.getPassword());
+        UpdateResults results = this.ds.update(query, update);
+        return results.getUpdatedExisting();
+    }
+
     public Boolean update(Usuario usuario) {
         Query<Usuario> query = this.ds.createQuery(Usuario.class);
         query.and(
                 query.criteria("codigo").equal(usuario.getCodigo())
         );
+        usuario.setPassword(DigestUtils.md5Hex(usuario.getPassword()));
         UpdateOperations<Usuario> update = this.ds.createUpdateOperations(Usuario.class);
         update.set("username", usuario.getUsername()).
-                set("password", usuario.getPassword()).
                 set("estado", usuario.getEstado()).
                 set("tipoUsuario", usuario.getTipoUsuario()).
                 set("infoPersonal", usuario.getInfoPersonal()).

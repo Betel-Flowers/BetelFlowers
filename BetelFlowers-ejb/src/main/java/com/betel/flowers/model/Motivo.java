@@ -101,6 +101,6 @@ public class Motivo extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Motivo{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", flag=" + flag + ", causa=" + causa + '}';
+        return causa.getDescripcion()+"-"+descripcion+" ";
     }
 }

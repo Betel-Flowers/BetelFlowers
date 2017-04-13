@@ -86,7 +86,7 @@ public class RegistroNacionalService implements Serializable {
                 query.criteria("codigo").equal(registroNacional.getCodigo())
         );
         UpdateOperations<RegistroNacional> update = this.ds.createUpdateOperations(RegistroNacional.class);
-        update.set("numeroTallos", registroNacional.getNumeroTallos()).
+        update.set("numeroTallos", registroNacional.getTotalNumeroTallos()).
                 set("fechaClasificacion", registroNacional.getFechaClasificacion()).
                 set("bodega", registroNacional.getBodega()).
                 set("detalle", registroNacional.getDetalle()).

@@ -98,7 +98,7 @@ public class Bloque extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Bloque{" + "codigo=" + codigo + ", numero=" + numero + ", area=" + area + ", username=" + username + ", flag=" + flag + '}';
+        return "Bloque=" + numero;
     }
 
 }

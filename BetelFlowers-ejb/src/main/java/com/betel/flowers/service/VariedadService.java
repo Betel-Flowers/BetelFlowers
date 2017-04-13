@@ -153,7 +153,7 @@ public class VariedadService implements Serializable {
         );
         UpdateOperations<Variedad> update = this.ds.createUpdateOperations(Variedad.class);
         update.set("especie", variedad.getEspecie()).
-                set("bloque", variedad.getBloque()).
+                set("bloques", variedad.getBloques()).
                 set("nombre", variedad.getNombre()).
                 set("color", variedad.getColor()).
                 set("urlFoto", variedad.getUrlFoto()).

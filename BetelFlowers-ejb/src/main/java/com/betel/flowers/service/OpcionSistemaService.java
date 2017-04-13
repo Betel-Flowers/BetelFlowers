@@ -78,7 +78,6 @@ public class OpcionSistemaService implements Serializable {
         urls.add("/faces/views/tipousuario.xhtml");
         urls.add("/faces/views/opcionsistema.xhtml");
         urls.add("/faces/views/betel.xhtml");
-        urls.add("/faces/register.xhtml");
         urls.add("/faces/index.xhtml");
         urls.add("/faces/loginPage");
         urls.add("/");

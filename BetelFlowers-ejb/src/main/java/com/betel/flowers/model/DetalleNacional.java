@@ -18,13 +18,13 @@ import org.mongodb.morphia.annotations.Reference;
 public class DetalleNacional {
 
     private Integer index;
+    private Integer cantidad;
     @Reference
-    private Causa causa;
-    private List<String> motivos;
+    private List<Motivo> motivos;
 
     public DetalleNacional() {
-        this.causa = new Causa();
         this.motivos = new ArrayList<>();
+        this.cantidad = 0;
     }
 
     public Integer getIndex() {
@@ -35,19 +35,19 @@ public class DetalleNacional {
         this.index = index;
     }
 
-    public Causa getCausa() {
-        return causa;
+    public Integer getCantidad() {
+        return cantidad;
     }
 
-    public void setCausa(Causa causa) {
-        this.causa = causa;
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
-    public List<String> getMotivos() {
+    public List<Motivo> getMotivos() {
         return motivos;
     }
 
-    public void setMotivos(List<String> motivos) {
+    public void setMotivos(List<Motivo> motivos) {
         this.motivos = motivos;
     }
 }
