@@ -40,9 +40,7 @@ public class RegistroNacionalBean implements Serializable {
     private RegistroNacional nuevo;
     private RegistroNacional selected;
     private List<RegistroNacional> registrosNacional;
-    private Causa causaSelected;
-    private List<String> listmotivos;
-    private List<String> selectedmotivos;
+    private List<Motivo> selectionMotivos;
     private DetallesNacional detalle;
 
     @Inject
@@ -60,9 +58,6 @@ public class RegistroNacionalBean implements Serializable {
     public void init() {
         this.nuevo = new RegistroNacional();
         this.nuevo.setUsername("usertest"); //usertest
-        this.causaSelected = new Causa();
-        this.listmotivos = new ArrayList<>();
-        this.selectedmotivos = new ArrayList<>();
         this.detalle = new DetallesNacional();
         this.registrosNacional = this.registroNacionalService.obtenerLista();
         if (this.registrosNacional == null) {
@@ -106,40 +101,10 @@ public class RegistroNacionalBean implements Serializable {
         }
     }
 
-    public void onSelectionCausa() {
-        if (this.causaSelected != null) {
-            this.listmotivos = new ArrayList<>();
-            Causa mcausa = this.causaService.findByCodigo(this.causaSelected);
-            List<Motivo> motivos = this.motivoServicce.obtenerListCausaFlag(mcausa, 1);
-            for (Motivo m : motivos) {
-                this.listmotivos.add(m.getDescripcion());
-            }
-        }
-    }
-
-    public void onSelectionCausaSelect() {
-        if (this.detalle.getNuevo().getCausa() != null) {
-            this.listmotivos = new ArrayList<>();
-            Causa mcausa = this.causaService.findByCodigo(this.detalle.getNuevo().getCausa());
-            List<Motivo> motivos = this.motivoServicce.obtenerListCausaFlag(mcausa, 1);
-            for (Motivo m : motivos) {
-                this.listmotivos.add(m.getDescripcion());
-            }
-            this.detalle.getNuevo().setCausa(mcausa);
-        }
-    }
-
-    public void addCausaMotivos(ActionEvent evt) {
-        if (this.causaSelected != null && !this.listmotivos.isEmpty()) {
-            DetalleNacional item = new DetalleNacional();
-            Causa mcausa = this.causaService.findByCodigo(this.causaSelected);
-            item.setCausa(mcausa);
-            item.setMotivos(this.selectedmotivos);
-            this.detalle.setNuevo(item);
-            this.detalle.add(evt);
-            this.causaSelected = new Causa();
-            this.selectedmotivos = new ArrayList<>();
-            this.listmotivos = new ArrayList<>();
+    public void addItemDetail(ActionEvent evt) {
+        if (this.selectionMotivos != null && !this.selectionMotivos.isEmpty()) {
+            this.detalle.getNuevo().setMotivos(this.selectionMotivos);
+            this.detalle.add();
         }
     }
 
@@ -148,14 +113,6 @@ public class RegistroNacionalBean implements Serializable {
         this.nuevo = select;
         this.detalle = new DetallesNacional();
         this.detalle.setDetalles(this.selected.getDetalle());
-    }
-
-    public Causa getCausaSelected() {
-        return causaSelected;
-    }
-
-    public void setCausaSelected(Causa causaSelected) {
-        this.causaSelected = causaSelected;
     }
 
     public List<RegistroNacional> getRegistrosNacional() {
@@ -182,20 +139,12 @@ public class RegistroNacionalBean implements Serializable {
         this.nuevo = nuevo;
     }
 
-    public List<String> getListmotivos() {
-        return listmotivos;
+    public List<Motivo> getSelectionMotivos() {
+        return selectionMotivos;
     }
 
-    public void setListmotivos(List<String> listmotivos) {
-        this.listmotivos = listmotivos;
-    }
-
-    public List<String> getSelectedmotivos() {
-        return selectedmotivos;
-    }
-
-    public void setSelectedmotivos(List<String> selectedmotivos) {
-        this.selectedmotivos = selectedmotivos;
+    public void setSelectionMotivos(List<Motivo> selectionMotivos) {
+        this.selectionMotivos = selectionMotivos;
     }
 
     public DetallesNacional getDetalle() {

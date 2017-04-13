@@ -7,17 +7,30 @@ package com.betel.flowers.web.bean;
 
 import com.betel.flowers.model.OpcionSistema;
 import com.betel.flowers.model.Usuario;
+import com.betel.flowers.service.UsuarioService;
+import com.betel.flowers.web.bean.util.UploadFileRun;
 import com.betel.flowers.web.bean.util.menu.ItemMenu;
 import com.betel.flowers.web.bean.util.menu.SubMenu;
+import com.betel.flowers.web.util.FacesUtil;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -32,12 +45,18 @@ import org.primefaces.model.menu.MenuModel;
 public class CredencialBean implements Serializable {
 
     private static final long serialVersionUID = 5955970909768673736L;
+    private static final Logger LOG = Logger.getLogger(CredencialBean.class.getName());
+    private static final Integer sizeImage = 5500000;
 
     private Usuario userSession = new Usuario();
     private MenuModel piMenu = new DefaultMenuModel();
     private List<SubMenu> menu = new ArrayList<>();
     private String layoutmenu;
     private String cpassword;
+    private UploadedFile file;
+
+    @Inject
+    private UsuarioService usuarioService;
 
     private void init() {
         this.userSession = new Usuario();
@@ -50,6 +69,7 @@ public class CredencialBean implements Serializable {
         this.userSession = usuario;
         this.loadDataSession(this.userSession);
         this.loadLayoutMenu(this.userSession);
+        this.userSession.getInfoPersonal().setCodigoFoto(this.codigoFoto());
     }
 
     private void loadLayoutMenu(Usuario usuario) {
@@ -118,6 +138,70 @@ public class CredencialBean implements Serializable {
         return unique;
     }
 
+    private String codigoFoto() {
+        GregorianCalendar calendario = new GregorianCalendar();
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
+        return "BETEL-U" + RandomStringUtils.randomNumeric(4) + "-IMG-" + format.format(calendario.getTime());
+    }
+
+    public void modifyInfo(ActionEvent evt) {
+        Boolean exito = this.usuarioService.update(this.userSession);
+        if (exito) {
+            FacesUtil.addMessageInfo("Se actualizo exitosamente.");
+        } else {
+            FacesUtil.addMessageError(null, "No actualizo.");
+        }
+    }
+
+    public void changePassword(ActionEvent evt) {
+        if (this.userSession.getPassword().equals(this.cpassword)) {
+            Boolean exito = this.usuarioService.updatePassword(this.userSession);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se modifico el password con exito.");
+            } else {
+                FacesUtil.addMessageError(null, "No se modifico el password con exito.");
+            }
+        } else {
+            FacesUtil.addMessageWarn(null, "El password no coincide.");
+        }
+    }
+
+    public void handleSaveFoto(FileUploadEvent event) {
+        this.setFile(event.getFile());
+        if (this.getFile() != null) {
+            if ((getFile().getFileName().endsWith(".png")
+                    || getFile().getFileName().endsWith(".PNG")
+                    || getFile().getFileName().endsWith(".jpg")
+                    || getFile().getFileName().endsWith(".JPG")
+                    || getFile().getFileName().endsWith(".jpg")
+                    || getFile().getFileName().endsWith(".JPEG")
+                    || getFile().getFileName().endsWith(".jpeg"))
+                    && this.getFile().getSize() < sizeImage) {
+                try {
+                    HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                    String ipAdress = request.getLocalAddr();
+                    String filepath = "http://" + ipAdress + "/usuarios/";
+                    String url = "/var/www/html/usuarios/";
+                    String ext = getFile().getContentType();
+                    UploadFileRun upload = new UploadFileRun(url, this.userSession.getInfoPersonal().getCodigoFoto(), ext.replace("image/", ""), getFile().getInputstream());
+                    upload.run();
+                    if (upload.getExito()) {
+                        this.userSession.getInfoPersonal().setUrlFoto(filepath + this.userSession.getInfoPersonal().getCodigoFoto() + "." + ext.replace("image/", ""));
+                        LOG.log(Level.INFO, "dir IP save: " + filepath);
+                        this.userSession.getInfoPersonal().setLoadFoto(Boolean.TRUE);
+                        this.usuarioService.update(this.userSession);
+                        FacesUtil.addMessageInfo("Se ha agregado la imagen.");
+                    }
+                } catch (IOException ex) {
+                    //log.level.error("Error al subir la imagen", ex);
+                }
+            } else {
+                FacesUtil.addMessageWarn(null, "Tamaño maximo de imagen 5.5 MB.");
+            }
+
+        }
+    }
+
     public void logout(ActionEvent event) {
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/faces/index.xhtml";
         RequestContext context = RequestContext.getCurrentInstance();
@@ -168,6 +252,14 @@ public class CredencialBean implements Serializable {
 
     public void setCpassword(String cpassword) {
         this.cpassword = cpassword;
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 
 }

@@ -21,17 +21,7 @@
                         <f:selectItems value="#{especieBean.especies}" var="especie" 
                                        itemLabel="#{especie.nombre}" itemValue="#{especie.codigo}" />
                     </p:selectOneMenu>
-                    <p:message for="idSespe" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="idBloq" value="Bloque:"/>
-                    <p:selectOneMenu id="idBloq" required="true" style="width: 85%" 
-                                     value="#{variedadBean.nuevo.bloque.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue=""
-                                      noSelectionOption="false"/>
-                        <f:selectItems value="#{bloqueBean.bloques}" var="bloq" 
-                                       itemLabel="#{bloq.numero}" itemValue="#{bloq.codigo}" />
-                    </p:selectOneMenu>
-                    <p:message for="idBloq" display="tooltip" severity="error"/>
+                    <p:message for="idSespe" display="tooltip" severity="error"/>                    
 
                     <p:outputLabel for="nomVari" value="Nombre"/>
                     <p:inputText id="nomVari" required="true" style="width: 100%" 
@@ -51,6 +41,11 @@
                     <p:selectBooleanCheckbox id="mGirasol" value="#{variedadBean.nuevo.girasol}" />
                     <p:outputLabel value=""/>
 
+                    <p:outputLabel value=""/>
+                    <p:commandButton value="Agregar Bloques" update=":fbloq:outBloq"
+                                     oncomplete="PF('dlgBloq').show()"/>
+                    <p:outputLabel value=""/>
+
                     <p:outputLabel value="Foto:"/>
                     <p:commandButton value="Agregar"
                                      oncomplete="PF('dlgFoto').show()"/>
@@ -59,7 +54,13 @@
                                     width="80px" height="80px" alt="Betel"/>
 
                 </h:panelGrid>
-
+                <p:outputPanel id="outBloqs">
+                    <p:dataList value="#{variedadBean.nuevo.bloques}" 
+                                var="nbloq" rendered="#{not empty variedadBean.nuevo.bloques}">
+                        <h:outputText value=" Bloque: #{nbloq.numero} "/>
+                        <h:outputText value="Area: #{nbloq.area} "/>
+                    </p:dataList>
+                </p:outputPanel>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                     <p:commandButton value="Guardar" update=":fadd, :fvari:dtvari, :fadd:messages" 
@@ -105,13 +106,15 @@
                         <h:outputText value="#{variedad.especie.nombre}"/>
                     </p:column>
                     <p:column headerText="Bloque" style="text-align: center">
-                        <h:outputText value="#{variedad.bloque.numero}"/>
+                        <p:dataList value="#{variedad.bloques}" var="tbloq">
+                            <h:outputText value="#{tbloq}"/>
+                        </p:dataList>
                     </p:column>
                     <p:column headerText="Usuario" style="text-align: center">
                         <h:outputText value="#{variedad.username}"/>
                     </p:column>
                     <p:column headerText="Modificar" style="text-align: center">
-                        <p:commandButton value="Editar" update=":fedit:editVari, :fadd:messages"
+                        <p:commandButton value="Editar" update=":fedit:outVari, :fadd:messages"
                                          oncomplete="PF('dlgModifyVari').show()">
                             <f:setPropertyActionListener value="#{variedad}" target="#{variedadBean.selected}"/>
                             <f:setPropertyActionListener value="#{variedad}" target="#{variedadBean.nuevo}"/>
@@ -128,7 +131,7 @@
         </h:form>
         <h:form id="fedit">
             <p:dialog header="Modificar Variedad" widgetVar="dlgModifyVari" resizable="false" modal="true">
-                <p:outputPanel id="editVari">
+                <p:outputPanel id="outVari">
                     <h:panelGrid columns="2" cellpadding="10">
                         <h:panelGrid columns="6" cellpadding="5">
                             <p:outputLabel for="idmSespe" value="Especie:"/>
@@ -140,13 +143,8 @@
                             </p:selectOneMenu>
                             <p:outputLabel value=""/>
 
-                            <p:outputLabel for="idmBloq" value="Bloque:"/>
-                            <p:selectOneMenu id="idmBloq" style="width: 85%" 
-                                             value="#{variedadBean.nuevo.bloque.codigo}">
-                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                <f:selectItems value="#{bloqueBean.bloques}" var="bloq" 
-                                               itemLabel="#{bloq.numero}" itemValue="#{bloq.codigo}" />
-                            </p:selectOneMenu>
+                            <p:outputLabel value=""/>
+                            <p:commandButton value="Agregar Bloques"/>
                             <p:outputLabel value=""/>
 
                             <p:outputLabel for="nomVari" value="Nombre" />
@@ -171,12 +169,12 @@
                             <p:commandButton value="Agregar"
                                              oncomplete="PF('dlguFoto').show()"/>
                         </h:panelGrid>
-                        <p:graphicImage id="imgM" value="#{variedadBean.selected.urlFoto}"
+                        <p:graphicImage id="foto" value="#{variedadBean.selected.urlFoto}"
                                         width="80px" height="80px"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Modificar" update=":fedit, :fadd, :fadd:messages, :fvari:dtvari" 
+                    <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fvari:dtvari" 
                                      actionListener="#{variedadBean.modify(evt)}"/>
 
                 </f:facet>
@@ -212,7 +210,7 @@
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Eliminar" update=":fdelete, :fadd, :fadd:messages, :fvari:dtvari" 
+                    <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fvari:dtvari" 
                                      actionListener="#{variedadBean.remove(evt)}"/>
                 </f:facet>
             </p:dialog>
@@ -241,10 +239,47 @@
                 </h:panelGrid>  
                 <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                 <f:facet name="footer">
-                    <p:commandButton value="Aceptar" update=":imgUpdate, :fedit:imgM" /> 
+                    <p:commandButton value="Aceptar" update=":imgUpdate, :fedit:outVari" /> 
                 </f:facet> 
             </p:dialog>
-
+        </h:form>
+        <h:form id="fbloq">
+            <p:dialog header="Bloque" widgetVar="dlgBloq" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outBloq">
+                    <h:panelGrid style="margin: 0 auto;">
+                        <p:dataTable id="chekBloq" var="bloq" rows="5" 
+                                     widgetVar="chekBloqTable" paginatorPosition="Bottom"
+                                     paginator="true" tableStyle="width: auto"
+                                     value="#{bloqueBean.bloques}" 
+                                     selection="#{variedadBean.nuevo.bloques}" 
+                                     rowKey="#{bloq.codigo}" style="margin-bottom:0">
+                            <f:facet name="header">
+                                <h:outputText value="Bloqiones"/>
+                            </f:facet>
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                            <p:column headerText="Fecha" style="text-align: center">
+                                <h:outputText value="#{bloq.lastChange}">
+                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Codigo" style="text-align: center">
+                                <h:outputText value="#{bloq.codigo}"/>
+                            </p:column>
+                            <p:column headerText="Bloque">
+                                <h:outputText value="#{bloq.numero}" />
+                            </p:column>
+                            <p:column headerText="Area">
+                                <h:outputText value="#{bloq.area}" />
+                            </p:column>
+                        </p:dataTable>
+                        <f:facet name="footer">
+                            <p:commandButton value="Agregar" process="chekBloq" 
+                                             update=":fbloq, :fbloq:chekBloq, :fadd:outBloqs"/>
+                        </f:facet>
+                    </h:panelGrid>
+                </p:outputPanel>          
+            </p:dialog>
         </h:form>
     </ui:define>
 

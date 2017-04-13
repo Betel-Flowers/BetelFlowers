@@ -9,52 +9,100 @@
     <ui:define name="content">
         <h:form id="fperfil">
             <p:panel header="Perfil de usuario">
-                <h:panelGrid columns="6" cellpadding="5">
-                    <p:outputLabel for="nombres" value="Nombres:"/>
-                    <p:inputText id="nombres" required="true"
-                                 value="#{credencialBean.userSession.infoPersonal.nombres}"/>
-                    <p:message for="nombres" display="tooltip" severity="error"/>
+                <p:outputPanel id="outInfo">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="nombres" value="Nombres:"/>
+                        <p:inputText id="nombres" required="true"
+                                     value="#{credencialBean.userSession.infoPersonal.nombres}"/>
+                        <p:message for="nombres" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="apellidos" value="Apellidos:"/>
-                    <p:inputText id="apellidos" required="true"
-                                 value="#{credencialBean.userSession.infoPersonal.apellidos}"/>
-                    <p:message for="apellidos" display="tooltip" severity="error"/>
+                        <p:outputLabel for="apellidos" value="Apellidos:"/>
+                        <p:inputText id="apellidos" required="true"
+                                     value="#{credencialBean.userSession.infoPersonal.apellidos}"/>
+                        <p:message for="apellidos" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="cedula" value="Cedula/Pasaporte:"/>
-                    <p:inputText id="cedula" required="true"
-                                 value="#{credencialBean.userSession.infoPersonal.cedula}">
-                        <f:validateLongRange minimum="10"/>
-                    </p:inputText>
-                    <p:message for="cedula" display="tooltip" severity="error"/>
+                        <p:outputLabel for="fechaNaci" value="Fecha de clasificacion:"/>
+                        <p:calendar id="fechaNaci" required="true" 
+                                    value="#{credencialBean.userSession.infoPersonal.fechaNacimiento}" 
+                                    showOn="button" pattern="dd/MM/yyy" />
+                        <p:message for="fechaNaci" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="movil" value="Movil:"/>
-                    <p:inputText id="movil" required="true"
-                                 value="#{credencialBean.userSession.infoPersonal.movil}">
-                        <f:validateLongRange minimum="10"/>
-                    </p:inputText>
-                    <p:message for="movil" display="tooltip" severity="error"/>
+                        <p:outputLabel for="cedula" value="Cedula/Pasaporte:"/>
+                        <p:inputText id="cedula" required="true"
+                                     value="#{credencialBean.userSession.infoPersonal.cedula}">
+                            <f:validateLongRange minimum="10"/>
+                        </p:inputText>
+                        <p:message for="cedula" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="email" value="e-mail:"/>
-                    <p:inputText id="email" required="true"
-                                 value="#{credencialBean.userSession.infoPersonal.email}">
-                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                    </p:inputText>
-                </h:panelGrid>
+                        <p:outputLabel for="movil" value="Movil:"/>
+                        <p:inputText id="movil" required="true"
+                                     value="#{credencialBean.userSession.infoPersonal.movil}">
+                            <f:validateLongRange minimum="10"/>
+                        </p:inputText>
+                        <p:message for="movil" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="email" value="e-mail:"/>
+                        <p:inputText id="email" required="true"
+                                     value="#{credencialBean.userSession.infoPersonal.email}">
+                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </p:inputText>
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Tipo de Usuario:"/>
+                        <p:outputLabel value="#{credencialBean.userSession.tipoUsuario.nombre}"/>
+                        <p:outputLabel value=""/>
+
+                        <p:commandButton value="Actualizar" update=":fperfil:messages, :fperfil:outInfo"
+                                         actionListener="#{credencialBean.modifyInfo(evt)}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
                 <p:separator/>
-                <h:panelGrid columns="6" cellpadding="5">
-                    <p:outputLabel for="password" value="Password:"/>
-                    <p:password id="password" promptLabel="Por favor, introduzca un password" 
-                                weakLabel="Debil" required="true"
-                                value="#{credencialBean.userSession.password}"
-                                goodLabel="Buena" strongLabel="Fuerte" feedback="true"/>
-                    <p:message for="password" display="tooltip" severity="error"/>
+                <p:outputPanel id="outPwd">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="password" value="Password:"/>
+                        <p:password id="password" promptLabel="Por favor, introduzca un password" 
+                                    weakLabel="Debil"
+                                    value="#{credencialBean.userSession.password}"
+                                    goodLabel="Buena" strongLabel="Fuerte" feedback="true"/>
 
-                    <p:outputLabel for="cpassword" value="Confirmiar Password:"/>
-                    <p:password id="cpassword" required="true"
-                                value="#{credencialBean.cpassword}"/>
-                    <p:message for="cpassword" display="tooltip" severity="error"/>
-                </h:panelGrid>
+                        <p:outputLabel for="cpassword" value="Confirmiar Password:"/>
+                        <p:password id="cpassword"
+                                    value="#{credencialBean.cpassword}"/>
+
+                        <p:outputLabel value=""/>
+                        <p:commandButton value="Cambiar" update=":fperfil:messages, :fperfil:outPwd, :fperfil:outInfo"
+                                         actionListener="#{credencialBean.changePassword(evt)}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <p:separator/>
+                <p:outputPanel id="outFoto">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:graphicImage value="#{credencialBean.userSession.infoPersonal.urlFoto}"
+                                        width="80px" height="80px"/>
+
+                        <p:outputLabel value="Foto:"/>
+                        <p:commandButton value="Agregar" oncomplete="PF('dlgFoto').show()"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:outputLabel value="Porfavor complete la informacion del perfil de usuario de ser necesario."/>
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </f:facet>
             </p:panel>
+        </h:form>
+        <h:form id="imgSave">
+            <p:dialog widgetVar="dlgFoto" header="Añadir Imagen" minHeight="40" modal="true"
+                      showEffect="fade" hideEffect="fade" resizable="false">
+                <h:panelGrid columns="2" cellpadding="6">
+                    <h:outputLabel value="Imagen:"/>
+                    <p:fileUpload fileUploadListener="#{credencialBean.handleSaveFoto}" mode="advanced" label="Cargar"
+                                  update=":imgSave:messages" auto="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                </h:panelGrid>  
+                <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" update=":imgSave, :fperfil:outFoto, imgPerfil" /> 
+                </f:facet> 
+            </p:dialog>
         </h:form>
     </ui:define>
 

@@ -29,7 +29,7 @@
                         <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
                                        itemValue="#{va.codigo}"/>
                         <p:ajax listener="#{registroExportacionBean.loadVariedad}" 
-                                update=":fadd:cantidad, :fadd:ramos, :fadd:longitud, :fadd:puntoCorte" />
+                                update=":fadd:cantidad, :fadd:ramos, :fadd:outlongs, :fadd:puntoCorte" />
                     </p:selectOneMenu>
                     <p:message for="variedad" display="tooltip" severity="error"/>
 
@@ -46,16 +46,34 @@
                                        var="rm" itemLabel="#{rm}" itemValue="#{rm}"/>
                     </p:selectOneMenu>
                     <p:message for="ramos" display="tooltip" severity="error"/>
+                </h:panelGrid>
+                <p:outputPanel id="outlongs">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="longitud" value="Longitud:" 
+                                       rendered="#{not registroExportacionBean.nuevo.variedad.girasol}"/>
+                        <p:selectOneMenu id="longitud" required="true" style="width: 100%" 
+                                         value="#{registroExportacionBean.nuevo.longitud}"
+                                         rendered="#{not registroExportacionBean.nuevo.variedad.girasol}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{registroExportacionBean.nuevo.variedad.longitudes}"
+                                           var="lo" itemLabel="#{lo}" itemValue="#{lo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="longitud" display="tooltip" severity="error"
+                                   rendered="#{not registroExportacionBean.nuevo.variedad.girasol}"/>
 
-                    <p:outputLabel for="longitud" value="Longitud:"/>
-                    <p:selectOneMenu id="longitud" required="true" style="width: 100%" 
-                                     value="#{registroExportacionBean.nuevo.longitud}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{registroExportacionBean.nuevo.variedad.longitudes}"
-                                       var="lo" itemLabel="#{lo}" itemValue="#{lo}"/>
-                    </p:selectOneMenu>
-                    <p:message for="longitud" display="tooltip" severity="error"/>
-
+                        <p:outputLabel for="glongitud" value="Longitud:" rendered="#{registroExportacionBean.nuevo.variedad.girasol}"/>
+                        <p:selectOneMenu id="glongitud" required="true" style="width: 100%" 
+                                         value="#{registroExportacionBean.nuevo.glongitud}"
+                                         rendered="#{registroExportacionBean.nuevo.variedad.girasol}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{registroExportacionBean.nuevo.variedad.glongitudes}"
+                                           var="glo" itemLabel="#{glo}" itemValue="#{glo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="glongitud" display="tooltip" severity="error"
+                                   rendered="#{registroExportacionBean.nuevo.variedad.girasol}"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <h:panelGrid columns="3" cellpadding="5">
                     <p:outputLabel for="puntoCorte" value="Punto de Corte:"/>
                     <p:selectOneMenu id="puntoCorte" required="true" style="width: 100%" 
                                      value="#{registroExportacionBean.nuevo.puntoCorte}">
@@ -106,7 +124,8 @@
                         <h:outputText value="#{regExp.totalTallos}"/>
                     </p:column>
                     <p:column style="text-align: center" headerText="Longitud" >
-                        <h:outputText value="#{regExp.longitud}"/>
+                        <h:outputText value="#{regExp.longitud}" rendered="#{not regExp.variedad.girasol}"/>
+                        <h:outputText value="#{regExp.glongitud}" rendered="#{regExp.variedad.girasol}"/>
                     </p:column>
                     <p:column style="text-align: center" headerText="Pto. de Corte" >
                         <h:outputText value="#{regExp.puntoCorte}"/>
@@ -159,7 +178,8 @@
                         <h:outputText value="#{regExpG.totalTallos}"/>
                     </p:column>
                     <p:column style="text-align: center" headerText="Longitud" >
-                        <h:outputText value="#{regExpG.longitud}"/>
+                        <h:outputText value="#{regExpG.longitud}" rendered="#{not regExpG.variedad.girasol}"/>
+                        <h:outputText value="#{regExpG.glongitud}" rendered="#{regExpG.variedad.girasol}"/>
                     </p:column>
                     <p:column style="text-align: center" headerText="Pto. de Corte" >
                         <h:outputText value="#{regExpG.puntoCorte}"/>

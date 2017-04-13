@@ -35,7 +35,6 @@ public class RegistroCultivoBean implements Serializable {
     private RegistroCultivo nuevo;
     private RegistroCultivo selected;
     private List<RegistroCultivo> registrosCultivo;
-    private List<Variedad> variedades;
 
     @Inject
     private RegistroCultivoService registroCultivoService;
@@ -49,7 +48,6 @@ public class RegistroCultivoBean implements Serializable {
         this.nuevo = new RegistroCultivo();
         this.nuevo.setUsername("usertest");
         this.selected = new RegistroCultivo();
-        this.setVariedades(new ArrayList<Variedad>());
         this.registrosCultivo = this.registroCultivoService.obtenerLista();
         if (this.registrosCultivo == null) {
             this.registrosCultivo = new ArrayList<>();
@@ -91,11 +89,12 @@ public class RegistroCultivoBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-
-    public void changeBloque() {
-        if (this.nuevo.getBloque().getCodigo() != null) {
-            Bloque bloque = this.bloqueService.findByCodigo(this.nuevo.getBloque());
-            this.setVariedades(this.variedadService.obtenerListaBloque(bloque));
+    
+    public void changeVariedad() {
+        if (this.nuevo.getVariedad().getCodigo() != null) {
+            Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
+            this.nuevo.setVariedad(variedad);
+            
         }
     }
 
@@ -137,14 +136,6 @@ public class RegistroCultivoBean implements Serializable {
 
     public void setRegistrosCultivo(List<RegistroCultivo> registrosCultivo) {
         this.registrosCultivo = registrosCultivo;
-    }
-
-    public List<Variedad> getVariedades() {
-        return variedades;
-    }
-
-    public void setVariedades(List<Variedad> variedades) {
-        this.variedades = variedades;
     }
 
 }

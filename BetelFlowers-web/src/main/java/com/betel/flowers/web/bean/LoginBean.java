@@ -11,6 +11,7 @@ import com.betel.flowers.service.TipoUsuarioService;
 import com.betel.flowers.service.UsuarioService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -26,24 +27,24 @@ import org.primefaces.context.RequestContext;
 @Named(value = "loginBean")
 @ViewScoped
 public class LoginBean implements Serializable {
-
+    
     private static final long serialVersionUID = -2272147739224429341L;
-
+    
     private Usuario usuario;
-
+    
     @Inject
     private CredencialBean session;
     @Inject
     private UsuarioService usuarioService;
     @Inject
     private TipoUsuarioService tipoUsuarioService;
-
+    
     @PostConstruct
     public void init() {
         this.usuario = new Usuario();
         this.createAdmin();
     }
-
+    
     public void login(ActionEvent evt) {
         RequestContext context = RequestContext.getCurrentInstance();
         String url = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
@@ -68,7 +69,7 @@ public class LoginBean implements Serializable {
         context.addCallbackParam("loggedIn", LoggedIn);
         context.addCallbackParam("ruta", url);
     }
-
+    
     private void createAdmin() {
         Usuario admin = new Usuario();
         admin.setEstado(Boolean.TRUE);
@@ -89,8 +90,10 @@ public class LoginBean implements Serializable {
             adminBetel.setPassword("admin.betel.2017");
             adminBetel.getInfoPersonal().setApellidos("admin");
             adminBetel.getInfoPersonal().setNombres("admin");
-            adminBetel.getInfoPersonal().setCedula("0000000000");
-            adminBetel.getInfoPersonal().setMovil("0000000000");
+            adminBetel.getInfoPersonal().setCedula("1111111111");
+            adminBetel.getInfoPersonal().setMovil("9999999999");
+            adminBetel.getInfoPersonal().setEmail("admin@info.com");
+            adminBetel.getInfoPersonal().setFechaNacimiento(new Date());
             Usuario mUsername = this.usuarioService.findByUsername(adminBetel);
             if (mUsername.getId() == null) {
                 TipoUsuario mTipoAdmin = this.tipoUsuarioService.findByNombre(tipo);
@@ -99,13 +102,13 @@ public class LoginBean implements Serializable {
             }
         }
     }
-
+    
     public Usuario getUsuario() {
         return usuario;
     }
-
+    
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
+    
 }

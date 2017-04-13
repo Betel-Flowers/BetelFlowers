@@ -14,13 +14,13 @@
                 </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:outputLabel for="fechaApertura" value="Fecha Apertura:"/>
-                    <p:calendar id="fechaApertura" required="true" pattern="dd/MM/yyyy HH:mm:ss a"
+                    <p:calendar id="fechaApertura" required="true" pattern="dd/MM/yyy"
                                 timeZone="#{calendarioBean.calenadario.timeZone}"
                                 value="#{daeBean.nuevo.fechaApertura}" showOn="button" />
                     <p:message for="fechaApertura" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="fechaCaducidad" value="Fecha Caducidad:"/>
-                    <p:calendar id="fechaCaducidad" required="true" pattern="dd/MM/yyyy HH:mm:ss a"
+                    <p:calendar id="fechaCaducidad" required="true" pattern="dd/MM/yyy"
                                 timeZone="#{calendarioBean.calenadario.timeZone}"
                                 value="#{daeBean.nuevo.fechaCaducidad}" showOn="button" />
                     <p:message for="fechaCaducidad" display="tooltip" severity="error"/>

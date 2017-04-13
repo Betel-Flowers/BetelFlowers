@@ -1,0 +1,21 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 10, 2017, 11:58:55 PM
+    Author     : luis
+*/
+
+#betel-init{
+    background: url(http://45.33.78.137/resources/fondo.jpg);
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+}
+
+#betel-footer{
+    width: auto;
+    height: 100%;
+}

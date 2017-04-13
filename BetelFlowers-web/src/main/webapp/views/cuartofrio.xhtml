@@ -17,11 +17,6 @@
                     <p:inputText id="descripcion" required="true" 
                                  value="#{cuartoFrioBean.nuevo.descripcion}"/>
                     <p:message for="descripcion" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="ubicacion" value="Ubicacion:"/>
-                    <p:inputText id="ubicacion" required="true"
-                                 value="#{cuartoFrioBean.nuevo.ubicacion}"/>
-                    <p:message for="ubicacion" display="tooltip" severity="error"/>
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
@@ -51,9 +46,6 @@
                     <p:column headerText="Descripcion" style="text-align: center;width: auto">
                         <h:outputText value="#{cua.descripcion}"/>
                     </p:column>
-                    <p:column headerText="Ubicacion" style="text-align: center;width: auto">
-                        <h:outputText value="#{cua.ubicacion}"/>
-                    </p:column>
                     <p:column headerText="Username" style="text-align: center;width: auto">
                         <h:outputText value="#{cua.username}"/>
                     </p:column>
@@ -81,11 +73,6 @@
                         <p:inputText id="edescripcion" required="true" 
                                      value="#{cuartoFrioBean.selected.descripcion}"/>
                         <p:message for="edescripcion" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="eubicacion" value="Ubicacion:"/>
-                        <p:inputText id="eubicacion" required="true"
-                                     value="#{cuartoFrioBean.selected.ubicacion}"/>
-                        <p:message for="eubicacion" display="tooltip" severity="error"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
@@ -102,9 +89,6 @@
                     <h:panelGrid columns="2" cellpadding="5">
                         <p:outputLabel value="Descripcion:"/>
                         <p:outputLabel value="#{cuartoFrioBean.selected.descripcion}"/>
-
-                        <p:outputLabel value="Ubicacion:"/>
-                        <p:outputLabel value="#{cuartoFrioBean.selected.ubicacion}"/>
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">

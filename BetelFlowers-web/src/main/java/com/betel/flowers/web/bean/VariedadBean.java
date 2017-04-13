@@ -5,7 +5,6 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.Bloque;
 import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.BloqueService;
@@ -41,7 +40,7 @@ import org.primefaces.model.UploadedFile;
 public class VariedadBean implements Serializable {
     
     private static final long serialVersionUID = 720235995057834086L;
-    private static final Logger LOG = Logger.getLogger(FacesUtil.class.getName());
+    private static final Logger LOG = Logger.getLogger(VariedadBean.class.getName());
     
     private Variedad nuevo;
     private Variedad selected;
@@ -80,8 +79,6 @@ public class VariedadBean implements Serializable {
     
     public void add(ActionEvent evt) {
         Especie especie = this.especieService.findByCodigo(this.nuevo.getEspecie());
-        Bloque bloque = this.bloqueServie.findByCodigo(this.nuevo.getBloque());
-        this.nuevo.setBloque(bloque);
         this.nuevo.setEspecie(especie);
         Boolean exito = this.variedadService.insert(this.nuevo);
         if (exito) {
@@ -96,8 +93,6 @@ public class VariedadBean implements Serializable {
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
             Especie especie = this.especieService.findByCodigo(this.selected.getEspecie());
-            Bloque bloque = this.bloqueServie.findByCodigo(this.nuevo.getBloque());
-            this.selected.setBloque(bloque);
             this.selected.setEspecie(especie);
             Boolean exito = this.variedadService.update(this.selected);
             if (exito) {

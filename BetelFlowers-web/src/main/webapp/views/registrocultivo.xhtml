@@ -14,24 +14,24 @@
                 </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
 
-                    <p:outputLabel for="bloque" value="Bloque:"/>
-                    <p:selectOneMenu id="bloque" required="true" style="width: 85%" 
-                                     value="#{registroCultivoBean.nuevo.bloque.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{bloqueBean.bloques}" var="bl" 
-                                       itemLabel="#{bl.numero}" itemValue="#{bl.codigo}"/>
-                        <p:ajax update=":fadd:variedad" listener="#{registroCultivoBean.changeBloque}"/>
-                    </p:selectOneMenu>
-                    <p:message for="bloque" display="tooltip" severity="error"/>
-
                     <p:outputLabel for="variedad" value="Variedad:"/>
                     <p:selectOneMenu id="variedad" required="true" style="width: 85%"
                                      value="#{registroCultivoBean.nuevo.variedad.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{registroCultivoBean.variedades}" var="va" 
+                        <f:selectItems value="#{variedadBean.variedades}" var="va" 
                                        itemLabel="#{va.nombre}" itemValue="#{va.codigo}"/>
+                        <p:ajax update=":fadd:bloque" listener="#{registroCultivoBean.changeVariedad}"/>
                     </p:selectOneMenu>
                     <p:message for="variedad" display="tooltip" severity="error"/>
+                    
+                    <p:outputLabel for="bloque" value="Bloque:"/>
+                    <p:selectOneMenu id="bloque" required="true" style="width: 85%" 
+                                     value="#{registroCultivoBean.nuevo.bloque.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{registroCultivoBean.nuevo.variedad.bloques}" var="bl" 
+                                       itemLabel="#{bl.numero}" itemValue="#{bl.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="bloque" display="tooltip" severity="error"/>
 
                     <p:outputLabel value="Recipiente:"/>
                     <h:panelGrid columns="4" cellpadding="5">
