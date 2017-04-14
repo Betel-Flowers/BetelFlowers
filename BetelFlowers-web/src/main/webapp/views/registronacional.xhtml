@@ -37,37 +37,37 @@
                                 showOn="button" pattern="dd/MM/yyy" />
                     <p:message for="fechaCla" display="tooltip" severity="error"/>
 
-                    <p:commandButton value="Seleccionar Motivos" update=":fmot:outMots"
+                    <p:commandButton value="Seleccionar Motivos" update=":fmot:chekMot"
                                      oncomplete="PF('dlgSelectMotivos').show()"/>
                 </h:panelGrid>
-                <h:panelGrid columns="2" cellspacing="">
-                    <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel for="cantidad" value="Cantidad:"/>
-                        <p:spinner id="cantidad" required="true" min="1" 
-                                   value="#{registroNacionalBean.detalle.nuevo.cantidad}"/>
-                        <p:message for="cantidad" display="tooltip" severity="error"/>
-                    </h:panelGrid>
+                <h:panelGrid cellspacing="5">
                     <p:outputPanel id="outSelectMot">
                         <p:dataTable id="dtselectMot" var="selectMot" rows="5"
                                      paginator="true" tableStyle="width: auto"
-                                     paginatorPosition="Bottom" rendered="#{not empty registroNacionalBean.selectionMotivos}"
+                                     paginatorPosition="Bottom" 
+                                     rendered="#{not empty registroNacionalBean.selectionMotivos}"
                                      value="#{registroNacionalBean.selectionMotivos}">
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="#{selectMot.cantidad}" />
+                            </p:column>
                             <p:column headerText="Causa">
                                 <h:outputText value="#{selectMot.causa.descripcion}" />
                             </p:column>
                             <p:column headerText="Motivo">
                                 <h:outputText value="#{selectMot.descripcion}" />
                             </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton value="Agregar" 
+                                                 update=":fadd:messages, :fadd:outSelectMot, :fdetail:dtdet"
+                                                 actionListener="#{registroNacionalBean.addItemDetail(evt)}"/>
+                            </f:facet>
                         </p:dataTable>
                     </p:outputPanel>
-                    <p:commandButton value="Agregar" update=":fadd:messages, :fdetail:dtdet"
-                                     actionListener="#{registroNacionalBean.addItemDetail(evt)}"/>
                 </h:panelGrid>
-
-
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Guardar" update=":fadd, :fdetail:dtdet, :fdtregNac:dtregNac"
+                    <p:commandButton value="Guardar" 
+                                     update=":fadd, :fdetail:dtdet, :fdtregNac:dtregNac, :fadd:outSelectMot"
                                      actionListener="#{registroNacionalBean.add(evt)}"/>
                 </f:facet>
             </p:panel>
@@ -77,21 +77,22 @@
                 <p:dataTable id="dtdet" var="det" rows="5"
                              paginator="true" tableStyle="width: auto"
                              paginatorPosition="Bottom"
-                             value="#{registroNacionalBean.detalle.detalles}">
+                             value="#{registroNacionalBean.nuevo.detalle}">
                     <f:facet name="header">
                         <h:outputText value="Detalle"/>
                     </f:facet>
                     <p:column headerText="Cantidad">
                         <h:outputText value="#{det.cantidad}"/>
                     </p:column>
-                    <p:column headerText="Motivos">
-                        <p:dataList value="#{det.motivos}" var="cauMot">
-                            <h:outputText value="#{cauMot}"/>
-                        </p:dataList>
+                    <p:column headerText="Causa">
+                        <h:outputText value="#{det.motivo.causa.descripcion}" />
+                    </p:column>
+                    <p:column headerText="Motivo">
+                        <h:outputText value="#{det.motivo.descripcion}" />
                     </p:column>
                     <p:column headerText="Borrar">
                         <p:commandButton value="Eliminar" update=":fdetail:dtdet"
-                                         actionListener="#{registroNacionalBean.detalle.remove(evt,det)}"/>
+                                         actionListener="#{registroNacionalBean.removeItemDetail(evt,det)}"/>
                     </p:column>
                 </p:dataTable>
             </h:panelGrid>
@@ -108,7 +109,8 @@
                     </f:facet>
                     <p:column headerText="Fecha" style="text-align: center">
                         <h:outputText value="#{regNac.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" 
+                                               timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Bodega" style="text-align: center">
@@ -117,15 +119,22 @@
                     <p:column headerText="Variedad" style="text-align: center">
                         <h:outputText value="#{regNac.variedad.nombre}"/>
                     </p:column>
-                    <p:column headerText="Numero Tallos" style="text-align: center">
+                    <p:column headerText="Motivos">
+                        <p:dataList value="#{regNac.detalle}" var="regdet">
+                            <h:outputText value="#{regdet}"/>
+                        </p:dataList>
+                    </p:column>
+                    <p:column headerText="Toatal Tallos" style="text-align: center">
                         <h:outputText value="#{regNac.totalNumeroTallos}"/>
                     </p:column>
-
                     <p:column headerText="Usuario" style="text-align: center">
                         <h:outputText value="#{regNac.username}"/>
                     </p:column>
                     <p:column headerText="Borrar" style="text-align: center">
-                        <p:commandButton value="Eliminar" />
+                        <p:commandButton value="Eliminar" update=":fdtregNac, :fdtregNac:dtregNac, :fadd:messages"
+                                         actionListener="#{registroNacionalBean.remove(evt,regNac)}">
+                            <f:setPropertyActionListener value="#{regNac}" target="#{registroNacionalBean.selected}" />
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
             </h:panelGrid>
@@ -133,46 +142,43 @@
         <h:form id="fmot">
             <p:dialog header="Seleccione los Motivos" widgetVar="dlgSelectMotivos" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
-                <p:outputPanel id="outMots">
-                    <h:panelGrid style="margin: 0 auto;">
-                        <p:dataTable id="chekMot" var="mots" rows="5" 
-                                     widgetVar="chekMotTable" paginatorPosition="Bottom"
-                                     paginator="true" tableStyle="width: auto"
-                                     value="#{motivoBean.motivos}" 
-                                     selection="#{registroNacionalBean.selectionMotivos}" 
-                                     rowKey="#{mots.codigo}" style="margin-bottom:0">
-                            <f:facet name="header">
-                                <h:outputText value="Causas y Motivos"/>
-                            </f:facet>
-                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-                            <p:column headerText="Fecha" style="text-align: center">
-                                <h:outputText value="#{mots.lastChange}">
-                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Codigo" style="text-align: center">
-                                <h:outputText value="#{mots.codigo}"/>
-                            </p:column>
-                            <p:column filterBy="#{mots.causa.descripcion}" headerText="Causa" filterMatchMode="exact">
-                                <f:facet name="filter">
-                                    <p:selectOneMenu onchange="PF('chekMotTable').filter()" >
-                                        <f:selectItem itemLabel="Selecionar" itemValue="" noSelectionOption="true" />
-                                        <f:selectItems value="#{causaBean.causas}" var="chCau"
-                                                       itemLabel="#{chCau.descripcion}" itemValue="#{chCau.descripcion}"/>
-                                    </p:selectOneMenu>
-                                </f:facet>
-                                <h:outputText value="#{mots.causa.descripcion}" />
-                            </p:column>
-                            <p:column headerText="Motivo">
-                                <h:outputText value="#{mots.descripcion}" />
-                            </p:column>
-                        </p:dataTable>
-                        <f:facet name="footer">
-                            <p:commandButton value="Agregar" process="chekMot"
-                                             update=":fmot, :fmot:chekMot, :fadd:outSelectMot"/>
+                <h:panelGrid style="margin: 0 auto;">
+                    <p:dataTable id="chekMot" var="mots" rows="5" 
+                                 widgetVar="chekMotTable" paginatorPosition="Bottom"
+                                 paginator="true" tableStyle="width: auto"
+                                 editable="true" editMode="cell"
+                                 value="#{registroNacionalBean.motivos}" 
+                                 selection="#{registroNacionalBean.selectionMotivos}" 
+                                 rowKey="#{mots.codigo}" style="margin-bottom:0">
+                        <f:facet name="header">
+                            <h:outputText value="Causas y Motivos"/>
                         </f:facet>
-                    </h:panelGrid>
-                </p:outputPanel>          
+                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                        <p:column headerText="Cantidad" style="text-align: center">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{mots.cantidad}"/></f:facet>
+                                <f:facet name="input"><p:inputNumber value="#{mots.cantidad}" minValue="0"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column filterBy="#{mots.causa.descripcion}" headerText="Causa" filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('chekMotTable').filter()" >
+                                    <f:selectItem itemLabel="Selecionar" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{causaBean.causas}" var="chCau"
+                                                   itemLabel="#{chCau.descripcion}" itemValue="#{chCau.descripcion}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="#{mots.causa.descripcion}" />
+                        </p:column>
+                        <p:column headerText="Motivo">
+                            <h:outputText value="#{mots.descripcion}" />
+                        </p:column>
+                    </p:dataTable>
+                    <f:facet name="footer">
+                        <p:commandButton value="Agregar" process="chekMot"
+                                         update=":fmot, :fmot:chekMot, :fadd:outSelectMot"/>
+                    </f:facet>
+                </h:panelGrid>      
             </p:dialog>
         </h:form>
     </ui:define>

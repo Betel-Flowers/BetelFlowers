@@ -6,7 +6,6 @@
 package com.betel.flowers.web.bean;
 
 import com.betel.flowers.model.BodegaVirtual;
-import com.betel.flowers.model.Causa;
 import com.betel.flowers.model.DetalleNacional;
 import com.betel.flowers.model.Motivo;
 import com.betel.flowers.model.RegistroNacional;
@@ -16,16 +15,18 @@ import com.betel.flowers.service.CausaService;
 import com.betel.flowers.service.MotivoService;
 import com.betel.flowers.service.RegistroNacionalService;
 import com.betel.flowers.service.VariedadService;
-import com.betel.flowers.web.bean.util.DetallesNacional;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  *
@@ -40,8 +41,8 @@ public class RegistroNacionalBean implements Serializable {
     private RegistroNacional nuevo;
     private RegistroNacional selected;
     private List<RegistroNacional> registrosNacional;
+    private List<Motivo> motivos;
     private List<Motivo> selectionMotivos;
-    private DetallesNacional detalle;
 
     @Inject
     private RegistroNacionalService registroNacionalService;
@@ -58,8 +59,9 @@ public class RegistroNacionalBean implements Serializable {
     public void init() {
         this.nuevo = new RegistroNacional();
         this.nuevo.setUsername("usertest"); //usertest
-        this.detalle = new DetallesNacional();
-        this.registrosNacional = this.registroNacionalService.obtenerLista();
+        this.nuevo.setBarcode(this.generatedBarcode());
+        this.motivos = this.motivoServicce.obtenerListFlag(1);
+        this.registrosNacional = this.registroNacionalService.obtenerListFlag(1);
         if (this.registrosNacional == null) {
             this.registrosNacional = new ArrayList<>();
         }
@@ -70,7 +72,6 @@ public class RegistroNacionalBean implements Serializable {
         BodegaVirtual bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
         this.nuevo.setBodega(bodega);
         this.nuevo.setVariedad(variedad);
-        this.nuevo.setDetalle(this.detalle.getDetalles());
         Boolean exito = this.registroNacionalService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
@@ -81,19 +82,15 @@ public class RegistroNacionalBean implements Serializable {
         }
     }
 
-    public void modify(ActionEvent evt) {
+    public void remove(ActionEvent evt, RegistroNacional select) {
+        this.selected = select;
         if (this.selected != null) {
-            Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad());
-            BodegaVirtual bodega = this.bodegaService.findByCodigo(this.selected.getBodega());
-            this.selected.setBodega(bodega);
-            this.selected.setVariedad(variedad);
-            this.selected.setDetalle(this.detalle.getDetalles());
-            Boolean exito = this.registroNacionalService.update(this.selected);
+            Boolean exito = this.registroNacionalService.deteleFlag(this.selected);
             if (exito) {
-                FacesUtil.addMessageInfo("Se ha modifcado con exito.");
+                FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
             } else {
-                FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
+                FacesUtil.addMessageError(null, "No se ha eliminado con exito..");
                 this.init();
             }
         } else {
@@ -103,16 +100,24 @@ public class RegistroNacionalBean implements Serializable {
 
     public void addItemDetail(ActionEvent evt) {
         if (this.selectionMotivos != null && !this.selectionMotivos.isEmpty()) {
-            this.detalle.getNuevo().setMotivos(this.selectionMotivos);
-            this.detalle.add();
+            for (Motivo mt : this.selectionMotivos) {
+                this.nuevo.getDetalle().add(new DetalleNacional(mt.getCantidad(), mt));
+            }
         }
+        this.selectionMotivos = null;
+        this.motivos = this.motivoServicce.obtenerListFlag(1);
     }
 
-    public void sendSelectedClicDetail(ActionEvent evt, RegistroNacional select) {
-        this.selected = select;
-        this.nuevo = select;
-        this.detalle = new DetallesNacional();
-        this.detalle.setDetalles(this.selected.getDetalle());
+    public void removeItemDetail(ActionEvent evt, DetalleNacional det) {
+        if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
+            this.nuevo.getDetalle().remove(det);
+        }
+    }
+    
+        private String generatedBarcode() {
+        GregorianCalendar calendario = new GregorianCalendar();
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
+        return "BETEL-RN" + RandomStringUtils.randomNumeric(4) + "-IMG-" + format.format(calendario.getTime());
     }
 
     public List<RegistroNacional> getRegistrosNacional() {
@@ -139,20 +144,20 @@ public class RegistroNacionalBean implements Serializable {
         this.nuevo = nuevo;
     }
 
+    public List<Motivo> getMotivos() {
+        return motivos;
+    }
+
+    public void setMotivos(List<Motivo> motivos) {
+        this.motivos = motivos;
+    }
+
     public List<Motivo> getSelectionMotivos() {
         return selectionMotivos;
     }
 
     public void setSelectionMotivos(List<Motivo> selectionMotivos) {
         this.selectionMotivos = selectionMotivos;
-    }
-
-    public DetallesNacional getDetalle() {
-        return detalle;
-    }
-
-    public void setDetalle(DetallesNacional detalle) {
-        this.detalle = detalle;
     }
 
 }

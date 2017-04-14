@@ -8,7 +8,7 @@
 
     <ui:define name="content">
         <h:form id="fadd">
-            <p:panel header="Registrar Tipo Usuario">
+            <p:panel header="Registrar Tipo/Rol Usuario">
                 <h:panelGrid cellpadding="5" style="float: right">
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                 </h:panelGrid>
@@ -81,7 +81,7 @@
                              value="#{tipoUsuarioBean.tipoUsuarios}">
 
                     <f:facet name="header">
-                        <h:outputText value="Tipo Usuarios"/>
+                        <h:outputText value="Tipo/Rol Usuarios"/>
                     </f:facet>
                     <p:column headerText="Fecha" style="text-align: center">
                         <h:outputText value="#{tipUs.lastChange}">
@@ -91,7 +91,7 @@
                     +      <p:column headerText="Codigo" style="text-align: center">
                         <h:outputText value="#{tipUs.codigo}"/>
                     </p:column>
-                    <p:column headerText="Tipo" style="text-align: center">
+                    <p:column headerText="Tipo/Rol" style="text-align: center">
                         <h:outputText value="#{tipUs.nombre}"/>
                     </p:column>
                     <p:column headerText="Admin" style="text-align: center">
@@ -111,12 +111,12 @@
             </h:panelGrid>
         </h:form>
         <h:form id="fdelete">
-            <p:dialog header="Eliminar Tipo Usuario" widgetVar="dlgDeleteTipUs" resizable="false" 
+            <p:dialog header="Eliminar Tipo/Rol Usuario" widgetVar="dlgDeleteTipUs" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="deleteEspe">
                     <p:outputLabel value="Se eliminara el siguiente registro:"/>
                     <h:panelGrid columns="2" cellpadding="5">
-                        <p:outputLabel value="Tipo:"/>
+                        <p:outputLabel value="Tipo/Rol:"/>
                         <p:outputLabel value="#{tipoUsuarioBean.selected.nombre}"/>
 
                         <p:outputLabel value="Admin:"/>

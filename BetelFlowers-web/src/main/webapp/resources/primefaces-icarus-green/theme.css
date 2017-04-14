@@ -1355,7 +1355,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-indent: 0px !important; }
 .ui-icon-circle-close:before {
-    content: "icono-es"; }
+    content: "\f057"; }
 
 .ui-icon-circle-triangle-e {
     background: none;
@@ -1367,7 +1367,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-indent: 0px !important; }
 .ui-icon-circle-triangle-e:before {
-    content: "icono-es"; }
+    content: "\f138"; }
 
 .ui-icon-circle-triangle-s {
     background: none;
@@ -1379,7 +1379,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-indent: 0px !important; }
 .ui-icon-circle-triangle-s:before {
-    content: "icono-es"; }
+    content: "\f13a"; }
 
 .ui-icon-circle-triangle-w {
     background: none;
@@ -1391,7 +1391,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-indent: 0px !important; }
 .ui-icon-circle-triangle-w:before {
-    content: "icono-es"; }
+    content: "\f137"; }
 
 .ui-icon-circle-triangle-n {
     background: none;
@@ -1403,7 +1403,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-indent: 0px !important; }
 .ui-icon-circle-triangle-n:before {
-    content: "icono-es"; }
+    content: "\f139"; }
 
 .ui-icon-circle-arrow-e {
     background-position: -112px -192px; }
@@ -2872,7 +2872,7 @@
     color: #fff;
     padding: 0 0 2px 4px; }
 .ui-carousel .ui-carousel-header.ui-widget-header .ui-carousel-button.ui-icon-circle-triangle-e:before {
-    content: "icono-es"; }
+    content: "\f0a9"; }
 .ui-carousel .ui-carousel-header.ui-widget-header .ui-carousel-button.ui-icon-circle-triangle-w {
     background: none;
     display: inline-block;
@@ -2886,7 +2886,7 @@
     color: #fff;
     padding: 0 0 2px 4px; }
 .ui-carousel .ui-carousel-header.ui-widget-header .ui-carousel-button.ui-icon-circle-triangle-w:before {
-    content: "icono-es"; }
+    content: "\f0a8"; }
 .ui-carousel .ui-carousel-header .ui-carousel-page-links {
     margin-top: 3.4px; }
 .ui-carousel .ui-carousel-header .ui-carousel-page-links .ui-icon-radio-off {
@@ -4122,7 +4122,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-indent: 0px !important; }
 .ui-galleria .ui-galleria-nav-prev.ui-icon-circle-triangle-w:before {
-    content: "icono-es"; }
+    content: "\f0a8"; }
 .ui-galleria .ui-galleria-nav-prev.ui-icon-circle-triangle-w:hover {
     color: #B7D666; }
 .ui-galleria .ui-galleria-nav-next.ui-icon-circle-triangle-e {
@@ -4135,7 +4135,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-indent: 0px !important; }
 .ui-galleria .ui-galleria-nav-next.ui-icon-circle-triangle-e:before {
-    content: "icono-es"; }
+    content: "\f0a9"; }
 .ui-galleria .ui-galleria-nav-next.ui-icon-circle-triangle-e:hover {
     color: #B7D666; }
 

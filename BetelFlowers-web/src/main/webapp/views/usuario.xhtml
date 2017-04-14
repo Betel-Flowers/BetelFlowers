@@ -32,6 +32,9 @@
                     <p:column headerText="Username" style="text-align: center">
                         <h:outputText value="#{user.username}"/>
                     </p:column>
+                    <p:column headerText="Tipo/Rol Usuario" style="text-align: center">
+                        <h:outputText value="#{user.tipoUsuario.nombre}"/>
+                    </p:column>
                     <p:column headerText="Propietario" style="text-align: center">
                         <h:outputText value="#{user.infoPersonal.nombres} #{user.infoPersonal.apellidos}"/>
                     </p:column>
@@ -86,7 +89,7 @@
                         <p:selectBooleanCheckbox id="userEstado" value="#{usuarioBean.selected.estado}"/>
                         <p:message for="userEstado" display="tooltip" severity="error"/>
 
-                        <p:outputLabel for="tipoUser" value="Tipo de Usuario:"/>
+                        <p:outputLabel for="tipoUser" value="Tipo/Rol de Usuario:"/>
                         <p:selectOneMenu id="tipoUser" required="true"
                                          value="#{usuarioBean.nuevo.tipoUsuario.codigo}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>

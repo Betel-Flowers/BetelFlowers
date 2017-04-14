@@ -8,6 +8,7 @@ package com.betel.flowers.web.bean;
 import com.betel.flowers.model.OpcionSistema;
 import com.betel.flowers.model.Usuario;
 import com.betel.flowers.service.UsuarioService;
+import com.betel.flowers.web.bean.util.DeleteFileRun;
 import com.betel.flowers.web.bean.util.UploadFileRun;
 import com.betel.flowers.web.bean.util.menu.ItemMenu;
 import com.betel.flowers.web.bean.util.menu.SubMenu;
@@ -183,6 +184,9 @@ public class CredencialBean implements Serializable {
                     String filepath = "http://" + ipAdress + "/usuarios/";
                     String url = "/var/www/html/usuarios/";
                     String ext = getFile().getContentType();
+                    DeleteFileRun deleteFile = new DeleteFileRun(url, this.userSession.getInfoPersonal().getCodigoFoto(), ext.replace("image/", ""));
+                    deleteFile.run();
+                    this.userSession.getInfoPersonal().setCodigoFoto(this.codigoFoto());
                     UploadFileRun upload = new UploadFileRun(url, this.userSession.getInfoPersonal().getCodigoFoto(), ext.replace("image/", ""), getFile().getInputstream());
                     upload.run();
                     if (upload.getExito()) {

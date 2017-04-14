@@ -151,45 +151,62 @@
                 <p:dataTable id="dtregExpG" var="regExpG" rows="5"
                              paginator="true" tableStyle="width: auto"
                              paginatorPosition="Bottom" style="table-layout: auto"
-                             value="#{registroExportacionBean.registrosExportacionG}">
+                             value="#{registroExportacionBean.barcodeList}">
 
                     <f:facet name="header">
                         <h:outputText value="Registros Ingresados en Bodega"/>
                     </f:facet>
-
-                    <p:column style="text-align: center" headerText="Fecha" >
-                        <h:outputText value="#{regExpG.lastChange}">
-                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
-                        </h:outputText>
+                    <p:column style="width:16px">
+                        <p:rowToggler />
                     </p:column>
-                    <p:column style="text-align: center" headerText="Bodega" >
+                    <p:column style="text-align: center" headerText="Barcode">
+                        <p:barcode value="#{regExpG.barcode}" type="code39" />
+                    </p:column>
+                    <p:column style="text-align: center" headerText="Bodega">
                         <h:outputText value="#{regExpG.bodega.nombre}"/>
                     </p:column>
-                    <p:column style="text-align: center" headerText="Variedad" >
-                        <h:outputText value="#{regExpG.variedad.nombre}"/>
-                    </p:column>
-                    <p:column style="text-align: center" headerText="Ramos" >
-                        <h:outputText value="#{regExpG.numeroRamos}"/>
-                    </p:column>
-                    <p:column style="text-align: center" headerText="Tallos" >
-                        <h:outputText value="#{regExpG.numeroTallosRamo}"/>
-                    </p:column>
-                    <p:column style="text-align: center" headerText="Total" >
-                        <h:outputText value="#{regExpG.totalTallos}"/>
-                    </p:column>
-                    <p:column style="text-align: center" headerText="Longitud" >
-                        <h:outputText value="#{regExpG.longitud}" rendered="#{not regExpG.variedad.girasol}"/>
-                        <h:outputText value="#{regExpG.glongitud}" rendered="#{regExpG.variedad.girasol}"/>
-                    </p:column>
-                    <p:column style="text-align: center" headerText="Pto. de Corte" >
-                        <h:outputText value="#{regExpG.puntoCorte}"/>
-                    </p:column>
-                    <p:column style="text-align: center" headerText="Barcode" >
-                        <p:barcode value="#{regExpG.barcode}" type="code39" />
+                    <p:column style="text-align: center" headerText="Total Tallos">
+                        <h:outputText value="#{regExpG.totalTallosBarcode}"/>
                     </p:column>
                     <p:column style="text-align: center" headerText="Usuario" >
                         <h:outputText value="#{regExpG.username}"/>
                     </p:column>
+                    <p:rowExpansion>
+                        <h:panelGrid style="margin: 0 auto;">
+                            <p:dataTable value="#{registroExportacionBean.listBardodeInsideList(regExpG)}" 
+                                         var="codeList" rows="5"
+                                         paginator="true" paginatorPosition="Bottom">
+                                <p:column style="text-align: center" headerText="Fecha" >
+                                    <h:outputText value="#{codeList.lastChange}">
+                                        <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Foto" style="text-align: center">
+                                    <p:graphicImage value="#{codeList.variedad.urlFoto}"
+                                                    width="40px" height="40px"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Variedad" >
+                                    <h:outputText value="#{codeList.variedad.nombre}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Ramos" >
+                                    <h:outputText value="#{codeList.numeroRamos}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Tallos" >
+                                    <h:outputText value="#{codeList.numeroTallosRamo}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Total" >
+                                    <h:outputText value="#{codeList.totalTallos}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Longitud" >
+                                    <h:outputText value="#{codeList.longitud}" rendered="#{not codeList.variedad.girasol}"/>
+                                    <h:outputText value="#{codeList.glongitud}" rendered="#{codeList.variedad.girasol}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Pto. de Corte" >
+                                    <h:outputText value="#{codeList.puntoCorte}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:rowExpansion>
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
