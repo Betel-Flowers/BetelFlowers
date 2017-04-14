@@ -5,8 +5,6 @@
  */
 package com.betel.flowers.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Reference;
 
@@ -17,24 +15,21 @@ import org.mongodb.morphia.annotations.Reference;
 @Embedded
 public class DetalleNacional {
 
-    private Integer index;
     private Integer cantidad;
+
     @Reference
-    private List<Motivo> motivos;
+    private Motivo motivo;
 
     public DetalleNacional() {
-        this.motivos = new ArrayList<>();
         this.cantidad = 0;
+        this.motivo = new Motivo();
     }
 
-    public Integer getIndex() {
-        return index;
+    public DetalleNacional(Integer cantidad, Motivo motivo) {
+        this.cantidad = cantidad;
+        this.motivo = motivo;
     }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
+    
     public Integer getCantidad() {
         return cantidad;
     }
@@ -43,11 +38,17 @@ public class DetalleNacional {
         this.cantidad = cantidad;
     }
 
-    public List<Motivo> getMotivos() {
-        return motivos;
+    public Motivo getMotivo() {
+        return motivo;
     }
 
-    public void setMotivos(List<Motivo> motivos) {
-        this.motivos = motivos;
+    public void setMotivo(Motivo motivo) {
+        this.motivo = motivo;
     }
+
+    @Override
+    public String toString() {
+        return  "cantidad=" + cantidad + ", motivo=" + motivo.getDescripcion();
+    }
+    
 }

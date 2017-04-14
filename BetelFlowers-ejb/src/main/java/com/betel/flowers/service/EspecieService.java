@@ -6,7 +6,6 @@
 package com.betel.flowers.service;
 
 import com.betel.flowers.model.Especie;
-import com.betel.flowers.model.Variedad;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;

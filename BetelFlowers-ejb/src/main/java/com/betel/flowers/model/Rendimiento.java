@@ -6,6 +6,7 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
+import java.util.Date;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
@@ -17,23 +18,24 @@ import org.mongodb.morphia.annotations.Reference;
  *
  * @author luis
  */
-@Entity(value = "Motivo", noClassnameStored = true)
+@Entity(value = "Rendimiento", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class Motivo extends BaseEntity {
+public class Rendimiento extends BaseEntity {
 
     private Integer codigo;
-    private String descripcion;
+    private String barcode;
+    private Date fechaIn;
+    private Date fechaFin;
     private Integer cantidad;
+    private Usuario operario;
     private String username;
-    private Integer flag;
 
     @Reference
-    private Causa causa;
+    private TipoTrabajo tipoTrabajo;
 
-    public Motivo() {
-        this.cantidad = 0;
-        this.causa = new Causa();
+    public Rendimiento() {
+        this.tipoTrabajo = new TipoTrabajo();
     }
 
     public Integer getCodigo() {
@@ -44,12 +46,28 @@ public class Motivo extends BaseEntity {
         this.codigo = codigo;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getBarcode() {
+        return barcode;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public Date getFechaIn() {
+        return fechaIn;
+    }
+
+    public void setFechaIn(Date fechaIn) {
+        this.fechaIn = fechaIn;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public Integer getCantidad() {
@@ -60,12 +78,12 @@ public class Motivo extends BaseEntity {
         this.cantidad = cantidad;
     }
 
-    public Causa getCausa() {
-        return causa;
+    public Usuario getOperario() {
+        return operario;
     }
 
-    public void setCausa(Causa causa) {
-        this.causa = causa;
+    public void setOperario(Usuario operario) {
+        this.operario = operario;
     }
 
     public String getUsername() {
@@ -76,18 +94,18 @@ public class Motivo extends BaseEntity {
         this.username = username;
     }
 
-    public Integer getFlag() {
-        return flag;
+    public TipoTrabajo getTipoTrabajo() {
+        return tipoTrabajo;
     }
 
-    public void setFlag(Integer flag) {
-        this.flag = flag;
+    public void setTipoTrabajo(TipoTrabajo tipoTrabajo) {
+        this.tipoTrabajo = tipoTrabajo;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.codigo);
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -102,7 +120,7 @@ public class Motivo extends BaseEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Motivo other = (Motivo) obj;
+        final Rendimiento other = (Rendimiento) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -111,7 +129,7 @@ public class Motivo extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Motivo=" + descripcion + ", Cantidad=" + cantidad;
+        return "Rendimiento{" + "codigo=" + codigo + ", barcode=" + barcode + ", fechaIn=" + fechaIn + ", fechaFin=" + fechaFin + ", cantidad=" + cantidad + ", operario=" + operario + ", username=" + username + ", tipoTrabajo=" + tipoTrabajo + '}';
     }
 
 }

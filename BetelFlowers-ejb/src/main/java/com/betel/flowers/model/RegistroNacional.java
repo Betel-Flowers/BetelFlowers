@@ -29,6 +29,7 @@ public class RegistroNacional extends BaseEntity {
     private Integer codigo;
     private Date fechaClasificacion;
     private Integer totalNumeroTallos;
+    private String barcode;
     private String username;
     private Integer flag;
 
@@ -40,9 +41,10 @@ public class RegistroNacional extends BaseEntity {
     private List<DetalleNacional> detalle;
 
     public RegistroNacional() {
+        this.totalNumeroTallos = 0;
         this.variedad = new Variedad();
         this.bodega = new BodegaVirtual();
-        this.detalle = new ArrayList<>();
+        this.detalle = new ArrayList<DetalleNacional>();
     }
 
     public Integer getCodigo() {
@@ -62,11 +64,19 @@ public class RegistroNacional extends BaseEntity {
     }
 
     public Integer getTotalNumeroTallos() {
-        return totalNumeroTallos;
+        return this.calcularTotalTallos();
     }
 
     public void setTotalNumeroTallos(Integer totalNumeroTallos) {
         this.totalNumeroTallos = totalNumeroTallos;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public String getUsername() {
@@ -109,6 +119,16 @@ public class RegistroNacional extends BaseEntity {
         this.detalle = detalle;
     }
 
+    private Integer calcularTotalTallos() {
+        Integer total = 0;
+        if (this.getDetalle() != null && !this.detalle.isEmpty()) {
+            for (DetalleNacional mt : this.getDetalle()) {
+                total = total + mt.getCantidad();
+            }
+        }
+        return total;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -136,7 +156,7 @@ public class RegistroNacional extends BaseEntity {
 
     @Override
     public String toString() {
-        return "RegistroNacional{" + "codigo=" + codigo + ", fechaClasificacion=" + fechaClasificacion + ", numeroTallos=" + totalNumeroTallos + ", username=" + username + ", flag=" + flag + ", bodega=" + bodega + ", variedad=" + variedad + ", detalle=" + detalle + '}';
+        return "RegistroNacional{" + "codigo=" + codigo + ", fechaClasificacion=" + fechaClasificacion + ", totalNumeroTallos=" + totalNumeroTallos + ", barcode=" + barcode + ", username=" + username + ", flag=" + flag + ", bodega=" + bodega + ", variedad=" + variedad + ", detalle=" + getDetalle() + '}';
     }
 
 }

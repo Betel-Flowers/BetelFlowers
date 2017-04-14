@@ -11,27 +11,20 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexes;
-import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
  * @author luis
  */
-@Entity(value = "Puerto", noClassnameStored = true)
+@Entity(value = "TipoTrabajo", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class Puerto extends BaseEntity{
+public class TipoTrabajo extends BaseEntity {
 
     private Integer codigo;
     private String nombre;
-     private String username;
-    private Integer flag;
 
-    @Reference
-    private Ciudad ciudad;
-
-    public Puerto() {
-        this.ciudad = new Ciudad();
+    public TipoTrabajo() {
     }
 
     public Integer getCodigo() {
@@ -50,34 +43,10 @@ public class Puerto extends BaseEntity{
         this.nombre = nombre;
     }
 
-    public Ciudad getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(Ciudad ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getFlag() {
-        return flag;
-    }
-
-    public void setFlag(Integer flag) {
-        this.flag = flag;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.codigo);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -92,7 +61,7 @@ public class Puerto extends BaseEntity{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Puerto other = (Puerto) obj;
+        final TipoTrabajo other = (TipoTrabajo) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -101,7 +70,7 @@ public class Puerto extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Puerto{" + "codigo=" + codigo + ", nombre=" + nombre + ", ciudad=" + ciudad + '}';
+        return "TipoTrabajo{" + "codigo=" + codigo + ", nombre=" + nombre + '}';
     }
-    
+
 }

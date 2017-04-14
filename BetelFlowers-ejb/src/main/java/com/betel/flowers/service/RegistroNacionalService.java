@@ -35,6 +35,7 @@ public class RegistroNacionalService implements Serializable {
         RegistroNacional axu = this.findByCodigo(registroNacional);
         if (axu.getId() == null) {
             registroNacional.setCodigo(this.obtenerCodigo());
+            registroNacional.setFlag(1);
             this.ds.save(registroNacional);
             exito = Boolean.TRUE;
         }
@@ -49,6 +50,16 @@ public class RegistroNacionalService implements Serializable {
         Integer size = especies.size();
         Integer number = 1000 + 1 * size;
         return number;
+    }
+    
+    public List<RegistroNacional> obtenerListFlag(Integer flag) {
+        List<RegistroNacional> list = new ArrayList<>();
+        Query<RegistroNacional> result = this.ds.find(RegistroNacional.class).
+                field("flag").equal(flag);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        return list;
     }
 
     public List<RegistroNacional> obtenerLista() {
@@ -74,6 +85,18 @@ public class RegistroNacionalService implements Serializable {
             find = result.asList().get(0);
         }
         return find;
+    }
+    
+    public Boolean deteleFlag(RegistroNacional registroNacional) {
+        Query<RegistroNacional> query = this.ds.createQuery(RegistroNacional.class);
+        registroNacional.setFlag(0);
+        query.and(
+                query.criteria("codigo").equal(registroNacional.getCodigo())
+        );
+        UpdateOperations<RegistroNacional> update = this.ds.createUpdateOperations(RegistroNacional.class);
+        update.set("flag", registroNacional.getFlag());
+        UpdateResults results = this.ds.update(query, update);
+        return results.getUpdatedExisting();
     }
 
     public void delete(RegistroNacional registroNacional) {

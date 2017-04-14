@@ -124,6 +124,7 @@ public class MotivoService implements Serializable {
         );
         UpdateOperations<Motivo> update = this.ds.createUpdateOperations(Motivo.class);
         update.set("descripcion", motivo.getDescripcion()).
+                set("cantidad", motivo.getCantidad()).
                 set("causa", motivo.getCausa()).
                 set("flag", motivo.getFlag());
         UpdateResults results = this.ds.update(query, update);
