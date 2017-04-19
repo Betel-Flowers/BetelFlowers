@@ -28,13 +28,17 @@ public class Rendimiento extends BaseEntity {
     private Date fechaIn;
     private Date fechaFin;
     private Integer cantidad;
-    private Usuario operario;
     private String username;
+    private Integer flag;
 
+    @Reference
+    private Usuario operario;
+    
     @Reference
     private TipoTrabajo tipoTrabajo;
 
     public Rendimiento() {
+        this.operario = new Usuario();
         this.tipoTrabajo = new TipoTrabajo();
     }
 
@@ -100,6 +104,14 @@ public class Rendimiento extends BaseEntity {
 
     public void setTipoTrabajo(TipoTrabajo tipoTrabajo) {
         this.tipoTrabajo = tipoTrabajo;
+    }
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
     }
 
     @Override

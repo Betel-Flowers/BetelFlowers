@@ -30,6 +30,9 @@ public class RegistroExportacion extends BaseEntity {
     private String puntoCorte;
     private Integer totalTallos;
     private String barcode;
+    private String urlXml;
+    private String urlHtml;
+    private String urlPdf;
     private String username;
     private Integer flag;
 
@@ -107,6 +110,30 @@ public class RegistroExportacion extends BaseEntity {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getUrlXml() {
+        return urlXml;
+    }
+
+    public String getUrlHtml() {
+        return urlHtml;
+    }
+
+    public void setUrlXml(String urlXml) {
+        this.urlXml = urlXml;
+    }
+
+    public void setUrlHtml(String urlHtml) {
+        this.urlHtml = urlHtml;
+    }
+
+    public String getUrlPdf() {
+        return urlPdf;
+    }
+
+    public void setUrlPdf(String urlPdf) {
+        this.urlPdf = urlPdf;
     }
 
     public String getUsername() {

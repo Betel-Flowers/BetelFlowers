@@ -29,7 +29,7 @@ public class Variedad extends BaseEntity {
     private String color;
     private String urlFoto;
     private String codigoFoto;
-    private String tiempoVida;
+    private Integer tiempoVida;
     private List<Integer> ramos;
     private List<Integer> longitudes;
     private List<String> glongitudes;
@@ -93,13 +93,15 @@ public class Variedad extends BaseEntity {
         this.codigoFoto = codigoFoto;
     }
 
-    public String getTiempoVida() {
+    public Integer getTiempoVida() {
         return tiempoVida;
     }
 
-    public void setTiempoVida(String tiempoVida) {
+    public void setTiempoVida(Integer tiempoVida) {
         this.tiempoVida = tiempoVida;
     }
+
+   
 
     public Boolean getGirasol() {
         return girasol;
@@ -200,7 +202,7 @@ public class Variedad extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Variedad{" + "codigo=" + codigo + ", nombre=" + nombre + ", color=" + color + ", urlFoto=" + urlFoto + ", codigoFoto=" + codigoFoto + ", tiempoVida=" + tiempoVida + ", ramos=" + ramos + ", longitudes=" + longitudes + ", puntosCorte=" + puntosCorte + ", username=" + username + ", flag=" + flag + ", especie=" + especie + '}';
+        return "Variedad{" + "codigo=" + codigo + ", nombre=" + nombre + ", color=" + color + ", urlFoto=" + urlFoto + ", codigoFoto=" + codigoFoto + ", tiempoVida=" + getTiempoVida() + ", ramos=" + ramos + ", longitudes=" + longitudes + ", puntosCorte=" + puntosCorte + ", username=" + username + ", flag=" + flag + ", especie=" + especie + '}';
     }
 
 }
