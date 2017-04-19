@@ -42,7 +42,7 @@ public class BarcodeGenerator {
                 Node nNode = nList.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    claveAcceso = eElement.getElementsByTagName("Barcode").item(0).getTextContent();
+                    claveAcceso = eElement.getElementsByTagName("barcode").item(0).getTextContent();
                 }
             }
         } catch (Exception ex) {

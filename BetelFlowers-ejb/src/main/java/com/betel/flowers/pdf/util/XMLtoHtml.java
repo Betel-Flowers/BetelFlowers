@@ -28,6 +28,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 
@@ -37,11 +38,12 @@ import org.jsoup.Jsoup;
  */
 @Stateless
 @LocalBean
-public class XMLtoHtml implements Serializable{
+public class XMLtoHtml implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(XMLtoHtml.class.getName());
+    private static final long serialVersionUID = -1684391484304843987L;
 
-    public static Boolean createHTML(String direccionDestino, String direccionDestinoHtml, String direccionXML, String barcode, int Type) throws IOException, FileNotFoundException, TransformerFactoryConfigurationError, TransformerException {
+    public Boolean createHTML(String direccionDestino, String direccionDestinoHtml, String direccionXML, String barcode, int Type) throws IOException, FileNotFoundException, TransformerFactoryConfigurationError, TransformerException {
         Boolean exito = false;
         try {
             TransformerFactory tFactory = TransformerFactory.newInstance();
@@ -51,7 +53,8 @@ public class XMLtoHtml implements Serializable{
             switch (Type) {
                 case 0:
                     BarcodeGenerator.createBarCode(direccionXML, direccionDestino);
-                    xslDoc = new StreamSource(new File("/var/www/html/pdf/resources/tagRegistroExportacion.xsl"));
+                    xslDoc = new StreamSource(new File("/var/www/html/pdf/resources/tag/re/tagRegistroExportacion.xsl"));
+                    copyFile("/var/www/html/pdf/resources/tag/re/style.css", direccionDestino+"style.css");
                     break;
                 case 1:
                     xslDoc = new StreamSource(XMLtoHtml.class.getResourceAsStream("/rapidloans/pdf/res/rptpdf.xsl"));
@@ -90,7 +93,7 @@ public class XMLtoHtml implements Serializable{
         return exito;
     }
 
-    public static String checkHTML(String htmlString) throws IOException {
+    public String checkHTML(String htmlString) throws IOException {
 
         String checkedhtml = null;
         try {
@@ -103,7 +106,7 @@ public class XMLtoHtml implements Serializable{
         return checkedhtml;
     }
 
-    public static void transform(File source, String srcEncoding, File target, String tgtEncoding) throws IOException {
+    public void transform(File source, String srcEncoding, File target, String tgtEncoding) throws IOException {
         BufferedReader br = null;
         BufferedWriter bw = null;
         try {
@@ -127,7 +130,7 @@ public class XMLtoHtml implements Serializable{
         }
     }
 
-    public static boolean writeHTML(String htmlString, String direccionDestino) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+    public boolean writeHTML(String htmlString, String direccionDestino) throws UnsupportedEncodingException, FileNotFoundException, IOException {
         Boolean exito = false;
         FileOutputStream fos = new FileOutputStream(direccionDestino);
 
@@ -142,5 +145,15 @@ public class XMLtoHtml implements Serializable{
             fos.close();
         }
         return exito;
+    }
+
+    public void copyFile(String origen, String destino) {
+        File source = new File(origen);
+        File dest = new File(destino);
+        try {
+            FileUtils.copyFile(source, dest);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+        }
     }
 }

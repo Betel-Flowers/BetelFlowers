@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -22,7 +24,10 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 @LocalBean
 public class HTMLtoPDF implements Serializable{
 
-    public static Boolean createPDF(String htmlOrigen, String pdfDestino) throws IOException {
+    private static final long serialVersionUID = 4437189021082897191L;
+    private static final Logger LOG = Logger.getLogger(HTMLtoPDF.class.getName());
+    
+    public Boolean createPDF(String htmlOrigen, String pdfDestino) throws IOException {
         Boolean exito = true;
         OutputStream os = null;
         try {
@@ -49,7 +54,7 @@ public class HTMLtoPDF implements Serializable{
             }
 
         } catch (Exception ex) {
-            //System.out.println(ex.getMessage());
+            LOG.log(Level.SEVERE,ex.getMessage());
             throw ex;
         } finally {
             os.close();
