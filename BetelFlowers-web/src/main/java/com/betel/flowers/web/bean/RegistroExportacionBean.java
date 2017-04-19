@@ -12,6 +12,7 @@ import com.betel.flowers.service.BodegaVirtualService;
 import com.betel.flowers.service.RegistroExportacionService;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.bean.util.BarcodeRegistroExportacion;
+import com.betel.flowers.web.bean.util.GeneratedPDF;
 import com.betel.flowers.web.util.FacesUtil;
 import com.betel.flowers.xml.service.EtiquetaRegExpoXML;
 import java.io.Serializable;
@@ -32,9 +33,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 @Named(value = "registroExportacionBean")
 @ViewScoped
 public class RegistroExportacionBean implements Serializable {
-    
+
     private static final long serialVersionUID = -2241393232044677588L;
-    
+
     private RegistroExportacion nuevo;
     private RegistroExportacion selected;
     private RegistroExportacion remove;
@@ -42,7 +43,7 @@ public class RegistroExportacionBean implements Serializable {
     private List<RegistroExportacion> registrosExportacionG;
     private List<BarcodeRegistroExportacion> barcodeList;
     private Boolean gerated;
-    
+
     @Inject
     private RegistroExportacionService registroExportacionService;
     @Inject
@@ -51,7 +52,7 @@ public class RegistroExportacionBean implements Serializable {
     private BodegaVirtualService bodegaService;
     @Inject
     private EtiquetaRegExpoXML etiquetaRegExpoXML;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new RegistroExportacion();
@@ -68,7 +69,7 @@ public class RegistroExportacionBean implements Serializable {
             this.loadBarcodeList();
         }
     }
-    
+
     public void generateContainer(ActionEvent evt) {
         Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
         BodegaVirtual bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
@@ -86,13 +87,13 @@ public class RegistroExportacionBean implements Serializable {
             FacesUtil.addMessageError(null, "No se ha guardado.");
         }
     }
-    
+
     private Integer generatedTemCode() {
         Integer number = 0;
         number = new Integer(RandomStringUtils.randomNumeric(4));
         return number;
     }
-    
+
     public void add(ActionEvent evt) {
         this.generatedBarcode();
         Boolean exito = this.allInserts();
@@ -104,7 +105,7 @@ public class RegistroExportacionBean implements Serializable {
             this.init();
         }
     }
-    
+
     private void generatedBarcode() {
         if (this.registrosExportacion != null && !this.registrosExportacion.isEmpty()) {
             int size = this.registrosExportacion.size();
@@ -121,9 +122,15 @@ public class RegistroExportacionBean implements Serializable {
                 this.registrosExportacion.get(i).setUrlPdf(url + barcode + ".pdf");
             }
             this.etiquetaRegExpoXML.generatedXML(barcode, url, barcode, this.registrosExportacion);
+            GeneratedPDF runPDF = new GeneratedPDF(url, url + barcode + ".xml", url + barcode + ".html", url + barcode + ".pdf", barcode, 0);
+            runPDF.run();
+            Boolean exito = runPDF.getExito();
+            if (exito) {
+
+            }
         }
     }
-    
+
     private Boolean allInserts() {
         Boolean exito = Boolean.FALSE;
         if (this.registrosExportacion != null && !this.registrosExportacion.isEmpty()) {
@@ -137,11 +144,11 @@ public class RegistroExportacionBean implements Serializable {
         }
         return exito;
     }
-    
+
     public void enviarOriginalRegister(ActionEvent evt, RegistroExportacion select) {
         this.remove = select;
     }
-    
+
     public void updateContainer(ActionEvent evt) {
         if (this.selected != null) {
             Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad());
@@ -163,7 +170,7 @@ public class RegistroExportacionBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     public void removeContainer(ActionEvent evt, RegistroExportacion select) {
         this.remove = select;
         if (this.remove != null) {
@@ -178,7 +185,7 @@ public class RegistroExportacionBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     private void stateGenetated() {
         if (this.registrosExportacion == null || this.registrosExportacion.isEmpty()) {
             this.gerated = Boolean.TRUE;
@@ -186,7 +193,7 @@ public class RegistroExportacionBean implements Serializable {
             this.gerated = Boolean.FALSE;
         }
     }
-    
+
     public void modify(ActionEvent evt) {
         if (this.selected != null && this.nuevo.getBodega() != null
                 && this.nuevo.getVariedad().getCodigo() != null) {
@@ -207,21 +214,21 @@ public class RegistroExportacionBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
     public void loadVariedad() {
         Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad().getCodigo());
         if (variedad.getCodigo() != null) {
             this.nuevo.setVariedad(variedad);
         }
     }
-    
+
     public void loadVariedadSelected() {
         Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad().getCodigo());
         if (variedad.getCodigo() != null) {
             this.selected.setVariedad(variedad);
         }
     }
-    
+
     private void loadBarcodeList() {
         if (this.registrosExportacionG != null && !this.registrosExportacionG.isEmpty()) {
             List<RegistroExportacion> unique = this.selectBarcode(this.registrosExportacionG);
@@ -240,9 +247,9 @@ public class RegistroExportacionBean implements Serializable {
             }
         }
     }
-    
+
     private List<RegistroExportacion> selectBarcode(List<RegistroExportacion> barcode) {
-        
+
         List<RegistroExportacion> unique = new ArrayList<>();
         if (barcode != null && !barcode.isEmpty()) {
             unique.add(barcode.get(0));
@@ -254,7 +261,7 @@ public class RegistroExportacionBean implements Serializable {
         }
         return unique;
     }
-    
+
     public List<RegistroExportacion> listBardodeInsideList(BarcodeRegistroExportacion barcodeItem) {
         List<RegistroExportacion> list = new ArrayList<>();
         if (barcodeItem.getListBarcode() != null && !barcodeItem.getListBarcode().isEmpty()) {
@@ -262,61 +269,61 @@ public class RegistroExportacionBean implements Serializable {
         }
         return list;
     }
-    
+
     public RegistroExportacion getNuevo() {
         return nuevo;
     }
-    
+
     public void setNuevo(RegistroExportacion nuevo) {
         this.nuevo = nuevo;
     }
-    
+
     public RegistroExportacion getSelected() {
         return selected;
     }
-    
+
     public void setSelected(RegistroExportacion selected) {
         this.selected = selected;
     }
-    
+
     public RegistroExportacion getRemove() {
         return remove;
     }
-    
+
     public void setRemove(RegistroExportacion remove) {
         this.remove = remove;
     }
-    
+
     public Boolean getGerated() {
         return gerated;
     }
-    
+
     public void setGerated(Boolean gerated) {
         this.gerated = gerated;
     }
-    
+
     public List<RegistroExportacion> getRegistrosExportacion() {
         return registrosExportacion;
     }
-    
+
     public void setRegistrosExportacion(List<RegistroExportacion> registrosExportacion) {
         this.registrosExportacion = registrosExportacion;
     }
-    
+
     public List<RegistroExportacion> getRegistrosExportacionG() {
         return registrosExportacionG;
     }
-    
+
     public void setRegistrosExportacionG(List<RegistroExportacion> registrosExportacionG) {
         this.registrosExportacionG = registrosExportacionG;
     }
-    
+
     public List<BarcodeRegistroExportacion> getBarcodeList() {
         return barcodeList;
     }
-    
+
     public void setBarcodeList(List<BarcodeRegistroExportacion> barcodeList) {
         this.barcodeList = barcodeList;
     }
-    
+
 }
