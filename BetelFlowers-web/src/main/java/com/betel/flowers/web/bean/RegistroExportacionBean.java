@@ -13,6 +13,7 @@ import com.betel.flowers.service.RegistroExportacionService;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.bean.util.BarcodeRegistroExportacion;
 import com.betel.flowers.web.util.FacesUtil;
+import com.betel.flowers.xml.service.EtiquetaRegExpoXML;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,6 +49,8 @@ public class RegistroExportacionBean implements Serializable {
     private VariedadService variedadService;
     @Inject
     private BodegaVirtualService bodegaService;
+    @Inject
+    private EtiquetaRegExpoXML etiquetaRegExpoXML;
     
     @PostConstruct
     public void init() {
@@ -108,11 +111,16 @@ public class RegistroExportacionBean implements Serializable {
             int length = this.registrosExportacionG.size();
             String code = RandomStringUtils.randomNumeric(2);
             String barcode = "BETEL-RE" + code + "" + size + "" + length;
+            String url = "/var/www/html/pdf/" + barcode + "/";
             for (int i = 0; i < size; i++) {
                 Integer total = this.registrosExportacion.get(i).getTotalTallos();
                 this.registrosExportacion.get(i).setTotalTallos(total);
                 this.registrosExportacion.get(i).setBarcode(barcode);
+                this.registrosExportacion.get(i).setUrlXml(url + barcode + ".xml");
+                this.registrosExportacion.get(i).setUrlHtml(url + barcode + ".html");
+                this.registrosExportacion.get(i).setUrlPdf(url + barcode + ".pdf");
             }
+            this.etiquetaRegExpoXML.generatedXML(barcode, url, barcode, this.registrosExportacion);
         }
     }
     
@@ -222,6 +230,7 @@ public class RegistroExportacionBean implements Serializable {
                 barcodes.setBodega(registro.getBodega());
                 barcodes.setBarcode(registro.getBarcode());
                 barcodes.setUsername(registro.getUsername());
+                barcodes.setUrlPdf(registro.getUrlPdf());
                 for (int i = 0; i < this.registrosExportacionG.size(); i++) {
                     if (this.registrosExportacionG.get(i).getBarcode().equals(registro.getBarcode())) {
                         barcodes.getListBarcode().add(this.registrosExportacionG.get(i));
@@ -246,10 +255,10 @@ public class RegistroExportacionBean implements Serializable {
         return unique;
     }
     
-    public List<RegistroExportacion> listBardodeInsideList(BarcodeRegistroExportacion barcodeItem){
+    public List<RegistroExportacion> listBardodeInsideList(BarcodeRegistroExportacion barcodeItem) {
         List<RegistroExportacion> list = new ArrayList<>();
-        if(barcodeItem.getListBarcode() != null &&!barcodeItem.getListBarcode().isEmpty()){
-            list =barcodeItem.getListBarcode();
+        if (barcodeItem.getListBarcode() != null && !barcodeItem.getListBarcode().isEmpty()) {
+            list = barcodeItem.getListBarcode();
         }
         return list;
     }

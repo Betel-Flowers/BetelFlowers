@@ -62,6 +62,7 @@ public class UploadFileRun extends Thread implements Serializable {
         } else {
             log.log(Level.INFO, "No se elimino el archivo: " + url + name + "." + ext);
         }
+        
         File file = new File(url + name + "." + ext);
         try {
             byte[] imgbytes = IOUtils.toByteArray(input);

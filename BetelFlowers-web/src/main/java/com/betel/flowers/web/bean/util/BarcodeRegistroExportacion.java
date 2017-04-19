@@ -19,6 +19,7 @@ public class BarcodeRegistroExportacion {
     private String barcode;
     private BodegaVirtual bodega;
     private Integer totalTallosBarcode;
+    private String urlPdf;
     private String username;
     private List<RegistroExportacion> listBarcode;
 
@@ -50,6 +51,14 @@ public class BarcodeRegistroExportacion {
 
     public void setTotalTallosBarcode(Integer totalTallosBarcode) {
         this.totalTallosBarcode = totalTallosBarcode;
+    }
+
+    public String getUrlPdf() {
+        return urlPdf;
+    }
+
+    public void setUrlPdf(String urlPdf) {
+        this.urlPdf = urlPdf;
     }
 
     public String getUsername() {
