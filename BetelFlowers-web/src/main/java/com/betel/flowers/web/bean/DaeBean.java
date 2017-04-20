@@ -41,6 +41,7 @@ public class DaeBean implements Serializable {
     @PostConstruct
     public void init() {
         this.nuevo = new Dae();
+        this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.daes = this.daeService.obtenerListFlag(1);
         if (this.daes == null) {

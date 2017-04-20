@@ -41,6 +41,7 @@ public class CargueraBean implements Serializable {
     @PostConstruct
     public void init() {
         this.nuevo = new Carguera();
+        this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.cargueras = this.cargueraService.obtenerListFlag(1);
         if (this.cargueras == null) {

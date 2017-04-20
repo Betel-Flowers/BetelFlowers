@@ -36,6 +36,7 @@ public class MarcaCajaBean implements Serializable{
     @PostConstruct
     public void init(){
         this.nuevo = new MarcaCaja();
+        this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.marcasCaja = this.marcaCajaService.obtenerListFlag(1);
     }

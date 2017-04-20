@@ -37,6 +37,7 @@ public class BloqueBean implements Serializable {
     @PostConstruct
     public void init() {
         this.nuevo = new Bloque();
+        this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.bloques = this.bloqueService.obtenerListFlag(1);
         if (this.bloques == null) {

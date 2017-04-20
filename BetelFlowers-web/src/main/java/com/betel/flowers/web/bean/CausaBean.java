@@ -41,6 +41,7 @@ public class CausaBean implements Serializable {
     @PostConstruct
     public void init() {
         this.nuevo = new Causa();
+        this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.causas = this.causaService.obtenerListFlag(1);
         this.listmotivos = new ArrayList<>();

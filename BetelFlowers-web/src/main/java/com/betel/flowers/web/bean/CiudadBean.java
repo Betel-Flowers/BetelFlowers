@@ -41,6 +41,7 @@ public class CiudadBean implements Serializable {
     @PostConstruct
     public void init() {
         this.nuevo = new Ciudad();
+        this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.ciudades = this.ciudadService.obtenerListFlag(1);
         if (this.ciudades == null) {

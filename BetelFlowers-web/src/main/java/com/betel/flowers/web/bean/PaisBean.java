@@ -37,6 +37,7 @@ public class PaisBean implements Serializable{
     @PostConstruct
     public void init(){
         this.nuevo = new Pais();
+        this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.paices = this.paisService.obtenerListFlag(1);
         if(this.paices == null){
