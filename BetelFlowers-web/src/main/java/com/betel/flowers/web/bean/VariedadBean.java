@@ -81,13 +81,17 @@ public class VariedadBean implements Serializable {
     public void add(ActionEvent evt) {
         Especie especie = this.especieService.findByCodigo(this.nuevo.getEspecie());
         this.nuevo.setEspecie(especie);
-        Boolean exito = this.variedadService.insert(this.nuevo);
-        if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
-            this.init();
-        } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
-            this.init();
+        if (this.nuevo.getBloques() != null && !this.nuevo.getBloques().isEmpty()) {
+            Boolean exito = this.variedadService.insert(this.nuevo);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha guardado.");
+                this.init();
+            }
+        }else{
+             FacesUtil.addMessageWarn(null, "Por favor seleccione por lo menos un bloque.");
         }
     }
 

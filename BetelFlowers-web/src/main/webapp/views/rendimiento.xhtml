@@ -13,6 +13,21 @@
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="cantidad" value="Cantidad:"/>
+                    <p:spinner id="cantidad" required="true" 
+                               value="#{rendimientoBean.nuevo.cantidad}"/>
+                    <p:message for="cantidad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="fechaIn" value="Fecha de Inicio:"/>
+                    <p:calendar id="fechaIn" required="true" pattern="MM/dd/yyyy HH:mm:ss a"
+                                value="#{rendimientoBean.nuevo.fechaIn}"/>
+                    <p:message for="fechaIn" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
+                    <p:calendar id="fechaFin" required="true" pattern="MM/dd/yyyy HH:mm:ss a" 
+                                value="#{rendimientoBean.nuevo.fechaFin}"/>
+                    <p:message for="fechaFin" display="tooltip" severity="error"/>
+
                     <p:outputLabel for="tipotrabajo" value="Tipo de Trabajo:"/>
                     <p:selectOneMenu id="tipotrabajo" required="true" style="width: 85%" 
                                      value="#{rendimientoBean.nuevo.tipoTrabajo.codigo}">
@@ -21,21 +36,6 @@
                                        itemLabel="#{tpTr.nombre}" itemValue="#{tpTr.codigo}"/>
                     </p:selectOneMenu>
                     <p:message for="tipotrabajo" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="fechaIn" value="Fecha de Inicio:"/>
-                    <p:calendar id="fechaIn" required="true" pattern="MM/dd/yyyy HH:mm:ss a"
-                                 value="#{rendimientoBean.nuevo.fechaIn}"/>
-                    <p:message for="fechaIn" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
-                    <p:calendar id="fechaFin" required="true" pattern="MM/dd/yyyy HH:mm:ss a" 
-                                 value="#{rendimientoBean.nuevo.fechaFin}"/>
-                    <p:message for="fechaFin" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="cantidad" value="Cantidad:"/>
-                    <p:spinner id="cantidad" required="true" 
-                               value="#{rendimientoBean.nuevo.cantidad}"/>
-                    <p:message for="cantidad" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="operario" value="Operario:"/>
                     <p:selectOneMenu id="operario" required="true" style="width: 85%"
@@ -69,12 +69,6 @@
                             <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Tipo de Trabajo" style="text-align: center;width: auto">
-                        <h:outputText value="#{rend.tipoTrabajo.nombre}"/>
-                    </p:column>
-                    <p:column headerText="Operario" style="text-align: center;width: auto">
-                        <h:outputText value="#{rend.operario.infoPersonal.apellidos} #{rend.operario.infoPersonal.nombres}"/>
-                    </p:column>
                     <p:column headerText="Cantidad" style="text-align: center;width: auto">
                         <h:outputText value="#{rend.cantidad}"/>
                     </p:column>
@@ -87,6 +81,12 @@
                         <h:outputText value="#{rend.fechaFin}">
                             <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
+                    </p:column>
+                    <p:column headerText="Tipo de Trabajo" style="text-align: center;width: auto">
+                        <h:outputText value="#{rend.tipoTrabajo.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Operario" style="text-align: center;width: auto">
+                        <h:outputText value="#{rend.operario.infoPersonal.apellidos} #{rend.operario.infoPersonal.nombres}"/>
                     </p:column>
                     <p:column headerText="Username" style="text-align: center;width: auto">
                         <h:outputText value="#{rend.username}"/>
@@ -116,19 +116,19 @@
                         <p:selectOneMenu id="tipotrabajo" required="true" style="width: 85%" 
                                          value="#{rendimientoBean.nuevo.tipoTrabajo.codigo}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{cuartoFrioBean.cuartosFrio}" var="cua" itemLabel="#{cua.descripcion}"
-                                           itemValue="#{cua.codigo}"/>
+                            <f:selectItems value="#{tipoTrabajoBean.tipoTrabajos}" var="tpTr" 
+                                           itemLabel="#{tpTr.nombre}" itemValue="#{tpTr.codigo}"/>
                         </p:selectOneMenu>
                         <p:message for="tipotrabajo" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="fechaIn" value="Fecha de Inicio:"/>
                         <p:calendar id="fechaIn" required="true" pattern="MM/dd/yyyy HH:mm:ss a" 
-                                     value="#{rendimientoBean.selected.fechaIn}"/>
+                                    value="#{rendimientoBean.selected.fechaIn}"/>
                         <p:message for="fechaIn" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
                         <p:calendar id="fechaFin" required="true" pattern="MM/dd/yyyy HH:mm:ss a" 
-                                     value="#{rendimientoBean.selected.fechaFin}"/>
+                                    value="#{rendimientoBean.selected.fechaFin}"/>
                         <p:message for="fechaFin" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="cantidad" value="Cantidad:"/>
@@ -161,23 +161,23 @@
                     <h:panelGrid columns="2" cellpadding="5">
                         <p:outputLabel value="Tipo de Trabajo:"/>
                         <p:outputLabel value="#{rendimientoBean.selected.tipoTrabajo.nombre}"/>
-                        
+
                         <p:outputLabel value="Fecha Inicio:"/>
                         <p:outputLabel value="#{rendimientoBean.selected.fechaIn}">
-                        <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </p:outputLabel>
-                        
+
                         <p:outputLabel value="Fecha Fin:"/>
                         <p:outputLabel value="#{rendimientoBean.selected.fechaFin}">
-                        <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </p:outputLabel>
-                        
+
                         <p:outputLabel value="Cantidad:"/>
                         <p:outputLabel value="#{rendimientoBean.selected.cantidad}"/>
-                        
+
                         <p:outputLabel value="Operario:"/>
                         <p:outputLabel value="#{rendimientoBean.selected.operario.infoPersonal.nombres} #{rendimientoBean.selected.operario.infoPersonal.apellidos}"/>
-                   </h:panelGrid>
+                    </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Eliminar" update=":fdelete, :fadd:messages, :fdtrend:dtrend" 

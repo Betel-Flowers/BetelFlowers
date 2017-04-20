@@ -10,9 +10,11 @@ import com.betel.flowers.model.RegistroExportacion;
 import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.BodegaVirtualService;
 import com.betel.flowers.service.RegistroExportacionService;
+import com.betel.flowers.service.RendimientoService;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.bean.util.BarcodeRegistroExportacion;
 import com.betel.flowers.web.bean.util.GeneratedPDF;
+import com.betel.flowers.web.bean.util.Rendimientos;
 import com.betel.flowers.web.util.FacesUtil;
 import com.betel.flowers.xml.service.EtiquetaRegExpoXML;
 import java.io.Serializable;
@@ -44,8 +46,9 @@ public class RegistroExportacionBean implements Serializable {
     private List<RegistroExportacion> registrosExportacion;
     private List<RegistroExportacion> registrosExportacionG;
     private List<BarcodeRegistroExportacion> barcodeList;
-    private BarcodeRegistroExportacion barcodeSelected;
+    private Rendimientos rendiminetoServiceList;
     private Boolean gerated;
+    private Boolean operarios;
 
     @Inject
     private RegistroExportacionService registroExportacionService;
@@ -55,6 +58,8 @@ public class RegistroExportacionBean implements Serializable {
     private BodegaVirtualService bodegaService;
     @Inject
     private EtiquetaRegExpoXML etiquetaRegExpoXML;
+    @Inject
+    private RendimientoService rendimientoService;
 
     @PostConstruct
     public void init() {
@@ -62,8 +67,10 @@ public class RegistroExportacionBean implements Serializable {
         this.nuevo.setUsername("usertest");//usertest
         this.selected = new RegistroExportacion();
         this.gerated = Boolean.TRUE;
+        this.operarios = Boolean.TRUE;
         this.registrosExportacion = new ArrayList<>();
         this.barcodeList = new ArrayList<>();
+        this.rendiminetoServiceList = new Rendimientos();
         this.registrosExportacionG = this.registroExportacionService.obtenerLista();
         if (this.registrosExportacionG == null) {
             this.registrosExportacionG = new ArrayList<>();
@@ -85,7 +92,7 @@ public class RegistroExportacionBean implements Serializable {
             this.nuevo = new RegistroExportacion();
             this.nuevo.setUsername("usertest");//usertest
             this.nuevo.setVariedad(new Variedad());
-            this.stateGenetated();
+            this.stateOperarios();
         } else {
             FacesUtil.addMessageError(null, "No se ha guardado.");
         }
@@ -99,13 +106,16 @@ public class RegistroExportacionBean implements Serializable {
 
     public void add(ActionEvent evt) {
         this.generatedBarcode();
-        Boolean exito = this.allInserts();
-        if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
-            this.init();
-        } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
-            this.init();
+        Boolean rendi = this.allInsertsRendimiento();
+        if (rendi) {
+            Boolean exito = this.allInserts();
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha guardado.");
+                this.init();
+            }
         }
     }
 
@@ -128,6 +138,11 @@ public class RegistroExportacionBean implements Serializable {
                 this.registrosExportacion.get(i).setPdf(url + barcode + ".pdf");
                 this.registrosExportacion.get(i).setUrlPdf(filepath);
             }
+            if (this.rendiminetoServiceList.getRendimientos() != null && !this.rendiminetoServiceList.getRendimientos().isEmpty()) {
+                for (int j = 0; j < this.rendiminetoServiceList.getRendimientos().size(); j++) {
+                    this.rendiminetoServiceList.getRendimientos().get(j).setBarcode(barcode);
+                }
+            }
             this.etiquetaRegExpoXML.generatedXML(barcode, url, barcode, this.registrosExportacion);
             GeneratedPDF runPDF = new GeneratedPDF(url, url + barcode + ".xml", url + barcode + ".html", url + barcode + ".pdf", barcode, 0);
             runPDF.run();
@@ -140,9 +155,25 @@ public class RegistroExportacionBean implements Serializable {
 
     private Boolean allInserts() {
         Boolean exito = Boolean.FALSE;
-        if (this.registrosExportacion != null && !this.registrosExportacion.isEmpty()) {
+        if (this.registrosExportacion != null && !this.registrosExportacion.isEmpty()
+                && this.rendiminetoServiceList.getRendimientos() != null && !this.rendiminetoServiceList.getRendimientos().isEmpty()) {
             for (int i = 0; i < this.registrosExportacion.size(); i++) {
+                this.registrosExportacion.get(i).setRedimientos(this.rendiminetoServiceList.getRendimientos());
                 exito = this.registroExportacionService.insert(this.registrosExportacion.get(i));
+                if (!exito) {
+                    exito = Boolean.FALSE;
+                    break;
+                }
+            }
+        }
+        return exito;
+    }
+
+    private Boolean allInsertsRendimiento() {
+        Boolean exito = Boolean.FALSE;
+        if (this.rendiminetoServiceList.getRendimientos() != null && !this.rendiminetoServiceList.getRendimientos().isEmpty()) {
+            for (int i = 0; i < this.rendiminetoServiceList.getRendimientos().size(); i++) {
+                exito = this.rendimientoService.insert(this.rendiminetoServiceList.getRendimientos().get(i));
                 if (!exito) {
                     exito = Boolean.FALSE;
                     break;
@@ -193,11 +224,26 @@ public class RegistroExportacionBean implements Serializable {
         }
     }
 
+    public void addRendimiento(ActionEvent evt) {
+        Boolean exito = this.rendiminetoServiceList.add();
+        if (exito) {
+            this.stateGenetated();
+        }
+    }
+
     private void stateGenetated() {
-        if (this.registrosExportacion == null || this.registrosExportacion.isEmpty()) {
+        if (this.rendiminetoServiceList.getRendimientos() == null || this.rendiminetoServiceList.getRendimientos().isEmpty()) {
             this.gerated = Boolean.TRUE;
         } else {
             this.gerated = Boolean.FALSE;
+        }
+    }
+
+    private void stateOperarios() {
+        if (this.registrosExportacion == null || this.registrosExportacion.isEmpty()) {
+            this.operarios = Boolean.TRUE;
+        } else {
+            this.operarios = Boolean.FALSE;
         }
     }
 
@@ -244,7 +290,7 @@ public class RegistroExportacionBean implements Serializable {
                 barcodes.setBodega(registro.getBodega());
                 barcodes.setBarcode(registro.getBarcode());
                 barcodes.setUsername(registro.getUsername());
-                barcodes.setUrlPdf(registro.getPdf());
+                barcodes.setUrlPdf(registro.getUrlPdf());
                 for (int i = 0; i < this.registrosExportacionG.size(); i++) {
                     if (this.registrosExportacionG.get(i).getBarcode().equals(registro.getBarcode())) {
                         barcodes.getListBarcode().add(this.registrosExportacionG.get(i));
@@ -271,15 +317,12 @@ public class RegistroExportacionBean implements Serializable {
 
     public List<RegistroExportacion> listBardodeInsideList(BarcodeRegistroExportacion barcodeItem) {
         List<RegistroExportacion> list = new ArrayList<>();
-        if (barcodeItem.getListBarcode() != null && !barcodeItem.getListBarcode().isEmpty()) {
-            list = barcodeItem.getListBarcode();
+        if (barcodeItem != null) {
+            if (barcodeItem.getListBarcode() != null && !barcodeItem.getListBarcode().isEmpty()) {
+                list = barcodeItem.getListBarcode();
+            }
         }
         return list;
-    }
-
-    public void sendPdfSelection(BarcodeRegistroExportacion pdf) {
-        this.barcodeSelected = pdf;
-
     }
 
     public RegistroExportacion getNuevo() {
@@ -314,6 +357,14 @@ public class RegistroExportacionBean implements Serializable {
         this.gerated = gerated;
     }
 
+    public Boolean getOperarios() {
+        return operarios;
+    }
+
+    public void setOperarios(Boolean operarios) {
+        this.operarios = operarios;
+    }
+
     public List<RegistroExportacion> getRegistrosExportacion() {
         return registrosExportacion;
     }
@@ -330,20 +381,20 @@ public class RegistroExportacionBean implements Serializable {
         this.registrosExportacionG = registrosExportacionG;
     }
 
-    public BarcodeRegistroExportacion getBarcodeSelected() {
-        return barcodeSelected;
-    }
-
-    public void setBarcodeSelected(BarcodeRegistroExportacion barcodeSelected) {
-        this.barcodeSelected = barcodeSelected;
-    }
-
     public List<BarcodeRegistroExportacion> getBarcodeList() {
         return barcodeList;
     }
 
     public void setBarcodeList(List<BarcodeRegistroExportacion> barcodeList) {
         this.barcodeList = barcodeList;
+    }
+
+    public Rendimientos getRendiminetoServiceList() {
+        return rendiminetoServiceList;
+    }
+
+    public void setRendiminetoServiceList(Rendimientos rendiminetoServiceList) {
+        this.rendiminetoServiceList = rendiminetoServiceList;
     }
 
 }

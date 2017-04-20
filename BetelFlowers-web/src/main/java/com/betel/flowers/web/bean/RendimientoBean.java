@@ -20,6 +20,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  *
@@ -58,6 +59,7 @@ public class RendimientoBean implements Serializable {
         TipoTrabajo tipoTrabajo = this.tipoTrabajoService.findByCodigo(this.nuevo.getTipoTrabajo());
         this.nuevo.setOperario(user);
         this.nuevo.setTipoTrabajo(tipoTrabajo);
+        this.nuevo.setBarcode(this.generatedBarcode());
         Boolean exito = this.rendimientoService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
@@ -100,6 +102,16 @@ public class RendimientoBean implements Serializable {
         } else {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
+    }
+
+    private String generatedBarcode() {
+        int size = 0;
+        if (this.rendimientos != null) {
+            size = this.rendimientos.size();
+        }
+        String code = RandomStringUtils.randomNumeric(4);
+        String barcode = "BETEL-REM" + code + "" + size;
+        return barcode;
     }
 
     public Rendimiento getNuevo() {

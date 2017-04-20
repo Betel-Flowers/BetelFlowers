@@ -85,17 +85,9 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Agregar" update=":fadd, :fdtregDet:dtregExp, :fadd:messages, :fsave:btnSave" 
+                    <p:commandButton value="Agregar" update=":fadd, :fdtregDet:dtregExp, :fadd:messages, :fsaveOp:btnSaveOp" 
                                      actionListener="#{registroExportacionBean.generateContainer(evt)}"/>                    
                 </f:facet>
-            </p:panel>
-        </h:form>
-        <h:form id="fsave">
-            <p:panel style="align-content: center; text-align: center">
-                <p:commandButton id="btnSave" value="Guardar" 
-                                 disabled="#{registroExportacionBean.gerated}"
-                                 update=":fadd, :fdtregExp:dtregExpG, :fdtregDet:dtregExp, :fadd:messages" 
-                                 actionListener="#{registroExportacionBean.add(evt)}"/>
             </p:panel>
         </h:form>
         <h:form id="fdtregDet">
@@ -146,6 +138,61 @@
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
+        <h:form id="fsaveOp">
+            <p:panel style="align-content: center; text-align: center">
+                <p:commandButton id="btnSaveOp" value="Agregar Operario" 
+                                 update=":frend:outRend"
+                                 disabled="#{registroExportacionBean.operarios}"
+                                 oncomplete="PF('dlgRend').show()"/>
+            </p:panel>
+        </h:form>
+        <h:form id="frendDt">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtRendList" var="rend" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{registroExportacionBean.rendiminetoServiceList.rendimientos}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Operarios"/>
+                    </f:facet>
+
+                    <p:column headerText="Cantidad" style="text-align: center;width: auto">
+                        <h:outputText value="#{rend.cantidad}"/>
+                    </p:column>
+                    <p:column headerText="Fehca Inicio" style="text-align: center;width: auto">
+                        <h:outputText value="#{rend.fechaIn}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Fehca Fin" style="text-align: center;width: auto">
+                        <h:outputText value="#{rend.fechaFin}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Tipo de Trabajo" style="text-align: center;width: auto">
+                        <h:outputText value="#{rend.tipoTrabajo.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Operario" style="text-align: center;width: auto">
+                        <h:outputText value="#{rend.operario.infoPersonal.apellidos} #{rend.operario.infoPersonal.nombres}"/>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton update=":frendDt:dtRendList"
+                                         icon="ui-icon-close" title="Eliminar"
+                                         actionListener="#{registroExportacionBean.rendiminetoServiceList.remove(evt, rend)}">
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fsave">
+            <p:panel style="align-content: center; text-align: center">
+                <p:commandButton id="btnSave" value="Guardar" 
+                                 disabled="#{registroExportacionBean.gerated}"
+                                 update=":fadd, :fdtregExp:dtregExpG, :fdtregDet:dtregExp, :frendDt:dtRendList, :fadd:messages" 
+                                 actionListener="#{registroExportacionBean.add(evt)}"/>
+            </p:panel>
+        </h:form>
         <h:form id="fdtregExp">
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtregExpG" var="regExpG" rows="5"
@@ -172,11 +219,9 @@
                         <h:outputText value="#{regExpG.username}"/>
                     </p:column>
                     <p:column style="text-align: center"  headerText="Etiqueta">
-                        <p:commandLink update=":fpdf:outPdf" 
-                                       actionListener="#{registroExportacionBean.sendPdfSelection(regExpG)}" 
-                                       oncomplete="PF('dlgViewRegExpo').show()">
+                        <p:link href="#{regExpG.urlPdf}" target="_blank">
                             <p:graphicImage name="img/pdf.png"/>
-                        </p:commandLink>
+                        </p:link>
                     </p:column>
                     <p:rowExpansion>
                         <h:panelGrid style="margin: 0 auto;">
@@ -279,12 +324,46 @@
                 </f:facet>
             </p:dialog>
         </h:form>
-        <h:form id="fpdf">
-            <p:dialog header="Etiqueta" widgetVar="dlgViewRegExpo" resizable="true" 
+        <h:form id="frend">
+            <p:dialog header="Agregar Operario" widgetVar="dlgRend" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
-                <p:outputPanel id="outPdf">
-                    
-                </p:outputPanel>   
+                <p:outputPanel id="outRend">
+                    <h:panelGrid columns="9" cellpadding="5">
+                        <p:outputLabel for="cantidad" value="Cantidad:"/>
+                        <p:spinner id="cantidad" required="true" 
+                                   value="#{registroExportacionBean.rendiminetoServiceList.nuevo.cantidad}"/>
+                        <p:message for="cantidad" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="fechaIn" value="Fecha de Inicio:"/>
+                        <p:calendar id="fechaIn" required="true" pattern="MM/dd/yyyy HH:mm:ss a"
+                                    value="#{registroExportacionBean.rendiminetoServiceList.nuevo.fechaIn}"/>
+                        <p:message for="fechaIn" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
+                        <p:calendar id="fechaFin" required="true" pattern="MM/dd/yyyy HH:mm:ss a" 
+                                    value="#{registroExportacionBean.rendiminetoServiceList.nuevo.fechaFin}"/>
+                        <p:message for="fechaFin" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="tipotrabajo" value="Tipo de Trabajo:"/>
+                        <p:selectOneMenu id="tipotrabajo" required="true" style="width: 85%" 
+                                         value="#{registroExportacionBean.rendiminetoServiceList.nuevo.tipoTrabajo.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{tipoTrabajoBean.tipoTrabajos}" var="tpTr" 
+                                           itemLabel="#{tpTr.nombre}" itemValue="#{tpTr.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipotrabajo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="operario" value="Operario:"/>
+                        <p:inputText id="operario" required="true" 
+                                     value="#{registroExportacionBean.rendiminetoServiceList.nuevo.operario.codigo}"/>
+                        <p:message for="operario" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" 
+                                     update=":frend, :fadd:messages, :frendDt:dtRendList, :fsave:btnSave"
+                                     actionListener="#{registroExportacionBean.addRendimiento(evt)}"/>
+                </f:facet>
             </p:dialog>
         </h:form>
     </ui:define>
