@@ -116,6 +116,7 @@ public class CargueraService implements Serializable {
                 set("telefono", carguera.getTelefono()).
                 set("correo1", carguera.getCorreo1()).
                 set("correo2", carguera.getCorreo2()).
+                set("username", carguera.getUsername()).
                 set("flag", carguera.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

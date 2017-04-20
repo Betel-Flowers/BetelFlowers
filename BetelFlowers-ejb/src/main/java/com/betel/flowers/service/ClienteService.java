@@ -152,8 +152,7 @@ public class ClienteService implements Serializable {
                 set("exterior", cliente.getExterior()).
                 set("local", cliente.getLocal()).
                 set("nombreContacto", cliente.getNombreContacto()).
-                set("nombres", cliente.getNombres()).
-                set("apellidos", cliente.getApellidos()).
+                set("empresa", cliente.getEmpresa()).
                 set("ruc", cliente.getRuc()).
                 set("direccion", cliente.getDireccion()).
                 set("diasPago", cliente.getDiasPago()).

@@ -125,6 +125,7 @@ public class CiudadService implements Serializable {
         UpdateOperations<Ciudad> update = this.ds.createUpdateOperations(Ciudad.class);
         update.set("nombre", ciudad.getNombre()).
                 set("pais", ciudad.getPais()).
+                set("username", ciudad.getUsername()).
                 set("flag", ciudad.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

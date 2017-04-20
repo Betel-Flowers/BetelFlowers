@@ -115,6 +115,7 @@ public class DaeService implements Serializable{
                 set("fechaCaducidad", dae.getFechaCaducidad()).
                 set("codigoDAE", dae.getCodigoDAE()).
                 set("pais", dae.getPais()).
+                set("username", dae.getUsername()).
                 set("flag", dae.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

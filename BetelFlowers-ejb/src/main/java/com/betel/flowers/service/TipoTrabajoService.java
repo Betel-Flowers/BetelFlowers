@@ -112,6 +112,7 @@ public class TipoTrabajoService implements Serializable {
         );
         UpdateOperations<TipoTrabajo> update = this.ds.createUpdateOperations(TipoTrabajo.class);
         update.set("nombre", tipoTrabajo.getNombre()).
+                set("username", tipoTrabajo.getUsername()).
                 set("flag", tipoTrabajo.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

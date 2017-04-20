@@ -31,8 +31,7 @@ public class Cliente extends BaseEntity {
     private Boolean exterior;
     private Boolean local;
     private String nombreContacto;
-    private String nombres;
-    private String apellidos;
+    private String empresa;
     private String ruc;
     private String direccion;
     private Integer diasPago;
@@ -105,20 +104,12 @@ public class Cliente extends BaseEntity {
         this.nombreContacto = nombreContacto;
     }
 
-    public String getNombres() {
-        return nombres;
+    public String getEmpresa() {
+        return empresa;
     }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
     }
 
     public String getRuc() {
@@ -252,7 +243,7 @@ public class Cliente extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Cliente{" + "codigo=" + codigo + ", comercializadora=" + comercializadora + ", exterior=" + exterior + ", local=" + local + ", nombreContacto=" + nombreContacto + ", nombres=" + nombres + ", apellidos=" + apellidos + ", ruc=" + ruc + ", direccion=" + direccion + ", diasPago=" + diasPago + ", limiteCredito=" + limiteCredito + ", diasCredito=" + diasCredito + ", impuestos=" + impuestos + ", username=" + username + ", ciudad=" + ciudad + ", telefonos=" + telefonos + ", correos=" + correos + ", cajas=" + cajas + '}';
+        return "Cliente{" + "codigo=" + codigo + ", comercializadora=" + comercializadora + ", exterior=" + exterior + ", local=" + local + ", nombreContacto=" + nombreContacto + ", empresa=" + empresa + ", ruc=" + ruc + ", direccion=" + direccion + ", diasPago=" + diasPago + ", limiteCredito=" + limiteCredito + ", diasCredito=" + diasCredito + ", impuestos=" + impuestos + ", username=" + username + ", flag=" + flag + ", ciudad=" + ciudad + ", telefonos=" + telefonos + ", correos=" + correos + ", cajas=" + cajas + '}';
     }
 
 }

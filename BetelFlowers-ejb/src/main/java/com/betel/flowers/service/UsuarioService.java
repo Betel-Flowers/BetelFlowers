@@ -189,6 +189,7 @@ public class UsuarioService implements Serializable {
                 set("estado", usuario.getEstado()).
                 set("tipoUsuario", usuario.getTipoUsuario()).
                 set("infoPersonal", usuario.getInfoPersonal()).
+                set("username", usuario.getUsername()).
                 set("flag", usuario.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

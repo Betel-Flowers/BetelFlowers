@@ -124,6 +124,7 @@ public class BloqueService implements Serializable {
         UpdateOperations<Bloque> update = this.ds.createUpdateOperations(Bloque.class);
         update.set("numero", bloque.getNumero()).
                 set("area", bloque.getArea()).
+                set("username", bloque.getUsername()).
                 set("flag", bloque.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

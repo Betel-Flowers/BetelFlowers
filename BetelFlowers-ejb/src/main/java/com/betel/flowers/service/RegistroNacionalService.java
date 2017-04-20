@@ -51,7 +51,7 @@ public class RegistroNacionalService implements Serializable {
         Integer number = 1000 + 1 * size;
         return number;
     }
-    
+
     public List<RegistroNacional> obtenerListFlag(Integer flag) {
         List<RegistroNacional> list = new ArrayList<>();
         Query<RegistroNacional> result = this.ds.find(RegistroNacional.class).
@@ -86,7 +86,7 @@ public class RegistroNacionalService implements Serializable {
         }
         return find;
     }
-    
+
     public Boolean deteleFlag(RegistroNacional registroNacional) {
         Query<RegistroNacional> query = this.ds.createQuery(RegistroNacional.class);
         registroNacional.setFlag(0);
@@ -114,7 +114,8 @@ public class RegistroNacionalService implements Serializable {
                 set("bodega", registroNacional.getBodega()).
                 set("detalle", registroNacional.getDetalle()).
                 set("variedad", registroNacional.getVariedad()).
-                set("username", registroNacional.getUsername());
+                set("username", registroNacional.getUsername()).
+                set("flag", registroNacional.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }

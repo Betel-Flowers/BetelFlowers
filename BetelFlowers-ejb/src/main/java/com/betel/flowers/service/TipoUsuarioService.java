@@ -163,6 +163,7 @@ public class TipoUsuarioService implements Serializable {
         update.set("nombre", tipoUsuario.getNombre()).
                 set("admin", tipoUsuario.getAdmin()).
                 set("opcionesSistema", tipoUsuario.getOpcionesSistema()).
+                set("username",tipoUsuario.getUsername()).
                 set("flag", tipoUsuario.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

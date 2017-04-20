@@ -93,7 +93,8 @@ public class RegistroCultivoService implements Serializable {
                 set("numeroTallosRecipiente", registroCultivo.getNumeroTallosRecipiente()).
                 set("bloque", registroCultivo.getBloque()).
                 set("variedad", registroCultivo.getVariedad()).
-                set("username", registroCultivo.getUsername());
+                set("username", registroCultivo.getUsername()).
+                set("flag", registroCultivo.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }

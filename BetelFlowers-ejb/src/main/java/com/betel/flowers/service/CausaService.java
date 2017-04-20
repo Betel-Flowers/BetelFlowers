@@ -112,6 +112,7 @@ public class CausaService implements Serializable {
         );
         UpdateOperations<Causa> update = this.ds.createUpdateOperations(Causa.class);
         update.set("descripcion", causa.getDescripcion()).
+                set("username", causa.getUsername()).
                 set("flag", causa.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

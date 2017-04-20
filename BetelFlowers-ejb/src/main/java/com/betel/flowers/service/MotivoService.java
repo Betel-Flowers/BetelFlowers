@@ -57,8 +57,8 @@ public class MotivoService implements Serializable {
         List<Motivo> motivos = this.ds.find(Motivo.class).asList();
         return motivos;
     }
-    
-    public List<Motivo> obtenerListCausaFlag(Causa causa,Integer flag) {
+
+    public List<Motivo> obtenerListCausaFlag(Causa causa, Integer flag) {
         List<Motivo> list = new ArrayList<>();
         Query<Motivo> result = this.ds.find(Motivo.class).
                 field("flag").equal(flag).
@@ -126,6 +126,7 @@ public class MotivoService implements Serializable {
         update.set("descripcion", motivo.getDescripcion()).
                 set("cantidad", motivo.getCantidad()).
                 set("causa", motivo.getCausa()).
+                set("username", motivo.getUsername()).
                 set("flag", motivo.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
