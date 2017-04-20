@@ -133,7 +133,7 @@
                     <p:column style="text-align: center" headerText="Modificar" >
                         <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
                                          actionListener="#{registroExportacionBean.enviarOriginalRegister(evt, regExp)}"
-                                         oncomplete="PF('dlgModifyBloq').show()">
+                                         oncomplete="PF('dlgModifyRegExpo').show()">
                             <f:setPropertyActionListener value="#{regExp}" target="#{registroExportacionBean.selected}"/>
                         </p:commandButton>
                     </p:column>
@@ -170,6 +170,13 @@
                     </p:column>
                     <p:column style="text-align: center" headerText="Usuario" >
                         <h:outputText value="#{regExpG.username}"/>
+                    </p:column>
+                    <p:column style="text-align: center"  headerText="Etiqueta">
+                        <p:commandLink update=":fpdf:outPdf" 
+                                       actionListener="#{registroExportacionBean.sendPdfSelection(regExpG)}" 
+                                       oncomplete="PF('dlgViewRegExpo').show()">
+                            <p:graphicImage name="img/pdf.png"/>
+                        </p:commandLink>
                     </p:column>
                     <p:rowExpansion>
                         <h:panelGrid style="margin: 0 auto;">
@@ -211,7 +218,7 @@
             </h:panelGrid>
         </h:form>
         <h:form id="fedit">
-            <p:dialog header="Modificar Registro Flor Exportacion" widgetVar="dlgModifyBloq" resizable="false" 
+            <p:dialog header="Modificar Registro Flor Exportacion" widgetVar="dlgModifyRegExpo" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="editEspe">
                     <h:panelGrid columns="3" cellpadding="5">
@@ -270,6 +277,14 @@
                     <p:commandButton value="Modificar" update=":fedit, :fadd:messages, :fdtregDet:dtregExp" 
                                      actionListener="#{registroExportacionBean.updateContainer(evt)}"/>
                 </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fpdf">
+            <p:dialog header="Etiqueta" widgetVar="dlgViewRegExpo" resizable="true" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outPdf">
+                    
+                </p:outputPanel>   
             </p:dialog>
         </h:form>
     </ui:define>

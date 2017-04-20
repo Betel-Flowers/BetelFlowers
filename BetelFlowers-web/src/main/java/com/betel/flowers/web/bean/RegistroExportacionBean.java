@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
@@ -42,6 +44,7 @@ public class RegistroExportacionBean implements Serializable {
     private List<RegistroExportacion> registrosExportacion;
     private List<RegistroExportacion> registrosExportacionG;
     private List<BarcodeRegistroExportacion> barcodeList;
+    private BarcodeRegistroExportacion barcodeSelected;
     private Boolean gerated;
 
     @Inject
@@ -113,13 +116,17 @@ public class RegistroExportacionBean implements Serializable {
             String code = RandomStringUtils.randomNumeric(2);
             String barcode = "BETEL-RE" + code + "" + size + "" + length;
             String url = "/var/www/html/pdf/" + barcode + "/";
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String ipAdress = request.getLocalAddr();
+            String filepath = "http://" + ipAdress + "/pdf/" + barcode + "/" + barcode + ".pdf";
             for (int i = 0; i < size; i++) {
                 Integer total = this.registrosExportacion.get(i).getTotalTallos();
                 this.registrosExportacion.get(i).setTotalTallos(total);
                 this.registrosExportacion.get(i).setBarcode(barcode);
-                this.registrosExportacion.get(i).setUrlXml(url + barcode + ".xml");
-                this.registrosExportacion.get(i).setUrlHtml(url + barcode + ".html");
-                this.registrosExportacion.get(i).setUrlPdf(url + barcode + ".pdf");
+                this.registrosExportacion.get(i).setXml(url + barcode + ".xml");
+                this.registrosExportacion.get(i).setHtml(url + barcode + ".html");
+                this.registrosExportacion.get(i).setPdf(url + barcode + ".pdf");
+                this.registrosExportacion.get(i).setUrlPdf(filepath);
             }
             this.etiquetaRegExpoXML.generatedXML(barcode, url, barcode, this.registrosExportacion);
             GeneratedPDF runPDF = new GeneratedPDF(url, url + barcode + ".xml", url + barcode + ".html", url + barcode + ".pdf", barcode, 0);
@@ -237,7 +244,7 @@ public class RegistroExportacionBean implements Serializable {
                 barcodes.setBodega(registro.getBodega());
                 barcodes.setBarcode(registro.getBarcode());
                 barcodes.setUsername(registro.getUsername());
-                barcodes.setUrlPdf(registro.getUrlPdf());
+                barcodes.setUrlPdf(registro.getPdf());
                 for (int i = 0; i < this.registrosExportacionG.size(); i++) {
                     if (this.registrosExportacionG.get(i).getBarcode().equals(registro.getBarcode())) {
                         barcodes.getListBarcode().add(this.registrosExportacionG.get(i));
@@ -268,6 +275,11 @@ public class RegistroExportacionBean implements Serializable {
             list = barcodeItem.getListBarcode();
         }
         return list;
+    }
+
+    public void sendPdfSelection(BarcodeRegistroExportacion pdf) {
+        this.barcodeSelected = pdf;
+
     }
 
     public RegistroExportacion getNuevo() {
@@ -316,6 +328,14 @@ public class RegistroExportacionBean implements Serializable {
 
     public void setRegistrosExportacionG(List<RegistroExportacion> registrosExportacionG) {
         this.registrosExportacionG = registrosExportacionG;
+    }
+
+    public BarcodeRegistroExportacion getBarcodeSelected() {
+        return barcodeSelected;
+    }
+
+    public void setBarcodeSelected(BarcodeRegistroExportacion barcodeSelected) {
+        this.barcodeSelected = barcodeSelected;
     }
 
     public List<BarcodeRegistroExportacion> getBarcodeList() {
