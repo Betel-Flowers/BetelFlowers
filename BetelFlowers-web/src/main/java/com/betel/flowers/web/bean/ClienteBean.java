@@ -42,6 +42,7 @@ public class ClienteBean implements Serializable {
     private Cliente selected;
     private Cliente removeSelected;
     private List<Cliente> clientes;
+    private List<Cliente> subClientes;
     private List<Ciudad> ciudades;
     private Telefonos telefono;
     private Correos correo;
@@ -69,8 +70,10 @@ public class ClienteBean implements Serializable {
         this.subCliente = new SubCliente();
         this.activeSelectedCliente = Boolean.TRUE;
         this.clientes = this.clienteService.obtenerListFlag(1);
+        this.subClientes = this.clienteService.obtenerListFlag(1);
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
+            this.subClientes = new ArrayList<>();
         }
     }
 
@@ -168,6 +171,14 @@ public class ClienteBean implements Serializable {
             this.caja.setCajas(this.selected.getCajas());
             this.subCliente.setSubClientes(this.selected.getSubClientes());
             this.activeSelectedCliente = Boolean.FALSE;
+            this.removeEqualCliente();
+
+        }
+    }
+
+    private void removeEqualCliente() {
+        if (this.subClientes != null && !this.subClientes.isEmpty()) {
+            this.subClientes.remove(this.getRemoveSelected());
         }
     }
 
@@ -254,6 +265,14 @@ public class ClienteBean implements Serializable {
 
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
+    }
+
+    public List<Cliente> getSubClientes() {
+        return subClientes;
+    }
+
+    public void setSubClientes(List<Cliente> subClientes) {
+        this.subClientes = subClientes;
     }
 
     public List<Ciudad> getCiudades() {

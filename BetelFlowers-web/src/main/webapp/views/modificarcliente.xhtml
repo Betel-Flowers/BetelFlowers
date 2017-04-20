@@ -26,11 +26,11 @@
                     <p:column filterBy="#{cli.codigo}" headerText="Codigo" filterMatchMode="contains" style="text-align: center">
                         <h:outputText value="#{cli.codigo}"/>
                     </p:column>
-                    <p:column headerText="Nombre de Contacto" style="text-align: center">
-                        <h:outputText value="#{cli.nombreContacto}"/>
+                    <p:column filterBy="#{cli.empresa}" headerText="Empresa" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{cli.empresa}"/>
                     </p:column>
-                    <p:column headerText="Representante" style="text-align: center">
-                        <h:outputText value="#{cli.nombres} #{cli.apellidos}"/>
+                    <p:column filterBy="#{cli.nombreContacto}" headerText="Nombre de Contacto" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{cli.nombreContacto}"/>
                     </p:column>
                     <p:column filterBy="#{cli.ruc}" headerText="Cedula/RUC/Pasaporte" filterMatchMode="contains" style="text-align: center">
                         <h:outputText value="#{cli.ruc}"/>
@@ -50,10 +50,10 @@
                 </h:panelGrid>
                 <p:outputPanel id="outCli">
                     <h:panelGrid columns="6" cellpadding="5">
-                        <p:outputLabel for="nombreContacto" value="Nombre de contacto:"/>
-                        <p:inputText id="nombreContacto" required="true" 
-                                     value="#{clienteBean.selected.nombreContacto}"/>
-                        <p:message for="nombreContacto" display="tooltip" severity="error"/>
+                        <p:outputLabel for="empresa" value="Empresa:"/>
+                        <p:inputText id="empresa" required="true" 
+                                     value="#{clienteBean.selected.empresa}"/>
+                        <p:message for="empresa" display="tooltip" severity="error"/>
 
                         <p:outputLabel value="Tipo:"/>
                         <h:panelGrid columns="6" cellpadding="5">
@@ -72,15 +72,10 @@
                         </h:panelGrid>
                         <p:outputLabel value=""/>
 
-                        <p:outputLabel for="nombres" value="Nombres:"/>
-                        <p:inputText id="nombres" required="true"
-                                     value="#{clienteBean.selected.nombres}"/>
-                        <p:message for="nombres" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="apellidos" value="Apellidos:"/>
-                        <p:inputText id="apellidos" required="true"
-                                     value="#{clienteBean.selected.apellidos}"/>
-                        <p:message for="apellidos" display="tooltip" severity="error"/>
+                        <p:outputLabel for="nombreContacto" value="Nombre de Contacto:"/>
+                        <p:inputText id="nombreContacto" required="true"
+                                     value="#{clienteBean.selected.nombreContacto}"/>
+                        <p:message for="nombreContacto" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="ruc" value="Cedula/RUC/Pasaporte:"/>
                         <p:inputText id="ruc" required="true"
@@ -244,11 +239,11 @@
                                         <p:column headerText="Codigo" style="text-align: center">
                                             <h:outputText value="#{subCli.codigo}"/>
                                         </p:column>
+                                        <p:column headerText="Empresa" style="text-align: center">
+                                            <h:outputText value="#{subCli.empresa}"/>
+                                        </p:column>
                                         <p:column headerText="Nombre de Contacto" style="text-align: center">
                                             <h:outputText value="#{subCli.nombreContacto}"/>
-                                        </p:column>
-                                        <p:column headerText="Representante" style="text-align: center">
-                                            <h:outputText value="#{subCli.nombres} #{subCli.apellidos}"/>
                                         </p:column>
                                         <p:column headerText="Tipo" style="text-align: center">
                                             <h:outputText value="Comercializadora" rendered="#{subCli.comercializadora}"/>
@@ -363,7 +358,7 @@
                         <p:dataTable id="dtCli" var="cli" rows="5"
                                      paginator="true" tableStyle="width: auto"
                                      paginatorPosition="Bottom"
-                                     value="#{clienteBean.clientes}"
+                                     value="#{clienteBean.subClientes}"
                                      selectionMode="single"
                                      selection="#{clienteBean.subCliente.nuevo}"
                                      rowKey="#{cli.codigo}">
@@ -382,11 +377,11 @@
                             <p:column filterBy="#{cli.ruc}" headerText="Cedula/RUC/Pasaporte" filterMatchMode="contains" style="text-align: center">
                                 <h:outputText value="#{cli.ruc}"/>
                             </p:column>
+                            <p:column headerText="Empresa" style="text-align: center">
+                                <h:outputText value="#{cli.empresa}"/>
+                            </p:column>
                             <p:column headerText="Nombre de Contacto" style="text-align: center">
                                 <h:outputText value="#{cli.nombreContacto}"/>
-                            </p:column>
-                            <p:column headerText="Representante" style="text-align: center">
-                                <h:outputText value="#{cli.nombres} #{cli.apellidos}"/>
                             </p:column>
                             <p:column headerText="Tipo" style="text-align: center">
                                 <h:outputText value="Comercializadora" rendered="#{cli.comercializadora}"/>

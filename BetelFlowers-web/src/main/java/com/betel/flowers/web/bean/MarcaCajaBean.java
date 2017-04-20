@@ -5,12 +5,10 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.Causa;
-import com.betel.flowers.service.CausaService;
-import com.betel.flowers.service.MotivoService;
+import com.betel.flowers.model.MarcaCaja;
+import com.betel.flowers.service.MarcaCajaService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -22,35 +20,28 @@ import javax.inject.Inject;
  *
  * @author luis
  */
-@Named(value = "causaBean")
+@Named(value = "marcaCajaBean")
 @ViewScoped
-public class CausaBean implements Serializable {
+public class MarcaCajaBean implements Serializable{
 
-    private static final long serialVersionUID = -1764935876352186475L;
-
-    private Causa nuevo;
-    private Causa selected;
-    private List<Causa> causas;
-    private List<String> listmotivos;
-
+    private static final long serialVersionUID = 1240479047930374158L;
+    
+    private MarcaCaja nuevo;
+    private MarcaCaja selected;
+    private List<MarcaCaja> marcasCaja;
+    
     @Inject
-    private CausaService causaService;
-    @Inject
-    private MotivoService motivoServicce;
-
+    private MarcaCajaService marcaCajaService;
+    
     @PostConstruct
-    public void init() {
-        this.nuevo = new Causa();
+    public void init(){
+        this.nuevo = new MarcaCaja();
         this.selected = null;
-        this.causas = this.causaService.obtenerListFlag(1);
-        this.listmotivos = new ArrayList<>();
-        if (this.causas == null) {
-            this.causas = new ArrayList<>();
-        }
+        this.marcasCaja = this.marcaCajaService.obtenerListFlag(1);
     }
-
+    
     public void add(ActionEvent evt) {
-        Boolean exito = this.causaService.insert(this.nuevo);
+        Boolean exito = this.marcaCajaService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.init();
@@ -62,7 +53,7 @@ public class CausaBean implements Serializable {
 
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
-            Boolean exito = this.causaService.update(this.selected);
+            Boolean exito = this.marcaCajaService.update(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
                 this.init();
@@ -77,7 +68,7 @@ public class CausaBean implements Serializable {
 
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
-            Boolean exito = this.causaService.deteleFlag(this.selected);
+            Boolean exito = this.marcaCajaService.deteleFlag(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
@@ -90,36 +81,28 @@ public class CausaBean implements Serializable {
         }
     }
 
-    public Causa getNuevo() {
+    public MarcaCaja getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(Causa nuevo) {
+    public void setNuevo(MarcaCaja nuevo) {
         this.nuevo = nuevo;
     }
 
-    public Causa getSelected() {
+    public MarcaCaja getSelected() {
         return selected;
     }
 
-    public void setSelected(Causa selected) {
+    public void setSelected(MarcaCaja selected) {
         this.selected = selected;
     }
 
-    public List<Causa> getCausas() {
-        return causas;
+    public List<MarcaCaja> getMarcasCaja() {
+        return marcasCaja;
     }
 
-    public void setCausas(List<Causa> causas) {
-        this.causas = causas;
+    public void setMarcasCaja(List<MarcaCaja> marcasCaja) {
+        this.marcasCaja = marcasCaja;
     }
-
-    public List<String> getListmotivos() {
-        return listmotivos;
-    }
-
-    public void setListmotivos(List<String> listmotivos) {
-        this.listmotivos = listmotivos;
-    }
-
+    
 }
