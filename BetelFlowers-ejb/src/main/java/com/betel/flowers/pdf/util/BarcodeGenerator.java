@@ -5,7 +5,10 @@
  */
 package com.betel.flowers.pdf.util;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.Barcode39;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -61,7 +64,7 @@ public class BarcodeGenerator {
             StringBuilder sbca = new StringBuilder(claveAcceso);
             Barcode39 code39 = new Barcode39();
             code39.setCode(sbca.toString());
-            code39.setX(2f);
+            code39.setX(0.75f);
             code39.setBarHeight(50f);
             java.awt.Image im = code39.createAwtImage(Color.WHITE, Color.BLACK);
             int w = im.getWidth(null);

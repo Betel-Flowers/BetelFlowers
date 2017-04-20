@@ -32,8 +32,7 @@ public class Rendimiento extends BaseEntity {
     private Integer flag;
 
     @Reference
-    private Usuario operario;
-    
+    private Usuario operario;    
     @Reference
     private TipoTrabajo tipoTrabajo;
 

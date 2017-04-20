@@ -112,6 +112,7 @@ public class RendimientoService implements Serializable{
         );
         UpdateOperations<Rendimiento> update = this.ds.createUpdateOperations(Rendimiento.class);
         update.set("barcode", rendimiento.getBarcode()).
+                set("tipoTrabajo", rendimiento.getTipoTrabajo()).
                 set("fechaIn", rendimiento.getFechaIn()).
                 set("fechaFin", rendimiento.getFechaFin()).
                 set("cantidad", rendimiento.getCantidad()).

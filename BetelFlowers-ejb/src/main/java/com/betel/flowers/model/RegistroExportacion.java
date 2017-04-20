@@ -6,6 +6,8 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
@@ -41,12 +43,15 @@ public class RegistroExportacion extends BaseEntity {
     private BodegaVirtual bodega;
     @Reference
     private Variedad variedad;
+    @Reference
+    private List<Rendimiento> redimientos;
 
     public RegistroExportacion() {
         this.numeroRamos = 1;
         this.numeroTallosRamo = 1;
         this.bodega = new BodegaVirtual();
         this.variedad = new Variedad();
+        this.redimientos = new ArrayList<>();
     }
 
     public Integer getCodigo() {
@@ -175,6 +180,14 @@ public class RegistroExportacion extends BaseEntity {
 
     public void setVariedad(Variedad variedad) {
         this.variedad = variedad;
+    }
+
+    public List<Rendimiento> getRedimientos() {
+        return redimientos;
+    }
+
+    public void setRedimientos(List<Rendimiento> redimientos) {
+        this.redimientos = redimientos;
     }
 
     @Override

@@ -86,11 +86,22 @@ public class RegistroExportacionService implements Serializable {
                 query.criteria("codigo").equal(registroExportacion.getCodigo())
         );
         UpdateOperations<RegistroExportacion> update = this.ds.createUpdateOperations(RegistroExportacion.class);
-        update.set("cantidad", registroExportacion.getNumeroRamos()).
+        update.set("numeroRamos", registroExportacion.getNumeroRamos()).
+                set("numeroTallosRamo", registroExportacion.getNumeroTallosRamo()).
+                set("longitud", registroExportacion.getLongitud()).
+                set("glongitud", registroExportacion.getGlongitud()).
+                set("puntoCorte", registroExportacion.getPuntoCorte()).
+                set("totalTallos", registroExportacion.getTotalTallos()).
                 set("barcode", registroExportacion.getBarcode()).
+                set("xml", registroExportacion.getXml()).
+                set("html", registroExportacion.getHtml()).
+                set("pdf", registroExportacion.getPdf()).
+                set("urlPdf", registroExportacion.getUrlPdf()).
                 set("bodega", registroExportacion.getBodega()).
                 set("variedad", registroExportacion.getVariedad()).
-                set("username", registroExportacion.getUsername());
+                set("rendimientos", registroExportacion.getRedimientos()).
+                set("username", registroExportacion.getUsername()).
+                set("flag", registroExportacion.getFlag());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();
     }
