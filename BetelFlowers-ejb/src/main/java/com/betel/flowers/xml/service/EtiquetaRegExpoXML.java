@@ -87,7 +87,6 @@ public class EtiquetaRegExpoXML implements Serializable {
             // output pretty printed
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
 
             jaxbMarshaller.marshal(etiqueta, file);
             jaxbMarshaller.marshal(etiqueta, System.out);

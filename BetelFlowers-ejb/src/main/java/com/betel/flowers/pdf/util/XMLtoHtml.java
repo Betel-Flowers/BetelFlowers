@@ -31,6 +31,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  *
@@ -52,9 +53,9 @@ public class XMLtoHtml implements Serializable {
             Source xslDoc = null;
             switch (Type) {
                 case 0:
+                    copyFile("/var/www/html/pdf/resources/tag/re/style.css", direccionDestino + "style.css");
                     BarcodeGenerator.createBarCode(direccionXML, direccionDestino);
                     xslDoc = new StreamSource(new File("/var/www/html/pdf/resources/tag/re/tagRegistroExportacion.xsl"));
-                    copyFile("/var/www/html/pdf/resources/tag/re/style.css", direccionDestino+"style.css");
                     break;
                 case 1:
                     xslDoc = new StreamSource(XMLtoHtml.class.getResourceAsStream("/rapidloans/pdf/res/rptpdf.xsl"));
@@ -97,12 +98,13 @@ public class XMLtoHtml implements Serializable {
 
         String checkedhtml = null;
         try {
-            String value = new String(Jsoup.parse(htmlString, "UTF-8").html().getBytes(), "UTF-8");
+            Document docHtml = Jsoup.parse(htmlString);
+            docHtml.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+            String value = new String(docHtml.html());
             checkedhtml = StringEscapeUtils.unescapeHtml4(value);
         } catch (Exception ex) {
             throw ex;
         }
-
         return checkedhtml;
     }
 

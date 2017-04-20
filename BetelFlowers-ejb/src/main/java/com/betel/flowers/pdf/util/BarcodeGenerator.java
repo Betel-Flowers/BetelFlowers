@@ -59,11 +59,11 @@ public class BarcodeGenerator {
             File archivo = new File(direccionXML);
             String claveAcceso = getClaveAcceso(archivo);
             StringBuilder sbca = new StringBuilder(claveAcceso);
-            Barcode39 codeEAN = new Barcode39();
-            codeEAN.setCode(sbca.toString());
-            codeEAN.setX(2f);
-            codeEAN.setBarHeight(50f);
-            java.awt.Image im = codeEAN.createAwtImage(Color.WHITE, Color.BLACK);
+            Barcode39 code39 = new Barcode39();
+            code39.setCode(sbca.toString());
+            code39.setX(2f);
+            code39.setBarHeight(50f);
+            java.awt.Image im = code39.createAwtImage(Color.WHITE, Color.BLACK);
             int w = im.getWidth(null);
             int h = im.getHeight(null);
             int type = BufferedImage.TYPE_INT_RGB;  // other options
