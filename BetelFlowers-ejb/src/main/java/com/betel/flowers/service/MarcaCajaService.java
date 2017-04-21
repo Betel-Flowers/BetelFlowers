@@ -68,17 +68,6 @@ public class MarcaCajaService implements Serializable {
         return list;
     }
 
-    public List<MarcaCaja> obtenerListPais(Pais pais) {
-        List<MarcaCaja> list = new ArrayList<>();
-        Query<MarcaCaja> result = this.ds.find(MarcaCaja.class).
-                field("pais").equal(pais).
-                field("flag").equal(1);
-        if (result.asList() != null && !result.asList().isEmpty()) {
-            list = result.asList();
-        }
-        return list;
-    }
-
     public MarcaCaja findByCodigo(MarcaCaja marcaCaja) {
         MarcaCaja find = new MarcaCaja();
         Query<MarcaCaja> result = this.ds.find(MarcaCaja.class).
