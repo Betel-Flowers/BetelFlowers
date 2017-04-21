@@ -8,13 +8,13 @@
 
     <ui:define name="content">
         <h:form id="fadd">
-            <p:panel header="Registrar Bloque">
+            <p:panel header="Registrar Marca Caja">
                 <h:panelGrid cellpadding="5" style="float: right">
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:outputLabel for="nombre" value="Nombre:"/>
-                    <p:spinner id="nombre" required="true" 
+                    <p:inputText id="nombre" required="true" 
                                value="#{marcaCajaBean.nuevo.nombre}"/>
                     <p:message for="nombre" display="tooltip" severity="error"/>
                 </h:panelGrid>
@@ -62,7 +62,7 @@
             </h:panelGrid>
         </h:form>
         <h:form id="fedit">
-            <p:dialog header="Modificar MarCue" widgetVar="dlgModifyMarC" resizable="false" 
+            <p:dialog header="Modificar Marca Caja" widgetVar="dlgModifyMarC" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="editEspe">
                     <h:panelGrid columns="3" cellpadding="5">
@@ -79,7 +79,7 @@
             </p:dialog>
         </h:form>
         <h:form id="fdelete">
-            <p:dialog header="Eliminar MarCue" widgetVar="dlgDeleteMarC" resizable="false" 
+            <p:dialog header="Eliminar Marca Caja" widgetVar="dlgDeleteMarC" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="deleteEspe">
                     <p:outputLabel value="Se eliminara el siguiente registro:"/>
