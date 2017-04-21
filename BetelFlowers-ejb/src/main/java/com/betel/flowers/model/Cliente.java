@@ -43,17 +43,20 @@ public class Cliente extends BaseEntity {
 
     @Reference
     private Ciudad ciudad;
+    @Reference
+    private ZonaGeografica zona;
     @Embedded
     private List<Telefono> telefonos;
     @Embedded
     private List<Correo> correos;
-    @Embedded
-    private List<Caja> cajas;
+    @Reference
+    private List<MarcaCaja> cajas;
     @Reference
     private List<Cliente> subClientes;
 
     public Cliente() {
         this.ciudad = new Ciudad();
+        this.zona = new ZonaGeografica();
         this.telefonos = new ArrayList<>();
         this.correos = new ArrayList<>();
         this.cajas = new ArrayList<>();
@@ -184,6 +187,14 @@ public class Cliente extends BaseEntity {
         this.ciudad = ciudad;
     }
 
+    public ZonaGeografica getZona() {
+        return zona;
+    }
+
+    public void setZona(ZonaGeografica zona) {
+        this.zona = zona;
+    }
+
     public List<Telefono> getTelefonos() {
         return telefonos;
     }
@@ -200,11 +211,11 @@ public class Cliente extends BaseEntity {
         this.correos = correos;
     }
 
-    public List<Caja> getCajas() {
+    public List<MarcaCaja> getCajas() {
         return cajas;
     }
 
-    public void setCajas(List<Caja> cajas) {
+    public void setCajas(List<MarcaCaja> cajas) {
         this.cajas = cajas;
     }
 

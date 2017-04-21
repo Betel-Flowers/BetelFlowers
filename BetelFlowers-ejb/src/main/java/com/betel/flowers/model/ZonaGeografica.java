@@ -16,17 +16,17 @@ import org.mongodb.morphia.annotations.Indexes;
  *
  * @author luis
  */
-@Entity(value = "MarcaCaja", noClassnameStored = true)
+@Entity(value = "ZonaGeografica", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class MarcaCaja extends BaseEntity {
+public class ZonaGeografica extends BaseEntity {
 
     private Integer codigo;
     private String nombre;
     private String username;
     private Integer flag;
 
-    public MarcaCaja() {
+    public ZonaGeografica() {
     }
 
     public Integer getCodigo() {
@@ -63,8 +63,8 @@ public class MarcaCaja extends BaseEntity {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 31 * hash + Objects.hashCode(this.codigo);
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -79,7 +79,7 @@ public class MarcaCaja extends BaseEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final MarcaCaja other = (MarcaCaja) obj;
+        final ZonaGeografica other = (ZonaGeografica) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -88,7 +88,6 @@ public class MarcaCaja extends BaseEntity {
 
     @Override
     public String toString() {
-        return "MarcaCaja{" + "codigo=" + codigo + ", nombre=" + nombre + ", flag=" + flag + '}';
+        return "ZonaGeografica{" + "codigo=" + codigo + ", nombre=" + nombre + ", username=" + username + ", flag=" + flag + '}';
     }
-
 }

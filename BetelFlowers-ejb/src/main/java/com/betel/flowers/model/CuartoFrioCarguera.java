@@ -11,22 +11,26 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexes;
+import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
  * @author luis
  */
-@Entity(value = "MarcaCaja", noClassnameStored = true)
+@Entity(value = "CuartoFrioCarguera", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class MarcaCaja extends BaseEntity {
-
+public class CuartoFrioCarguera extends BaseEntity{
+    
     private Integer codigo;
-    private String nombre;
+    private String descripcion;
     private String username;
     private Integer flag;
+    
+    @Reference
+    private BodegaCarguera bodega;
 
-    public MarcaCaja() {
+    public CuartoFrioCarguera() {
     }
 
     public Integer getCodigo() {
@@ -37,12 +41,12 @@ public class MarcaCaja extends BaseEntity {
         this.codigo = codigo;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getUsername() {
@@ -61,10 +65,18 @@ public class MarcaCaja extends BaseEntity {
         this.flag = flag;
     }
 
+    public BodegaCarguera getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(BodegaCarguera bodega) {
+        this.bodega = bodega;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 31 * hash + Objects.hashCode(this.codigo);
+        hash = 17 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -79,7 +91,7 @@ public class MarcaCaja extends BaseEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final MarcaCaja other = (MarcaCaja) obj;
+        final CuartoFrioCarguera other = (CuartoFrioCarguera) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -88,7 +100,7 @@ public class MarcaCaja extends BaseEntity {
 
     @Override
     public String toString() {
-        return "MarcaCaja{" + "codigo=" + codigo + ", nombre=" + nombre + ", flag=" + flag + '}';
+        return "CuartoFrioCarguera{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", username=" + username + ", flag=" + flag + ", bodega=" + bodega + '}';
     }
-
+    
 }

@@ -6,7 +6,9 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
+import java.util.List;
 import java.util.Objects;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -25,17 +27,18 @@ public class Carguera extends BaseEntity {
     private Integer codigo;
     private String nombre;
     private String ruc;
-    private String telefono;
-    private String correo1;
-    private String correo2;
     private String username;
     private Integer flag;
 
+    @Embedded
+    private List<Telefono> telefonos;
+    @Embedded
+    private List<Correo> correos;
     @Reference
-    private BodegaVirtual bodega;
+    private CuartoFrioCarguera cuartoFrio;
 
     public Carguera() {
-        this.bodega = new BodegaVirtual();
+        this.cuartoFrio = new CuartoFrioCarguera();
     }
 
     public Integer getCodigo() {
@@ -62,38 +65,6 @@ public class Carguera extends BaseEntity {
         this.ruc = ruc;
     }
 
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCorreo1() {
-        return correo1;
-    }
-
-    public void setCorreo1(String correo1) {
-        this.correo1 = correo1;
-    }
-
-    public String getCorreo2() {
-        return correo2;
-    }
-
-    public void setCorreo2(String correo2) {
-        this.correo2 = correo2;
-    }
-
-    public BodegaVirtual getBodega() {
-        return bodega;
-    }
-
-    public void setBodega(BodegaVirtual bodega) {
-        this.bodega = bodega;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -108,6 +79,30 @@ public class Carguera extends BaseEntity {
 
     public void setFlag(Integer flag) {
         this.flag = flag;
+    }
+
+    public List<Telefono> getTelefonos() {
+        return telefonos;
+    }
+
+    public void setTelefonos(List<Telefono> telefonos) {
+        this.telefonos = telefonos;
+    }
+
+    public List<Correo> getCorreos() {
+        return correos;
+    }
+
+    public void setCorreos(List<Correo> correos) {
+        this.correos = correos;
+    }
+
+    public CuartoFrioCarguera getCuartoFrio() {
+        return cuartoFrio;
+    }
+
+    public void setCuartoFrio(CuartoFrioCarguera cuartoFrio) {
+        this.cuartoFrio = cuartoFrio;
     }
 
     @Override
@@ -134,9 +129,10 @@ public class Carguera extends BaseEntity {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
-        return "Carguera{" + "codigo=" + codigo + ", nombre=" + nombre + ", ruc=" + ruc + ", telefono=" + telefono + ", correo1=" + correo1 + ", correo2=" + correo2 + ", bodega=" + bodega + '}';
+        return "Carguera{" + "codigo=" + codigo + ", nombre=" + nombre + ", ruc=" + ruc + ", username=" + username + ", flag=" + flag + ", telefonos=" + telefonos + ", correos=" + correos + ", cuartoFrio=" + cuartoFrio + '}';
     }
+    
 }
