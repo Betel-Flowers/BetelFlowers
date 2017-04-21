@@ -8,9 +8,11 @@ package com.betel.flowers.web.bean;
 import com.betel.flowers.model.Ciudad;
 import com.betel.flowers.model.Cliente;
 import com.betel.flowers.model.Pais;
+import com.betel.flowers.model.ZonaGeografica;
 import com.betel.flowers.service.CiudadService;
 import com.betel.flowers.service.ClienteService;
 import com.betel.flowers.service.PaisService;
+import com.betel.flowers.service.ZonaGeograficaService;
 import com.betel.flowers.web.bean.util.Cajas;
 import com.betel.flowers.web.bean.util.Correos;
 import com.betel.flowers.web.bean.util.SubCliente;
@@ -56,6 +58,8 @@ public class ClienteBean implements Serializable {
     private PaisService paisService;
     @Inject
     private CiudadService ciudadService;
+    @Inject
+    private ZonaGeograficaService zonaGeograficaService;
 
     @PostConstruct
     public void init() {
@@ -84,7 +88,9 @@ public class ClienteBean implements Serializable {
                 this.nuevo.setCorreos(this.correo.getCorreos());
                 this.nuevo.setCajas(this.caja.getCajas());
                 Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevo.getCiudad());
+                ZonaGeografica mzona = this.zonaGeograficaService.findByCodigo(this.nuevo.getZona());
                 this.nuevo.setCiudad(mciudad);
+                this.nuevo.setZona(mzona);
                 Boolean exito = this.clienteService.insert(this.nuevo);
                 if (exito) {
                     FacesUtil.addMessageInfo("Se ha guardado con exito.");

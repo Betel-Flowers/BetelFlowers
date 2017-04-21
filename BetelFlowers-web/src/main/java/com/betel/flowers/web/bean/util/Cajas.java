@@ -5,12 +5,14 @@
  */
 package com.betel.flowers.web.bean.util;
 
-import com.betel.flowers.model.Caja;
+import com.betel.flowers.model.MarcaCaja;
+import com.betel.flowers.service.MarcaCajaService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 
 /**
  *
@@ -21,13 +23,17 @@ public class Cajas implements Serializable{
     private static final long serialVersionUID = -7849298998466250785L;
     
     //agregar y eliminar
-    private Caja nuevo;
-    private Caja selected;
-    private List<Caja> cajas;
+    private MarcaCaja nuevo;
+    private MarcaCaja selected;
+    private List<MarcaCaja> cajas;
+    
+    @Inject
+    MarcaCajaService marcaCajaService;
 
     public Cajas() {
-        this.nuevo = new Caja();
+        this.nuevo = new MarcaCaja();
         this.selected = null;
+        this.marcaCajaService = new MarcaCajaService();
         if (this.cajas == null) {
             this.cajas = new ArrayList<>();
         }
@@ -35,19 +41,19 @@ public class Cajas implements Serializable{
 
     public void add(ActionEvent evt) {
         if (this.nuevo != null && this.cajas != null) {
-            int index = this.cajas.size();
-            this.nuevo.setIndex(index);
+            MarcaCaja mCaja = this.marcaCajaService.findByCodigo(this.nuevo);
+            this.setNuevo(mCaja);
             Boolean exito = this.cajas.add(this.nuevo);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
-                this.nuevo = new Caja();
+                this.nuevo = new MarcaCaja();
             } else {
                 FacesUtil.addMessageError(null, "No se ha agregado.");
             }
         }
     }
 
-    public void remove(ActionEvent evt, Caja select) {
+    public void remove(ActionEvent evt, MarcaCaja select) {
         this.selected = select;
         if (this.selected != null
                 && this.cajas != null
@@ -62,27 +68,27 @@ public class Cajas implements Serializable{
         }
     }
 
-    public Caja getNuevo() {
+    public MarcaCaja getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(Caja nuevo) {
+    public void setNuevo(MarcaCaja nuevo) {
         this.nuevo = nuevo;
     }
 
-    public Caja getSelected() {
+    public MarcaCaja getSelected() {
         return selected;
     }
 
-    public void setSelected(Caja selected) {
+    public void setSelected(MarcaCaja selected) {
         this.selected = selected;
     }
 
-    public List<Caja> getCajas() {
+    public List<MarcaCaja> getCajas() {
         return cajas;
     }
 
-    public void setCajas(List<Caja> cajas) {
+    public void setCajas(List<MarcaCaja> cajas) {
         this.cajas = cajas;
     }
 }

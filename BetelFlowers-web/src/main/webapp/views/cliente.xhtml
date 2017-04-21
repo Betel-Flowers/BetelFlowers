@@ -46,7 +46,7 @@
                                  value="#{clienteBean.nuevo.ruc}"/>
                     <p:message for="ruc" display="tooltip" severity="error"/>
                 </h:panelGrid>
-                <h:panelGrid columns="6" cellpadding="5">
+                <h:panelGrid columns="9" cellpadding="5">
                     <p:outputLabel for="pais" value="Pais:"/>
                     <p:selectOneMenu id="pais" required="true"
                                      value="#{clienteBean.nuevo.ciudad.pais.codigo}">
@@ -65,6 +65,15 @@
                                        itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
                     </p:selectOneMenu>
                     <p:message for="ciudad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="zonaGeo" value="Zona Geografica:"/>
+                    <p:selectOneMenu id="zonaGeo" required="true"
+                                     value="#{clienteBean.nuevo.zona.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{zonaGeograficaBean.zonasGeograficas}" var="zona"
+                                       itemLabel="#{zona.nombre}" itemValue="#{zona.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="zonaGeo" display="tooltip" severity="error"/>
                 </h:panelGrid>
                 <h:panelGrid columns="2" cellpadding="5">
                     <p:outputLabel for="direccion" value="Direccion:"/>
@@ -166,7 +175,7 @@
                                             <h:outputText value="Lista"/>
                                         </f:facet>
                                         <p:column headerText="Marca">
-                                            <h:outputText value="#{cja.marca}" />
+                                            <h:outputText value="#{cja.nombre}" />
                                         </p:column>
                                         <p:column style="width:32px;text-align: center">
                                             <p:commandButton update=":fadd:outDetail"
@@ -296,11 +305,13 @@
                 <p:outputPanel id="outCaja">
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel for="ecajas" value="Marca:"/>
-                        <p:inputText id="ecajas" required="true" 
-                                     value="#{clienteBean.caja.nuevo.marca}"/>
+                        <p:selectOneMenu id="ecajas" required="true" 
+                                         value="#{clienteBean.caja.nuevo.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{marcaCajaBean.marcasCaja}" var="mrc"
+                                           itemLabel="#{mrc.nombre}" itemValue="#{mrc.codigo}"/>
+                        </p:selectOneMenu>
                         <p:message for="ecajas" display="tooltip" severity="error"/>
-
-
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">

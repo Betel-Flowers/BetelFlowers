@@ -5,13 +5,10 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.BodegaVirtual;
-import com.betel.flowers.model.Carguera;
-import com.betel.flowers.service.BodegaVirtualService;
-import com.betel.flowers.service.CargueraService;
+import com.betel.flowers.model.ZonaGeografica;
+import com.betel.flowers.service.ZonaGeograficaService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -23,34 +20,29 @@ import javax.inject.Inject;
  *
  * @author luis
  */
-@Named(value = "cargueraBean")
+@Named(value = "zonaGeograficaBean")
 @ViewScoped
-public class CargueraBean implements Serializable {
+public class ZonaGeograficaBean implements Serializable{
 
-    private static final long serialVersionUID = 8503479427821744033L;
+    private static final long serialVersionUID = 7622018069412573367L;
 
-    private Carguera nuevo;
-    private Carguera selected;
-    private List<Carguera> cargueras;
-
+    private ZonaGeografica nuevo;
+    private ZonaGeografica selected;
+    private List<ZonaGeografica> zonasGeograficas;
+    
     @Inject
-    private CargueraService cargueraService;
-    @Inject
-    private BodegaVirtualService bodegaService;
-
+    private ZonaGeograficaService zonaGeograficaService;
+    
     @PostConstruct
-    public void init() {
-        this.nuevo = new Carguera();
+    public void init(){
+        this.nuevo = new ZonaGeografica();
         this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
-        this.cargueras = this.cargueraService.obtenerListFlag(1);
-        if (this.cargueras == null) {
-            this.cargueras = new ArrayList<>();
-        }
+        this.zonasGeograficas = this.zonaGeograficaService.obtenerListFlag(1);
     }
-
+    
     public void add(ActionEvent evt) {
-        Boolean exito = this.cargueraService.insert(this.nuevo);
+        Boolean exito = this.zonaGeograficaService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.init();
@@ -62,7 +54,7 @@ public class CargueraBean implements Serializable {
 
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
-            Boolean exito = this.cargueraService.update(this.selected);
+            Boolean exito = this.zonaGeograficaService.update(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha modifcado con exito.");
                 this.init();
@@ -77,7 +69,7 @@ public class CargueraBean implements Serializable {
 
     public void remove(ActionEvent evt) {
         if (this.selected != null) {
-            Boolean exito = this.cargueraService.deteleFlag(this.selected);
+            Boolean exito = this.zonaGeograficaService.deteleFlag(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado con exito.");
                 this.init();
@@ -89,29 +81,29 @@ public class CargueraBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
-    public Carguera getNuevo() {
+
+    public ZonaGeografica getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(Carguera nuevo) {
+    public void setNuevo(ZonaGeografica nuevo) {
         this.nuevo = nuevo;
     }
 
-    public Carguera getSelected() {
+    public ZonaGeografica getSelected() {
         return selected;
     }
 
-    public void setSelected(Carguera selected) {
+    public void setSelected(ZonaGeografica selected) {
         this.selected = selected;
     }
 
-    public List<Carguera> getCargueras() {
-        return cargueras;
+    public List<ZonaGeografica> getZonasGeograficas() {
+        return zonasGeograficas;
     }
 
-    public void setCargueras(List<Carguera> cargueras) {
-        this.cargueras = cargueras;
+    public void setZonasGeograficas(List<ZonaGeografica> zonasGeograficas) {
+        this.zonasGeograficas = zonasGeograficas;
     }
-
+    
 }
