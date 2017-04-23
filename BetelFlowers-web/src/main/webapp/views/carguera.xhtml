@@ -7,7 +7,116 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        
+        <h:form id="fadd">
+            <p:panel header="Registrar Carguera">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="nombre" value="Nombre:"/>
+                    <p:inputText id="nombre" required="true"
+                                 value="#{cargueraBean.nuevo.nombre}"/>
+                    <p:message for="nombre" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="ruc" value="RUC:"/>
+                    <p:inputText id="ruc" required="true"
+                                 value="#{cargueraBean.nuevo.ruc}"/>
+                    <p:message for="ruc" display="tooltip" severity="error"/>                   
+                </h:panelGrid>
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="pais" value="Pais:"/>
+                    <p:selectOneMenu id="pais" required="true"
+                                     value="#{cargueraBean.nuevo.ciudad.pais.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{paisBean.paices}" var="pass"
+                                       itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
+                        <p:ajax update=":fadd:ciudad" listener="#{cargueraBean.changePais}"/>
+                    </p:selectOneMenu>
+                    <p:message for="pais" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="ciudad" value="Ciudad:"/>
+                    <p:selectOneMenu id="ciudad" required="true"
+                                     value="#{cargueraBean.nuevo.ciudad.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{cargueraBean.ciudades}" var="ciu"
+                                       itemLabel="#{cui.nombre}" itemValue="#{ciu.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="ciudad" display="tooltip" severity="error"/>
+
+                    <p:outputLabel for="bodega" value="Bodega:"/>
+                    <p:selectOneMenu id="bodega" required="true"
+                                     value="#{cargueraBean.nuevo.cuartoFrio.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{bodegaCargueraBean.bodegas}" var="bodc"
+                                       itemLabel="#{bodc.nombre}" itemValue="#{bodc.codigo}"/>
+                        <p:ajax update=":fadd:cuartofrio" listener="#{cargueraBean.changeBodega}"/>
+                    </p:selectOneMenu>
+                    <p:message for="bodega" display="tooltip" severity="error"/>                        
+
+                    <p:outputLabel for="cuartofrio" value="Cuarto Frio:"/>
+                    <p:selectOneMenu id="cuartofrio" required="true"
+                                     value="#{cargueraBean.nuevo.cuartoFrio.codigo}">
+                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{cargueraBean.cuartosFrio}" var="cfc"
+                                       itemLabel="#{cfc.descripcion}" itemValue="#{cfc.codigo}"/>
+                    </p:selectOneMenu>
+                    <p:message for="cuartofrio" display="tooltip" severity="error"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form id="fedit1">
+            <p:dialog header="Agregar Telefono" widgetVar="dlgTelefono" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outTlf">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="etelefono" value="Numero:"/>
+                        <p:inputText id="etelefono" required="true" 
+                                     value="#{clienteBean.telefono.nuevo.numero}"/>
+                        <p:message for="etelefono" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="tipoTelefono" value="Tipo:"/>
+                        <p:selectOneMenu id="tipoTelefono" required="true" 
+                                         value="#{clienteBean.telefono.nuevo.tipo}">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Facturacion" itemValue="Facturacion"/>
+                            <f:selectItem itemLabel="Cobranzas" itemValue="Cobranzas"/>
+                            <f:selectItem itemLabel="Ventas" itemValue="Ventas"/>
+                            <f:selectItem itemLabel="Alterno" itemValue="Alterno"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipoTelefono" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" update=":fedit1, :fadd:messages, :fadd:outDetail" 
+                                     actionListener="#{clienteBean.telefono.add(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fedit2"> 
+            <p:dialog header="Agregar Correo" widgetVar="dlgCorreo" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outEmail">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="ecorreo" value="Numero:"/>
+                        <p:inputText id="ecorreo" required="true" 
+                                     value="#{clienteBean.correo.nuevo.email}"/>
+                        <p:message for="ecorreo" display="tooltip" severity="error"/>
+
+                        <p:outputLabel for="tipoCorreo" value="Tipo:"/>
+                        <p:selectOneMenu id="tipoCorreo" required="true" 
+                                         value="#{clienteBean.correo.nuevo.tipo}">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Facturacion" itemValue="Facturacion"/>
+                            <f:selectItem itemLabel="Cobranzas" itemValue="Cobranzas"/>
+                            <f:selectItem itemLabel="Ventas" itemValue="Ventas"/>
+                            <f:selectItem itemLabel="Alterno" itemValue="Alterno"/>
+                        </p:selectOneMenu>
+                        <p:message for="tipoCorreo" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" update=":fedit2, :fadd:messages, :fadd:outDetail" 
+                                     actionListener="#{clienteBean.correo.add(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>

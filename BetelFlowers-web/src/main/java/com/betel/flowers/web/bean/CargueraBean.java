@@ -5,10 +5,18 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.BodegaVirtual;
+import com.betel.flowers.model.BodegaCarguera;
 import com.betel.flowers.model.Carguera;
-import com.betel.flowers.service.BodegaVirtualService;
+import com.betel.flowers.model.Ciudad;
+import com.betel.flowers.model.CuartoFrioCarguera;
+import com.betel.flowers.model.Pais;
+import com.betel.flowers.service.BodegaCargueraService;
 import com.betel.flowers.service.CargueraService;
+import com.betel.flowers.service.CiudadService;
+import com.betel.flowers.service.CuartoFrioCargueraService;
+import com.betel.flowers.service.PaisService;
+import com.betel.flowers.web.bean.util.Correos;
+import com.betel.flowers.web.bean.util.Telefonos;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,17 +40,31 @@ public class CargueraBean implements Serializable {
     private Carguera nuevo;
     private Carguera selected;
     private List<Carguera> cargueras;
+    private Telefonos telefono;
+    private Correos correo;
+    private List<Ciudad> ciudades;
+    private List<CuartoFrioCarguera> cuartosFrio;
 
     @Inject
     private CargueraService cargueraService;
     @Inject
-    private BodegaVirtualService bodegaService;
+    private BodegaCargueraService bodegaService;
+    @Inject
+    private CuartoFrioCargueraService cuartoFrioService;
+    @Inject
+    private PaisService paisService;
+    @Inject
+    private CiudadService ciudadService;
 
     @PostConstruct
     public void init() {
         this.nuevo = new Carguera();
         this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
+        this.telefono = new Telefonos();
+        this.correo = new Correos();
+        this.ciudades = new ArrayList<>();
+        this.cuartosFrio = new ArrayList<>();
         this.cargueras = this.cargueraService.obtenerListFlag(1);
         if (this.cargueras == null) {
             this.cargueras = new ArrayList<>();
@@ -89,7 +111,23 @@ public class CargueraBean implements Serializable {
             FacesUtil.addMessageWarn(null, "Seleccione un registro.");
         }
     }
-    
+
+    public void changePais() {
+        if (this.nuevo.getCiudad().getPais().getCodigo() != null) {
+            this.ciudades = new ArrayList<>();
+            Pais mpais = this.paisService.findByCodigo(this.nuevo.getCiudad().getPais());
+            this.setCiudades(this.ciudadService.obtenerListPais(mpais));
+        }
+    }
+
+    public void changeBodega() {
+        if (this.nuevo.getCuartoFrio().getBodega().getCodigo() != null) {
+            this.cuartosFrio = new ArrayList<>();
+            BodegaCarguera mbodega = this.bodegaService.findByCodigo(this.nuevo.getCuartoFrio().getBodega());
+            this.setCuartosFrio(this.cuartoFrioService.obtenerListBodega(mbodega));
+        }
+    }
+
     public Carguera getNuevo() {
         return nuevo;
     }
@@ -112,6 +150,38 @@ public class CargueraBean implements Serializable {
 
     public void setCargueras(List<Carguera> cargueras) {
         this.cargueras = cargueras;
+    }
+
+    public Telefonos getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(Telefonos telefono) {
+        this.telefono = telefono;
+    }
+
+    public Correos getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(Correos correo) {
+        this.correo = correo;
+    }
+
+    public List<Ciudad> getCiudades() {
+        return ciudades;
+    }
+
+    public void setCiudades(List<Ciudad> ciudades) {
+        this.ciudades = ciudades;
+    }
+
+    public List<CuartoFrioCarguera> getCuartosFrio() {
+        return cuartosFrio;
+    }
+
+    public void setCuartosFrio(List<CuartoFrioCarguera> cuartosFrio) {
+        this.cuartosFrio = cuartosFrio;
     }
 
 }
