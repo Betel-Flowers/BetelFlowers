@@ -6,6 +6,7 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Embedded;
@@ -36,9 +37,14 @@ public class Carguera extends BaseEntity {
     private List<Correo> correos;
     @Reference
     private CuartoFrioCarguera cuartoFrio;
+    @Reference
+    private Ciudad ciudad;
 
     public Carguera() {
+        this.telefonos = new ArrayList<>();
+        this.correos = new ArrayList<>();
         this.cuartoFrio = new CuartoFrioCarguera();
+        this.ciudad = new Ciudad();
     }
 
     public Integer getCodigo() {
@@ -103,6 +109,14 @@ public class Carguera extends BaseEntity {
 
     public void setCuartoFrio(CuartoFrioCarguera cuartoFrio) {
         this.cuartoFrio = cuartoFrio;
+    }
+
+    public Ciudad getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(Ciudad ciudad) {
+        this.ciudad = ciudad;
     }
 
     @Override

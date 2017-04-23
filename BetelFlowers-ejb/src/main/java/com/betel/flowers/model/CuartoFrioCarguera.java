@@ -31,6 +31,7 @@ public class CuartoFrioCarguera extends BaseEntity{
     private BodegaCarguera bodega;
 
     public CuartoFrioCarguera() {
+        this.bodega = new BodegaCarguera();
     }
 
     public Integer getCodigo() {

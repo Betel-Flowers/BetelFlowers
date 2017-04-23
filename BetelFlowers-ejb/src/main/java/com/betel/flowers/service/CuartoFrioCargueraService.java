@@ -5,6 +5,7 @@
  */
 package com.betel.flowers.service;
 
+import com.betel.flowers.model.BodegaCarguera;
 import com.betel.flowers.model.CuartoFrioCarguera;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
@@ -61,6 +62,17 @@ public class CuartoFrioCargueraService implements Serializable{
         List<CuartoFrioCarguera> list = new ArrayList<>();
         Query<CuartoFrioCarguera> result = this.ds.find(CuartoFrioCarguera.class).
                 field("flag").equal(flag);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        return list;
+    }
+    
+    public List<CuartoFrioCarguera> obtenerListBodega(BodegaCarguera bodega) {
+        List<CuartoFrioCarguera> list = new ArrayList<>();
+        Query<CuartoFrioCarguera> result = this.ds.find(CuartoFrioCarguera.class).
+                field("bodega").equal(bodega).
+                field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             list = result.asList();
         }
