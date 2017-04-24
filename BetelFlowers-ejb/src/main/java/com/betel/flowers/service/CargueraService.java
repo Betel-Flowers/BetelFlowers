@@ -115,7 +115,7 @@ public class CargueraService implements Serializable {
                 set("ruc", carguera.getRuc()).
                 set("telefonos", carguera.getTelefonos()).
                 set("correos", carguera.getCorreos()).
-                set("bodega", carguera.getCuartoFrio()).
+                set("cuartoFrio", carguera.getCuartoFrio()).
                 set("username", carguera.getUsername()).
                 set("flag", carguera.getFlag());
         UpdateResults results = this.ds.update(query, update);
