@@ -8,8 +8,10 @@ package com.betel.flowers.web.bean;
 import com.betel.flowers.model.BodegaCarguera;
 import com.betel.flowers.model.Carguera;
 import com.betel.flowers.model.Ciudad;
+import com.betel.flowers.model.Correo;
 import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Pais;
+import com.betel.flowers.model.Telefono;
 import com.betel.flowers.service.BodegaCargueraService;
 import com.betel.flowers.service.CargueraService;
 import com.betel.flowers.service.CiudadService;
@@ -44,6 +46,9 @@ public class CargueraBean implements Serializable {
     private Correos correo;
     private List<Ciudad> ciudades;
     private List<CuartoFrioCarguera> cuartosFrio;
+    private Boolean AddModify;
+    private List<Telefono> telefonos;
+    private List<Correo> correos;
 
     @Inject
     private CargueraService cargueraService;
@@ -65,6 +70,9 @@ public class CargueraBean implements Serializable {
         this.correo = new Correos();
         this.ciudades = new ArrayList<>();
         this.cuartosFrio = new ArrayList<>();
+        this.AddModify = Boolean.TRUE;
+        this.telefonos = new ArrayList<>();
+        this.correos = new ArrayList<>();
         this.cargueras = this.cargueraService.obtenerListFlag(1);
         if (this.cargueras == null) {
             this.cargueras = new ArrayList<>();
@@ -72,32 +80,58 @@ public class CargueraBean implements Serializable {
     }
 
     public void add(ActionEvent evt) {
-        Boolean exito = this.cargueraService.insert(this.nuevo);
-        if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
-            this.init();
+        if (this.telefono.getTelefonos() != null && !this.telefono.getTelefonos().isEmpty()) {
+            if (this.correo.getCorreos() != null && !this.correo.getCorreos().isEmpty()) {
+                this.nuevo.setTelefonos(this.telefono.getTelefonos());
+                this.nuevo.setCorreos(this.correo.getCorreos());
+                Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevo.getCiudad());
+                CuartoFrioCarguera mfrioc = this.cuartoFrioService.findByCodigo(this.nuevo.getCuartoFrio());
+                this.nuevo.setCiudad(mciudad);
+                this.nuevo.setCuartoFrio(mfrioc);
+                Boolean exito = this.cargueraService.insert(this.nuevo);
+                if (exito) {
+                    FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                    this.init();
+                } else {
+                    FacesUtil.addMessageError(null, "No se ha guardado.");
+                    this.init();
+                }
+            } else {
+                FacesUtil.addMessageWarn(null, "Ingrese al menos un e-mail.");
+            }
         } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
-            this.init();
+            FacesUtil.addMessageWarn(null, "Ingrese al menos un telefono.");
         }
     }
 
     public void modify(ActionEvent evt) {
-        if (this.selected != null) {
-            Boolean exito = this.cargueraService.update(this.selected);
-            if (exito) {
-                FacesUtil.addMessageInfo("Se ha modifcado con exito.");
-                this.init();
+        if (this.telefono.getTelefonos() != null && !this.telefono.getTelefonos().isEmpty()) {
+            if (this.correo.getCorreos() != null && !this.correo.getCorreos().isEmpty()) {
+                this.nuevo.setTelefonos(this.telefono.getTelefonos());
+                this.nuevo.setCorreos(this.correo.getCorreos());
+                Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevo.getCiudad());
+                CuartoFrioCarguera mfrioc = this.cuartoFrioService.findByCodigo(this.nuevo.getCuartoFrio());
+                this.nuevo.setCiudad(mciudad);
+                this.nuevo.setCuartoFrio(mfrioc);
+                setSelected(this.nuevo);
+                Boolean exito = this.cargueraService.update(getSelected());
+                if (exito) {
+                    FacesUtil.addMessageInfo("Se ha modifcado con exito.");
+                    this.init();
+                } else {
+                    FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
+                    this.init();
+                }
             } else {
-                FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
-                this.init();
+                FacesUtil.addMessageWarn(null, "Ingrese al menos un e-mail.");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageWarn(null, "Ingrese al menos un telefono.");
         }
     }
 
-    public void remove(ActionEvent evt) {
+    public void remove(ActionEvent evt, Carguera carguera) {
+        this.selected = carguera;
         if (this.selected != null) {
             Boolean exito = this.cargueraService.deteleFlag(this.selected);
             if (exito) {
@@ -126,6 +160,28 @@ public class CargueraBean implements Serializable {
             BodegaCarguera mbodega = this.bodegaService.findByCodigo(this.nuevo.getCuartoFrio().getBodega());
             this.setCuartosFrio(this.cuartoFrioService.obtenerListBodega(mbodega));
         }
+    }
+
+    public void viewListTelefonos(ActionEvent evt, Carguera carguera) {
+        List<Telefono> list = new ArrayList<>();
+        if (carguera.getTelefonos() != null && !carguera.getTelefonos().isEmpty()) {
+            list = carguera.getTelefonos();
+        }
+        this.telefonos = list;
+    }
+
+    public void viewListCorreos(ActionEvent evt, Carguera carguera) {
+        List<Correo> list = new ArrayList<>();
+        if (carguera.getCorreos() != null && !carguera.getCorreos().isEmpty()) {
+            list = carguera.getCorreos();
+        }
+        this.correos = list;
+    }
+
+    public void onRowSelect(ActionEvent evt, Carguera carguera) {
+        this.nuevo = carguera;
+        changeBodega();
+        changePais();
     }
 
     public Carguera getNuevo() {
@@ -182,6 +238,30 @@ public class CargueraBean implements Serializable {
 
     public void setCuartosFrio(List<CuartoFrioCarguera> cuartosFrio) {
         this.cuartosFrio = cuartosFrio;
+    }
+
+    public Boolean getAddModify() {
+        return AddModify;
+    }
+
+    public void setAddModify(Boolean AddModify) {
+        this.AddModify = AddModify;
+    }
+
+    public List<Telefono> getTelefonos() {
+        return telefonos;
+    }
+
+    public void setTelefonos(List<Telefono> telefonos) {
+        this.telefonos = telefonos;
+    }
+
+    public List<Correo> getCorreos() {
+        return correos;
+    }
+
+    public void setCorreos(List<Correo> correos) {
+        this.correos = correos;
     }
 
 }

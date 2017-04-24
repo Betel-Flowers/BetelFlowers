@@ -9,6 +9,9 @@
     <ui:define name="content">
         <h:form id="fadd">
             <p:panel header="Registrar Carguera">
+                <h:panelGrid cellpadding="5" style="float: right">
+                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:outputLabel for="nombre" value="Nombre:"/>
                     <p:inputText id="nombre" required="true"
@@ -36,13 +39,13 @@
                                      value="#{cargueraBean.nuevo.ciudad.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{cargueraBean.ciudades}" var="ciu"
-                                       itemLabel="#{cui.nombre}" itemValue="#{ciu.codigo}"/>
+                                       itemLabel="#{ciu.nombre}" itemValue="#{ciu.codigo}"/>
                     </p:selectOneMenu>
                     <p:message for="ciudad" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="bodega" value="Bodega:"/>
                     <p:selectOneMenu id="bodega" required="true"
-                                     value="#{cargueraBean.nuevo.cuartoFrio.codigo}">
+                                     value="#{cargueraBean.nuevo.cuartoFrio.bodega.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{bodegaCargueraBean.bodegas}" var="bodc"
                                        itemLabel="#{bodc.nombre}" itemValue="#{bodc.codigo}"/>
@@ -59,7 +62,139 @@
                     </p:selectOneMenu>
                     <p:message for="cuartofrio" display="tooltip" severity="error"/>
                 </h:panelGrid>
+                <h:panelGrid columns="1" cellspacing="5">
+                    <p:outputPanel id="outDetail">
+                        <p:tabView orientation="left">
+                            <p:tab title="Telefonos">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="telefonos" var="tlf" rows="4"
+                                                 paginator="true"
+                                                 paginatorPosition="Bottom"
+                                                 value="#{cargueraBean.telefono.telefonos}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Lista"/>
+                                        </f:facet>
+                                        <p:column headerText="Tipo">
+                                            <h:outputText value="#{tlf.tipo}" />
+                                        </p:column>
+                                        <p:column headerText="Numero">
+                                            <h:outputText value="#{tlf.numero}" />
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":fadd:outDetail"
+                                                             icon="ui-icon-close" title="Eliminar"
+                                                             actionListener="#{cargueraBean.telefono.remove(evt,tlf)}">
+                                                <f:setPropertyActionListener value="#{tlf}" target="#{cargueraBean.telefono.selected}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton value="Agregar" update=":fedit1:outTlf"
+                                                             oncomplete="PF('dlgTelefono').show()"/>
+                                        </f:facet>   
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Correos">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="correos" var="email" rows="4"
+                                                 paginator="true"
+                                                 paginatorPosition="Bottom"
+                                                 value="#{cargueraBean.correo.correos}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Lista"/>
+                                        </f:facet>
+                                        <p:column headerText="Tipo">
+                                            <h:outputText value="#{email.tipo}" />
+                                        </p:column>
+                                        <p:column headerText="e-mail">
+                                            <h:outputText value="#{email.email}" />
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":fadd:outDetail"
+                                                             icon="ui-icon-close" title="Eliminar"
+                                                             actionListener="#{cargueraBean.correo.remove(evt,email)}">
+                                                <f:setPropertyActionListener value="#{email}" target="#{cargueraBean.correo.selected}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton value="Agregar" update=":fedit2:outEmail"
+                                                             oncomplete="PF('dlgCorreo').show()"/>
+                                        </f:facet>   
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+                    </p:outputPanel>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+
+                    <p:commandButton id="btnAdd" value="Guardar" rendered="#{cargueraBean.addModify}" 
+                                     update=":fadd, :fcarg:dtcarg, :fadd:messages" 
+                                     actionListener="#{cargueraBean.add(evt)}"/>
+
+                    <p:commandButton id="btnModify" value="Modificar" rendered="#{not cargueraBean.addModify}" 
+                                     update=":fadd, :fcarg:dtcarg, :fadd:messages"
+                                     actionListener="#{cargueraBean.modify(evt)}"/>
+                </f:facet>
             </p:panel>
+        </h:form>
+        <h:form id="fcarg">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtcarg" var="carg" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             value="#{cargueraBean.cargueras}">
+
+                    <f:facet name="header">
+                        <h:outputText value="Bloques"/>
+                    </f:facet>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{carg.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Nombre" style="text-align: center">
+                        <h:outputText value="#{carg.nombre}"/>
+                    </p:column>
+                    <p:column headerText="RUC" style="text-align: center">
+                        <h:outputText value="#{carg.ruc}"/>
+                    </p:column>
+                    <p:column headerText="Pais" style="text-align: center">
+                        <h:outputText value="#{carg.ciudad.pais.nombre} "/>
+                        <h:outputText value="#{carg.ciudad.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Bodega" style="text-align: center">
+                        <h:outputText value="#{carg.cuartoFrio.bodega.nombre} "/>
+                        <h:outputText value="#{carg.cuartoFrio.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Telefonos" style="text-align: center">
+                        <p:commandLink value="Ver Lista" update=":fviewt:outViewT"
+                                       actionListener="#{cargueraBean.viewListTelefonos(evt, carg)}"
+                                       oncomplete="PF('dlgViewT').show()"/>
+                    </p:column>
+                    <p:column headerText="Correos" style="text-align: center">
+                        <p:commandLink value="Ver Lista" update=":fviewc:outViewC"
+                                       actionListener="#{cargueraBean.viewListCorreos(evt, carg)}"
+                                       oncomplete="PF('dlgViewC').show()"/>
+                    </p:column>
+                    <p:column headerText="Modificar" style="text-align: center">
+                        <p:commandButton value="Editar" update=":fadd, :fadd:btnAdd, :fadd:btnModify, :fadd:messages"
+                                         actionListener="#{cargueraBean.onRowSelect(evt,carg)}">
+                            <f:setPropertyActionListener value="#{carg}" target="#{cargueraBean.nuevo}" />
+                            <f:setPropertyActionListener value="#{carg.telefonos}" target="#{cargueraBean.telefono.telefonos}"/>
+                            <f:setPropertyActionListener value="#{carg.correos}" target="#{cargueraBean.correo.correos}"/>
+                            <f:setPropertyActionListener value="#{Boolean.TRUE}" target="#{cargueraBean.addModify}"/>
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Borrar" style="text-align: center">
+                        <p:commandButton value="Eliminar" update=":fadd:btnAdd, :fadd:btnModify, :fcarg:dtcarg, :fadd:messages"
+                                         actionListener="#{cargueraBean.remove(evt, carg)}">
+                            <f:setPropertyActionListener value="#{carg}" target="#{cargueraBean.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
         </h:form>
         <h:form id="fedit1">
             <p:dialog header="Agregar Telefono" widgetVar="dlgTelefono" resizable="false" 
@@ -68,16 +203,16 @@
                     <h:panelGrid columns="6" cellpadding="5">
                         <p:outputLabel for="etelefono" value="Numero:"/>
                         <p:inputText id="etelefono" required="true" 
-                                     value="#{clienteBean.telefono.nuevo.numero}"/>
+                                     value="#{cargueraBean.telefono.nuevo.numero}"/>
                         <p:message for="etelefono" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="tipoTelefono" value="Tipo:"/>
                         <p:selectOneMenu id="tipoTelefono" required="true" 
-                                         value="#{clienteBean.telefono.nuevo.tipo}">
+                                         value="#{cargueraBean.telefono.nuevo.tipo}">
                             <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
-                            <f:selectItem itemLabel="Facturacion" itemValue="Facturacion"/>
-                            <f:selectItem itemLabel="Cobranzas" itemValue="Cobranzas"/>
-                            <f:selectItem itemLabel="Ventas" itemValue="Ventas"/>
+                            <f:selectItem itemLabel="Coordinacion" itemValue="Coordinacion"/>
+                            <f:selectItem itemLabel="Operaciones" itemValue="Operaciones"/>
+                            <f:selectItem itemLabel="Administracion" itemValue="Administracion"/>
                             <f:selectItem itemLabel="Alterno" itemValue="Alterno"/>
                         </p:selectOneMenu>
                         <p:message for="tipoTelefono" display="tooltip" severity="error"/>
@@ -85,7 +220,7 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Agregar" update=":fedit1, :fadd:messages, :fadd:outDetail" 
-                                     actionListener="#{clienteBean.telefono.add(evt)}"/>
+                                     actionListener="#{cargueraBean.telefono.add(evt)}"/>
                 </f:facet>
             </p:dialog>
         </h:form>
@@ -96,16 +231,17 @@
                     <h:panelGrid columns="6" cellpadding="5">
                         <p:outputLabel for="ecorreo" value="Numero:"/>
                         <p:inputText id="ecorreo" required="true" 
-                                     value="#{clienteBean.correo.nuevo.email}"/>
+                                     value="#{cargueraBean.correo.nuevo.email}"/>
                         <p:message for="ecorreo" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="tipoCorreo" value="Tipo:"/>
                         <p:selectOneMenu id="tipoCorreo" required="true" 
-                                         value="#{clienteBean.correo.nuevo.tipo}">
+                                         value="#{cargueraBean.correo.nuevo.tipo}">
                             <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
-                            <f:selectItem itemLabel="Facturacion" itemValue="Facturacion"/>
-                            <f:selectItem itemLabel="Cobranzas" itemValue="Cobranzas"/>
-                            <f:selectItem itemLabel="Ventas" itemValue="Ventas"/>
+                            <f:selectItem itemLabel="Skype" itemValue="Skype"/>
+                            <f:selectItem itemLabel="Coordinacion" itemValue="Coordinacion"/>
+                            <f:selectItem itemLabel="Operaciones" itemValue="Operaciones"/>
+                            <f:selectItem itemLabel="Administracion" itemValue="Administracion"/>
                             <f:selectItem itemLabel="Alterno" itemValue="Alterno"/>
                         </p:selectOneMenu>
                         <p:message for="tipoCorreo" display="tooltip" severity="error"/>
@@ -113,8 +249,32 @@
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Agregar" update=":fedit2, :fadd:messages, :fadd:outDetail" 
-                                     actionListener="#{clienteBean.correo.add(evt)}"/>
+                                     actionListener="#{cargueraBean.correo.add(evt)}"/>
                 </f:facet>
+            </p:dialog>
+        </h:form>
+        <h:form id="fviewt">
+            <p:dialog header="Telefonos" widgetVar="dlgViewT" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outViewT">
+                    <p:dataList value="#{cargueraBean.telefonos}"
+                                var="tlfcar">
+                        <h:outputText value="#{tlfcar.tipo}:"/>
+                        <h:outputText value="#{tlfcar.numero}"/>
+                    </p:dataList>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <h:form id="fviewc">
+            <p:dialog header="Correos" widgetVar="dlgViewC" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outViewC">
+                    <p:dataList value="#{cargueraBean.correos}"
+                                var="emailcar">
+                        <h:outputText value="#{emailcar.tipo}:"/>
+                        <h:outputText value="#{emailcar.email}"/>
+                    </p:dataList>
+                </p:outputPanel>
             </p:dialog>
         </h:form>
     </ui:define>
