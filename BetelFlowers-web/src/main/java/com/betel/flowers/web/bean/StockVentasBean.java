@@ -7,10 +7,10 @@ package com.betel.flowers.web.bean;
 
 import com.betel.flowers.model.StockVenta;
 import com.betel.flowers.model.TipoCaja;
-import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.StockVentasService;
 import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.service.VariedadService;
+import com.betel.flowers.web.bean.util.DetalleCajaStock;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ public class StockVentasBean implements Serializable {
     private List<StockVenta> stockVentas;
     private List<StockVenta> stockVentasG;
     private Boolean gerated;
+    private DetalleCajaStock detalle;
 
     @Inject
     private StockVentasService stockVentaService;
@@ -54,6 +55,7 @@ public class StockVentasBean implements Serializable {
         this.selected = new StockVenta();
         this.stockVentas = new ArrayList<>();
         this.gerated = Boolean.TRUE;
+        this.detalle = new DetalleCajaStock();
         this.stockVentasG = this.stockVentaService.obtenerListFlag(1);
         if (this.stockVentasG == null) {
             this.stockVentasG = new ArrayList<>();
@@ -63,9 +65,7 @@ public class StockVentasBean implements Serializable {
     }
 
     public void generateContainer(ActionEvent evt) {
-        Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
         TipoCaja caja = this.tipoCajaService.findByCodigo(this.nuevo.getCaja());
-        this.nuevo.setVariedad(variedad);
         this.nuevo.setCaja(caja);
         this.nuevo.setCodigo(this.generatedTempCode());
         Boolean exito = this.stockVentas.add(this.nuevo);
@@ -73,7 +73,6 @@ public class StockVentasBean implements Serializable {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
             this.nuevo = new StockVenta();
             this.nuevo.setUsername("usertest");//usertest
-            this.nuevo.setVariedad(new Variedad());
             this.nuevo.setCaja(new TipoCaja());
             this.stateGenetated();
         } else {
@@ -83,9 +82,7 @@ public class StockVentasBean implements Serializable {
 
     public void updateContainer(ActionEvent evt) {
         if (this.selected != null && this.remove != null) {
-            Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad());
             TipoCaja caja = this.tipoCajaService.findByCodigo(this.selected.getCaja());
-            this.selected.setVariedad(variedad);
             this.selected.setCaja(caja);
             int index = this.stockVentas.indexOf(this.selected);
             Boolean exito = this.stockVentas.remove(this.remove);
@@ -207,17 +204,17 @@ public class StockVentasBean implements Serializable {
     }
 
     public void loadVariedad() {
-        Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad().getCodigo());
-        if (variedad.getCodigo() != null) {
-            this.nuevo.setVariedad(variedad);
-        }
+//        Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad().getCodigo());
+//        if (variedad.getCodigo() != null) {
+//            this.nuevo.setVariedad(variedad);
+//        }
     }
 
     public void loadVariedadSelected() {
-        Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad().getCodigo());
-        if (variedad.getCodigo() != null) {
-            this.selected.setVariedad(variedad);
-        }
+//        Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad().getCodigo());
+//        if (variedad.getCodigo() != null) {
+//            this.selected.setVariedad(variedad);
+//        }
     }
 
     public StockVenta getNuevo() {
@@ -258,6 +255,22 @@ public class StockVentasBean implements Serializable {
 
     public void setGerated(Boolean gerated) {
         this.gerated = gerated;
+    }
+    
+    public StockVenta getRemove() {
+        return remove;
+    }
+
+    public void setRemove(StockVenta remove) {
+        this.remove = remove;
+    }
+
+    public DetalleCajaStock getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(DetalleCajaStock detalle) {
+        this.detalle = detalle;
     }
 
 }

@@ -6,7 +6,6 @@
 package com.betel.flowers.web.bean.util;
 
 import com.betel.flowers.model.Correo;
-import com.betel.flowers.model.Telefono;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -4,22 +4,23 @@
                 template="./betel/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
         <h:form id="fadd">
-            <p:panel header="Registrar Stock Venta">
+            <p:panel header="Registro Stock Ventas">
                 <h:panelGrid cellpadding="5" style="float: right">
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                 </h:panelGrid>
                 <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel for="numCajas" value="Numero de Cajas:"/>
-                    <p:spinner id="numCajas" required="true" min="1" max="100"
-                               value="#{stockVentasBean.nuevo.numeroCajas}"/>
-                    <p:message for="numCajas" display="tooltip" severity="error"/>
+                    <p:outputLabel for="cantidadCajas" value="Cantidad Cajas:"/>
+                    <p:spinner id="cantidadCajas" required="true" min="1" max="100"
+                               value="#{stockVentasBean.nuevo.cantidadCajas}"/>
+                    <p:message for="cantidadCajas" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="tipoCaja" value="Tipo de Caja:"/>
-                    <p:selectOneMenu id="tipoCaja" required="true" style="width: 100%" 
+                    <p:selectOneMenu id="tipoCaja" required="true" 
                                      value="#{stockVentasBean.nuevo.caja.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="cajat" itemLabel="#{cajat.tipo} #{cajat.valor}"
@@ -28,13 +29,13 @@
                     <p:message for="tipoCaja" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="variedad" value="Variedad:"/>
-                    <p:selectOneMenu id="variedad" required="true" style="width: 100%" 
-                                     value="#{stockVentasBean.nuevo.variedad.codigo}">
+                    <p:selectOneMenu id="variedad" required="true" 
+                                     value="#{stockVentasBean.variedad.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
                                        itemValue="#{va.codigo}"/>
                         <p:ajax listener="#{stockVentasBean.loadVariedad}" 
-                                update=":fadd:cantidad, :fadd:ramos, :fadd:longitud, :fadd:puntoCorte" />
+                                update=":fadd:cantidad, :fadd:ramos, :fadd:longitud" />
                     </p:selectOneMenu>
                     <p:message for="variedad" display="tooltip" severity="error"/>
 
@@ -44,7 +45,7 @@
                     <p:message for="cantidad" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="ramos" value="Ramos de:"/>
-                    <p:selectOneMenu id="ramos" required="true" style="width: 100%" 
+                    <p:selectOneMenu id="ramos" required="true" 
                                      value="#{stockVentasBean.nuevo.numeroTallosRamo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{stockVentasBean.nuevo.variedad.ramos}"
@@ -53,22 +54,13 @@
                     <p:message for="ramos" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="longitud" value="Longitud:"/>
-                    <p:selectOneMenu id="longitud" required="true" style="width: 100%" 
+                    <p:selectOneMenu id="longitud" required="true" 
                                      value="#{stockVentasBean.nuevo.longitud}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{stockVentasBean.nuevo.variedad.longitudes}"
                                        var="lo" itemLabel="#{lo}" itemValue="#{lo}"/>
                     </p:selectOneMenu>
                     <p:message for="longitud" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="puntoCorte" value="Punto de Corte:"/>
-                    <p:selectOneMenu id="puntoCorte" required="true" style="width: 100%" 
-                                     value="#{stockVentasBean.nuevo.puntoCorte}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{stockVentasBean.nuevo.variedad.puntosCorte}"
-                                       var="pc" itemLabel="#{pc}" itemValue="#{pc}"/>
-                    </p:selectOneMenu>
-                    <p:message for="puntoCorte" display="tooltip" severity="error"/>
 
                     <p:outputLabel for="valor" value="Percio:"/>
                     <p:spinner id="valor" required="true" prefix="$ "
@@ -83,12 +75,12 @@
                 </f:facet>
             </p:panel>
         </h:form>
-        <h:form id="fsave">
-            <p:panel style="align-content: center; text-align: center">
-                <p:commandButton id="btnSend" value="Enviar" update=":fadd, :fdtstkv:dtstkv, :fadd:messages"
-                                 disabled="#{stockVentasBean.gerated}"
-                                 actionListener="#{stockVentasBean.add(evt)}"/>
-            </p:panel>
+        <h:form id="fcjamix">
+            <p:accordionPanel>
+                <p:tab title="Crear Caja Mixta">
+                   
+                </p:tab>
+            </p:accordionPanel>
         </h:form>
         <h:form id="fdetSV">
             <h:panelGrid style="margin: 0 auto;">
@@ -107,7 +99,7 @@
                         <h:outputText value="#{stkvs.caja.tipo} #{stkvs.caja.valor}"/>
                     </p:column>
                     <p:column headerText="Cajas" style="text-align: center">
-                        <h:outputText value="#{stkvs.numeroCajas}"/>
+                        <h:outputText value="#{stkvs.cantidadCajas}"/>
                     </p:column>
                     <p:column headerText="Variedad" style="text-align: center">
                         <h:outputText value="#{stkvs.variedad.nombre}"/>
@@ -136,9 +128,6 @@
                     <p:column headerText="Longitud" style="text-align: center">
                         <h:outputText value="#{stkvs.longitud}"/>
                     </p:column>
-                    <p:column headerText="Punto Corte" style="text-align: center">
-                        <h:outputText value="#{stkvs.puntoCorte}"/>
-                    </p:column>
                     <p:column headerText="Modificar" style="text-align: center">
                         <p:commandButton value="Editar" update=":fedit:editEspe, :fadd:messages"
                                          actionListener="#{stockVentasBean.enviarOriginalRegister(evt, stkvs)}"
@@ -154,6 +143,16 @@
                     </p:column>
                 </p:dataTable> 
             </h:panelGrid>
+        </h:form>
+        <h:form id="fmsgEditor">
+            <p:editor widgetVar="editor" value="#{stockVentasBean.nuevo.message}" height="150" style="margin-bottom:10px"/>
+        </h:form>
+        <h:form id="fsave">
+            <p:panel style="align-content: center; text-align: center">
+                <p:commandButton id="btnSend" value="Enviar" update=":fadd, :fdtstkv:dtstkv, :fadd:messages"
+                                 disabled="#{stockVentasBean.gerated}"
+                                 actionListener="#{stockVentasBean.add(evt)}"/>
+            </p:panel>
         </h:form>
         <h:form id="fdtstkv">
             <h:panelGrid style="margin: 0 auto;">
@@ -181,7 +180,7 @@
                         <h:outputText value="#{stkv.caja.tipo} #{stkv.caja.valor}"/>
                     </p:column>
                     <p:column headerText="Cajas" style="text-align: center">
-                        <h:outputText value="#{stkv.numeroCajas}"/>
+                        <h:outputText value="#{stkv.cantidadCajas}"/>
                     </p:column>
                     <p:column headerText="Variedad" style="text-align: center">
                         <h:outputText value="#{stkv.variedad.nombre}"/>
@@ -210,9 +209,6 @@
                     <p:column headerText="Longitud" style="text-align: center">
                         <h:outputText value="#{stkv.longitud}"/>
                     </p:column>
-                    <p:column headerText="Punto Corte" style="text-align: center">
-                        <h:outputText value="#{stkv.puntoCorte}"/>
-                    </p:column>
                     <p:column headerText="Username" style="text-align: center">
                         <h:outputText value="#{stkv.username}"/>
                     </p:column>
@@ -224,10 +220,10 @@
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="editEspe">
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel for="numCajas" value="Numero de Cajas:"/>
-                        <p:spinner id="numCajas" required="true" min="1" max="100"
-                                   value="#{stockVentasBean.selected.numeroCajas}"/>
-                        <p:message for="numCajas" display="tooltip" severity="error"/>
+                        <p:outputLabel for="cantidadCajas" value="Cantidad Cajas:"/>
+                        <p:spinner id="cantidadCajas" required="true" min="1" max="100"
+                                   value="#{stockVentasBean.selected.cantidadCajas}"/>
+                        <p:message for="cantidadCajas" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="tipoCaja" value="Tipo de Caja:"/>
                         <p:selectOneMenu id="tipoCaja" required="true" 
@@ -245,7 +241,7 @@
                             <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
                                            itemValue="#{va.codigo}"/>
                             <p:ajax listener="#{stockVentasBean.loadVariedadSelected}" 
-                                    update=":fedit:cantidad, :fedit:ramos, :fedit:longitud, :fedit:puntoCorte" />
+                                    update=":fedit:cantidad, :fedit:ramos, :fedit:longitud" />
                         </p:selectOneMenu>
                         <p:message for="variedad" display="tooltip" severity="error"/>
 
@@ -271,15 +267,6 @@
                                            var="lo" itemLabel="#{lo}" itemValue="#{lo}"/>
                         </p:selectOneMenu>
                         <p:message for="longitud" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="puntoCorte" value="Punto de Corte:"/>
-                        <p:selectOneMenu id="puntoCorte" required="true" 
-                                         value="#{stockVentasBean.selected.puntoCorte}">
-                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{stockVentasBean.selected.variedad.puntosCorte}"
-                                           var="pc" itemLabel="#{pc}" itemValue="#{pc}"/>
-                        </p:selectOneMenu>
-                        <p:message for="puntoCorte" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="valor" value="Percio:"/>
                         <p:spinner id="valor" required="true" prefix="$ "

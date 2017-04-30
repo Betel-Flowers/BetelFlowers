@@ -3117,7 +3117,7 @@
     color: #fff;
     padding-left: 8px; }
 .ui-accordion .ui-accordion-header.ui-state-default .ui-icon.ui-icon-triangle-1-e:before {
-    content: "icono-es"; }
+    content: "\f105"; }
 .ui-accordion .ui-accordion-header.ui-state-hover {
     background: #7FA128; }
 .ui-accordion .ui-accordion-header.ui-state-hover .ui-icon {
@@ -3138,7 +3138,7 @@
     color: #fff;
     padding-left: 5px; }
 .ui-accordion .ui-accordion-header.ui-state-active .ui-icon.ui-icon-triangle-1-s:before {
-    content: "icono-es"; }
+    content: "\f107"; }
 
 /* TabView */
 .ui-tabs.ui-tabs-scrollable .ui-icon.ui-icon-carat-1-w {
