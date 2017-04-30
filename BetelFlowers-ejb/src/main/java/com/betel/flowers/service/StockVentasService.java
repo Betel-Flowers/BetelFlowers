@@ -109,17 +109,14 @@ public class StockVentasService implements Serializable {
                 query.criteria("codigo").equal(stockVenta.getCodigo())
         );
         UpdateOperations<StockVenta> update = this.ds.createUpdateOperations(StockVenta.class);
-        update.set("numeroCajas", stockVenta.getNumeroCajas()).
-                set("numeroRamos", stockVenta.getNumeroRamos()).
-                set("numeroTallosRamo", stockVenta.getNumeroTallosRamo()).
-                set("longitud", stockVenta.getLongitud()).
-                set("puntoCorte", stockVenta.getPuntoCorte()).
+        update.set("cantidadCajas", stockVenta.getCantidadCajas()).
                 set("totalTallos", stockVenta.getTotalTallos()).
-                set("precio", stockVenta.getPrecio()).
-                set("subtotal", stockVenta.getSubtotal()).
-                set("barcode", stockVenta.getBarcode()).
-                set("variedad", stockVenta.getVariedad()).
+                set("detalleCajaStock", stockVenta.getDetalleCajaStock()).
                 set("caja", stockVenta.getCaja()).
+                set("precio", stockVenta.getPrecio()).
+                set("barcode", stockVenta.getBarcode()).
+                set("message", stockVenta.getMessage()).
+                set("urlhtml", stockVenta.getUrlhtml()).
                 set("username", stockVenta.getUsername()).
                 set("flag", stockVenta.getFlag());
         UpdateResults results = this.ds.update(query, update);

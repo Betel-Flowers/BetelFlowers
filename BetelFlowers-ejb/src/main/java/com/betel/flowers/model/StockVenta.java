@@ -6,7 +6,10 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -23,29 +26,24 @@ import org.mongodb.morphia.annotations.Reference;
 public class StockVenta extends BaseEntity {
 
     private Integer codigo;
-    private Integer numeroCajas;
-    private Integer numeroRamos;
-    private Integer numeroTallosRamo;
-    private Integer longitud;
-    private String puntoCorte;
+    private Integer cantidadCajas;
     private Integer totalTallos;
     private Double precio;
-    private Double subtotal;
     private String barcode;
+    private String message;
+    private String urlhtml;
     private String username;
     private Integer flag;
 
-    @Reference
-    private Variedad variedad;
+    @Embedded
+    private List<ItemCajaStock> detalleCajaStock;
     @Reference
     private TipoCaja caja;
 
     public StockVenta() {
         this.precio = 0.0;
-        this.numeroCajas = 1;
-        this.numeroRamos = 1;
-        this.numeroTallosRamo = 1;
-        this.variedad = new Variedad();
+        this.cantidadCajas = 1;
+        this.detalleCajaStock = new ArrayList<>();
         this.caja = new TipoCaja();
     }
 
@@ -57,16 +55,16 @@ public class StockVenta extends BaseEntity {
         this.codigo = codigo;
     }
 
-    public Integer getNumeroCajas() {
-        return numeroCajas;
+    public Integer getCantidadCajas() {
+        return cantidadCajas;
     }
 
-    public void setNumeroCajas(Integer numeroCajas) {
-        this.numeroCajas = numeroCajas;
+    public void setCantidadCajas(Integer cantidadCajas) {
+        this.cantidadCajas = cantidadCajas;
     }
 
     public Integer getTotalTallos() {
-        return getNumeroRamos() * getNumeroTallosRamo() * getNumeroCajas();
+        return this.totalTallos;
     }
 
     public void setTotalTallos(Integer totalTallos) {
@@ -81,12 +79,12 @@ public class StockVenta extends BaseEntity {
         this.precio = precio;
     }
 
-    public Variedad getVariedad() {
-        return variedad;
+    public List<ItemCajaStock> getDetalleCajaStock() {
+        return detalleCajaStock;
     }
 
-    public void setVariedad(Variedad variedad) {
-        this.variedad = variedad;
+    public void setDetalleCajaStock(List<ItemCajaStock> detalleCajaStock) {
+        this.detalleCajaStock = detalleCajaStock;
     }
 
     public TipoCaja getCaja() {
@@ -97,20 +95,28 @@ public class StockVenta extends BaseEntity {
         this.caja = caja;
     }
 
-    public Double getSubtotal() {
-        return getPrecio() * (double) (getTotalTallos());
-    }
-
-    public void setSubtotal(Double subtotal) {
-        this.subtotal = subtotal;
-    }
-
     public String getBarcode() {
         return barcode;
     }
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getUrlhtml() {
+        return urlhtml;
+    }
+
+    public void setUrlhtml(String urlhtml) {
+        this.urlhtml = urlhtml;
     }
 
     public String getUsername() {
@@ -156,38 +162,6 @@ public class StockVenta extends BaseEntity {
 
     @Override
     public String toString() {
-        return "StockVentas{" + "codigo=" + codigo + ", numeroCajas=" + numeroCajas + ", totalTallos=" + totalTallos + ", precio=" + precio + ", variedad=" + variedad + ", caja=" + caja + '}';
-    }
-
-    public Integer getNumeroRamos() {
-        return numeroRamos;
-    }
-
-    public void setNumeroRamos(Integer numeroRamos) {
-        this.numeroRamos = numeroRamos;
-    }
-
-    public Integer getNumeroTallosRamo() {
-        return numeroTallosRamo;
-    }
-
-    public void setNumeroTallosRamo(Integer numeroTallosRamo) {
-        this.numeroTallosRamo = numeroTallosRamo;
-    }
-
-    public Integer getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(Integer longitud) {
-        this.longitud = longitud;
-    }
-
-    public String getPuntoCorte() {
-        return puntoCorte;
-    }
-
-    public void setPuntoCorte(String puntoCorte) {
-        this.puntoCorte = puntoCorte;
+        return "StockVenta{" + "codigo=" + codigo + ", cantidadCajas=" + cantidadCajas + ", totalTallos=" + totalTallos + ", precio=" + precio + ", barcode=" + barcode + ", message=" + message + ", urlhtml=" + urlhtml + ", username=" + username + ", flag=" + flag + ", detalleCajaStock=" + detalleCajaStock + ", caja=" + caja + '}';
     }
 }
