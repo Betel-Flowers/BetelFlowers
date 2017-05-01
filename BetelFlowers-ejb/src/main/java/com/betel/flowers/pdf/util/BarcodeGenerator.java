@@ -5,10 +5,7 @@
  */
 package com.betel.flowers.pdf.util;
 
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.Barcode39;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
