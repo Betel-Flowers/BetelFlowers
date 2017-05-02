@@ -5,11 +5,11 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.ItemCajaStock;
 import com.betel.flowers.model.StockVenta;
 import com.betel.flowers.model.TipoCaja;
 import com.betel.flowers.service.StockVentasService;
 import com.betel.flowers.service.TipoCajaService;
-import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.bean.util.DetalleCajaStock;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
@@ -44,8 +44,6 @@ public class StockVentasBean implements Serializable {
     @Inject
     private StockVentasService stockVentaService;
     @Inject
-    private VariedadService variedadService;
-    @Inject
     private TipoCajaService tipoCajaService;
 
     @PostConstruct
@@ -68,15 +66,34 @@ public class StockVentasBean implements Serializable {
         TipoCaja caja = this.tipoCajaService.findByCodigo(this.nuevo.getCaja());
         this.nuevo.setCaja(caja);
         this.nuevo.setCodigo(this.generatedTempCode());
+        this.detalle.add(evt);
+        this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
         Boolean exito = this.stockVentas.add(this.nuevo);
         if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
+            FacesUtil.addMessageInfo("Exito.");
             this.nuevo = new StockVenta();
             this.nuevo.setUsername("usertest");//usertest
-            this.nuevo.setCaja(new TipoCaja());
+            this.detalle = new DetalleCajaStock();
             this.stateGenetated();
         } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
+            FacesUtil.addMessageError(null, "Falló.");
+        }
+    }
+
+    public void generateContainerMix(ActionEvent evt) {
+        TipoCaja caja = this.tipoCajaService.findByCodigo(this.nuevo.getCaja());
+        this.nuevo.setCaja(caja);
+        this.nuevo.setCodigo(this.generatedTempCode());
+        this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
+        Boolean exito = this.stockVentas.add(this.nuevo);
+        if (exito) {
+            FacesUtil.addMessageInfo("Exito.");
+            this.nuevo = new StockVenta();
+            this.nuevo.setUsername("usertest");//usertest
+            this.detalle = new DetalleCajaStock();
+            this.stateGenetated();
+        } else {
+            FacesUtil.addMessageError(null, "Falló.");
         }
     }
 
@@ -203,18 +220,14 @@ public class StockVentasBean implements Serializable {
         }
     }
 
-    public void loadVariedad() {
-//        Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad().getCodigo());
-//        if (variedad.getCodigo() != null) {
-//            this.nuevo.setVariedad(variedad);
-//        }
-    }
-
-    public void loadVariedadSelected() {
-//        Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad().getCodigo());
-//        if (variedad.getCodigo() != null) {
-//            this.selected.setVariedad(variedad);
-//        }
+    public List<ItemCajaStock> listBardodeInsideList(StockVenta barcodeItem) {
+        List<ItemCajaStock> list = new ArrayList<>();
+        if (barcodeItem != null) {
+            if (barcodeItem.getDetalleCajaStock() != null && !barcodeItem.getDetalleCajaStock().isEmpty()) {
+                list = barcodeItem.getDetalleCajaStock();
+            }
+        }
+        return list;
     }
 
     public StockVenta getNuevo() {
@@ -256,7 +269,7 @@ public class StockVentasBean implements Serializable {
     public void setGerated(Boolean gerated) {
         this.gerated = gerated;
     }
-    
+
     public StockVenta getRemove() {
         return remove;
     }

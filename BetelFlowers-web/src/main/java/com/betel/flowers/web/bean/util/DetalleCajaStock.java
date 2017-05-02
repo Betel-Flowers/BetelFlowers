@@ -6,11 +6,14 @@
 package com.betel.flowers.web.bean.util;
 
 import com.betel.flowers.model.ItemCajaStock;
+import com.betel.flowers.model.Variedad;
+import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 
 /**
  *
@@ -21,18 +24,20 @@ public class DetalleCajaStock implements Serializable {
     private ItemCajaStock nuevo;
     private ItemCajaStock selected;
     private List<ItemCajaStock> detalleCajaStock;
-    private List<ItemCajaStock> selectedItemsStock;
+
+    @Inject
+    private VariedadService variedadService;
 
     public DetalleCajaStock() {
         this.nuevo = new ItemCajaStock();
         this.selected = null;
         this.detalleCajaStock = new ArrayList<>();
+        this.variedadService = new VariedadService();
     }
-    
+
     public void add(ActionEvent evt) {
         if (this.nuevo != null && this.detalleCajaStock != null) {
-            int index = this.detalleCajaStock.size();
-            Boolean exito = this.detalleCajaStock.add(this.nuevo);
+            Boolean exito = this.detalleCajaStock.add(nuevo);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
                 this.nuevo = new ItemCajaStock();
@@ -54,6 +59,20 @@ public class DetalleCajaStock implements Serializable {
             } else {
                 FacesUtil.addMessageError(null, "No se ha eliminado.");
             }
+        }
+    }
+
+    public void loadVariedad() {
+        Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad().getCodigo());
+        if (variedad.getCodigo() != null) {
+            this.nuevo.setVariedad(variedad);
+        }
+    }
+
+    public void loadVariedadSelected() {
+        Variedad variedad = this.variedadService.findByCodigo(this.selected.getVariedad().getCodigo());
+        if (variedad.getCodigo() != null) {
+            this.selected.setVariedad(variedad);
         }
     }
 
@@ -80,13 +99,4 @@ public class DetalleCajaStock implements Serializable {
     public void setDetalleCajaStock(List<ItemCajaStock> detalleCajaStock) {
         this.detalleCajaStock = detalleCajaStock;
     }
-
-    public List<ItemCajaStock> getSelectedItemsStock() {
-        return selectedItemsStock;
-    }
-
-    public void setSelectedItemsStock(List<ItemCajaStock> selectedItemsStock) {
-        this.selectedItemsStock = selectedItemsStock;
-    }
-    
 }
