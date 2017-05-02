@@ -116,7 +116,10 @@ public class StockVentasService implements Serializable {
                 set("precio", stockVenta.getPrecio()).
                 set("barcode", stockVenta.getBarcode()).
                 set("message", stockVenta.getMessage()).
-                set("urlhtml", stockVenta.getUrlhtml()).
+                set("xml", stockVenta.getXml()).
+                set("html", stockVenta.getHtml()).
+                set("pdf", stockVenta.getPdf()).
+                set("urlPdf", stockVenta.getUrlPdf()).
                 set("username", stockVenta.getUsername()).
                 set("flag", stockVenta.getFlag());
         UpdateResults results = this.ds.update(query, update);

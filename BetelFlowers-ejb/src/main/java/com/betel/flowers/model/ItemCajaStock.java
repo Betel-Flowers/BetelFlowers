@@ -15,19 +15,17 @@ import org.mongodb.morphia.annotations.Reference;
 @Embedded
 public class ItemCajaStock {
 
-    private String barcode;
-    private Boolean mix;
     private Integer numeroRamos;
     private Integer numeroTallosRamo;
     private Integer longitud;
     private String glongitud;
-    
+
     @Reference
     private Variedad variedad;
 
     public ItemCajaStock() {
+        this.numeroRamos = 1;
         this.variedad = new Variedad();
-        this.mix = Boolean.FALSE;
     }
 
     public Variedad getVariedad() {
@@ -70,20 +68,10 @@ public class ItemCajaStock {
         this.glongitud = glongitud;
     }
 
-    public String getBarcode() {
-        return barcode;
+    @Override
+    public String toString() {
+        return "Variedad: " + variedad.getNombre() +" Numero Ramos: " + numeroRamos + ", Numero Tallos Ramo: " + numeroTallosRamo + ", Longitud: " + longitud + " " + glongitud+" ";
     }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
-
-    public Boolean getMix() {
-        return mix;
-    }
-
-    public void setMix(Boolean mix) {
-        this.mix = mix;
-    }
-
+    
+    
 }

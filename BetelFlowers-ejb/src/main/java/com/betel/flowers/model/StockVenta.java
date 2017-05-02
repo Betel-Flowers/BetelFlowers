@@ -31,7 +31,10 @@ public class StockVenta extends BaseEntity {
     private Double precio;
     private String barcode;
     private String message;
-    private String urlhtml;
+    private String xml;
+    private String html;
+    private String pdf;
+    private String urlPdf;
     private String username;
     private Integer flag;
 
@@ -111,12 +114,36 @@ public class StockVenta extends BaseEntity {
         this.message = message;
     }
 
-    public String getUrlhtml() {
-        return urlhtml;
+    public String getXml() {
+        return xml;
     }
 
-    public void setUrlhtml(String urlhtml) {
-        this.urlhtml = urlhtml;
+    public String getHtml() {
+        return html;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public String getUrlPdf() {
+        return urlPdf;
+    }
+
+    public void setXml(String xml) {
+        this.xml = xml;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
+    }
+
+    public void setUrlPdf(String urlPdf) {
+        this.urlPdf = urlPdf;
     }
 
     public String getUsername() {
@@ -162,6 +189,7 @@ public class StockVenta extends BaseEntity {
 
     @Override
     public String toString() {
-        return "StockVenta{" + "codigo=" + codigo + ", cantidadCajas=" + cantidadCajas + ", totalTallos=" + totalTallos + ", precio=" + precio + ", barcode=" + barcode + ", message=" + message + ", urlhtml=" + urlhtml + ", username=" + username + ", flag=" + flag + ", detalleCajaStock=" + detalleCajaStock + ", caja=" + caja + '}';
+        return "StockVenta{" + "codigo=" + codigo + ", cantidadCajas=" + cantidadCajas + ", totalTallos=" + totalTallos + ", precio=" + precio + ", barcode=" + barcode + ", message=" + message + ", xml=" + xml + ", html=" + html + ", pdf=" + pdf + ", urlPdf=" + urlPdf + ", username=" + username + ", flag=" + flag + ", detalleCajaStock=" + detalleCajaStock + ", caja=" + caja + '}';
     }
+
 }
