@@ -67,7 +67,7 @@ public class StockVenta extends BaseEntity {
     }
 
     public Integer getTotalTallos() {
-        return this.totalTallos;
+        return this.CalcularTotalTallos();
     }
 
     public void setTotalTallos(Integer totalTallos) {
@@ -160,6 +160,16 @@ public class StockVenta extends BaseEntity {
 
     public void setFlag(Integer flag) {
         this.flag = flag;
+    }
+
+    private Integer CalcularTotalTallos() {
+        Integer total = 0;
+        if (this.detalleCajaStock != null && !this.detalleCajaStock.isEmpty()) {
+            for (ItemCajaStock item : this.detalleCajaStock) {
+                total = total + item.getTotalTallos();
+            }
+        }
+        return total;
     }
 
     @Override

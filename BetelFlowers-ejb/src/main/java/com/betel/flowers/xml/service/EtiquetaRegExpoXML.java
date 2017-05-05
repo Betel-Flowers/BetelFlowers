@@ -55,7 +55,7 @@ public class EtiquetaRegExpoXML implements Serializable {
         } else {
             log.log(Level.INFO, "No se elimino el archivo: " + url + filename + "." + "xml");
         }
-        
+
         GregorianCalendar calendar = new GregorianCalendar();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
         EtiquetaRegExpo etiqueta = new EtiquetaRegExpo();
@@ -65,7 +65,7 @@ public class EtiquetaRegExpoXML implements Serializable {
         for (RegistroExportacion regExpo : barcodeList) {
             etiqueta.getDetalle().add(createTextItemDetail(creationDate, regExpo));
         }
-        createXML(url, filename+".xml", etiqueta);
+        createXML(url, filename + ".xml", etiqueta);
     }
 
     public DetalleRegExpo createTextItemDetail(Date creationDate, RegistroExportacion regExpo) {
@@ -74,6 +74,11 @@ public class EtiquetaRegExpoXML implements Serializable {
         SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
         item.setVariedad(regExpo.getVariedad().getNombre());
         item.setFechaVencimiento(formatDate.format(fechaVencimiento));
+        if (regExpo.getVariedad().getGirasol()) {
+            item.setLongitud(regExpo.getGlongitud());
+        } else {
+            item.setLongitud(regExpo.getLongitud() + "");
+        }
         return item;
     }
 

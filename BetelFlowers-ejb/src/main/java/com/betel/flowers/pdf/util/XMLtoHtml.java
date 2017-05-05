@@ -53,7 +53,8 @@ public class XMLtoHtml implements Serializable {
             Source xslDoc = null;
             switch (Type) {
                 case 0:
-                    copyFile("/var/www/html/pdf/resources/tag/re/style.css", direccionDestino + "style.css");
+                    //http://45.33.78.137/pdf/resources/tag/re/style.css
+                    //copyFile("/var/www/html/pdf/resources/tag/re/style.css", direccionDestino + "style.css");
                     BarcodeGenerator.createBarCode(direccionXML, direccionDestino);
                     xslDoc = new StreamSource(new File("/var/www/html/pdf/resources/tag/re/tagRegistroExportacion.xsl"));
                     break;

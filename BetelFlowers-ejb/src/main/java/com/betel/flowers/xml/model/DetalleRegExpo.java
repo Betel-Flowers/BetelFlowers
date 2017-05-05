@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DetalleRegExpo {
 
     private String variedad;
+    private String longitud;
     private String fechaVencimiento;
 
     public DetalleRegExpo() {
@@ -28,6 +29,14 @@ public class DetalleRegExpo {
     @XmlElement
     public void setVariedad(String variedad) {
         this.variedad = variedad;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 
     public String getFechaVencimiento() {

@@ -17,6 +17,7 @@ public class ItemCajaStock {
 
     private Integer numeroRamos;
     private Integer numeroTallosRamo;
+    private Integer totalTallos;
     private Integer longitud;
     private String glongitud;
 
@@ -52,6 +53,14 @@ public class ItemCajaStock {
         this.numeroTallosRamo = numeroTallosRamo;
     }
 
+    public Integer getTotalTallos() {
+        return this.getNumeroRamos() * this.getNumeroTallosRamo();
+    }
+
+    public void setTotalTallos(Integer totalTallos) {
+        this.totalTallos = totalTallos;
+    }
+
     public Integer getLongitud() {
         return longitud;
     }
@@ -70,8 +79,12 @@ public class ItemCajaStock {
 
     @Override
     public String toString() {
-        return "Variedad: " + variedad.getNombre() +" Numero Ramos: " + numeroRamos + ", Numero Tallos Ramo: " + numeroTallosRamo + ", Longitud: " + longitud + " " + glongitud+" ";
+        String text = "";
+        if (variedad.getGirasol()) {
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + glongitud + " Total:" + this.getTotalTallos() + " ";
+        } else {
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + longitud + " Total:" + this.getTotalTallos() + " ";
+        }
+        return text;
     }
-    
-    
 }
