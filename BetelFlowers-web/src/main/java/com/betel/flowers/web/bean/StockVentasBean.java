@@ -10,6 +10,7 @@ import com.betel.flowers.model.StockVenta;
 import com.betel.flowers.model.TipoCaja;
 import com.betel.flowers.service.StockVentasService;
 import com.betel.flowers.service.TipoCajaService;
+import com.betel.flowers.web.bean.util.BarcodeStockVenta;
 import com.betel.flowers.web.bean.util.DetalleCajaStock;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
@@ -17,10 +18,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
@@ -38,8 +41,10 @@ public class StockVentasBean implements Serializable {
     private StockVenta remove;
     private List<StockVenta> stockVentas;
     private List<StockVenta> stockVentasG;
+    private List<BarcodeStockVenta> barcodeList;
     private Boolean gerated;
     private DetalleCajaStock detalle;
+    private String message;
 
     @Inject
     private StockVentasService stockVentaService;
@@ -54,11 +59,14 @@ public class StockVentasBean implements Serializable {
         this.stockVentas = new ArrayList<>();
         this.gerated = Boolean.TRUE;
         this.detalle = new DetalleCajaStock();
+        this.message = "";
+        this.barcodeList = new ArrayList<>();
         this.stockVentasG = this.stockVentaService.obtenerListFlag(1);
         if (this.stockVentasG == null) {
             this.stockVentasG = new ArrayList<>();
         } else {
             Collections.reverse(this.stockVentasG);
+            this.loadBarcodeList();
         }
     }
 
@@ -84,16 +92,20 @@ public class StockVentasBean implements Serializable {
         TipoCaja caja = this.tipoCajaService.findByCodigo(this.nuevo.getCaja());
         this.nuevo.setCaja(caja);
         this.nuevo.setCodigo(this.generatedTempCode());
-        this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
-        Boolean exito = this.stockVentas.add(this.nuevo);
-        if (exito) {
-            FacesUtil.addMessageInfo("Exito.");
-            this.nuevo = new StockVenta();
-            this.nuevo.setUsername("usertest");//usertest
-            this.detalle = new DetalleCajaStock();
-            this.stateGenetated();
+        if (this.detalle.getDetalleCajaStock() != null && !this.detalle.getDetalleCajaStock().isEmpty()) {
+            this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
+            Boolean exito = this.stockVentas.add(this.nuevo);
+            if (exito) {
+                FacesUtil.addMessageInfo("Exito.");
+                this.nuevo = new StockVenta();
+                this.nuevo.setUsername("usertest");//usertest
+                this.detalle = new DetalleCajaStock();
+                this.stateGenetated();
+            } else {
+                FacesUtil.addMessageError(null, "Falló.");
+            }
         } else {
-            FacesUtil.addMessageError(null, "Falló.");
+            FacesUtil.addMessageWarn(null, "Agregar Variedades");
         }
     }
 
@@ -169,24 +181,38 @@ public class StockVentasBean implements Serializable {
             int size = this.stockVentas.size();
             int length = this.stockVentasG.size();
             String code = RandomStringUtils.randomNumeric(2);
-            String barcode = "BETEL-SK" + code + "" + size + "" + length;
+            String barcode = "BETEL-SV" + code + "" + size + "" + length;
+            String url = "/var/www/html/mail/" + barcode + "/";
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String ipAdress = request.getLocalAddr();
+            String filepath = "http://" + ipAdress + "/mail/" + barcode + "/" + barcode + ".pdf";
             for (int i = 0; i < size; i++) {
                 Integer total = this.stockVentas.get(i).getTotalTallos();
                 this.stockVentas.get(i).setTotalTallos(total);
                 this.stockVentas.get(i).setBarcode(barcode);
+                this.stockVentas.get(0).setMessage(this.getMessage());
+                this.stockVentas.get(i).setXml(url + barcode + ".xml");
+                this.stockVentas.get(i).setHtml(url + barcode + ".html");
+                this.stockVentas.get(i).setPdf(url + barcode + ".pdf");
+                this.stockVentas.get(i).setUrlPdf(filepath);
             }
         }
     }
 
     public void add(ActionEvent evt) {
-        this.generatedBarcode();
-        Boolean exito = this.allInserts();
-        if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
-            this.init();
+        String msg = this.getMessage().trim();
+        if (msg != null && msg.equals("")) {
+            this.generatedBarcode();
+            Boolean exito = this.allInserts();
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha guardado.");
+                this.init();
+            }
         } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
-            this.init();
+            FacesUtil.addMessageInfo("Porfavor ingrese un mensaje para el Stock de Ventas.");
         }
     }
 
@@ -225,6 +251,50 @@ public class StockVentasBean implements Serializable {
         if (barcodeItem != null) {
             if (barcodeItem.getDetalleCajaStock() != null && !barcodeItem.getDetalleCajaStock().isEmpty()) {
                 list = barcodeItem.getDetalleCajaStock();
+            }
+        }
+        return list;
+    }
+
+    private void loadBarcodeList() {
+        if (this.stockVentasG != null && !this.stockVentasG.isEmpty()) {
+            List<StockVenta> unique = this.selectBarcode(this.stockVentasG);
+            for (StockVenta registro : unique) {
+                BarcodeStockVenta barcodes = new BarcodeStockVenta();
+                barcodes.setCreationDate(registro.getCreationDate());
+                barcodes.setBarcode(registro.getBarcode());
+                barcodes.setUsername(registro.getUsername());
+                barcodes.setUrlPdf(registro.getUrlPdf());
+                barcodes.setPrecio(registro.getPrecio());
+                for (int i = 0; i < this.stockVentasG.size(); i++) {
+                    if (this.stockVentasG.get(i).getBarcode().equals(registro.getBarcode())) {
+                        barcodes.getListBarcode().add(this.stockVentasG.get(i));
+                    }
+                }
+                this.barcodeList.add(barcodes);
+            }
+        }
+    }
+
+    private List<StockVenta> selectBarcode(List<StockVenta> barcode) {
+
+        List<StockVenta> unique = new ArrayList<>();
+        if (barcode != null && !barcode.isEmpty()) {
+            unique.add(barcode.get(0));
+            for (int i = 0; i < barcode.size(); i++) {
+                if (!(barcode.get(i).getBarcode().equals(unique.get(unique.size() - 1).getBarcode()))) {
+                    unique.add(barcode.get(i));
+                }
+            }
+        }
+        return unique;
+    }
+
+    public List<StockVenta> listBardodeInsideListStockVenta(BarcodeStockVenta barcodeItem) {
+        List<StockVenta> list = new ArrayList<>();
+        if (barcodeItem != null) {
+            if (barcodeItem.getListBarcode() != null && !barcodeItem.getListBarcode().isEmpty()) {
+                list = barcodeItem.getListBarcode();
             }
         }
         return list;
@@ -286,4 +356,19 @@ public class StockVentasBean implements Serializable {
         this.detalle = detalle;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<BarcodeStockVenta> getBarcodeList() {
+        return barcodeList;
+    }
+
+    public void setBarcodeList(List<BarcodeStockVenta> barcodeList) {
+        this.barcodeList = barcodeList;
+    }
 }

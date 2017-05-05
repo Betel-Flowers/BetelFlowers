@@ -5,6 +5,7 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.Bloque;
 import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.BloqueService;
@@ -257,6 +258,16 @@ public class VariedadBean implements Serializable {
             }
 
         }
+    }
+    
+    public List<Bloque> listBardodeInsideList(Variedad barcodeItem) {
+        List<Bloque> list = new ArrayList<>();
+        if (barcodeItem != null) {
+            if (barcodeItem.getBloques() != null && !barcodeItem.getBloques().isEmpty()) {
+                list = barcodeItem.getBloques();
+            }
+        }
+        return list;
     }
 
     public Variedad getNuevo() {

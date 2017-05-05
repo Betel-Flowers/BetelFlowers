@@ -7,7 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:form id="fadd">
+        <h:form id="fadd" rendered="false">
             <p:panel header="Crear Caja Variedad">
                 <h:panelGrid style="float: right">
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
@@ -93,7 +93,10 @@
         </h:form>
         <h:form id="faddMix">
             <p:accordionPanel id="caja">
-                <p:tab title="Crear Caja Mixta">
+                <p:tab title="Crear Caja Variedad">
+                    <h:panelGrid style="float: right">
+                        <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
+                    </h:panelGrid>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel for="cantidadmx" value="Cantidad Cajas:"/>
                         <p:spinner id="cantidadmx" value="#{stockVentasBean.nuevo.cantidadCajas}"
@@ -207,13 +210,16 @@
                     <p:column style="text-align: center" headerText="Tipo Caja" >
                         <h:outputText value="#{nstock.caja.tipo}"/>
                     </p:column>
+                    <p:column style="text-align: center" headerText="Total Tallos" >
+                        <h:outputText value="#{nstock.totalTallos}"/>
+                    </p:column>
                     <p:column style="text-align: center" headerText="Precio" >
                         <h:outputText value="#{nstock.precio}"/>
                     </p:column>
                     <p:rowExpansion>
                         <h:panelGrid style="margin: 0 auto;">
                             <p:dataTable value="#{stockVentasBean.listBardodeInsideList(nstock)}" 
-                                         var="codeList" rows="5"
+                                         var="codeList" rows="5" tableStyle="width: auto"
                                          paginator="true" paginatorPosition="Bottom">
                                 <p:column headerText="Foto" style="text-align: center">
                                     <p:graphicImage value="#{codeList.variedad.urlFoto}"
@@ -245,9 +251,12 @@
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
+        <h:form id="fmsg">
+            <p:editor id="editor" widgetVar="editorWidget" value="#{stockVentasBean.nuevo.message}" height="150"/>
+        </h:form>
         <h:form id="fsend">
             <p:panel style="align-content: center; text-align: center">
-                <p:commandButton id="btnSend" value="Enviar" update=":fadd, :faddMix, :fadd:messages"
+                <p:commandButton id="btnSend" value="Enviar" update=":faddMix, :faddMix:caja:messages, :fstockV:dtstockV, :fstock:dtstock"
                                  disabled="#{stockVentasBean.gerated}"
                                  actionListener="#{stockVentasBean.add(evt)}"/>
             </p:panel>
@@ -256,8 +265,77 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtstockV" var="nstockV" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom"
-                             value="#{stockVentasBean.stockVentasG}">
+                             paginatorPosition="Bottom" style="table-layout: auto"
+                             value="#{stockVentasBean.barcodeList}">
+                    <f:facet name="header">
+                        <h:outputText value="Registro de Stock de Ventas Enviados"/>
+                    </f:facet>
+                    <p:column style="width:16px">
+                        <p:rowToggler />
+                    </p:column>
+                    <p:column style="text-align: center" headerText="Fecha" >
+                        <h:outputText value="#{nstockV.creationDate}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center" headerText="Total Cajas">
+                        <h:outputText value="#{nstockV.totalCajasBarcode}"/>
+                    </p:column>
+                    <p:column style="text-align: center" headerText="Total Tallos">
+                        <h:outputText value="#{nstockV.totalTallosBarcode}"/>
+                    </p:column>
+                    <p:column style="text-align: center" headerText="Usuario" >
+                        <h:outputText value="#{nstockV.username}"/>
+                    </p:column>
+                    <p:column style="text-align: center"  headerText="E-mail">
+                        <p:link href="#{nstockV.urlPdf}" target="_blank">
+                            <p:graphicImage name="img/pdf.png"/>
+                        </p:link>
+                    </p:column>
+                    <p:rowExpansion>
+                        <p:panel style="align-content: center; text-align: center">
+                            <p:dataTable value="#{stockVentasBean.listBardodeInsideListStockVenta(nstockV)}" 
+                                         var="codeListV" rows="5" tableStyle="width: auto"
+                                         paginator="true" paginatorPosition="Bottom">
+                                <p:column headerText="Cantidad Cajas" style="text-align: center">
+                                    <h:outputText value="#{codeListV.cantidadCajas}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Tipo Caja">
+                                    <h:outputText value="#{codeListV.caja.tipo}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Variedades">
+                                    <p:dataTable var="itemCajaStock" tableStyle="width: auto"
+                                                 value="#{stockVentasBean.listBardodeInsideList(codeListV)}">
+                                        <p:column headerText="Foto" style="text-align: center">
+                                            <p:graphicImage value="#{itemCajaStock.variedad.urlFoto}"
+                                                            width="40px" height="40px"/>
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Variedad">
+                                            <h:outputText value="#{itemCajaStock.variedad.nombre}" />
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Longitud">
+                                            <h:outputText value="#{itemCajaStock.longitud}" />
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Ramos">
+                                            <h:outputText value="#{itemCajaStock.numeroRamos}" />
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Tallos">
+                                            <h:outputText value="#{itemCajaStock.numeroTallosRamo}" />
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Total">
+                                            <h:outputText value="#{itemCajaStock.totalTallos}" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Total Tallos" >
+                                    <h:outputText value="#{codeListV.totalTallos}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Precio" >
+                                    <h:outputText value="#{codeListV.precio}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:rowExpansion>
                 </p:dataTable>
             </h:panelGrid>
         </h:form>

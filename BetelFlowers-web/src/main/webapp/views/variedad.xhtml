@@ -105,10 +105,13 @@
                     <p:column headerText="Especie" style="text-align: center">
                         <h:outputText value="#{fvariedad.especie.nombre}"/>
                     </p:column>
-                    <p:column headerText="Bloque" style="text-align: center">
-                        <p:dataList value="#{fvariedad.bloques}" var="tbloq">
-                            <h:outputText value="#{tbloq}"/>
-                        </p:dataList>
+                    <p:column headerText="Bloques" style="text-align: center">
+                        <p:dataTable value="#{variedadBean.listBardodeInsideList(fvariedad)}" var="tbloq" 
+                                     tableStyle="width: auto">
+                            <p:column style="text-align: center" headerText="Bloque">
+                                <h:outputText value="#{tbloq.numero}" />
+                            </p:column>
+                        </p:dataTable>
                     </p:column>
                     <p:column headerText="Usuario" style="text-align: center">
                         <h:outputText value="#{fvariedad.username}"/>
@@ -123,7 +126,7 @@
                     <p:column headerText="Borrar" style="text-align: center">
                         <p:commandButton value="Eliminar" update=":fdelete:deleteVari, :fadd:messages"
                                          oncomplete="PF('dlgDeleteVari').show()">
-                            <f:setPropertyActionListener value="#{variedad}" target="#{variedadBean.selected}"/>
+                            <f:setPropertyActionListener value="#{fvariedad}" target="#{variedadBean.selected}"/>
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
@@ -144,7 +147,7 @@
 
                         <p:outputLabel value=""/>
                         <p:commandButton value="Agregar Bloques" update=":fbloq:outBloq"
-                                     oncomplete="PF('dlgBloq').show()"/>
+                                         oncomplete="PF('dlgBloq').show()"/>
                         <p:outputLabel value=""/>
 
                         <p:outputLabel for="nomVari" value="Nombre" />

@@ -224,9 +224,9 @@
                         </p:link>
                     </p:column>
                     <p:rowExpansion>
-                        <h:panelGrid style="margin: 0 auto;">
+                        <p:panel style="align-content: center; text-align: center">
                             <p:dataTable value="#{registroExportacionBean.listBardodeInsideList(regExpG)}" 
-                                         var="codeList" rows="5"
+                                         var="codeList" rows="5" tableStyle="width: auto"
                                          paginator="true" paginatorPosition="Bottom">
                                 <p:column style="text-align: center" headerText="Fecha" >
                                     <h:outputText value="#{codeList.lastChange}">
@@ -257,7 +257,7 @@
                                     <h:outputText value="#{codeList.puntoCorte}"/>
                                 </p:column>
                             </p:dataTable>
-                        </h:panelGrid>
+                        </p:panel>
                     </p:rowExpansion>
                 </p:dataTable>
             </h:panelGrid>

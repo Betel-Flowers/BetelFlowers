@@ -116,13 +116,23 @@
                     <p:column headerText="Bodega" style="text-align: center">
                         <h:outputText value="#{regNac.bodega.nombre}"/>
                     </p:column>
+                    <p:column headerText="Foto" style="text-align: center">
+                        <p:graphicImage value="#{regNac.variedad.urlFoto}"
+                                        width="40px" height="40px"/>
+                    </p:column>
                     <p:column headerText="Variedad" style="text-align: center">
                         <h:outputText value="#{regNac.variedad.nombre}"/>
                     </p:column>
                     <p:column headerText="Motivos">
-                        <p:dataList value="#{regNac.detalle}" var="regdet">
-                            <h:outputText value="#{regdet}"/>
-                        </p:dataList>
+                        <p:dataTable var="detalle" tableStyle="width: auto"
+                                     value="#{registroNacionalBean.listBardodeInsideList(regNac)}">
+                            <p:column style="text-align: left" headerText="Motivo">
+                                <h:outputText value="#{detalle.motivo.descripcion}" />
+                            </p:column>
+                            <p:column style="text-align: center" headerText="Cantidad">
+                                <h:outputText value="#{detalle.cantidad}" />
+                            </p:column>
+                        </p:dataTable>
                     </p:column>
                     <p:column headerText="Toatal Tallos" style="text-align: center">
                         <h:outputText value="#{regNac.totalNumeroTallos}"/>

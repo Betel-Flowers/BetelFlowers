@@ -257,11 +257,15 @@
             <p:dialog header="Telefonos" widgetVar="dlgViewT" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="outViewT">
-                    <p:dataList value="#{cargueraBean.telefonos}"
-                                var="tlfcar">
-                        <h:outputText value="#{tlfcar.tipo}:"/>
-                        <h:outputText value="#{tlfcar.numero}"/>
-                    </p:dataList>
+                    <p:dataTable var="tlfcar" tableStyle="width: auto"
+                                 value="#{cargueraBean.telefonos}">
+                        <p:column style="text-align: center" headerText="Tipo">
+                            <h:outputText value="#{tlfcar.tipo}" />
+                        </p:column>
+                        <p:column style="text-align: center" headerText="Longitud">
+                            <h:outputText value="#{tlfcar.numero}" />
+                        </p:column>
+                    </p:dataTable>
                 </p:outputPanel>
             </p:dialog>
         </h:form>
@@ -269,11 +273,15 @@
             <p:dialog header="Correos" widgetVar="dlgViewC" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="outViewC">
-                    <p:dataList value="#{cargueraBean.correos}"
-                                var="emailcar">
-                        <h:outputText value="#{emailcar.tipo}:"/>
-                        <h:outputText value="#{emailcar.email}"/>
-                    </p:dataList>
+                    <p:dataTable var="emailcar" tableStyle="width: auto"
+                                 value="#{cargueraBean.correos}">
+                        <p:column style="text-align: center" headerText="Tipo">
+                            <h:outputText value="#{emailcar.tipo}" />
+                        </p:column>
+                        <p:column style="text-align: center" headerText="Longitud">
+                            <h:outputText value="#{emailcar.email}" />
+                        </p:column>
+                    </p:dataTable>
                 </p:outputPanel>
             </p:dialog>
         </h:form>

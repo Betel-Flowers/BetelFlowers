@@ -113,11 +113,21 @@ public class RegistroNacionalBean implements Serializable {
             this.nuevo.getDetalle().remove(det);
         }
     }
-    
-        private String generatedBarcode() {
+
+    private String generatedBarcode() {
         GregorianCalendar calendario = new GregorianCalendar();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
         return "BETEL-RN" + RandomStringUtils.randomNumeric(4) + "-IMG-" + format.format(calendario.getTime());
+    }
+    
+     public List<DetalleNacional> listBardodeInsideList(RegistroNacional barcodeItem) {
+        List<DetalleNacional> list = new ArrayList<>();
+        if (barcodeItem != null) {
+            if (barcodeItem.getDetalle() != null && !barcodeItem.getDetalle().isEmpty()) {
+                list = barcodeItem.getDetalle();
+            }
+        }
+        return list;
     }
 
     public List<RegistroNacional> getRegistrosNacional() {
