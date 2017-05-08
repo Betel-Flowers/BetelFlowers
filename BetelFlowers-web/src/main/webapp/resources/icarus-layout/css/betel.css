@@ -9,13 +9,7 @@ and open the template in the editor.
 */
 
 #betel-init{
-    background: url(http://45.33.78.137/resources/fondo.jpg);
+    background: url(http://45.33.78.137/resources/fondo.png);
     width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-}
-
-#betel-footer{
-    width: auto;
     height: 100%;
 }

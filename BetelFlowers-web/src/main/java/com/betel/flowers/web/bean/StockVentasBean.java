@@ -13,6 +13,7 @@ import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.web.bean.util.BarcodeStockVenta;
 import com.betel.flowers.web.bean.util.DetalleCajaStock;
 import com.betel.flowers.web.util.FacesUtil;
+import com.betel.flowers.xml.service.MailStockVentaXML;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,8 @@ public class StockVentasBean implements Serializable {
     private StockVentasService stockVentaService;
     @Inject
     private TipoCajaService tipoCajaService;
+    @Inject
+    private MailStockVentaXML mailStockVentaXML;
 
     @PostConstruct
     public void init() {
@@ -59,8 +62,8 @@ public class StockVentasBean implements Serializable {
         this.stockVentas = new ArrayList<>();
         this.gerated = Boolean.TRUE;
         this.detalle = new DetalleCajaStock();
-        this.message = "";
         this.barcodeList = new ArrayList<>();
+        this.message = "";
         this.stockVentasG = this.stockVentaService.obtenerListFlag(1);
         if (this.stockVentasG == null) {
             this.stockVentasG = new ArrayList<>();
@@ -190,18 +193,19 @@ public class StockVentasBean implements Serializable {
                 Integer total = this.stockVentas.get(i).getTotalTallos();
                 this.stockVentas.get(i).setTotalTallos(total);
                 this.stockVentas.get(i).setBarcode(barcode);
-                this.stockVentas.get(0).setMessage(this.getMessage());
+                this.stockVentas.get(i).setMessage(this.message);
                 this.stockVentas.get(i).setXml(url + barcode + ".xml");
                 this.stockVentas.get(i).setHtml(url + barcode + ".html");
                 this.stockVentas.get(i).setPdf(url + barcode + ".pdf");
                 this.stockVentas.get(i).setUrlPdf(filepath);
             }
+            this.mailStockVentaXML.generatedXML(barcode, url, barcode, this.message, this.stockVentas);
         }
     }
 
     public void add(ActionEvent evt) {
-        String msg = this.getMessage().trim();
-        if (msg != null && msg.equals("")) {
+        this.message = this.nuevo.getMessage().trim();
+        if (this.message != null && !this.message.equals("")) {
             this.generatedBarcode();
             Boolean exito = this.allInserts();
             if (exito) {
@@ -212,7 +216,7 @@ public class StockVentasBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageInfo("Porfavor ingrese un mensaje para el Stock de Ventas.");
+            FacesUtil.addMessageInfo("Por favor ingrese un mensaje para el Stock de Ventas.");
         }
     }
 
