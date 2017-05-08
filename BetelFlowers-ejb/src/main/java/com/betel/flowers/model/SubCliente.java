@@ -20,24 +20,15 @@ import org.mongodb.morphia.annotations.Reference;
  *
  * @author luis
  */
-@Entity(value = "Cliente", noClassnameStored = true)
+@Entity(value = "SubCliente", noClassnameStored = true)
 @Indexes({
-    @Index(fields = @Field("codigo")),
-    @Index(fields = @Field("ruc"))})
-public class Cliente extends BaseEntity {
+    @Index(fields = @Field("codigo"))})
+public class SubCliente extends BaseEntity {
 
     private String codigo;
-    private Boolean comercializadora;
-    private Boolean exterior;
-    private Boolean local;
     private String nombreContacto;
     private String empresa;
-    private String ruc;
     private String direccion;
-    private Integer diasPago;
-    private Double limiteCredito;
-    private Integer diasCredito;
-    private Boolean impuestos;
     private String username;
     private Integer flag;
 
@@ -49,22 +40,12 @@ public class Cliente extends BaseEntity {
     private List<Telefono> telefonos;
     @Embedded
     private List<Correo> correos;
-    @Reference
-    private List<MarcaCaja> cajas;
-    @Reference
-    private List<SubCliente> subClientes;
 
-    public Cliente() {
+    public SubCliente() {
         this.ciudad = new Ciudad();
         this.zona = new ZonaGeografica();
         this.telefonos = new ArrayList<>();
         this.correos = new ArrayList<>();
-        this.cajas = new ArrayList<>();
-        this.subClientes = new ArrayList<>();
-        this.comercializadora = Boolean.FALSE;
-        this.local = Boolean.FALSE;
-        this.exterior = Boolean.FALSE;
-        this.impuestos = Boolean.FALSE;
     }
 
     public String getCodigo() {
@@ -73,30 +54,6 @@ public class Cliente extends BaseEntity {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
-    }
-
-    public Boolean getComercializadora() {
-        return comercializadora;
-    }
-
-    public void setComercializadora(Boolean comercializadora) {
-        this.comercializadora = comercializadora;
-    }
-
-    public Boolean getExterior() {
-        return exterior;
-    }
-
-    public void setExterior(Boolean exterior) {
-        this.exterior = exterior;
-    }
-
-    public Boolean getLocal() {
-        return local;
-    }
-
-    public void setLocal(Boolean local) {
-        this.local = local;
     }
 
     public String getNombreContacto() {
@@ -115,52 +72,12 @@ public class Cliente extends BaseEntity {
         this.empresa = empresa;
     }
 
-    public String getRuc() {
-        return ruc;
-    }
-
-    public void setRuc(String ruc) {
-        this.ruc = ruc;
-    }
-
     public String getDireccion() {
         return direccion;
     }
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
-
-    public Integer getDiasPago() {
-        return diasPago;
-    }
-
-    public void setDiasPago(Integer diasPago) {
-        this.diasPago = diasPago;
-    }
-
-    public Double getLimiteCredito() {
-        return limiteCredito;
-    }
-
-    public void setLimiteCredito(Double limiteCredito) {
-        this.limiteCredito = limiteCredito;
-    }
-
-    public Integer getDiasCredito() {
-        return diasCredito;
-    }
-
-    public void setDiasCredito(Integer diasCredito) {
-        this.diasCredito = diasCredito;
-    }
-
-    public Boolean getImpuestos() {
-        return impuestos;
-    }
-
-    public void setImpuestos(Boolean impuestos) {
-        this.impuestos = impuestos;
     }
 
     public String getUsername() {
@@ -211,25 +128,9 @@ public class Cliente extends BaseEntity {
         this.correos = correos;
     }
 
-    public List<MarcaCaja> getCajas() {
-        return cajas;
-    }
-
-    public void setCajas(List<MarcaCaja> cajas) {
-        this.cajas = cajas;
-    }
-
-    public List<SubCliente> getSubClientes() {
-        return subClientes;
-    }
-
-    public void setSubClientes(List<SubCliente> subClientes) {
-        this.subClientes = subClientes;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 5;
         hash = 29 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
@@ -245,7 +146,7 @@ public class Cliente extends BaseEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Cliente other = (Cliente) obj;
+        final SubCliente other = (SubCliente) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -254,7 +155,7 @@ public class Cliente extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Cliente{" + "codigo=" + codigo + ", comercializadora=" + comercializadora + ", exterior=" + exterior + ", local=" + local + ", nombreContacto=" + nombreContacto + ", empresa=" + empresa + ", ruc=" + ruc + ", direccion=" + direccion + ", diasPago=" + diasPago + ", limiteCredito=" + limiteCredito + ", diasCredito=" + diasCredito + ", impuestos=" + impuestos + ", username=" + username + ", flag=" + flag + ", ciudad=" + ciudad + ", telefonos=" + telefonos + ", correos=" + correos + ", cajas=" + cajas + '}';
+        return "SubCliente{" + "codigo=" + codigo + ", nombreContacto=" + nombreContacto + ", empresa=" + empresa + ", direccion=" + direccion + ", username=" + username + ", flag=" + flag + ", ciudad=" + ciudad + ", zona=" + zona + ", telefonos=" + telefonos + ", correos=" + correos + '}';
     }
 
 }

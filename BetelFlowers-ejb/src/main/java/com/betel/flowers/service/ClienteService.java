@@ -162,6 +162,7 @@ public class ClienteService implements Serializable {
                 set("username", cliente.getUsername()).
                 set("flag", cliente.getFlag()).
                 set("ciudad", cliente.getCiudad()).
+                set("zona", cliente.getZona()).
                 set("telefonos", cliente.getTelefonos()).
                 set("correos", cliente.getCorreos()).
                 set("cajas", cliente.getCajas()).
