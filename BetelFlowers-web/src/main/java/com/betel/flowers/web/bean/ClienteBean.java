@@ -8,14 +8,16 @@ package com.betel.flowers.web.bean;
 import com.betel.flowers.model.Ciudad;
 import com.betel.flowers.model.Cliente;
 import com.betel.flowers.model.Pais;
+import com.betel.flowers.model.SubCliente;
 import com.betel.flowers.model.ZonaGeografica;
 import com.betel.flowers.service.CiudadService;
 import com.betel.flowers.service.ClienteService;
 import com.betel.flowers.service.PaisService;
+import com.betel.flowers.service.SubClienteService;
 import com.betel.flowers.service.ZonaGeograficaService;
 import com.betel.flowers.web.bean.util.Cajas;
 import com.betel.flowers.web.bean.util.Correos;
-import com.betel.flowers.web.bean.util.SubCliente;
+import com.betel.flowers.web.bean.util.SubClient;
 import com.betel.flowers.web.bean.util.Telefonos;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
@@ -44,16 +46,18 @@ public class ClienteBean implements Serializable {
     private Cliente selected;
     private Cliente removeSelected;
     private List<Cliente> clientes;
-    private List<Cliente> subClientes;
+    private List<SubCliente> subClientes;
     private List<Ciudad> ciudades;
     private Telefonos telefono;
     private Correos correo;
     private Cajas caja;
-    private SubCliente subCliente;
+    private SubClient subClients;
     private Boolean activeSelectedCliente;
 
     @Inject
     private ClienteService clienteService;
+    @Inject
+    private SubClienteService subClienteService;
     @Inject
     private PaisService paisService;
     @Inject
@@ -71,10 +75,10 @@ public class ClienteBean implements Serializable {
         this.telefono = new Telefonos();
         this.correo = new Correos();
         this.caja = new Cajas();
-        this.subCliente = new SubCliente();
+        this.subClients = new SubClient();
         this.activeSelectedCliente = Boolean.TRUE;
         this.clientes = this.clienteService.obtenerListFlag(1);
-        this.subClientes = this.clienteService.obtenerListFlag(1);
+        this.subClientes = this.subClienteService.obtenerListFlag(1);
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
             this.subClientes = new ArrayList<>();
@@ -95,7 +99,7 @@ public class ClienteBean implements Serializable {
                 if (exito) {
                     FacesUtil.addMessageInfo("Se ha guardado con exito.");
                     this.removeDuplicateSubClientes();
-                    this.nuevo.setSubClientes(this.subCliente.getSubClientes());
+                    this.nuevo.setSubClientes(this.subClients.getSubClientes());
                     this.clienteService.addSubCliente(this.nuevo);
                     this.init();
                 } else {
@@ -120,7 +124,7 @@ public class ClienteBean implements Serializable {
                     Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevoSelected.getCiudad());
                     this.selected.setCiudad(mciudad);
                     this.removeDuplicateSubClientes();
-                    this.selected.setSubClientes(this.subCliente.getSubClientes());
+                    this.selected.setSubClientes(this.subClients.getSubClientes());
                     Boolean exito = this.clienteService.update(this.selected);
                     if (exito) {
                         FacesUtil.addMessageInfo("Se ha modifcado con exito.");
@@ -156,12 +160,12 @@ public class ClienteBean implements Serializable {
     }
 
     private void removeDuplicateSubClientes() {
-        if (this.subCliente.getSubClientes() != null
-                && !this.subCliente.getSubClientes().isEmpty()) {
+        if (this.subClients.getSubClientes() != null
+                && !this.subClients.getSubClientes().isEmpty()) {
             HashSet hs = new HashSet();
-            hs.addAll(this.subCliente.getSubClientes());
-            this.subCliente.getSubClientes().clear();
-            this.subCliente.getSubClientes().addAll(hs);
+            hs.addAll(this.subClients.getSubClientes());
+            this.subClients.getSubClientes().clear();
+            this.subClients.getSubClientes().addAll(hs);
         }
     }
 
@@ -171,27 +175,18 @@ public class ClienteBean implements Serializable {
             this.setNuevoSelected(this.selected);
             this.setRemoveSelected(this.selected);
             changePaisSelected();
-            this.subCliente.setNuevo(this.selected);
             this.telefono.setTelefonos(this.selected.getTelefonos());
             this.correo.setCorreos(this.selected.getCorreos());
             this.caja.setCajas(this.selected.getCajas());
-            this.subCliente.setSubClientes(this.selected.getSubClientes());
+            this.subClients.setSubClientes(this.selected.getSubClientes());
             this.activeSelectedCliente = Boolean.FALSE;
-            this.removeEqualCliente();
-
-        }
-    }
-
-    private void removeEqualCliente() {
-        if (this.subClientes != null && !this.subClientes.isEmpty()) {
-            this.subClientes.remove(this.getRemoveSelected());
         }
     }
 
     public void onRowSelectSubCliente(SelectEvent event) {
-        this.subCliente.setSelected((Cliente) event.getObject());
-        if (this.subCliente.getSelected() != null) {
-            this.subCliente.setNuevo(this.subCliente.getSelected());
+        this.subClients.setSelected((SubCliente) event.getObject());
+        if (this.subClients.getSelected() != null) {
+            this.subClients.setNuevo(this.subClients.getSelected());
         }
     }
 
@@ -273,11 +268,11 @@ public class ClienteBean implements Serializable {
         this.clientes = clientes;
     }
 
-    public List<Cliente> getSubClientes() {
+    public List<SubCliente> getSubClientes() {
         return subClientes;
     }
 
-    public void setSubClientes(List<Cliente> subClientes) {
+    public void setSubClientes(List<SubCliente> subClientes) {
         this.subClientes = subClientes;
     }
 
@@ -313,12 +308,12 @@ public class ClienteBean implements Serializable {
         this.caja = caja;
     }
 
-    public SubCliente getSubCliente() {
-        return subCliente;
+    public SubClient getSubClients() {
+        return subClients;
     }
 
-    public void setSubCliente(SubCliente subCliente) {
-        this.subCliente = subCliente;
+    public void setSubClients(SubClient subClients) {
+        this.subClients = subClients;
     }
 
     public Boolean getActiveSelectedCliente() {

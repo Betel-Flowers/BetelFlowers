@@ -196,7 +196,7 @@
                                     <p:dataTable id="dtSubCli" var="subCli" rows="5"
                                                  paginator="true" tableStyle="width: auto"
                                                  paginatorPosition="Bottom"
-                                                 value="#{clienteBean.subCliente.subClientes}">
+                                                 value="#{clienteBean.subClients.subClientes}">
                                         <f:facet name="header">
                                             <h:outputText value="Sub-Clientes"/>
                                         </f:facet>
@@ -214,16 +214,11 @@
                                         <p:column headerText="Nombre de Contacto" style="text-align: center">
                                             <h:outputText value="#{subCli.nombreContacto}"/>
                                         </p:column>
-                                        <p:column headerText="Tipo" style="text-align: center">
-                                            <h:outputText value="Comercializadora" rendered="#{subCli.comercializadora}"/>
-                                            <h:outputText value="Exterior" rendered="#{subCli.exterior}"/>
-                                            <h:outputText value="Local" rendered="#{subCli.local}"/>
-                                        </p:column>
                                         <p:column style="width:32px;text-align: center">
                                             <p:commandButton update=":fadd:outDetail"
                                                              icon="ui-icon-close" title="Eliminar"
-                                                             actionListener="#{clienteBean.subCliente.remove(evt, subCli)}">
-                                                <f:setPropertyActionListener value="#{subcli}" target="#{clienteBean.subCliente.selected}" />
+                                                             actionListener="#{clienteBean.subClients.remove(evt, subCli)}">
+                                                <f:setPropertyActionListener value="#{subcli}" target="#{clienteBean.subClients.selected}" />
                                             </p:commandButton>
                                         </p:column>
                                         <f:facet name="footer">
@@ -328,39 +323,31 @@
                         <p:dataTable id="dtCli" var="cli" rows="5"
                                      paginator="true" tableStyle="width: auto"
                                      paginatorPosition="Bottom"
-                                     value="#{clienteBean.clientes}"
+                                     value="#{clienteBean.subClientes}"
                                      selectionMode="single"
-                                     selection="#{clienteBean.subCliente.nuevo}"
-                                     rowKey="#{cli.codigo}">
+                                     selection="#{clienteBean.subClients.nuevo}"
+                                     rowKey="#{subCliSelect.codigo}">
                             <p:ajax event="rowSelect" listener="#{clienteBean.onRowSelectSubCliente}"/>
                             <f:facet name="header">
-                                <h:outputText value="Clientes"/>
+                                <h:outputText value="Sub-Clientes"/>
                             </f:facet>
                             <p:column headerText="Fecha" style="text-align: center">
-                                <h:outputText value="#{cli.lastChange}">
+                                <h:outputText value="#{subCliSelect.lastChange}">
                                     <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column filterBy="#{cli.codigo}" headerText="Codigo" filterMatchMode="contains" style="text-align: center">
-                                <h:outputText value="#{cli.codigo}"/>
+                            <p:column filterBy="#{subCliSelect.codigo}" headerText="Codigo" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{subCliSelect.codigo}"/>
                             </p:column>
-                            <p:column filterBy="#{cli.ruc}" headerText="Cedula/RUC/Pasaporte" filterMatchMode="contains" style="text-align: center">
-                                <h:outputText value="#{cli.ruc}"/>
+                            <p:column filterBy="#{subCliSelect.empresa}" headerText="Empresa" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{subCliSelect.empresa}"/>
                             </p:column>
-                            <p:column filterBy="#{cli.empresa}" headerText="Empresa" filterMatchMode="contains" style="text-align: center">
-                                <h:outputText value="#{cli.empresa}"/>
-                            </p:column>
-                            <p:column filterBy="#{cli.nombreContacto}" headerText="Nombre de Contacto" filterMatchMode="contains" style="text-align: center">
-                                <h:outputText value="#{cli.nombreContacto}"/>
-                            </p:column>
-                            <p:column headerText="Tipo" style="text-align: center">
-                                <h:outputText value="Comercializadora" rendered="#{cli.comercializadora}"/>
-                                <h:outputText value="Exterior" rendered="#{cli.exterior}"/>
-                                <h:outputText value="Local" rendered="#{cli.local}"/>
+                            <p:column filterBy="#{subCliSelect.nombreContacto}" headerText="Nombre de Contacto" filterMatchMode="contains" style="text-align: center">
+                                <h:outputText value="#{subCliSelect.nombreContacto}"/>
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton value="Agregar" update=":fedit4, :fadd:messages, :fadd:outDetail"
-                                                 actionListener="#{clienteBean.subCliente.add(evt)}"/>
+                                                 actionListener="#{clienteBean.subClients.add(evt)}"/>
                             </f:facet>
                         </p:dataTable>
                     </h:panelGrid>

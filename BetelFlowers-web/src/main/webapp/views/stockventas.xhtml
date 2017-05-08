@@ -1,110 +1,27 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./betel/template.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                template="./betel/template.xhtml">
 
     <ui:define name="content">
-        <h:form id="fadd" rendered="false">
-            <p:panel header="Crear Caja Variedad">
-                <h:panelGrid style="float: right">
-                    <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
-                </h:panelGrid>
-                <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel for="cantidad" value="Cantidad Cajas:"/>
-                    <p:spinner id="cantidad" value="#{stockVentasBean.nuevo.cantidadCajas}"
-                               min="1" max="500" required="true"/>
-                    <p:message for="cantidad" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="tipCaja" value="Tipo Caja:"/>
-                    <p:selectOneMenu id="tipCaja" required="true" style="width: 100%" 
-                                     value="#{stockVentasBean.nuevo.caja.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="cja" itemLabel="#{cja.tipo}"
-                                       itemValue="#{cja.codigo}"/>
-                    </p:selectOneMenu>
-                    <p:message for="tipCaja" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="variedad" value="Variedad:"/>
-                    <p:selectOneMenu id="variedad" required="true" style="width: 100%" 
-                                     value="#{stockVentasBean.detalle.nuevo.variedad.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
-                                       itemValue="#{va.codigo}"/>
-                        <p:ajax listener="#{stockVentasBean.detalle.loadVariedad}" 
-                                update=":fadd:numRamos, :fadd:ramos, :fadd:outlongs" />
-                    </p:selectOneMenu>
-                    <p:message for="variedad" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="numRamos" value="Numero de Ramos:"/>
-                    <p:spinner id="numRamos" value="#{stockVentasBean.detalle.nuevo.numeroRamos}"
-                               min="1" max="500" required="true"/>
-                    <p:message for="numRamos" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="ramos" value="Ramos de:"/>
-                    <p:selectOneMenu id="ramos" required="true" style="width: 100%" 
-                                     value="#{stockVentasBean.detalle.nuevo.numeroTallosRamo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{stockVentasBean.detalle.nuevo.variedad.ramos}"
-                                       var="rm" itemLabel="#{rm}" itemValue="#{rm}"/>
-                    </p:selectOneMenu>
-                    <p:message for="ramos" display="tooltip" severity="error"/>
-                </h:panelGrid>
-                <p:outputPanel id="outlongs">
-                    <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel for="longitud" value="Longitud:" 
-                                       rendered="#{not stockVentasBean.detalle.nuevo.variedad.girasol}"/>
-                        <p:selectOneMenu id="longitud" required="true" style="width: 100%" 
-                                         value="#{stockVentasBean.detalle.nuevo.longitud}"
-                                         rendered="#{not stockVentasBean.detalle.nuevo.variedad.girasol}">
-                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{stockVentasBean.detalle.nuevo.variedad.longitudes}"
-                                           var="lo" itemLabel="#{lo}" itemValue="#{lo}"/>
-                        </p:selectOneMenu>
-                        <p:message for="longitud" display="tooltip" severity="error"
-                                   rendered="#{not stockVentasBean.detalle.nuevo.variedad.girasol}"/>
-
-                        <p:outputLabel for="glongitud" value="Longitud:" 
-                                       rendered="#{stockVentasBean.detalle.nuevo.variedad.girasol}"/>
-                        <p:selectOneMenu id="glongitud" required="true" style="width: 100%" 
-                                         value="#{stockVentasBean.detalle.nuevo.glongitud}"
-                                         rendered="#{stockVentasBean.detalle.nuevo.variedad.girasol}">
-                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{stockVentasBean.detalle.nuevo.variedad.glongitudes}"
-                                           var="glo" itemLabel="#{glo}" itemValue="#{glo}"/>
-                        </p:selectOneMenu>
-                        <p:message for="glongitud" display="tooltip" severity="error"
-                                   rendered="#{stockVentasBean.detalle.nuevo.variedad.girasol}"/>
-
-                        <p:outputLabel for="precio" value="Precio:"/>
-                        <p:spinner id="precio" value="#{stockVentasBean.nuevo.precio}"
-                                   prefix="$" stepFactor="0.01" required="true"/>
-                        <p:message for="precio" display="tooltip" severity="error"/>
-                    </h:panelGrid>
-                </p:outputPanel>
-                <f:facet name="footer">
-                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Crear" update=":fadd, :fadd:messages, :fstock:dtstock, :fsend:btnSend"
-                                     actionListener="#{stockVentasBean.generateContainer(evt)}"/>
-                </f:facet>
-            </p:panel>
-        </h:form>
         <h:form id="faddMix">
             <p:accordionPanel id="caja">
                 <p:tab title="Crear Caja Variedad">
-                    <h:panelGrid style="float: right">
+                    <h:panelGrid cellpadding="5">
                         <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                     </h:panelGrid>
-                    <h:panelGrid columns="3" cellpadding="5">
+                    <h:panelGrid columns="9" cellpadding="5">
                         <p:outputLabel for="cantidadmx" value="Cantidad Cajas:"/>
                         <p:spinner id="cantidadmx" value="#{stockVentasBean.nuevo.cantidadCajas}"
                                    min="1" max="500" required="true"/>
                         <p:message for="cantidadmx" display="tooltip" severity="error"/>
 
                         <p:outputLabel for="tipCajaMx" value="Tipo Caja:"/>
-                        <p:selectOneMenu id="tipCajaMx" required="true" style="width: 100%" 
+                        <p:selectOneMenu id="tipCajaMx" required="true" 
                                          value="#{stockVentasBean.nuevo.caja.codigo}">
                             <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="cja" itemLabel="#{cja.tipo}"
@@ -186,7 +103,8 @@
                     </p:outputPanel>
                     <p:separator/>
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Crear" update=":faddMix, :faddMix:caja:messages, :fstock:dtstock, :fsend:btnSend"
+                    <p:commandButton value="Crear Caja" style="float: right" 
+                                     update=":faddMix, :faddMix:caja:messages, :fstock:dtstock, :fsend:btnSend"
                                      actionListener="#{stockVentasBean.generateContainerMix(evt)}"/>
                 </p:tab>
             </p:accordionPanel>
@@ -251,14 +169,18 @@
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
-        <h:form id="fmsg">
-            <p:editor id="editor" widgetVar="editorWidget" value="#{stockVentasBean.nuevo.message}" height="150"/>
-        </h:form>
         <h:form id="fsend">
-            <p:panel style="align-content: center; text-align: center">
-                <p:commandButton id="btnSend" value="Enviar" update=":faddMix, :faddMix:caja:messages, :fstockV:dtstockV, :fstock:dtstock"
-                                 disabled="#{stockVentasBean.gerated}"
-                                 actionListener="#{stockVentasBean.add(evt)}"/>
+            <p:panel header="Mensaje" style="align-content: center; text-align: center">
+                <p:inputTextarea rows="10" cols="100" value="#{stockVentasBean.nuevo.message}"
+                                 required="true"/>
+                <f:facet name="footer">
+                    <p:commandButton id="btnSend" value="Enviar E-mail" 
+                                     update=":faddMix, :faddMix:caja:messages, :fstockV:dtstockV, :fstock:dtstock, :fsend, :fsend:btnSend, :fsend:messages"
+                                     disabled="#{stockVentasBean.gerated}"
+                                     actionListener="#{stockVentasBean.add(evt)}"/>
+
+                    <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                </f:facet>
             </p:panel>
         </h:form>
         <h:form id="fstockV">
@@ -288,8 +210,8 @@
                         <h:outputText value="#{nstockV.username}"/>
                     </p:column>
                     <p:column style="text-align: center"  headerText="E-mail">
-                        <p:link href="#{nstockV.urlPdf}" target="_blank">
-                            <p:graphicImage name="img/pdf.png"/>
+                        <p:link href="#{nstockV.urlHtml}" target="_blank">
+                            <p:graphicImage name="img/mail.png"/>
                         </p:link>
                     </p:column>
                     <p:rowExpansion>
@@ -314,7 +236,8 @@
                                             <h:outputText value="#{itemCajaStock.variedad.nombre}" />
                                         </p:column>
                                         <p:column style="text-align: center" headerText="Longitud">
-                                            <h:outputText value="#{itemCajaStock.longitud}" />
+                                            <h:outputText value="#{itemCajaStock.longitud}" rendered="#{not itemCajaStock.variedad.girasol}" />
+                                            <h:outputText value="#{itemCajaStock.glongitud}" rendered="#{itemCajaStock.variedad.girasol}" />
                                         </p:column>
                                         <p:column style="text-align: center" headerText="Ramos">
                                             <h:outputText value="#{itemCajaStock.numeroRamos}" />

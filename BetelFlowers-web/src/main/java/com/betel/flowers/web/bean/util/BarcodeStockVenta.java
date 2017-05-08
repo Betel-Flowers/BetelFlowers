@@ -20,7 +20,7 @@ public class BarcodeStockVenta {
     private String barcode;
     private Integer totalTallosBarcode;
     private Integer totalCajasBarcode;
-    private String urlPdf;
+    private String urlHtml;
     private Double precio;
     private String username;
     private List<StockVenta> listBarcode;
@@ -63,12 +63,12 @@ public class BarcodeStockVenta {
         this.totalCajasBarcode = totalCajasBarcode;
     }
 
-    public String getUrlPdf() {
-        return urlPdf;
+    public String getUrlHtml() {
+        return urlHtml;
     }
 
-    public void setUrlPdf(String urlPdf) {
-        this.urlPdf = urlPdf;
+    public void setUrlHtml(String urlHtml) {
+        this.urlHtml = urlHtml;
     }
 
     public Double getPrecio() {

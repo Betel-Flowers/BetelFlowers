@@ -12,6 +12,7 @@ import com.betel.flowers.service.StockVentasService;
 import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.web.bean.util.BarcodeStockVenta;
 import com.betel.flowers.web.bean.util.DetalleCajaStock;
+import com.betel.flowers.web.bean.util.GeneratedPDF;
 import com.betel.flowers.web.util.FacesUtil;
 import com.betel.flowers.xml.service.MailStockVentaXML;
 import java.io.Serializable;
@@ -200,6 +201,12 @@ public class StockVentasBean implements Serializable {
                 this.stockVentas.get(i).setUrlPdf(filepath);
             }
             this.mailStockVentaXML.generatedXML(barcode, url, barcode, this.message, this.stockVentas);
+            GeneratedPDF runPDF = new GeneratedPDF(url, url + barcode + ".xml", url + barcode + ".html", url + barcode + ".pdf", barcode, 1);
+            runPDF.run();
+            Boolean exito = runPDF.getExito();
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha generado con exito.");
+            }
         }
     }
 
@@ -268,7 +275,7 @@ public class StockVentasBean implements Serializable {
                 barcodes.setCreationDate(registro.getCreationDate());
                 barcodes.setBarcode(registro.getBarcode());
                 barcodes.setUsername(registro.getUsername());
-                barcodes.setUrlPdf(registro.getUrlPdf());
+                barcodes.setUrlHtml(registro.getUrlPdf().replace(".pdf", ".html"));
                 barcodes.setPrecio(registro.getPrecio());
                 for (int i = 0; i < this.stockVentasG.size(); i++) {
                     if (this.stockVentasG.get(i).getBarcode().equals(registro.getBarcode())) {

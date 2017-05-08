@@ -148,7 +148,7 @@ public class RegistroExportacionBean implements Serializable {
             runPDF.run();
             Boolean exito = runPDF.getExito();
             if (exito) {
-
+                FacesUtil.addMessageInfo("Se ha genarado con exito.");
             }
         }
     }
