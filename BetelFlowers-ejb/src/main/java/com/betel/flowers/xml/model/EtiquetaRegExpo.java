@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EtiquetaRegExpo {
     
     private String barcode;
-    private String createDate;   
+    private String creationDate;   
     private List<DetalleRegExpo> detalle;
 
     public EtiquetaRegExpo() {
@@ -34,13 +34,13 @@ public class EtiquetaRegExpo {
         this.barcode = barcode;
     }
 
-    public String getCreateDate() {
-        return createDate;
+    public String getCreationDate() {
+        return creationDate;
     }
 
     @XmlElement
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 
     public List<DetalleRegExpo> getDetalle() {

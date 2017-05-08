@@ -60,7 +60,7 @@ public class EtiquetaRegExpoXML implements Serializable {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
         EtiquetaRegExpo etiqueta = new EtiquetaRegExpo();
         Date creationDate = calendar.getTime();
-        etiqueta.setCreateDate(format.format(calendar.getTime()));
+        etiqueta.setCreationDate(format.format(calendar.getTime()));
         etiqueta.setBarcode(barcode);
         for (RegistroExportacion regExpo : barcodeList) {
             etiqueta.getDetalle().add(createTextItemDetail(creationDate, regExpo));

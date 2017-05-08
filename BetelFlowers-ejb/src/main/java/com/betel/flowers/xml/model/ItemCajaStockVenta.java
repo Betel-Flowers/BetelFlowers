@@ -20,6 +20,7 @@ public class ItemCajaStockVenta {
     private String longitud;
     private String numeroRamos;
     private String numeroTallosRamo;
+    private String totalTallos;
 
     public ItemCajaStockVenta() {
     }
@@ -31,6 +32,24 @@ public class ItemCajaStockVenta {
     @XmlElement
     public void setUrlFoto(String urlFoto) {
         this.urlFoto = urlFoto;
+    }
+
+    public String getVariedad() {
+        return variedad;
+    }
+
+    @XmlElement
+    public void setVariedad(String variedad) {
+        this.variedad = variedad;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    @XmlElement
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 
     public String getNumeroRamos() {
@@ -51,22 +70,13 @@ public class ItemCajaStockVenta {
         this.numeroTallosRamo = numeroTallosRamo;
     }
 
-    public String getLongitud() {
-        return longitud;
+    public String getTotalTallos() {
+        return totalTallos;
     }
 
     @XmlElement
-    public void setLongitud(String longitud) {
-        this.longitud = longitud;
+    public void setTotalTallos(String totalTallos) {
+        this.totalTallos = totalTallos;
     }
-
-    public String getVariedad() {
-        return variedad;
-    }
-
-    @XmlElement
-    public void setVariedad(String variedad) {
-        this.variedad = variedad;
-    }
-
+    
 }
