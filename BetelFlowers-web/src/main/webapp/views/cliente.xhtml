@@ -104,6 +104,7 @@
                     <p:selectBooleanCheckbox id="impuesto" value="#{clienteBean.nuevo.impuestos}"/>
                     <p:message for="impuesto" display="tooltip" severity="error"/>
                 </h:panelGrid>
+
                 <h:panelGrid columns="1" cellspacing="5">
                     <p:outputPanel id="outDetail">
                         <p:tabView orientation="left">
@@ -194,7 +195,7 @@
                             <p:tab title="Sub-Clientes">
                                 <h:panelGrid style="margin: 0 auto;">
                                     <p:dataTable id="dtSubCli" var="subCli" rows="5"
-                                                 paginator="true" tableStyle="width: auto"
+                                                 paginator="true"
                                                  paginatorPosition="Bottom"
                                                  value="#{clienteBean.subClients.subClientes}">
                                         <f:facet name="header">
@@ -231,6 +232,7 @@
                         </p:tabView>
                     </p:outputPanel>
                 </h:panelGrid>
+
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                     <p:commandButton value="Guardar" update=":fadd, :fadd:messages"
@@ -320,7 +322,7 @@
                       modal="true" showEffect="fade" hideEffect="fade">
                 <p:outputPanel id="outSubCliente">
                     <h:panelGrid style="margin: 0 auto;">
-                        <p:dataTable id="dtCli" var="cli" rows="5"
+                        <p:dataTable id="dtCli" var="subCliSelect" rows="5"
                                      paginator="true" tableStyle="width: auto"
                                      paginatorPosition="Bottom"
                                      value="#{clienteBean.subClientes}"

@@ -2,64 +2,92 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./betel/template.xhtml"
-                xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-
-        <h:form id="fadd">
-            <p:panel header="Registrar Cliente">
+        <h:form id="flist">
+            <h:panelGrid style="margin: 0 auto;">
+                <p:dataTable id="dtCli" value="#{subClienteBean.subClientes}"
+                             var="cli" rows="5"
+                             paginator="true" tableStyle="width: auto"
+                             paginatorPosition="Bottom"
+                             selectionMode="single"
+                             selection="#{subClienteBean.selected}"
+                             rowKey="#{cli.codigo}">
+                    <p:ajax event="rowSelect" listener="#{subClienteBean.onRowSelect}"
+                            update=":fcli:outCli, :fcli:outDetail"/>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <h:outputText value="#{cli.lastChange}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column filterBy="#{cli.codigo}" headerText="Codigo" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{cli.codigo}"/>
+                    </p:column>
+                    <p:column filterBy="#{cli.empresa}" headerText="Empresa" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{cli.empresa}"/>
+                    </p:column>
+                    <p:column filterBy="#{cli.nombreContacto}" headerText="Nombre de Contacto" filterMatchMode="contains" style="text-align: center">
+                        <h:outputText value="#{cli.nombreContacto}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="fcli">
+            <p:panel header="Modificar Cliente">
                 <h:panelGrid cellpadding="5">
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                 </h:panelGrid>
-                <h:panelGrid columns="6" cellpadding="5">
-                    <p:outputLabel for="empresa" value="Empresa:"/>
-                    <p:inputText id="empresa" required="true" 
-                                 value="#{subClienteBean.nuevo.empresa}"/>
-                    <p:message for="empresa" display="tooltip" severity="error"/>
+                <p:outputPanel id="outCli">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:outputLabel for="empresa" value="Empresa:"/>
+                        <p:inputText id="empresa" required="true" 
+                                     value="#{subClienteBean.selected.empresa}"/>
+                        <p:message for="empresa" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="nombreContacto" value="Nombre de Contacto:"/>
-                    <p:inputText id="nombreContacto" required="true"
-                                 value="#{subClienteBean.nuevo.nombreContacto}"/>
-                    <p:message for="nombreContacto" display="tooltip" severity="error"/>
+                        <p:outputLabel for="nombreContacto" value="Nombre de Contacto:"/>
+                        <p:inputText id="nombreContacto" required="true"
+                                     value="#{subClienteBean.selected.nombreContacto}"/>
+                        <p:message for="nombreContacto" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="9" cellpadding="5">
+                        <p:outputLabel for="pais" value="Pais:"/>
+                        <p:selectOneMenu id="pais" required="true"
+                                         value="#{subClienteBean.nuevoSelected.ciudad.pais.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{paisBean.paices}" var="pass"
+                                           itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
+                            <p:ajax update=":fcli:ciudad" listener="#{subClienteBean.changePaisSelected}"/>
+                        </p:selectOneMenu>
+                        <p:message for="pais" display="tooltip" severity="error"/>
 
-                </h:panelGrid>
-                <h:panelGrid columns="9" cellpadding="5">
-                    <p:outputLabel for="pais" value="Pais:"/>
-                    <p:selectOneMenu id="pais" required="true"
-                                     value="#{subClienteBean.nuevo.ciudad.pais.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{paisBean.paices}" var="pass"
-                                       itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
-                        <p:ajax update=":fadd:ciudad" listener="#{subClienteBean.changePais}"/>
-                    </p:selectOneMenu>
-                    <p:message for="pais" display="tooltip" severity="error"/>
+                        <p:outputLabel for="ciudad" value="Ciudad:"/>
+                        <p:selectOneMenu id="ciudad" required="true"
+                                         value="#{subClienteBean.nuevoSelected.ciudad.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{subClienteBean.ciudades}" var="ciud"
+                                           itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="ciudad" display="tooltip" severity="error"/>
 
-                    <p:outputLabel for="ciudad" value="Ciudad:"/>
-                    <p:selectOneMenu id="ciudad" required="true"
-                                     value="#{subClienteBean.nuevo.ciudad.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{subClienteBean.ciudades}" var="ciud"
-                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
-                    </p:selectOneMenu>
-                    <p:message for="ciudad" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="zonaGeo" value="Zona Geografica:"/>
-                    <p:selectOneMenu id="zonaGeo" required="true"
-                                     value="#{subClienteBean.nuevo.zona.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{zonaGeograficaBean.zonasGeograficas}" var="zona"
-                                       itemLabel="#{zona.nombre}" itemValue="#{zona.codigo}"/>
-                    </p:selectOneMenu>
-                    <p:message for="zonaGeo" display="tooltip" severity="error"/>
-                </h:panelGrid>
-                <h:panelGrid columns="2" cellpadding="5">
-                    <p:outputLabel for="direccion" value="Direccion:"/>
-                    <p:inputTextarea id="direccion" required="true" style="width: 190%" 
-                                     value="#{subClienteBean.nuevo.direccion}"/>
-                    <p:message for="direccion" display="tooltip" severity="error"/>
-                </h:panelGrid>
+                        <p:outputLabel for="zonaGeo" value="Zona Geografica:"/>
+                        <p:selectOneMenu id="zonaGeo" required="true"
+                                         value="#{subClienteBean.nuevoSelected.zona.codigo}">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{zonaGeograficaBean.zonasGeograficas}" var="zona"
+                                           itemLabel="#{zona.nombre}" itemValue="#{zona.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="zonaGeo" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="direccion" value="Direccion:"/>
+                        <p:inputTextarea id="direccion" required="true" style="width: 190%" 
+                                         value="#{subClienteBean.selected.direccion}"/>
+                        <p:message for="direccion" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
                 <h:panelGrid columns="1" cellspacing="5">
                     <p:outputPanel id="outDetail">
                         <p:tabView orientation="left">
@@ -79,7 +107,7 @@
                                             <h:outputText value="#{tlf.numero}" />
                                         </p:column>
                                         <p:column style="width:32px;text-align: center">
-                                            <p:commandButton update=":fadd:outDetail"
+                                            <p:commandButton update=":fcli:outDetail"
                                                              icon="ui-icon-close" title="Eliminar"
                                                              actionListener="#{subClienteBean.telefono.remove(evt,tlf)}">
                                                 <f:setPropertyActionListener value="#{tlf}" target="#{subClienteBean.telefono.selected}" />
@@ -87,6 +115,7 @@
                                         </p:column>
                                         <f:facet name="footer">
                                             <p:commandButton value="Agregar" update=":fedit1:outTlf"
+                                                             disabled="#{subClienteBean.activeSelectedSubCliente}"
                                                              oncomplete="PF('dlgTelefono').show()"/>
                                         </f:facet>   
                                     </p:dataTable>
@@ -108,7 +137,7 @@
                                             <h:outputText value="#{email.email}" />
                                         </p:column>
                                         <p:column style="width:32px;text-align: center">
-                                            <p:commandButton update=":fadd:outDetail"
+                                            <p:commandButton update=":fcli:outDetail"
                                                              icon="ui-icon-close" title="Eliminar"
                                                              actionListener="#{subClienteBean.correo.remove(evt,email)}">
                                                 <f:setPropertyActionListener value="#{email}" target="#{subClienteBean.correo.selected}" />
@@ -116,6 +145,7 @@
                                         </p:column>
                                         <f:facet name="footer">
                                             <p:commandButton value="Agregar" update=":fedit2:outEmail"
+                                                             disabled="#{subClienteBean.activeSelectedSubCliente}"
                                                              oncomplete="PF('dlgCorreo').show()"/>
                                         </f:facet>   
                                     </p:dataTable>
@@ -126,8 +156,8 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                     <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
-                    <p:commandButton value="Guardar" update=":fadd, :fadd:messages"
-                                     actionListener="#{subClienteBean.add(evt)}"/>
+                    <p:commandButton value="Actualizar" update=":fcli, :fcli:messages, :flist, :flist:dtCli"
+                                     actionListener="#{subClienteBean.modify(evt)}"/>
                 </f:facet>
             </p:panel>
         </h:form>
@@ -154,7 +184,7 @@
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Agregar" update=":fedit1, :fadd:messages, :fadd:outDetail" 
+                    <p:commandButton value="Agregar" update=":fedit1, :fcli:messages, :fcli:outDetail" 
                                      actionListener="#{subClienteBean.telefono.add(evt)}"/>
                 </f:facet>
             </p:dialog>
@@ -182,7 +212,7 @@
                     </h:panelGrid>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Agregar" update=":fedit2, :fadd:messages, :fadd:outDetail" 
+                    <p:commandButton value="Agregar" update=":fedit2, :fcli:messages, :fcli:outDetail" 
                                      actionListener="#{subClienteBean.correo.add(evt)}"/>
                 </f:facet>
             </p:dialog>

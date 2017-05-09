@@ -5,8 +5,8 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.Causa;
-import com.betel.flowers.service.CausaService;
+import com.betel.flowers.model.CausaEmpaque;
+import com.betel.flowers.service.CausaEmpaqueService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,22 +21,22 @@ import javax.inject.Inject;
  *
  * @author luis
  */
-@Named(value = "causaBean")
+@Named(value = "causaEmpaqueBean")
 @ViewScoped
-public class CausaBean implements Serializable {
+public class CausaEmpaqueBean implements Serializable {
 
-    private static final long serialVersionUID = -1764935876352186475L;
+    private static final long serialVersionUID = -4681432932216523925L;
 
-    private Causa nuevo;
-    private Causa selected;
-    private List<Causa> causas;
+    private CausaEmpaque nuevo;
+    private CausaEmpaque selected;
+    private List<CausaEmpaque> causas;
 
     @Inject
-    private CausaService causaService;
-
-    @PostConstruct
+    private CausaEmpaqueService causaService;
+    
+     @PostConstruct
     public void init() {
-        this.nuevo = new Causa();
+        this.nuevo = new CausaEmpaque();
         this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.causas = this.causaService.obtenerListFlag(1);
@@ -44,7 +44,8 @@ public class CausaBean implements Serializable {
             this.causas = new ArrayList<>();
         }
     }
-
+    
+    
     public void add(ActionEvent evt) {
         Boolean exito = this.causaService.insert(this.nuevo);
         if (exito) {
@@ -86,27 +87,28 @@ public class CausaBean implements Serializable {
         }
     }
 
-    public Causa getNuevo() {
+    public CausaEmpaque getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(Causa nuevo) {
+    public void setNuevo(CausaEmpaque nuevo) {
         this.nuevo = nuevo;
     }
 
-    public Causa getSelected() {
+    public CausaEmpaque getSelected() {
         return selected;
     }
 
-    public void setSelected(Causa selected) {
+    public void setSelected(CausaEmpaque selected) {
         this.selected = selected;
     }
 
-    public List<Causa> getCausas() {
+    public List<CausaEmpaque> getCausas() {
         return causas;
     }
 
-    public void setCausas(List<Causa> causas) {
+    public void setCausas(List<CausaEmpaque> causas) {
         this.causas = causas;
     }
+    
 }

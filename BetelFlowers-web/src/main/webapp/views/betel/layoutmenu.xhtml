@@ -37,7 +37,9 @@
 
             <p:submenu label="Clientes">
                 <p:menuitem value="Registro Cliente" outcome="/faces/views/cliente"/>
-                <p:menuitem value="Actulizar Cliente" outcome="/faces/views/modificarcliente"/>
+                <p:menuitem value="Actualizar Cliente" outcome="/faces/views/modificarcliente"/>
+                <p:menuitem value="Registro Sub-Cliente" outcome="/faces/views/subcliente"/>
+                <p:menuitem value="Actualizar Sub-Cliente" outcome="/faces/views/modificarsubcliente"/>
                 <p:menuitem value="Registro Pais" outcome="/faces/views/pais"/>
                 <p:menuitem value="Registro Ciudad" outcome="/faces/views/ciudad"/>
                 <p:menuitem value="Registro Marca de Caja" outcome="/faces/views/marcacaja"/>
@@ -54,6 +56,12 @@
                 <p:menuitem value="Cuartos Frio Carguera" outcome="/faces/views/cuartofriocarguera"/>
             </p:submenu>
 
+            <p:submenu label="Empaque">
+                <p:menuitem value="Dar de Baja" outcome="/faces/views/registrodebaja"/>
+                <p:menuitem value="Registro Causas" outcome="/faces/views/causaempaque"/>
+                <p:menuitem value="Registro Motivos" outcome="/faces/views/motivoempaque"/>
+            </p:submenu>
+            
             <p:submenu label="Usuarios">
                 <p:menuitem value="Administrar Usuarios" outcome="/faces/views/usuario"/>
                 <p:menuitem value="Registrar Tipo/Rol Usuario" outcome="/faces/views/tipousuario"/>
