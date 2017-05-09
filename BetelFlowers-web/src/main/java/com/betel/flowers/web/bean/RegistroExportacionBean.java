@@ -46,6 +46,7 @@ public class RegistroExportacionBean implements Serializable {
     private List<RegistroExportacion> registrosExportacion;
     private List<RegistroExportacion> registrosExportacionG;
     private List<BarcodeRegistroExportacion> barcodeList;
+    private List<BarcodeRegistroExportacion> filteredbarcodeList;
     private Rendimientos rendiminetoServiceList;
     private Boolean gerated;
     private Boolean operarios;
@@ -287,6 +288,7 @@ public class RegistroExportacionBean implements Serializable {
             List<RegistroExportacion> unique = this.selectBarcode(this.registrosExportacionG);
             for (RegistroExportacion registro : unique) {
                 BarcodeRegistroExportacion barcodes = new BarcodeRegistroExportacion();
+                barcodes.setCreationDate(registro.getCreationDate());
                 barcodes.setBodega(registro.getBodega());
                 barcodes.setBarcode(registro.getBarcode());
                 barcodes.setUsername(registro.getUsername());
@@ -387,6 +389,14 @@ public class RegistroExportacionBean implements Serializable {
 
     public void setBarcodeList(List<BarcodeRegistroExportacion> barcodeList) {
         this.barcodeList = barcodeList;
+    }
+
+    public List<BarcodeRegistroExportacion> getFilteredbarcodeList() {
+        return filteredbarcodeList;
+    }
+
+    public void setFilteredbarcodeList(List<BarcodeRegistroExportacion> filteredbarcodeList) {
+        this.filteredbarcodeList = filteredbarcodeList;
     }
 
     public Rendimientos getRendiminetoServiceList() {

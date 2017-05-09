@@ -8,6 +8,7 @@ package com.betel.flowers.web.bean.util;
 import com.betel.flowers.model.BodegaVirtual;
 import com.betel.flowers.model.RegistroExportacion;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class BarcodeRegistroExportacion {
     
+    private Date creationDate;
     private String barcode;
     private BodegaVirtual bodega;
     private Integer totalTallosBarcode;
@@ -27,6 +29,14 @@ public class BarcodeRegistroExportacion {
         this.totalTallosBarcode  = 0;
         this.bodega = new BodegaVirtual();
         this.listBarcode = new ArrayList<>();
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getBarcode() {

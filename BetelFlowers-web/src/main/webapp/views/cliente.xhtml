@@ -326,6 +326,7 @@
                                      paginator="true" tableStyle="width: auto"
                                      paginatorPosition="Bottom"
                                      value="#{clienteBean.subClientes}"
+                                     filteredValue="#{clienteBean.subClients.filteredSubClientes}"
                                      selectionMode="single"
                                      selection="#{clienteBean.subClients.nuevo}"
                                      rowKey="#{subCliSelect.codigo}">
@@ -348,7 +349,7 @@
                                 <h:outputText value="#{subCliSelect.nombreContacto}"/>
                             </p:column>
                             <f:facet name="footer">
-                                <p:commandButton value="Agregar" update=":fedit4, :fadd:messages, :fadd:outDetail"
+                                <p:commandButton value="Agregar" update=":fedit4, :fedit4:outSubCliente, :fadd:messages, :fadd:outDetail"
                                                  actionListener="#{clienteBean.subClients.add(evt)}"/>
                             </f:facet>
                         </p:dataTable>

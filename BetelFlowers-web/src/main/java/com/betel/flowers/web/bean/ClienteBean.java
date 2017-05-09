@@ -46,6 +46,7 @@ public class ClienteBean implements Serializable {
     private Cliente selected;
     private Cliente removeSelected;
     private List<Cliente> clientes;
+    private List<Cliente> filteredClientes;
     private List<SubCliente> subClientes;
     private List<Ciudad> ciudades;
     private Telefonos telefono;
@@ -71,6 +72,7 @@ public class ClienteBean implements Serializable {
         this.nuevo.setUsername("usertest"); //usertest
         this.nuevoSelected = new Cliente();
         this.selected = null;
+        this.filteredClientes = null;
         this.ciudades = new ArrayList<>();
         this.telefono = new Telefonos();
         this.correo = new Correos();
@@ -266,6 +268,14 @@ public class ClienteBean implements Serializable {
 
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
+    }
+
+    public List<Cliente> getFilteredClientes() {
+        return filteredClientes;
+    }
+
+    public void setFilteredClientes(List<Cliente> filteredClientes) {
+        this.filteredClientes = filteredClientes;
     }
 
     public List<SubCliente> getSubClientes() {

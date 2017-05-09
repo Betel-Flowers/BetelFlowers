@@ -11,6 +11,7 @@
         <h:form id="flist">
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtCli" value="#{clienteBean.clientes}"
+                             filteredValue="#{clienteBean.filteredClientes}"
                              var="cli" rows="5"
                              paginator="true" tableStyle="width: auto"
                              paginatorPosition="Bottom"
@@ -366,6 +367,7 @@
                                      paginator="true" tableStyle="width: auto"
                                      paginatorPosition="Bottom"
                                      value="#{clienteBean.subClientes}"
+                                     filteredValue="#{clienteBean.subClients.filteredSubClientes}"
                                      selectionMode="single"
                                      selection="#{clienteBean.subClients.nuevo}"
                                      rowKey="#{subCliSelect.codigo}">
@@ -388,8 +390,8 @@
                                 <h:outputText value="#{subCliSelect.nombreContacto}"/>
                             </p:column>
                             <f:facet name="footer">
-                                <p:commandButton value="Agregar" update=":fedit4, :fedit4:outSubCliente, 
-                                                 :fcli:messages, :fcli:outDetail"
+                                <p:commandButton value="Agregar" 
+                                                 update=":fedit4, :fedit4:outSubCliente, :fcli:messages, :fcli:outDetail"
                                                  actionListener="#{clienteBean.subClients.add(evt)}"/>
                             </f:facet>
                         </p:dataTable>

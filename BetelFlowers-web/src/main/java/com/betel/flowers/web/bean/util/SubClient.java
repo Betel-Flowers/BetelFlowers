@@ -22,7 +22,8 @@ public class SubClient implements Serializable {
     //Agregar y Eliminar SubClient
     private SubCliente nuevo;
     private SubCliente selected;
-    private List<SubCliente> subClientes;
+    private List<SubCliente> subClientes; 
+    private List<SubCliente> filteredSubClientes;
 
     public SubClient() {
         this.nuevo = new SubCliente();
@@ -39,6 +40,7 @@ public class SubClient implements Serializable {
                 FacesUtil.addMessageInfo("Se ha agregado.");
                 this.nuevo = new SubCliente();
                 this.selected = null;
+                this.filteredSubClientes = null;
             } else {
                 FacesUtil.addMessageError(null, "No se ha agregado.");
             }
@@ -82,6 +84,14 @@ public class SubClient implements Serializable {
 
     public void setSubClientes(List<SubCliente> subClientes) {
         this.subClientes = subClientes;
+    }
+
+    public List<SubCliente> getFilteredSubClientes() {
+        return filteredSubClientes;
+    }
+
+    public void setFilteredSubClientes(List<SubCliente> filteredSubClientes) {
+        this.filteredSubClientes = filteredSubClientes;
     }
 
 }

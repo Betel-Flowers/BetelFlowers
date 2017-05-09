@@ -56,6 +56,7 @@ public class Rendimientos implements Serializable {
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
                 this.nuevo = new Rendimiento();
+                this.nuevo.setUsername("usertest");
             } else {
                 FacesUtil.addMessageError(null, "No se ha agregado.");
             }

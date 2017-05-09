@@ -198,7 +198,8 @@
                 <p:dataTable id="dtregExpG" var="regExpG" rows="5"
                              paginator="true" tableStyle="width: auto"
                              paginatorPosition="Bottom" style="table-layout: auto"
-                             value="#{registroExportacionBean.barcodeList}">
+                             value="#{registroExportacionBean.barcodeList}"
+                             filteredValue="#{registroExportacionBean.filteredbarcodeList}">
 
                     <f:facet name="header">
                         <h:outputText value="Registros Ingresados en Bodega"/>
@@ -206,8 +207,16 @@
                     <p:column style="width:16px">
                         <p:rowToggler />
                     </p:column>
+                    <p:column style="text-align: center" headerText="Fecha Ingreso" >
+                        <h:outputText value="#{regExpG.creationDate}">
+                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                        </h:outputText>
+                    </p:column>
                     <p:column style="text-align: center" headerText="Barcode">
                         <p:barcode value="#{regExpG.barcode}" type="code39" />
+                    </p:column>
+                    <p:column filterBy="#{regExpG.barcode}" filterMatchMode="contains" headerText="Barcode">
+                        <h:outputText value="#{regExpG.barcode}"/>
                     </p:column>
                     <p:column style="text-align: center" headerText="Bodega">
                         <h:outputText value="#{regExpG.bodega.nombre}"/>

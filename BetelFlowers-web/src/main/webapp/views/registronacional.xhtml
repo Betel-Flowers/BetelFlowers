@@ -167,7 +167,9 @@
                         <p:column headerText="Cantidad" style="text-align: center">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{mots.cantidad}"/></f:facet>
-                                <f:facet name="input"><p:inputNumber value="#{mots.cantidad}" minValue="0"/></f:facet>
+                                <f:facet name="input"><p:inputNumber id="mCantidad" value="#{mots.cantidad}" minValue="0">
+                                        <p:ajax update="mCantidad"/>
+                                    </p:inputNumber></f:facet>
                             </p:cellEditor>
                         </p:column>
                         <p:column filterBy="#{mots.causa.descripcion}" headerText="Causa" filterMatchMode="exact">
@@ -189,46 +191,6 @@
                                          update=":fmot, :fmot:chekMot, :fadd:outSelectMot"/>
                     </f:facet>
                 </h:panelGrid>      
-            </p:dialog>
-        </h:form>
-        <h:form id="frend">
-            <p:dialog header="Agregar Operario" widgetVar="dlgRend" resizable="false" 
-                      modal="true" showEffect="fade" hideEffect="fade">
-                <p:outputPanel id="outRend">
-                    <h:panelGrid columns="18" cellpadding="4">
-                        <p:outputLabel for="cantidad" value="Cantidad:"/>
-                        <p:spinner id="cantidad" required="true" 
-                                   value="#{rendimientoBean.nuevo.cantidad}"/>
-                        <p:message for="cantidad" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="fechaIn" value="Fecha de Inicio:"/>
-                        <p:calendar id="fechaIn" required="true" pattern="MM/dd/yyyy HH:mm:ss a"
-                                    value="#{rendimientoBean.nuevo.fechaIn}"/>
-                        <p:message for="fechaIn" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="fechaFin" value="Fecha de Fin:"/>
-                        <p:calendar id="fechaFin" required="true" pattern="MM/dd/yyyy HH:mm:ss a" 
-                                    value="#{rendimientoBean.nuevo.fechaFin}"/>
-                        <p:message for="fechaFin" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="tipotrabajo" value="Tipo de Trabajo:"/>
-                        <p:selectOneMenu id="tipotrabajo" required="true" style="width: 85%" 
-                                         value="#{rendimientoBean.nuevo.tipoTrabajo.codigo}">
-                            <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{tipoTrabajoBean.tipoTrabajos}" var="tpTr" 
-                                           itemLabel="#{tpTr.nombre}" itemValue="#{tpTr.codigo}"/>
-                        </p:selectOneMenu>
-                        <p:message for="tipotrabajo" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="operario" value="Cantidad:"/>
-                        <p:inputText id="operario" required="true" 
-                                     value="#{rendimientoBean.nuevo.operario}"/>
-                        <p:message for="operario" display="tooltip" severity="error"/>
-                    </h:panelGrid>
-                </p:outputPanel>
-                <f:facet name="footer">
-                    <p:commandButton value="Agregar" update=":frend, :fadd:messages"/>
-                </f:facet>
             </p:dialog>
         </h:form>
     </ui:define>

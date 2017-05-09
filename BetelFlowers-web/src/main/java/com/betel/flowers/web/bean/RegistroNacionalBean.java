@@ -68,17 +68,21 @@ public class RegistroNacionalBean implements Serializable {
     }
 
     public void add(ActionEvent evt) {
-        Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
-        BodegaVirtual bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
-        this.nuevo.setBodega(bodega);
-        this.nuevo.setVariedad(variedad);
-        Boolean exito = this.registroNacionalService.insert(this.nuevo);
-        if (exito) {
-            FacesUtil.addMessageInfo("Se ha guardado con exito.");
-            this.init();
-        } else {
-            FacesUtil.addMessageError(null, "No se ha guardado.");
-            this.init();
+        if (this.selectionMotivos != null && !this.selectionMotivos.isEmpty()) {
+            Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
+            BodegaVirtual bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
+            this.nuevo.setBodega(bodega);
+            this.nuevo.setVariedad(variedad);
+            Boolean exito = this.registroNacionalService.insert(this.nuevo);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha guardado.");
+                this.init();
+            }
+        }else{
+            FacesUtil.addMessageInfo("Por favor seleccione motivos para la veriedad seleccionada.");
         }
     }
 
@@ -119,8 +123,8 @@ public class RegistroNacionalBean implements Serializable {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy");
         return "BETEL-RN" + RandomStringUtils.randomNumeric(4) + "-IMG-" + format.format(calendario.getTime());
     }
-    
-     public List<DetalleNacional> listBardodeInsideList(RegistroNacional barcodeItem) {
+
+    public List<DetalleNacional> listBardodeInsideList(RegistroNacional barcodeItem) {
         List<DetalleNacional> list = new ArrayList<>();
         if (barcodeItem != null) {
             if (barcodeItem.getDetalle() != null && !barcodeItem.getDetalle().isEmpty()) {

@@ -5,12 +5,15 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.DetalleDeBaja;
+import com.betel.flowers.model.MotivoEmpaque;
 import com.betel.flowers.model.RegistroDeBaja;
 import com.betel.flowers.model.RegistroExportacion;
 import com.betel.flowers.service.CausaEmpaqueService;
 import com.betel.flowers.service.MotivoEmpaqueService;
 import com.betel.flowers.service.RegistroDeBajaService;
 import com.betel.flowers.service.RegistroExportacionService;
+import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +36,11 @@ public class RegistroDeBajaBean implements Serializable {
     private RegistroDeBaja nuevo;
     private RegistroDeBaja selected;
     private List<RegistroDeBaja> registrosEnBaja;
+    private List<RegistroDeBaja> filteredRegistrosEnBaja;
     private List<RegistroExportacion> registrosBarcode;
     private List<RegistroExportacion> registrosBarcodeSelected;
+    private Integer cantidadTotalContenedor;
+    private Boolean findBarcode;
 
     @Inject
     private RegistroDeBajaService registroBajaService;
@@ -50,6 +56,8 @@ public class RegistroDeBajaBean implements Serializable {
         this.nuevo = new RegistroDeBaja();
         this.nuevo.setUsername("usertest");
         this.selected = null;
+        this.cantidadTotalContenedor = 0;
+        this.findBarcode = Boolean.FALSE;
         this.registrosBarcode = new ArrayList<>();
         this.registrosEnBaja = this.registroBajaService.obtenerListFlag(1);
         if (this.registrosEnBaja == null) {
@@ -61,8 +69,64 @@ public class RegistroDeBajaBean implements Serializable {
         if (this.nuevo.getBarcode() != null && !this.nuevo.getBarcode().equals("")) {
             List<RegistroExportacion> registros = this.registroExportacionService.
                     obtenerListBarcode(this.nuevo.getBarcode());
-            this.registrosBarcode = registros;
+            if (registros != null && !registros.isEmpty()) {
+                this.registrosBarcode = registros;
+                this.calculateTotalContenedor();
+                this.setFindBarcode(Boolean.TRUE);
+            } else {
+                this.registrosBarcode = new ArrayList<>();
+                this.cantidadTotalContenedor = 0;
+                this.setFindBarcode(Boolean.FALSE);
+            }
         }
+    }
+    
+    public void add(ActionEvent evt) {
+        if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
+            Boolean exito = this.registroBajaService.insert(this.nuevo);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                this.init();
+            } else {
+                FacesUtil.addMessageError(null, "No se ha guardado.");
+                this.init();
+            }
+        }else{
+            FacesUtil.addMessageInfo("Por favor seleccione motivos para la veriedad seleccionada.");
+        }
+    }
+
+    public void onClikListenerSelectList() {
+        if (this.registrosBarcodeSelected != null && !this.registrosBarcodeSelected.isEmpty()) {
+            for (RegistroExportacion item : this.registrosBarcodeSelected) {
+                DetalleDeBaja itemBaja = new DetalleDeBaja();
+                itemBaja.setItem(item);
+                itemBaja.setTotalInicial(item.getTotalTallos());
+                itemBaja.setMotivo(new MotivoEmpaque());
+                this.getNuevo().getDetalle().add(itemBaja);
+            }
+        }
+        this.registrosBarcode = new ArrayList<>();
+        this.registrosBarcodeSelected = null;
+        this.cantidadTotalContenedor = 0;
+    }
+
+    private void calculateTotalContenedor() {
+        Integer total = 0;
+        if (this.registrosBarcode != null && !this.registrosBarcode.isEmpty()) {
+            for (int i = 0; i < this.registrosBarcode.size(); i++) {
+                total = total + this.registrosBarcode.get(i).getTotalTallos();
+            }
+        }
+        this.setCantidadTotalContenedor(total);
+    }
+
+    public List<DetalleDeBaja> listInsideExportacion(RegistroDeBaja registro) {
+        List<DetalleDeBaja> list = new ArrayList<>();
+        if (registro.getDetalle() != null && !registro.getDetalle().isEmpty()) {
+            list = registro.getDetalle();
+        }
+        return list;
     }
 
     public RegistroDeBaja getNuevo() {
@@ -89,6 +153,14 @@ public class RegistroDeBajaBean implements Serializable {
         this.registrosEnBaja = registrosEnBaja;
     }
 
+    public List<RegistroDeBaja> getFilteredRegistrosEnBaja() {
+        return filteredRegistrosEnBaja;
+    }
+
+    public void setFilteredRegistrosEnBaja(List<RegistroDeBaja> filteredRegistrosEnBaja) {
+        this.filteredRegistrosEnBaja = filteredRegistrosEnBaja;
+    }
+
     public List<RegistroExportacion> getRegistrosBarcode() {
         return registrosBarcode;
     }
@@ -103,6 +175,22 @@ public class RegistroDeBajaBean implements Serializable {
 
     public void setRegistrosBarcodeSelected(List<RegistroExportacion> registrosBarcodeSelected) {
         this.registrosBarcodeSelected = registrosBarcodeSelected;
+    }
+
+    public Integer getCantidadTotalContenedor() {
+        return cantidadTotalContenedor;
+    }
+
+    public void setCantidadTotalContenedor(Integer cantidadTotalContenedor) {
+        this.cantidadTotalContenedor = cantidadTotalContenedor;
+    }
+
+    public Boolean getFindBarcode() {
+        return findBarcode;
+    }
+
+    public void setFindBarcode(Boolean findBarcode) {
+        this.findBarcode = findBarcode;
     }
 
 }
