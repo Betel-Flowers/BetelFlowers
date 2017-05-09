@@ -28,15 +28,12 @@ public class RegistroDeBaja extends BaseEntity{
     private String barcode;
     private String username;
     private Integer flag;
-    
+
     @Reference
-    private MotivoEmpaque motivo;
-    @Reference
-    private List<RegistroExportacion> contenedor;
+    private List<DetalleDeBaja> detalle;
 
     public RegistroDeBaja() {
-        this.motivo = new MotivoEmpaque();
-        this.contenedor = new ArrayList<>();
+        this.detalle = new ArrayList<>();
     }
 
     public String getBarcode() {
@@ -47,20 +44,12 @@ public class RegistroDeBaja extends BaseEntity{
         this.barcode = barcode;
     }
 
-    public MotivoEmpaque getMotivo() {
-        return motivo;
+    public List<DetalleDeBaja> getDetalle() {
+        return detalle;
     }
 
-    public void setMotivo(MotivoEmpaque motivo) {
-        this.motivo = motivo;
-    }
-
-    public List<RegistroExportacion> getContenedor() {
-        return contenedor;
-    }
-
-    public void setContenedor(List<RegistroExportacion> contenedor) {
-        this.contenedor = contenedor;
+    public void setDetalle(List<DetalleDeBaja> detalle) {
+        this.detalle = detalle;
     }
 
     public Integer getCodigo() {
@@ -114,7 +103,7 @@ public class RegistroDeBaja extends BaseEntity{
 
     @Override
     public String toString() {
-        return "RegistroDeBaja{" + "codigo=" + codigo + ", barcode=" + barcode + ", username=" + username + ", flag=" + flag + ", motivo=" + motivo + ", contenedor=" + contenedor + '}';
+        return "RegistroDeBaja{" + "codigo=" + codigo + ", barcode=" + barcode + ", username=" + username + ", flag=" + flag + ", detalle=" + detalle + '}';
     }
-    
+
 }

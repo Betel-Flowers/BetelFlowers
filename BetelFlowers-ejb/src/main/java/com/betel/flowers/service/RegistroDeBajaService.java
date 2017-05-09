@@ -123,8 +123,7 @@ public class RegistroDeBajaService implements Serializable {
         );
         UpdateOperations<RegistroDeBaja> update = this.ds.createUpdateOperations(RegistroDeBaja.class);
         update.set("barcode", registroDeBaja.getBarcode()).
-                set("motivo", registroDeBaja.getMotivo()).
-                set("contenedor", registroDeBaja.getContenedor()).
+                set("detalle", registroDeBaja.getDetalle()).
                 set("username", registroDeBaja.getUsername()).
                 set("flag", registroDeBaja.getFlag());
         UpdateResults results = this.ds.update(query, update);

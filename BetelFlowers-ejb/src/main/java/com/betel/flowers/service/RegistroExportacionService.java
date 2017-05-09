@@ -6,7 +6,6 @@
 package com.betel.flowers.service;
 
 import com.betel.flowers.model.RegistroExportacion;
-import com.betel.flowers.model.Usuario;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
