@@ -6,6 +6,7 @@
 package com.betel.flowers.service;
 
 import com.betel.flowers.model.RegistroExportacion;
+import com.betel.flowers.model.Usuario;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class RegistroExportacionService implements Serializable {
         RegistroExportacion axu = this.findByCodigo(registroExportacion);
         if (axu.getId() == null) {
             registroExportacion.setCodigo(this.obtenerCodigo());
+            registroExportacion.setFlag(1);
             this.ds.save(registroExportacion);
             exito = Boolean.TRUE;
         }
@@ -59,21 +61,56 @@ public class RegistroExportacionService implements Serializable {
     public RegistroExportacion findByCodigo(RegistroExportacion registroExportacion) {
         RegistroExportacion find = new RegistroExportacion();
         Query<RegistroExportacion> result = this.ds.find(RegistroExportacion.class).
-                field("codigo").equal(registroExportacion.getCodigo());
+                field("codigo").equal(registroExportacion.getCodigo()).
+                field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);
         }
         return find;
     }
 
+    public List<RegistroExportacion> obtenerListFlag(Integer flag) {
+        List<RegistroExportacion> list = new ArrayList<>();
+        Query<RegistroExportacion> result = this.ds.find(RegistroExportacion.class).
+                field("flag").equal(flag);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        return list;
+    }
+    
+    public List<RegistroExportacion> obtenerListBarcode(String barcode) {
+        List<RegistroExportacion> list = new ArrayList<>();
+        Query<RegistroExportacion> result = this.ds.find(RegistroExportacion.class).
+                field("barcode").equal(barcode).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        return list;
+    }
+
     public RegistroExportacion findByCodigo(String registroExportacion) {
         RegistroExportacion find = new RegistroExportacion();
         Query<RegistroExportacion> result = this.ds.find(RegistroExportacion.class).
-                field("codigo").equal(registroExportacion);
+                field("codigo").equal(registroExportacion).
+                field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);
         }
         return find;
+    }
+    
+    public Boolean deteleFlag(RegistroExportacion usuario) {
+        Query<RegistroExportacion> query = this.ds.createQuery(RegistroExportacion.class);
+        usuario.setFlag(0);
+        query.and(
+                query.criteria("codigo").equal(usuario.getCodigo())
+        );
+        UpdateOperations<RegistroExportacion> update = this.ds.createUpdateOperations(RegistroExportacion.class);
+        update.set("flag", usuario.getFlag());
+        UpdateResults results = this.ds.update(query, update);
+        return results.getUpdatedExisting();
     }
 
     public void delete(RegistroExportacion registroExportacion) {
