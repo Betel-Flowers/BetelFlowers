@@ -8,7 +8,7 @@
 
     <ui:define name="content">
         <h:form id="fadd">
-            <p:panel header="Registrar Carguera">
+            <p:panel header="Registrar Agencia Carguera">
                 <h:panelGrid cellpadding="5" style="float: right">
                     <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                 </h:panelGrid>
@@ -42,25 +42,6 @@
                                        itemLabel="#{ciu.nombre}" itemValue="#{ciu.codigo}"/>
                     </p:selectOneMenu>
                     <p:message for="ciudad" display="tooltip" severity="error"/>
-
-                    <p:outputLabel for="bodega" value="Bodega:"/>
-                    <p:selectOneMenu id="bodega" required="true"
-                                     value="#{cargueraBean.nuevo.cuartoFrio.bodega.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{bodegaCargueraBean.bodegas}" var="bodc"
-                                       itemLabel="#{bodc.nombre}" itemValue="#{bodc.codigo}"/>
-                        <p:ajax update=":fadd:cuartofrio" listener="#{cargueraBean.changeBodega}"/>
-                    </p:selectOneMenu>
-                    <p:message for="bodega" display="tooltip" severity="error"/>                        
-
-                    <p:outputLabel for="cuartofrio" value="Cuarto Frio:"/>
-                    <p:selectOneMenu id="cuartofrio" required="true"
-                                     value="#{cargueraBean.nuevo.cuartoFrio.codigo}">
-                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{cargueraBean.cuartosFrio}" var="cfc"
-                                       itemLabel="#{cfc.descripcion}" itemValue="#{cfc.codigo}"/>
-                    </p:selectOneMenu>
-                    <p:message for="cuartofrio" display="tooltip" severity="error"/>
                 </h:panelGrid>
                 <h:panelGrid columns="1" cellspacing="5">
                     <p:outputPanel id="outDetail">
@@ -123,6 +104,32 @@
                                     </p:dataTable>
                                 </h:panelGrid>
                             </p:tab>
+                            <p:tab title="Bodegas">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="bodegas" var="bod" rows="4"
+                                                 paginator="true"
+                                                 paginatorPosition="Bottom"
+                                                 value="#{cargueraBean.bodega.bodegas}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Lista"/>
+                                        </f:facet>
+                                        <p:column headerText="Bodega">
+                                            <h:outputText value="#{bod.nombre}" />
+                                        </p:column>
+                                        <p:column style="width:32px;text-align: center">
+                                            <p:commandButton update=":fadd:outDetail"
+                                                             icon="ui-icon-close" title="Eliminar"
+                                                             actionListener="#{cargueraBean.bodega.remove(evt,bod)}">
+                                                <f:setPropertyActionListener value="#{bod}" target="#{cargueraBean.bodega.selected}" />
+                                            </p:commandButton>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton value="Agregar" update=":fedit3:outBodega"
+                                                             oncomplete="PF('dlgBodega').show()"/>
+                                        </f:facet>   
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
                         </p:tabView>
                     </p:outputPanel>
                 </h:panelGrid>
@@ -145,7 +152,6 @@
                              paginator="true" tableStyle="width: auto"
                              paginatorPosition="Bottom"
                              value="#{cargueraBean.cargueras}">
-
                     <f:facet name="header">
                         <h:outputText value="Bloques"/>
                     </f:facet>
@@ -164,9 +170,10 @@
                         <h:outputText value="#{carg.ciudad.pais.nombre} "/>
                         <h:outputText value="#{carg.ciudad.nombre}"/>
                     </p:column>
-                    <p:column headerText="Bodega" style="text-align: center">
-                        <h:outputText value="#{carg.cuartoFrio.bodega.nombre} "/>
-                        <h:outputText value="#{carg.cuartoFrio.descripcion}"/>
+                    <p:column headerText="Bodegas" style="text-align: center">
+                        <p:commandLink value="Ver Lista" update=":fviewb:outViewB"
+                                       actionListener="#{cargueraBean.viewListBodegas(evt, carg)}"
+                                       oncomplete="PF('dlgViewB').show()"/>
                     </p:column>
                     <p:column headerText="Telefonos" style="text-align: center">
                         <p:commandLink value="Ver Lista" update=":fviewt:outViewT"
@@ -184,6 +191,7 @@
                             <f:setPropertyActionListener value="#{carg}" target="#{cargueraBean.nuevo}" />
                             <f:setPropertyActionListener value="#{carg.telefonos}" target="#{cargueraBean.telefono.telefonos}"/>
                             <f:setPropertyActionListener value="#{carg.correos}" target="#{cargueraBean.correo.correos}"/>
+                            <f:setPropertyActionListener value="#{carg.bodegas}" target="#{cargueraBean.bodega.bodegas}"/>
                             <f:setPropertyActionListener value="#{Boolean.TRUE}" target="#{cargueraBean.addModify}"/>
                         </p:commandButton>
                     </p:column>
@@ -253,6 +261,27 @@
                 </f:facet>
             </p:dialog>
         </h:form>
+        <h:form id="fedit3"> 
+            <p:dialog header="Agregar Bodega" widgetVar="dlgBodega" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outBodega">
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel for="Bodega" value="Tipo:"/>
+                        <p:selectOneMenu id="Bodega" required="true" 
+                                         value="#{cargueraBean.bodega.nuevo.codigo}">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{bodegaCargueraBean.bodegas}" var="cbodega"
+                                           itemLabel="#{cbodega.nombre}" itemValue="#{cbodega.codigo}"/>
+                        </p:selectOneMenu>
+                        <p:message for="Bodega" display="tooltip" severity="error"/>
+                    </h:panelGrid>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" update=":fedit3, :fadd:messages, :fadd:outDetail" 
+                                     actionListener="#{cargueraBean.bodega.add(evt)}"/>
+                </f:facet>
+            </p:dialog>
+        </h:form>
         <h:form id="fviewt">
             <p:dialog header="Telefonos" widgetVar="dlgViewT" resizable="false" 
                       modal="true" showEffect="fade" hideEffect="fade">
@@ -280,6 +309,19 @@
                         </p:column>
                         <p:column style="text-align: center" headerText="Longitud">
                             <h:outputText value="#{emailcar.email}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <h:form id="fviewb">
+            <p:dialog header="Bodegas" widgetVar="dlgViewB" resizable="false" 
+                      modal="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel id="outViewB">
+                    <p:dataTable var="bodegacar" tableStyle="width: auto"
+                                 value="#{cargueraBean.bodegas}">
+                        <p:column style="text-align: center" headerText="Tipo">
+                            <h:outputText value="#{bodegacar.nombre}" />
                         </p:column>
                     </p:dataTable>
                 </p:outputPanel>

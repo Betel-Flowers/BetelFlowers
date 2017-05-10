@@ -133,6 +133,7 @@ public class RegistroExportacionBean implements Serializable {
             for (int i = 0; i < size; i++) {
                 Integer total = this.registrosExportacion.get(i).getTotalTallos();
                 this.registrosExportacion.get(i).setTotalTallos(total);
+                this.registrosExportacion.get(i).setStock(total);
                 this.registrosExportacion.get(i).setBarcode(barcode);
                 this.registrosExportacion.get(i).setXml(url + barcode + ".xml");
                 this.registrosExportacion.get(i).setHtml(url + barcode + ".html");
@@ -159,7 +160,7 @@ public class RegistroExportacionBean implements Serializable {
         if (this.registrosExportacion != null && !this.registrosExportacion.isEmpty()
                 && this.rendiminetoServiceList.getRendimientos() != null && !this.rendiminetoServiceList.getRendimientos().isEmpty()) {
             for (int i = 0; i < this.registrosExportacion.size(); i++) {
-                this.registrosExportacion.get(i).setRedimientos(this.rendiminetoServiceList.getRendimientos());
+                this.registrosExportacion.get(i).setRendimientos(this.rendiminetoServiceList.getRendimientos());
                 exito = this.registroExportacionService.insert(this.registrosExportacion.get(i));
                 if (!exito) {
                     exito = Boolean.FALSE;

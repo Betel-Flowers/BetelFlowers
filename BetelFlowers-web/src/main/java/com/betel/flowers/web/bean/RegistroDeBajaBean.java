@@ -59,6 +59,8 @@ public class RegistroDeBajaBean implements Serializable {
         this.cantidadTotalContenedor = 0;
         this.findBarcode = Boolean.FALSE;
         this.registrosBarcode = new ArrayList<>();
+        this.registrosBarcodeSelected = null;
+        this.filteredRegistrosEnBaja = null;
         this.registrosEnBaja = this.registroBajaService.obtenerListFlag(1);
         if (this.registrosEnBaja == null) {
             this.registrosEnBaja = new ArrayList<>();
@@ -80,9 +82,11 @@ public class RegistroDeBajaBean implements Serializable {
             }
         }
     }
-    
+
     public void add(ActionEvent evt) {
         if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
+            this.asignarCodeMotivosForDetail();
+            this.updateContentsBarcodeDown();
             Boolean exito = this.registroBajaService.insert(this.nuevo);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha guardado con exito.");
@@ -91,8 +95,30 @@ public class RegistroDeBajaBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se ha guardado.");
                 this.init();
             }
-        }else{
+        } else {
             FacesUtil.addMessageInfo("Por favor seleccione motivos para la veriedad seleccionada.");
+        }
+    }
+
+    private void asignarCodeMotivosForDetail() {
+        if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
+            for (int i = 0; i < this.nuevo.getDetalle().size(); i++) {
+                MotivoEmpaque mot = this.motivoService.
+                        findByDescripcion(this.nuevo.getDetalle().get(i).getMotivo());
+                this.nuevo.getDetalle().get(i).setMotivo(mot);
+            }
+        }
+    }
+
+    private void updateContentsBarcodeDown() {
+        if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
+            for (DetalleDeBaja itemDetailBaja : this.nuevo.getDetalle()) {
+                Integer stock = itemDetailBaja.getItem().getTotalTallos() - itemDetailBaja.getCantidad();
+                RegistroExportacion registro = this.registroExportacionService.findByCodigo(itemDetailBaja.getItem());
+                registro.setStock(stock);
+                this.registroExportacionService.update(registro);
+                itemDetailBaja.setItem(registro);
+            }
         }
     }
 
@@ -101,7 +127,6 @@ public class RegistroDeBajaBean implements Serializable {
             for (RegistroExportacion item : this.registrosBarcodeSelected) {
                 DetalleDeBaja itemBaja = new DetalleDeBaja();
                 itemBaja.setItem(item);
-                itemBaja.setTotalInicial(item.getTotalTallos());
                 itemBaja.setMotivo(new MotivoEmpaque());
                 this.getNuevo().getDetalle().add(itemBaja);
             }
@@ -123,8 +148,10 @@ public class RegistroDeBajaBean implements Serializable {
 
     public List<DetalleDeBaja> listInsideExportacion(RegistroDeBaja registro) {
         List<DetalleDeBaja> list = new ArrayList<>();
-        if (registro.getDetalle() != null && !registro.getDetalle().isEmpty()) {
-            list = registro.getDetalle();
+        if (registro != null) {
+            if (registro.getDetalle() != null && !registro.getDetalle().isEmpty()) {
+                list = registro.getDetalle();
+            }
         }
         return list;
     }

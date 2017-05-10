@@ -68,7 +68,7 @@ public class RegistroNacionalBean implements Serializable {
     }
 
     public void add(ActionEvent evt) {
-        if (this.selectionMotivos != null && !this.selectionMotivos.isEmpty()) {
+        if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
             Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
             BodegaVirtual bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
             this.nuevo.setBodega(bodega);

@@ -45,6 +45,13 @@
                         <p:graphicImage value="#{itemContent.variedad.urlFoto}"
                                         width="40px" height="40px"/>
                     </p:column>
+                    <p:column style="text-align: center" headerText="Longitud" >
+                        <h:outputText value="#{itemContent.longitud}" rendered="#{not itemContent.variedad.girasol}"/>
+                        <h:outputText value="#{itemContent.glongitud}" rendered="#{itemContent.variedad.girasol}"/>
+                    </p:column>
+                    <p:column style="text-align: center" headerText="Pto. de Corte" >
+                        <h:outputText value="#{itemContent.puntoCorte}"/>
+                    </p:column>
                     <p:column style="text-align: center" headerText="Variedad" >
                         <h:outputText value="#{itemContent.variedad.nombre}"/>
                     </p:column>
@@ -57,12 +64,8 @@
                     <p:column style="text-align: center" headerText="Total" >
                         <h:outputText value="#{itemContent.totalTallos}"/>
                     </p:column>
-                    <p:column style="text-align: center" headerText="Longitud" >
-                        <h:outputText value="#{itemContent.longitud}" rendered="#{not itemContent.variedad.girasol}"/>
-                        <h:outputText value="#{itemContent.glongitud}" rendered="#{itemContent.variedad.girasol}"/>
-                    </p:column>
-                    <p:column style="text-align: center" headerText="Pto. de Corte" >
-                        <h:outputText value="#{itemContent.puntoCorte}"/>
+                    <p:column style="text-align: center" headerText="Stock" >
+                        <h:outputText value="#{itemContent.stock}"/>
                     </p:column>
                     <f:facet name="footer">
                         <p:commandButton process="dtSelectContent"
@@ -86,7 +89,7 @@
                 <p:dataTable id="dtBaja" var="itemBaja" tableStyle="width: auto" 
                              value="#{registroDeBajaBean.nuevo.detalle}" 
                              editable="true" editMode="cell" 
-                             widgetVar="cellCars">
+                             widgetVar="cellBaja">
                     <f:facet name="header">
                         <h:outputText value="Variedades Seleccionadas"/>
                     </f:facet>
@@ -118,6 +121,9 @@
                     <p:column style="text-align: center" headerText="Total" >
                         <h:outputText value="#{itemBaja.item.totalTallos}"/>
                     </p:column>
+                    <p:column style="text-align: center" headerText="Stock" >
+                        <h:outputText value="#{itemBaja.item.totalTallos}"/>
+                    </p:column>
                     <p:column headerText="Motivo">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{itemBaja.motivo.descripcion}" /></f:facet>
@@ -132,8 +138,8 @@
                     </p:column>
                     <p:column headerText="Cantidad">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{itemBaja.motivo.cantidad}" /></f:facet>
-                            <f:facet name="input"><p:inputNumber id="mCantidad" required="true" value="#{itemBaja.motivo.cantidad}" 
+                            <f:facet name="output"><h:outputText value="#{itemBaja.cantidad}" /></f:facet>
+                            <f:facet name="input"><p:inputNumber id="mCantidad" required="true" value="#{itemBaja.cantidad}" 
                                                                  style="width:100%" label="Cantidad"
                                                                  minValue="0" maxValue="#{itemBaja.item.totalTallos}">
                                     <p:ajax update="mCantidad"/>
@@ -141,7 +147,7 @@
                         </p:cellEditor>
                     </p:column>
                     <f:facet name="footer">
-                        <p:commandButton value="Guardar" update=":fadd:dbBaja, :frbaja:dtRegBaja"
+                        <p:commandButton value="Guardar" update=":fadd:dtBaja, :frbaja:dtRegBaja, :ffind, :ffind:messages"
                                          actionListener="#{registroDeBajaBean.add(evt)}"/>
                     </f:facet>
                 </p:dataTable>
@@ -162,20 +168,12 @@
                             <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Barcode">
-                        <p:barcode value="#{itemRegBaja.barcode}" type="code39"/>
-                    </p:column>
                     <p:column filterBy="#{itemRegBaja.barcode}" filterMatchMode="contains" headerText="Barcode">
                         <h:outputText value="#{itemRegBaja.barcode}"/>
                     </p:column>
                     <p:column headerText="Detalle">
                         <p:dataTable var="itemDetail" tableStyle="width: auto"
                                      value="#{registroDeBajaBean.listInsideExportacion(itemRegBaja)}">
-                            <p:column style="text-align: center" headerText="Fecha Registro" >
-                                <h:outputText value="#{itemDetail.item.lastChange}">
-                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
-                                </h:outputText>
-                            </p:column>
                             <p:column headerText="Foto" style="text-align: center">
                                 <p:graphicImage value="#{itemDetail.item.variedad.urlFoto}"
                                                 width="40px" height="40px"/>
@@ -184,8 +182,8 @@
                                 <h:outputText value="#{itemDetail.item.variedad.nombre}"/>
                             </p:column>
                             <p:column style="text-align: center" headerText="Longitud" >
-                                <h:outputText value="#{itemDetail.item.longitud}" rendered="#{not codeList.variedad.girasol}"/>
-                                <h:outputText value="#{itemDetail.item.glongitud}" rendered="#{codeList.variedad.girasol}"/>
+                                <h:outputText value="#{itemDetail.item.longitud}" rendered="#{not itemDetail.item.variedad.girasol}"/>
+                                <h:outputText value="#{itemDetail.item.glongitud}" rendered="#{itemDetail.item.variedad.girasol}"/>
                             </p:column>
                             <p:column style="text-align: center" headerText="Pto. de Corte" >
                                 <h:outputText value="#{itemDetail.item.puntoCorte}"/>
@@ -196,17 +194,17 @@
                             <p:column style="text-align: center" headerText="Tallos" >
                                 <h:outputText value="#{itemDetail.item.numeroTallosRamo}"/>
                             </p:column>
-                            <p:column style="text-align: center" headerText="Total Inicial" >
-                                <h:outputText value="#{itemDetail.totalInicial}"/>
+                            <p:column style="text-align: center" headerText="Total" >
+                                <h:outputText value="#{itemDetail.item.totalTallos}"/>
+                            </p:column>
+                            <p:column style="text-align: center" headerText="stock" >
+                                <h:outputText value="#{itemDetail.item.stock}"/>
                             </p:column>
                             <p:column style="text-align: center" headerText="Motivo" >
                                 <h:outputText value="#{itemDetail.motivo.descripcion}"/>
                             </p:column>
                             <p:column style="text-align: center" headerText="Cantidad" >
-                                <h:outputText value="#{itemDetail.motivo.cantidad}"/>
-                            </p:column>
-                            <p:column style="text-align: center" headerText="Total Actual" >
-                                <h:outputText value="#{itemDetail.item.totalTallos}"/>
+                                <h:outputText value="#{itemDetail.cantidad}"/>
                             </p:column>
                         </p:dataTable>    
                     </p:column>

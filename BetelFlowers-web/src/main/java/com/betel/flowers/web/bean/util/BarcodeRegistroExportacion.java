@@ -21,6 +21,7 @@ public class BarcodeRegistroExportacion {
     private String barcode;
     private BodegaVirtual bodega;
     private Integer totalTallosBarcode;
+    private Integer stockBarcode;
     private String urlPdf;
     private String username;
     private List<RegistroExportacion> listBarcode;
@@ -56,11 +57,21 @@ public class BarcodeRegistroExportacion {
     }
 
     public Integer getTotalTallosBarcode() {
-        return this.calularTotalTallosBarcode();
+        this.totalTallosBarcode = this.calularTotalTallosBarcode();
+        return totalTallosBarcode;
     }
 
     public void setTotalTallosBarcode(Integer totalTallosBarcode) {
         this.totalTallosBarcode = totalTallosBarcode;
+    }
+
+    public Integer getStockBarcode() {
+        this.stockBarcode = this.calularStockBarcode();
+        return stockBarcode;
+    }
+
+    public void setStockBarcode(Integer stockBarcode) {
+        this.stockBarcode = stockBarcode;
     }
 
     public String getUrlPdf() {
@@ -92,6 +103,16 @@ public class BarcodeRegistroExportacion {
         if(this.listBarcode != null && ! this.listBarcode.isEmpty()){
             for(RegistroExportacion registro : this.listBarcode){
                 total = total + registro.getTotalTallos();
+            }
+        }
+        return total;
+    }
+    
+    private Integer calularStockBarcode(){
+        Integer total = 0;
+        if(this.listBarcode != null && ! this.listBarcode.isEmpty()){
+            for(RegistroExportacion registro : this.listBarcode){
+                total = total + registro.getStock();
             }
         }
         return total;

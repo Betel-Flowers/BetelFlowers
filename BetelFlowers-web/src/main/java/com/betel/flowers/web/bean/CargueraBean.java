@@ -15,8 +15,8 @@ import com.betel.flowers.model.Telefono;
 import com.betel.flowers.service.BodegaCargueraService;
 import com.betel.flowers.service.CargueraService;
 import com.betel.flowers.service.CiudadService;
-import com.betel.flowers.service.CuartoFrioCargueraService;
 import com.betel.flowers.service.PaisService;
+import com.betel.flowers.web.bean.util.Bodegas;
 import com.betel.flowers.web.bean.util.Correos;
 import com.betel.flowers.web.bean.util.Telefonos;
 import com.betel.flowers.web.util.FacesUtil;
@@ -44,18 +44,18 @@ public class CargueraBean implements Serializable {
     private List<Carguera> cargueras;
     private Telefonos telefono;
     private Correos correo;
+    private Bodegas bodega;
     private List<Ciudad> ciudades;
     private List<CuartoFrioCarguera> cuartosFrio;
     private Boolean AddModify;
     private List<Telefono> telefonos;
     private List<Correo> correos;
+    private List<BodegaCarguera> bodegas;
 
     @Inject
     private CargueraService cargueraService;
     @Inject
     private BodegaCargueraService bodegaService;
-    @Inject
-    private CuartoFrioCargueraService cuartoFrioService;
     @Inject
     private PaisService paisService;
     @Inject
@@ -68,6 +68,7 @@ public class CargueraBean implements Serializable {
         this.selected = null;
         this.telefono = new Telefonos();
         this.correo = new Correos();
+        this.bodega = new Bodegas();
         this.ciudades = new ArrayList<>();
         this.cuartosFrio = new ArrayList<>();
         this.AddModify = Boolean.TRUE;
@@ -84,10 +85,9 @@ public class CargueraBean implements Serializable {
             if (this.correo.getCorreos() != null && !this.correo.getCorreos().isEmpty()) {
                 this.nuevo.setTelefonos(this.telefono.getTelefonos());
                 this.nuevo.setCorreos(this.correo.getCorreos());
+                this.nuevo.setBodegas(this.bodega.getBodegas());
                 Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevo.getCiudad());
-                CuartoFrioCarguera mfrioc = this.cuartoFrioService.findByCodigo(this.nuevo.getCuartoFrio());
                 this.nuevo.setCiudad(mciudad);
-                this.nuevo.setCuartoFrio(mfrioc);
                 Boolean exito = this.cargueraService.insert(this.nuevo);
                 if (exito) {
                     FacesUtil.addMessageInfo("Se ha guardado con exito.");
@@ -109,10 +109,9 @@ public class CargueraBean implements Serializable {
             if (this.correo.getCorreos() != null && !this.correo.getCorreos().isEmpty()) {
                 this.nuevo.setTelefonos(this.telefono.getTelefonos());
                 this.nuevo.setCorreos(this.correo.getCorreos());
+                this.nuevo.setBodegas(this.bodega.getBodegas());
                 Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevo.getCiudad());
-                CuartoFrioCarguera mfrioc = this.cuartoFrioService.findByCodigo(this.nuevo.getCuartoFrio());
                 this.nuevo.setCiudad(mciudad);
-                this.nuevo.setCuartoFrio(mfrioc);
                 setSelected(this.nuevo);
                 Boolean exito = this.cargueraService.update(getSelected());
                 if (exito) {
@@ -154,14 +153,6 @@ public class CargueraBean implements Serializable {
         }
     }
 
-    public void changeBodega() {
-        if (this.nuevo.getCuartoFrio().getBodega().getCodigo() != null) {
-            this.cuartosFrio = new ArrayList<>();
-            BodegaCarguera mbodega = this.bodegaService.findByCodigo(this.nuevo.getCuartoFrio().getBodega());
-            this.setCuartosFrio(this.cuartoFrioService.obtenerListBodega(mbodega));
-        }
-    }
-
     public void viewListTelefonos(ActionEvent evt, Carguera carguera) {
         List<Telefono> list = new ArrayList<>();
         if (carguera.getTelefonos() != null && !carguera.getTelefonos().isEmpty()) {
@@ -178,9 +169,16 @@ public class CargueraBean implements Serializable {
         this.correos = list;
     }
 
+    public void viewListBodegas(ActionEvent evt, Carguera carguera) {
+        List<BodegaCarguera> list = new ArrayList<>();
+        if (carguera.getBodegas() != null && !carguera.getBodegas().isEmpty()) {
+            list = carguera.getBodegas();
+        }
+        this.bodegas = list;
+    }
+
     public void onRowSelect(ActionEvent evt, Carguera carguera) {
         this.nuevo = carguera;
-        changeBodega();
         changePais();
     }
 
@@ -224,6 +222,14 @@ public class CargueraBean implements Serializable {
         this.correo = correo;
     }
 
+    public Bodegas getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodegas bodega) {
+        this.bodega = bodega;
+    }
+
     public List<Ciudad> getCiudades() {
         return ciudades;
     }
@@ -262,6 +268,14 @@ public class CargueraBean implements Serializable {
 
     public void setCorreos(List<Correo> correos) {
         this.correos = correos;
+    }
+
+    public List<BodegaCarguera> getBodegas() {
+        return bodegas;
+    }
+
+    public void setBodegas(List<BodegaCarguera> bodegas) {
+        this.bodegas = bodegas;
     }
 
 }
