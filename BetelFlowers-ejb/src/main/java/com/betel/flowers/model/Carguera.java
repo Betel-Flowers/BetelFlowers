@@ -36,14 +36,14 @@ public class Carguera extends BaseEntity {
     @Embedded
     private List<Correo> correos;
     @Reference
-    private CuartoFrioCarguera cuartoFrio;
+    private List<BodegaCarguera> bodegas;
     @Reference
     private Ciudad ciudad;
 
     public Carguera() {
         this.telefonos = new ArrayList<>();
         this.correos = new ArrayList<>();
-        this.cuartoFrio = new CuartoFrioCarguera();
+        this.bodegas = new ArrayList<>();
         this.ciudad = new Ciudad();
     }
 
@@ -103,12 +103,12 @@ public class Carguera extends BaseEntity {
         this.correos = correos;
     }
 
-    public CuartoFrioCarguera getCuartoFrio() {
-        return cuartoFrio;
+    public List<BodegaCarguera> getBodegas() {
+        return bodegas;
     }
 
-    public void setCuartoFrio(CuartoFrioCarguera cuartoFrio) {
-        this.cuartoFrio = cuartoFrio;
+    public void setBodegas(List<BodegaCarguera> bodegas) {
+        this.bodegas = bodegas;
     }
 
     public Ciudad getCiudad() {
@@ -143,10 +143,10 @@ public class Carguera extends BaseEntity {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return "Carguera{" + "codigo=" + codigo + ", nombre=" + nombre + ", ruc=" + ruc + ", username=" + username + ", flag=" + flag + ", telefonos=" + telefonos + ", correos=" + correos + ", cuartoFrio=" + cuartoFrio + '}';
+        return "Carguera{" + "codigo=" + codigo + ", nombre=" + nombre + ", ruc=" + ruc + ", username=" + username + ", flag=" + flag + ", telefonos=" + telefonos + ", correos=" + correos + ", bodegas=" + bodegas + ", ciudad=" + ciudad + '}';
     }
-    
+
 }

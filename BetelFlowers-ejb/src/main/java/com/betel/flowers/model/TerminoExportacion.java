@@ -5,33 +5,28 @@
  */
 package com.betel.flowers.model;
 
-import com.mongo.persistance.BaseEntity;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexes;
-import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
  * @author luis
  */
-@Entity(value = "MotivoEmpaque", noClassnameStored = true)
+@Entity(value = "TerminoExportacion", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class MotivoEmpaque extends BaseEntity{
+public class TerminoExportacion {
     
     private Integer codigo;
     private String descripcion;
+    private String valor;
     private String username;
     private Integer flag;
 
-    @Reference
-    private CausaEmpaque causa;
-
-    public MotivoEmpaque() {
-        this.causa = new CausaEmpaque();
+    public TerminoExportacion() {
     }
 
     public Integer getCodigo() {
@@ -49,7 +44,15 @@ public class MotivoEmpaque extends BaseEntity{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -66,18 +69,10 @@ public class MotivoEmpaque extends BaseEntity{
         this.flag = flag;
     }
 
-    public CausaEmpaque getCausa() {
-        return causa;
-    }
-
-    public void setCausa(CausaEmpaque causa) {
-        this.causa = causa;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.codigo);
+        hash = 53 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -92,7 +87,7 @@ public class MotivoEmpaque extends BaseEntity{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final MotivoEmpaque other = (MotivoEmpaque) obj;
+        final TerminoExportacion other = (TerminoExportacion) obj;
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -101,7 +96,7 @@ public class MotivoEmpaque extends BaseEntity{
 
     @Override
     public String toString() {
-        return "MotivoEmpaque{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", username=" + username + ", flag=" + flag + ", causa=" + causa + '}';
+        return "TerminoExportacion{" + "codigo=" + codigo + ", descripcion=" + descripcion + ", valor=" + valor + ", username=" + username + ", flag=" + flag + '}';
     }
- 
+    
 }

@@ -15,23 +15,24 @@ import org.mongodb.morphia.annotations.Reference;
 @Embedded
 public class DetalleDeBaja {
 
-    private Integer totalInicial;
+    private Integer cantidad;
     @Reference
     private RegistroExportacion item;
     @Reference
     private MotivoEmpaque motivo;
 
     public DetalleDeBaja() {
+        this.cantidad = 0;
         this.item = new RegistroExportacion();
         this.motivo = new MotivoEmpaque();
     }
 
-    public Integer getTotalInicial() {
-        return totalInicial;
+    public Integer getCantidad() {
+        return cantidad;
     }
 
-    public void setTotalInicial(Integer totalInicial) {
-        this.totalInicial = totalInicial;
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
     public RegistroExportacion getItem() {
@@ -48,6 +49,10 @@ public class DetalleDeBaja {
 
     public void setMotivo(MotivoEmpaque motivo) {
         this.motivo = motivo;
+    }
+    
+    public Integer calcularCantidadActual() {
+        return this.getItem().getTotalTallos() - this.getCantidad();
     }
 
 }

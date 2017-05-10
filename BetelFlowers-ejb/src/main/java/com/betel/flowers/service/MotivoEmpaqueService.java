@@ -89,6 +89,17 @@ public class MotivoEmpaqueService implements Serializable{
         }
         return find;
     }
+    
+    public MotivoEmpaque findByDescripcion(MotivoEmpaque motivoEmpaque) {
+        MotivoEmpaque find = new MotivoEmpaque();
+        Query<MotivoEmpaque> result = this.ds.find(MotivoEmpaque.class).
+                field("descripcion").equal(motivoEmpaque.getDescripcion()).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
 
     public MotivoEmpaque findByCodigo(Integer motivoEmpaque) {
         MotivoEmpaque find = new MotivoEmpaque();
@@ -124,7 +135,6 @@ public class MotivoEmpaqueService implements Serializable{
         );
         UpdateOperations<MotivoEmpaque> update = this.ds.createUpdateOperations(MotivoEmpaque.class);
         update.set("descripcion", motivoEmpaque.getDescripcion()).
-                set("cantidad", motivoEmpaque.getCantidad()).
                 set("causa", motivoEmpaque.getCausa()).
                 set("username", motivoEmpaque.getUsername()).
                 set("flag", motivoEmpaque.getFlag());

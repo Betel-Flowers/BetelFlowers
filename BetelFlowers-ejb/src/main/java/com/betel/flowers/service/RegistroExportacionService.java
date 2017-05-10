@@ -77,7 +77,7 @@ public class RegistroExportacionService implements Serializable {
         }
         return list;
     }
-    
+
     public List<RegistroExportacion> obtenerListBarcode(String barcode) {
         List<RegistroExportacion> list = new ArrayList<>();
         Query<RegistroExportacion> result = this.ds.find(RegistroExportacion.class).
@@ -99,7 +99,7 @@ public class RegistroExportacionService implements Serializable {
         }
         return find;
     }
-    
+
     public Boolean deteleFlag(RegistroExportacion usuario) {
         Query<RegistroExportacion> query = this.ds.createQuery(RegistroExportacion.class);
         usuario.setFlag(0);
@@ -117,6 +117,18 @@ public class RegistroExportacionService implements Serializable {
     }
 
     public Boolean update(RegistroExportacion registroExportacion) {
+        Boolean exito = Boolean.FALSE;
+        if (registroExportacion != null) {
+            if (registroExportacion.getVariedad().getGirasol()) {
+                exito = this.updateGlongitud(registroExportacion);
+            } else {
+                exito = this.updateLongitud(registroExportacion);
+            }
+        }
+        return exito;
+    }
+
+    private Boolean updateLongitud(RegistroExportacion registroExportacion) {
         Query<RegistroExportacion> query = this.ds.createQuery(RegistroExportacion.class);
         query.and(
                 query.criteria("codigo").equal(registroExportacion.getCodigo())
@@ -125,8 +137,8 @@ public class RegistroExportacionService implements Serializable {
         update.set("numeroRamos", registroExportacion.getNumeroRamos()).
                 set("numeroTallosRamo", registroExportacion.getNumeroTallosRamo()).
                 set("longitud", registroExportacion.getLongitud()).
-                set("glongitud", registroExportacion.getGlongitud()).
                 set("puntoCorte", registroExportacion.getPuntoCorte()).
+                set("stock", registroExportacion.getStock()).
                 set("totalTallos", registroExportacion.getTotalTallos()).
                 set("barcode", registroExportacion.getBarcode()).
                 set("xml", registroExportacion.getXml()).
@@ -135,7 +147,33 @@ public class RegistroExportacionService implements Serializable {
                 set("urlPdf", registroExportacion.getUrlPdf()).
                 set("bodega", registroExportacion.getBodega()).
                 set("variedad", registroExportacion.getVariedad()).
-                set("rendimientos", registroExportacion.getRedimientos()).
+                set("rendimientos", registroExportacion.getRendimientos()).
+                set("username", registroExportacion.getUsername()).
+                set("flag", registroExportacion.getFlag());
+        UpdateResults results = this.ds.update(query, update);
+        return results.getUpdatedExisting();
+    }
+
+    private Boolean updateGlongitud(RegistroExportacion registroExportacion) {
+        Query<RegistroExportacion> query = this.ds.createQuery(RegistroExportacion.class);
+        query.and(
+                query.criteria("codigo").equal(registroExportacion.getCodigo())
+        );
+        UpdateOperations<RegistroExportacion> update = this.ds.createUpdateOperations(RegistroExportacion.class);
+        update.set("numeroRamos", registroExportacion.getNumeroRamos()).
+                set("numeroTallosRamo", registroExportacion.getNumeroTallosRamo()).
+                set("glongitud", registroExportacion.getGlongitud()).
+                set("puntoCorte", registroExportacion.getPuntoCorte()).
+                set("stock", registroExportacion.getStock()).
+                set("totalTallos", registroExportacion.getTotalTallos()).
+                set("barcode", registroExportacion.getBarcode()).
+                set("xml", registroExportacion.getXml()).
+                set("html", registroExportacion.getHtml()).
+                set("pdf", registroExportacion.getPdf()).
+                set("urlPdf", registroExportacion.getUrlPdf()).
+                set("bodega", registroExportacion.getBodega()).
+                set("variedad", registroExportacion.getVariedad()).
+                set("rendimientos", registroExportacion.getRendimientos()).
                 set("username", registroExportacion.getUsername()).
                 set("flag", registroExportacion.getFlag());
         UpdateResults results = this.ds.update(query, update);

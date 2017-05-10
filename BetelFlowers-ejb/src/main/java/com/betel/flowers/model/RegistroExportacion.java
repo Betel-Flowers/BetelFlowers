@@ -30,7 +30,9 @@ public class RegistroExportacion extends BaseEntity {
     private Integer longitud;
     private String glongitud;
     private String puntoCorte;
+    private Integer stock;
     private Integer totalTallos;
+    private Boolean agotado;
     private String barcode;
     private String xml;
     private String html;
@@ -44,14 +46,15 @@ public class RegistroExportacion extends BaseEntity {
     @Reference
     private Variedad variedad;
     @Reference
-    private List<Rendimiento> redimientos;
+    private List<Rendimiento> rendimientos;
 
     public RegistroExportacion() {
         this.numeroRamos = 1;
         this.numeroTallosRamo = 1;
+        this.agotado = Boolean.FALSE;
         this.bodega = new BodegaVirtual();
         this.variedad = new Variedad();
-        this.redimientos = new ArrayList<>();
+        this.rendimientos = new ArrayList<>();
     }
 
     public Integer getCodigo() {
@@ -102,12 +105,29 @@ public class RegistroExportacion extends BaseEntity {
         this.puntoCorte = puntoCorte;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
     public Integer getTotalTallos() {
-        return getNumeroRamos() * getNumeroTallosRamo();
+        this.totalTallos = getNumeroRamos() * getNumeroTallosRamo();
+        return totalTallos;
     }
 
     public void setTotalTallos(Integer totalTallos) {
         this.totalTallos = totalTallos;
+    }
+
+    public Boolean getAgotado() {
+        return agotado;
+    }
+
+    public void setAgotado(Boolean agotado) {
+        this.agotado = agotado;
     }
 
     public String getBarcode() {
@@ -182,12 +202,12 @@ public class RegistroExportacion extends BaseEntity {
         this.variedad = variedad;
     }
 
-    public List<Rendimiento> getRedimientos() {
-        return redimientos;
+    public List<Rendimiento> getRendimientos() {
+        return rendimientos;
     }
 
-    public void setRedimientos(List<Rendimiento> redimientos) {
-        this.redimientos = redimientos;
+    public void setRendimientos(List<Rendimiento> rendimientos) {
+        this.rendimientos = rendimientos;
     }
 
     @Override

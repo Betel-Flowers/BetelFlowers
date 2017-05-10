@@ -9,11 +9,11 @@ import com.mongo.persistance.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexes;
-import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
@@ -29,7 +29,7 @@ public class RegistroDeBaja extends BaseEntity{
     private String username;
     private Integer flag;
 
-    @Reference
+    @Embedded
     private List<DetalleDeBaja> detalle;
 
     public RegistroDeBaja() {

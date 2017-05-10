@@ -19,8 +19,8 @@ import org.mongodb.morphia.annotations.Indexes;
 @Entity(value = "BodegaCarguera", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class BodegaCarguera extends BaseEntity{
-    
+public class BodegaCarguera extends BaseEntity {
+
     private Integer codigo;
     private String nombre;
     private String username;
@@ -90,5 +90,5 @@ public class BodegaCarguera extends BaseEntity{
     public String toString() {
         return "BodegaCarguera{" + "codigo=" + codigo + ", nombre=" + nombre + ", username=" + username + ", flag=" + flag + '}';
     }
-    
+
 }
