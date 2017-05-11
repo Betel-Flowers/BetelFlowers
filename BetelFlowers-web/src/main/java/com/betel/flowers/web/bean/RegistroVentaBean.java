@@ -123,10 +123,14 @@ public class RegistroVentaBean implements Serializable {
         TerminoExportacion termino = this.terminoService.findByCodigo(this.nuevo.getTermino());
         this.nuevo.setTermino(termino);
     }
-    
-    public void changeAgenciaCarga(){
+
+    public void changeAgenciaCarga() {
         Carguera carguera = this.carqueraService.findByCodigo(this.nuevo.getAgenciaCarga());
         this.nuevo.setAgenciaCarga(carguera);
+        this.frios = this.frioService.obtenerListBodega(carguera.getBodega());
+        if (this.frios == null) {
+            this.frios = new ArrayList<>();
+        }
     }
 
     public String onFlowProcess(FlowEvent event) {

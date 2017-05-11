@@ -86,15 +86,15 @@ public class RegistroCultivoBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-    
+
     public void changeVariedad() {
         if (this.nuevo.getVariedad().getCodigo() != null) {
             Variedad variedad = this.variedadService.findByCodigo(this.nuevo.getVariedad());
             this.nuevo.setVariedad(variedad);
-            
+
         }
     }
 

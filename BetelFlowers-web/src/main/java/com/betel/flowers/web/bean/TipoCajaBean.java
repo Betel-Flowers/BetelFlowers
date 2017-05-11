@@ -23,7 +23,7 @@ import javax.inject.Inject;
  */
 @Named(value = "tipoCajaBean")
 @ViewScoped
-public class TipoCajaBean implements Serializable{
+public class TipoCajaBean implements Serializable {
 
     private static final long serialVersionUID = -6582571527078632747L;
 
@@ -67,7 +67,7 @@ public class TipoCajaBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -82,7 +82,7 @@ public class TipoCajaBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -109,5 +109,5 @@ public class TipoCajaBean implements Serializable{
     public void setTipoCajas(List<TipoCaja> tipoCajas) {
         this.tipoCajas = tipoCajas;
     }
-    
+
 }

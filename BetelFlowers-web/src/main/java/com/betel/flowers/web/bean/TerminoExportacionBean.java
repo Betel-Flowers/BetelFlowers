@@ -42,7 +42,7 @@ public class TerminoExportacionBean implements Serializable {
             this.terminos = new ArrayList<>();
         }
     }
-    
+
     public void add(ActionEvent evt) {
         Boolean exito = this.terminoService.insert(this.nuevo);
         if (exito) {
@@ -65,7 +65,7 @@ public class TerminoExportacionBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -80,10 +80,9 @@ public class TerminoExportacionBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-
 
     public TerminoExportacion getNuevo() {
         return nuevo;

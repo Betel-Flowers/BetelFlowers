@@ -55,10 +55,10 @@ public class PrecioVariedadBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         this.selected = (Variedad) event.getObject();
         this.setActiveTab(Boolean.FALSE);
@@ -87,5 +87,5 @@ public class PrecioVariedadBean implements Serializable {
     public void setActiveTab(Boolean activeTab) {
         this.activeTab = activeTab;
     }
-    
+
 }

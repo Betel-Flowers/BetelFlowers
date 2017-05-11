@@ -24,22 +24,22 @@ import javax.inject.Inject;
 @Named(value = "registerBean")
 @ViewScoped
 public class RegisterBean implements Serializable {
-    
+
     private Usuario nuevo;
     private String cpassword;
-    
+
     @Inject
     private UsuarioService usuarioService;
     @Inject
     private TipoUsuarioService tipousuarioService;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new Usuario();
         this.cpassword = "";
         this.createTipoUsuarioBlank();
     }
-    
+
     public void add(ActionEvent evt) {
         if (this.nuevo.getPassword().equals(this.cpassword)) {
             Usuario username = this.usuarioService.findByUsername(this.nuevo);
@@ -59,16 +59,16 @@ public class RegisterBean implements Serializable {
                         this.init();
                     }
                 } else {
-                    FacesUtil.addMessageWarn(null, "Ya existe un usuario registrado con ese e-mail.");
+                    FacesUtil.addMessageInfo("Ya existe un usuario registrado con ese e-mail.");
                 }
             } else {
-                FacesUtil.addMessageWarn(null, "Ya existe un usuario registrado con ese username.");
+                FacesUtil.addMessageInfo("Ya existe un usuario registrado con ese username.");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "El password no coincide.");
+            FacesUtil.addMessageInfo("El password no coincide.");
         }
     }
-    
+
     private void createTipoUsuarioBlank() {
         TipoUsuario tipo = new TipoUsuario();
         tipo.setNombre("SIN-TIPO-USUARIO");
@@ -76,21 +76,21 @@ public class RegisterBean implements Serializable {
         if (mTipo.getCodigo() == null) {
             this.tipousuarioService.insert(tipo);
         }
-        
+
     }
-    
+
     public Usuario getNuevo() {
         return nuevo;
     }
-    
+
     public void setNuevo(Usuario nuevo) {
         this.nuevo = nuevo;
     }
-    
+
     public String getCpassword() {
         return cpassword;
     }
-    
+
     public void setCpassword(String cpassword) {
         this.cpassword = cpassword;
     }

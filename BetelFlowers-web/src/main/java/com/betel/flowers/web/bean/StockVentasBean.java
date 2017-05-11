@@ -97,19 +97,23 @@ public class StockVentasBean implements Serializable {
         this.nuevo.setCaja(caja);
         this.nuevo.setCodigo(this.generatedTempCode());
         if (this.detalle.getDetalleCajaStock() != null && !this.detalle.getDetalleCajaStock().isEmpty()) {
-            this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
-            Boolean exito = this.stockVentas.add(this.nuevo);
-            if (exito) {
-                FacesUtil.addMessageInfo("Exito.");
-                this.nuevo = new StockVenta();
-                this.nuevo.setUsername("usertest");//usertest
-                this.detalle = new DetalleCajaStock();
-                this.stateGenetated();
+            if (this.nuevo.getPrecio() != 0.0) {
+                this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
+                Boolean exito = this.stockVentas.add(this.nuevo);
+                if (exito) {
+                    FacesUtil.addMessageInfo("Exito.");
+                    this.nuevo = new StockVenta();
+                    this.nuevo.setUsername("usertest");//usertest
+                    this.detalle = new DetalleCajaStock();
+                    this.stateGenetated();
+                } else {
+                    FacesUtil.addMessageError(null, "Falló.");
+                }
             } else {
-                FacesUtil.addMessageError(null, "Falló.");
+                FacesUtil.addMessageInfo("Ingrese un precio.");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Agregar Variedades");
+            FacesUtil.addMessageInfo("Agregar Variedades");
         }
     }
 
@@ -129,7 +133,7 @@ public class StockVentasBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -144,7 +148,7 @@ public class StockVentasBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se ha eliminado con exito..");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -238,7 +242,7 @@ public class StockVentasBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -253,7 +257,7 @@ public class StockVentasBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 

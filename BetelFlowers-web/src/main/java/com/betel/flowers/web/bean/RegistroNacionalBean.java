@@ -81,7 +81,7 @@ public class RegistroNacionalBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se ha guardado.");
                 this.init();
             }
-        }else{
+        } else {
             FacesUtil.addMessageInfo("Por favor seleccione motivos para la veriedad seleccionada.");
         }
     }
@@ -98,7 +98,7 @@ public class RegistroNacionalBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 

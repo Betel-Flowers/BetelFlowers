@@ -95,7 +95,7 @@ public class SubClienteBean implements Serializable {
             FacesUtil.addMessageError(null, "Ingrese un telefono.");
         }
     }
-    
+
     public void modify(ActionEvent evt) {
         if (this.selected != null) {
             if (!this.telefono.getTelefonos().isEmpty()) {
@@ -119,10 +119,10 @@ public class SubClienteBean implements Serializable {
                 FacesUtil.addMessageError(null, "Ingrese un telefono.");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         this.selected = (SubCliente) event.getObject();
         if (this.selected != null) {

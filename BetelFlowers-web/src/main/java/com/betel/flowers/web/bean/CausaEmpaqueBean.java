@@ -33,8 +33,8 @@ public class CausaEmpaqueBean implements Serializable {
 
     @Inject
     private CausaEmpaqueService causaService;
-    
-     @PostConstruct
+
+    @PostConstruct
     public void init() {
         this.nuevo = new CausaEmpaque();
         this.nuevo.setUsername("usertest"); //testuser
@@ -44,8 +44,7 @@ public class CausaEmpaqueBean implements Serializable {
             this.causas = new ArrayList<>();
         }
     }
-    
-    
+
     public void add(ActionEvent evt) {
         Boolean exito = this.causaService.insert(this.nuevo);
         if (exito) {
@@ -68,7 +67,7 @@ public class CausaEmpaqueBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -83,7 +82,7 @@ public class CausaEmpaqueBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -110,5 +109,5 @@ public class CausaEmpaqueBean implements Serializable {
     public void setCausas(List<CausaEmpaque> causas) {
         this.causas = causas;
     }
-    
+
 }

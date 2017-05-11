@@ -91,8 +91,8 @@ public class VariedadBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se ha guardado.");
                 this.init();
             }
-        }else{
-             FacesUtil.addMessageWarn(null, "Por favor seleccione por lo menos un bloque.");
+        } else {
+            FacesUtil.addMessageInfo("Por favor seleccione por lo menos un bloque.");
         }
     }
 
@@ -110,7 +110,7 @@ public class VariedadBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -125,7 +125,7 @@ public class VariedadBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -187,7 +187,7 @@ public class VariedadBean implements Serializable {
                     //log.level.error("Error al subir la imagen", ex);
                 }
             } else {
-                FacesUtil.addMessageWarn(null, "Tamaño maximo de imagen 5.5 MB.");
+                FacesUtil.addMessageInfo("Tamaño maximo de imagen 5.5 MB.");
             }
 
         }
@@ -254,12 +254,12 @@ public class VariedadBean implements Serializable {
                     //log.level.error("Error al subir la imagen", ex);
                 }
             } else {
-                FacesUtil.addMessageWarn(null, "Tamaño maximo de imagen 5.5 MB.");
+                FacesUtil.addMessageInfo("Tamaño maximo de imagen 5.5 MB.");
             }
 
         }
     }
-    
+
     public List<Bloque> listBardodeInsideList(Variedad barcodeItem) {
         List<Bloque> list = new ArrayList<>();
         if (barcodeItem != null) {

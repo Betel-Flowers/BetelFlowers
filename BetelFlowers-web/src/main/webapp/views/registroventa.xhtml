@@ -131,6 +131,11 @@
                                 </p:selectOneMenu>
                                 <p:message for="cDes" display="tooltip" severity="error"/>
                             </h:panelGrid>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:outputLabel for="dae" value="DAE:"/>
+                                <p:inputText id="dae" required="true" value="#{registroVentaBean.nuevo.dae.codigoDAE}"/>
+                                <p:message for="dae" display="tooltip" severity="error"/>
+                            </h:panelGrid>
                             <h:panelGrid columns="6" cellpadding="5">
                                 <p:outputLabel for="terExp" value="Terminos de Exportacion:"/>
                                 <p:selectOneMenu id="terExp" required="true" 
@@ -146,71 +151,51 @@
                                 <p:inputText id="valTerExp" required="true" value="#{registroVentaBean.nuevo.termino.valor}"/>
                                 <p:message for="valTerExp" display="tooltip" severity="error"/>
                             </h:panelGrid>
-                            <h:panelGrid columns="3" cellpadding="5">
-                                <p:outputLabel for="dae" value="DAE:"/>
-                                <p:inputText id="dae" required="true" value="#{registroVentaBean.nuevo.dae.codigoDAE}"/>
-                                <p:message for="dae" display="tooltip" severity="error"/>
-                            </h:panelGrid>
                         </h:panelGrid>
                     </p:panel>
                 </p:tab>
                 <p:tab id="agencias" title="Agencia de Carga">
                     <p:panel header="Seleccione la Agencia de Carga y complete la informacion">
-                        <h:panelGrid columns="9" cellpadding="5">
+                        <h:panelGrid columns="6" cellpadding="5">
                             <p:outputLabel for="ageC" value="Agencia de Carga"/>
                             <p:selectOneMenu id="ageC" required="true" 
                                              value="#{registroVentaBean.nuevo.agenciaCarga.codigo}">
                                 <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                 <f:selectItems value="#{cargueraBean.cargueras}" var="acarg"
                                                itemLabel="#{acarg.nombre}" itemValue="#{acarg.codigo}"/>
+                                <p:ajax update=":fventa:cfrio" listener="#{registroVentaBean.changeAgenciaCarga}"/>
                             </p:selectOneMenu>
                             <p:message for="ageC" display="tooltip" severity="error"/>
-                            
-                            <p:outputLabel for="cbod" value="Bodega:"/>
-                            <p:selectOneMenu id="cbod" required="true"
-                                             value="#{registroVentaBean.nuevo.agenciaCarga.bodegas}">
-                                
-                            </p:selectOneMenu>
-                            <p:message for="ageC" display="tooltip" severity="error"/>
-                            
+
                             <p:outputLabel for="cfrio" value="Cuarto Frio:"/>
                             <p:selectOneMenu id="cfrio" required="true" 
                                              value="#{registroVentaBean.nuevo.cuartoFrio.codigo}">
                                 <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                <f:selectItems />
+                                <f:selectItems value="#{registroVentaBean.frios}" var="cfrios"
+                                               itemLabel="#{cfrios.descripcion}" itemValue="#{cfrios.codigo}"/>
                             </p:selectOneMenu>
+                            <p:message for="cfrio" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="6" cellpadding="5">
+                            <p:outputLabel for="awb" value="AWB:" />
+                            <p:inputMask id="awb" required="true" value="#{registroVentaBean.nuevo.AWB}" mask="999-99999999"/>
+                            <p:message for="awb" display="tooltip" severity="error"/>
+
+                            <p:outputLabel for="hawb" value="HAWB:" />
+                            <p:inputText id="hawb" required="true" value="#{registroVentaBean.nuevo.HAWB}"/>
+                            <p:message for="hawb" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                        <h:panelGrid cellpadding="5">
+                            <p:outputLabel for="obser" value="Observacion:" />
+                            <p:inputTextarea id="obser" cols="70" rows="5"  
+                                             value="#{registroVentaBean.nuevo.observacion}"/>
+                            <p:message for="obser" display="tooltip" severity="error"/>
                         </h:panelGrid>
                     </p:panel>
                 </p:tab>
                 <p:tab id="detalles" title="Detalle de Venta">
-                    <p:panel header="Confirmation">
-                        <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
-                            <h:panelGrid columns="2" columnClasses="label, value">
-                                <h:outputText value="Firstname: " />
-
-                                <h:outputText value="Lastname: " />
-
-                                <h:outputText value="Age: " />
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" columnClasses="label, value">
-                                <h:outputText value="Street: " />
-
-                                <h:outputText value="Postal: " />
-
-                                <h:outputText value="City: " />
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" columnClasses="label, value">
-                                <h:outputText value="Email: " />
-
-                                <h:outputText value="Phone " />
-
-                                <h:outputText value="Info: " />
-
-                                <h:outputText />
-                                <h:outputText />
-                            </h:panelGrid>
-                        </h:panelGrid>
+                    <p:panel header="Agrege veriedades para el detalle">
+ 
 
                     </p:panel>
                 </p:tab>

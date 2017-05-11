@@ -5,7 +5,6 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.Causa;
 import com.betel.flowers.model.CausaEmpaque;
 import com.betel.flowers.model.MotivoEmpaque;
 import com.betel.flowers.service.CausaEmpaqueService;
@@ -26,7 +25,7 @@ import javax.inject.Inject;
  */
 @Named(value = "motivoEmpaqueBean")
 @ViewScoped
-public class MotivoEmpaqueBean implements Serializable{
+public class MotivoEmpaqueBean implements Serializable {
 
     private static final long serialVersionUID = 4561806746252764576L;
 
@@ -38,7 +37,7 @@ public class MotivoEmpaqueBean implements Serializable{
     private MotivoEmpaqueService motivoService;
     @Inject
     private CausaEmpaqueService causaService;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new MotivoEmpaque();
@@ -49,7 +48,7 @@ public class MotivoEmpaqueBean implements Serializable{
             this.motivos = new ArrayList<>();
         }
     }
-    
+
     public void add(ActionEvent evt) {
         CausaEmpaque causa = this.causaService.findByCodigo(this.nuevo.getCausa());
         this.nuevo.setCausa(causa);
@@ -76,7 +75,7 @@ public class MotivoEmpaqueBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -91,7 +90,7 @@ public class MotivoEmpaqueBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -118,5 +117,5 @@ public class MotivoEmpaqueBean implements Serializable{
     public void setMotivos(List<MotivoEmpaque> motivos) {
         this.motivos = motivos;
     }
-    
+
 }

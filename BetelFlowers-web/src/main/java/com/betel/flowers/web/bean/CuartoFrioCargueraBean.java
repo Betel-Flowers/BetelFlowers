@@ -50,8 +50,8 @@ public class CuartoFrioCargueraBean implements Serializable {
     }
 
     public void add(ActionEvent evt) {
-         BodegaCarguera bodega = this.bodegaCargueraService.findByCodigo(this.nuevo.getBodega());
-         this.nuevo.setBodega(bodega);
+        BodegaCarguera bodega = this.bodegaCargueraService.findByCodigo(this.nuevo.getBodega());
+        this.nuevo.setBodega(bodega);
         Boolean exito = this.cuartoService.insert(this.nuevo);
         if (exito) {
             FacesUtil.addMessageInfo("Se ha guardado con exito.");
@@ -75,7 +75,7 @@ public class CuartoFrioCargueraBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -90,7 +90,7 @@ public class CuartoFrioCargueraBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 

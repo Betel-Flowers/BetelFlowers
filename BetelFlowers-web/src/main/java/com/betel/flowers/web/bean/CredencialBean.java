@@ -163,7 +163,7 @@ public class CredencialBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se modifico el password con exito.");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "El password no coincide.");
+            FacesUtil.addMessageInfo("El password no coincide.");
         }
     }
 
@@ -200,7 +200,7 @@ public class CredencialBean implements Serializable {
                     //log.level.error("Error al subir la imagen", ex);
                 }
             } else {
-                FacesUtil.addMessageWarn(null, "Tamaño maximo de imagen 5.5 MB.");
+                FacesUtil.addMessageInfo("Tamaño maximo de imagen 5.5 MB.");
             }
 
         }

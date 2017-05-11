@@ -14,7 +14,7 @@
                     <h:panelGrid cellpadding="5">
                         <p:clock pattern="dd/MM/yyyy HH:mm:ss"/>
                     </h:panelGrid>
-                    <h:panelGrid columns="9" cellpadding="5">
+                    <h:panelGrid columns="6" cellpadding="5">
                         <p:outputLabel for="cantidadmx" value="Cantidad Cajas:"/>
                         <p:spinner id="cantidadmx" value="#{stockVentasBean.nuevo.cantidadCajas}"
                                    min="1" max="500" required="true"/>
@@ -28,15 +28,10 @@
                                            itemValue="#{cja.codigo}"/>
                         </p:selectOneMenu>
                         <p:message for="tipCajaMx" display="tooltip" severity="error"/>
-
-                        <p:outputLabel for="precioMx" value="Precio:"/>
-                        <p:spinner id="precioMx" value="#{stockVentasBean.nuevo.precio}"
-                                   prefix="$" min="0" stepFactor="0.01" required="true"/>
-                        <p:message for="precioMx" display="tooltip" severity="error"/>
                     </h:panelGrid>
                     <p:separator/>
                     <p:outputPanel id="outVariMx">
-                        <h:panelGrid columns="3" cellpadding="5">
+                        <h:panelGrid columns="9" cellpadding="5">
                             <p:outputLabel for="variedadMx" value="Variedad:"/>
                             <p:selectOneMenu id="variedadMx" value="#{stockVentasBean.detalle.nuevo.variedad.codigo}">
                                 <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
@@ -62,7 +57,7 @@
                         </h:panelGrid>
                     </p:outputPanel>
                     <p:outputPanel id="outlongsMx">
-                        <h:panelGrid columns="3" cellpadding="5">
+                        <h:panelGrid columns="6" cellpadding="5">
                             <p:outputLabel for="longitudMx" value="Longitud:" 
                                            rendered="#{not stockVentasBean.detalle.nuevo.variedad.girasol}"/>
                             <p:selectOneMenu id="longitudMx" value="#{stockVentasBean.detalle.nuevo.longitud}"
@@ -85,6 +80,12 @@
                             <p:message for="glongitudMx" display="tooltip" severity="error"
                                        rendered="#{stockVentasBean.detalle.nuevo.variedad.girasol}"/>
 
+                            <p:outputLabel for="precioMx" value="Precio:"/>
+                            <p:inputNumber id="precioMx" value="#{stockVentasBean.nuevo.precio}"
+                                           minValue="0" symbol="$" required="true">
+                                <p:ajax update="precioMx"/>
+                            </p:inputNumber>
+                            <p:message for="precioMx" display="tooltip" severity="error"/>
                         </h:panelGrid>
                     </p:outputPanel>
                     <h:panelGrid>

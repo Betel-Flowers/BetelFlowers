@@ -22,25 +22,25 @@ import javax.inject.Inject;
  */
 @Named(value = "zonaGeograficaBean")
 @ViewScoped
-public class ZonaGeograficaBean implements Serializable{
+public class ZonaGeograficaBean implements Serializable {
 
     private static final long serialVersionUID = 7622018069412573367L;
 
     private ZonaGeografica nuevo;
     private ZonaGeografica selected;
     private List<ZonaGeografica> zonasGeograficas;
-    
+
     @Inject
     private ZonaGeograficaService zonaGeograficaService;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.nuevo = new ZonaGeografica();
         this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.zonasGeograficas = this.zonaGeograficaService.obtenerListFlag(1);
     }
-    
+
     public void add(ActionEvent evt) {
         Boolean exito = this.zonaGeograficaService.insert(this.nuevo);
         if (exito) {
@@ -63,7 +63,7 @@ public class ZonaGeograficaBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -78,7 +78,7 @@ public class ZonaGeograficaBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -105,5 +105,5 @@ public class ZonaGeograficaBean implements Serializable{
     public void setZonasGeograficas(List<ZonaGeografica> zonasGeograficas) {
         this.zonasGeograficas = zonasGeograficas;
     }
-    
+
 }

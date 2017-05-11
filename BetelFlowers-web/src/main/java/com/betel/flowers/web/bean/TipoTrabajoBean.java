@@ -23,10 +23,10 @@ import javax.inject.Inject;
  */
 @Named(value = "tipoTrabajoBean")
 @ViewScoped
-public class TipoTrabajoBean implements Serializable{
+public class TipoTrabajoBean implements Serializable {
 
     private static final long serialVersionUID = 2049266426226198660L;
-    
+
     private TipoTrabajo nuevo;
     private TipoTrabajo selected;
     private List<TipoTrabajo> tipoTrabajos;
@@ -67,7 +67,7 @@ public class TipoTrabajoBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -82,7 +82,7 @@ public class TipoTrabajoBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -109,5 +109,5 @@ public class TipoTrabajoBean implements Serializable{
     public void setTipoTrabajos(List<TipoTrabajo> tipoTrabajos) {
         this.tipoTrabajos = tipoTrabajos;
     }
-    
+
 }

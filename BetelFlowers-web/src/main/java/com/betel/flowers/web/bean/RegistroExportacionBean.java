@@ -207,7 +207,7 @@ public class RegistroExportacionBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se ha modifcado con exito..");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -222,7 +222,7 @@ public class RegistroExportacionBean implements Serializable {
                 FacesUtil.addMessageError(null, "No se ha eliminado con exito..");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -266,7 +266,7 @@ public class RegistroExportacionBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 

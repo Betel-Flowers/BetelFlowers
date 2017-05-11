@@ -94,10 +94,10 @@ public class CargueraBean implements Serializable {
                     this.init();
                 }
             } else {
-                FacesUtil.addMessageWarn(null, "Ingrese al menos un e-mail.");
+                FacesUtil.addMessageInfo("Ingrese al menos un e-mail.");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Ingrese al menos un telefono.");
+            FacesUtil.addMessageInfo("Ingrese al menos un telefono.");
         }
     }
 
@@ -120,10 +120,10 @@ public class CargueraBean implements Serializable {
                     this.init();
                 }
             } else {
-                FacesUtil.addMessageWarn(null, "Ingrese al menos un e-mail.");
+                FacesUtil.addMessageInfo("Ingrese al menos un e-mail.");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Ingrese al menos un telefono.");
+            FacesUtil.addMessageInfo("Ingrese al menos un telefono.");
         }
     }
 
@@ -139,7 +139,7 @@ public class CargueraBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 

@@ -67,7 +67,7 @@ public class TipoUsuarioBean implements Serializable {
                 FacesUtil.addMessageInfo("Ingrese un nombre al tipo de usuario");
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione las opciones del sistema para el tipo de usuario a crear.");
+            FacesUtil.addMessageInfo("Seleccione las opciones del sistema para el tipo de usuario a crear.");
         }
     }
 
@@ -82,7 +82,7 @@ public class TipoUsuarioBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -97,7 +97,7 @@ public class TipoUsuarioBean implements Serializable {
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 

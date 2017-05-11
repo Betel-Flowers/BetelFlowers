@@ -23,28 +23,28 @@ import javax.inject.Inject;
  */
 @Named(value = "paisBean")
 @ViewScoped
-public class PaisBean implements Serializable{
+public class PaisBean implements Serializable {
 
     private static final long serialVersionUID = -6059139354438256941L;
 
     private Pais nuevo;
     private Pais selected;
     private List<Pais> paices;
-    
+
     @Inject
     private PaisService paisService;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.nuevo = new Pais();
         this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.paices = this.paisService.obtenerListFlag(1);
-        if(this.paices == null){
+        if (this.paices == null) {
             this.paices = new ArrayList<>();
         }
     }
-    
+
     public void add(ActionEvent evt) {
         Boolean exito = this.paisService.insert(this.nuevo);
         if (exito) {
@@ -67,7 +67,7 @@ public class PaisBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -82,10 +82,10 @@ public class PaisBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
-    
+
     public Pais getNuevo() {
         return nuevo;
     }
@@ -109,5 +109,5 @@ public class PaisBean implements Serializable{
     public void setPaices(List<Pais> paices) {
         this.paices = paices;
     }
-    
+
 }

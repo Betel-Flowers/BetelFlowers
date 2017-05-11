@@ -23,28 +23,28 @@ import javax.inject.Inject;
  */
 @Named(value = "bodegaCargueraBean")
 @ViewScoped
-public class BodegaCargueraBean implements Serializable{
+public class BodegaCargueraBean implements Serializable {
 
     private static final long serialVersionUID = -3524157319549872731L;
-    
+
     private BodegaCarguera nuevo;
     private BodegaCarguera selected;
     private List<BodegaCarguera> bodegas;
-    
+
     @Inject
     private BodegaCargueraService bodegaCargueraService;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.nuevo = new BodegaCarguera();
         this.nuevo.setUsername("usertest");
         this.selected = null;
         this.bodegas = this.bodegaCargueraService.obtenerListFlag(1);
-        if(this.bodegas == null){
+        if (this.bodegas == null) {
             this.bodegas = new ArrayList<>();
         }
     }
-    
+
     public void add(ActionEvent evt) {
         Boolean exito = this.bodegaCargueraService.insert(this.nuevo);
         if (exito) {
@@ -67,7 +67,7 @@ public class BodegaCargueraBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -82,7 +82,7 @@ public class BodegaCargueraBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -109,5 +109,5 @@ public class BodegaCargueraBean implements Serializable{
     public void setBodegas(List<BodegaCarguera> bodegas) {
         this.bodegas = bodegas;
     }
-   
+
 }

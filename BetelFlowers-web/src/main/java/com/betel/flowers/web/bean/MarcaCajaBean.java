@@ -22,25 +22,25 @@ import javax.inject.Inject;
  */
 @Named(value = "marcaCajaBean")
 @ViewScoped
-public class MarcaCajaBean implements Serializable{
+public class MarcaCajaBean implements Serializable {
 
     private static final long serialVersionUID = 1240479047930374158L;
-    
+
     private MarcaCaja nuevo;
     private MarcaCaja selected;
     private List<MarcaCaja> marcasCaja;
-    
+
     @Inject
     private MarcaCajaService marcaCajaService;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.nuevo = new MarcaCaja();
         this.nuevo.setUsername("usertest"); //testuser
         this.selected = null;
         this.marcasCaja = this.marcaCajaService.obtenerListFlag(1);
     }
-    
+
     public void add(ActionEvent evt) {
         Boolean exito = this.marcaCajaService.insert(this.nuevo);
         if (exito) {
@@ -63,7 +63,7 @@ public class MarcaCajaBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -78,7 +78,7 @@ public class MarcaCajaBean implements Serializable{
                 this.init();
             }
         } else {
-            FacesUtil.addMessageWarn(null, "Seleccione un registro.");
+            FacesUtil.addMessageInfo("Seleccione un registro.");
         }
     }
 
@@ -105,5 +105,5 @@ public class MarcaCajaBean implements Serializable{
     public void setMarcasCaja(List<MarcaCaja> marcasCaja) {
         this.marcasCaja = marcasCaja;
     }
-    
+
 }

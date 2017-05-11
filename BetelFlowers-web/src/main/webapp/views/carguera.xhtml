@@ -27,7 +27,7 @@
                     <p:selectOneMenu id="bodega" required="true"
                                      value="#{cargueraBean.nuevo.bodega.codigo}">
                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{bodegaCargueraBean}" var="cbod"
+                        <f:selectItems value="#{bodegaCargueraBean.bodegas}" var="cbod"
                                        itemLabel="#{cbod.nombre}" itemValue="#{cbod.codigo}"/>
                     </p:selectOneMenu>
                     <p:message for="bodega" display="tooltip" severity="error"/>
