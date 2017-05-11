@@ -1,6 +1,5 @@
 <ui:composition 
     xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
@@ -48,10 +47,12 @@
 
             <p:submenu label="Ventas">
                 <p:menuitem value="Registrar Venta" outcome="/faces/views/registroventa"/>
+                <p:menuitem value="Precios Variedad" outcome="/faces/views/preciovariedad"/>
                 <p:menuitem value="Stock de Ventas" outcome="/faces/views/stockventas"/>
+                <p:menuitem value="Terminos de Exportacion" outcome="/faces/views/terminoexportacion"/>
                 <p:menuitem value="Tipos de Caja" outcome="/faces/views/tipocaja"/>
                 <p:menuitem value="DAEs" outcome="/faces/views/dae"/>
-                <p:menuitem value="Agencias Cargueras" outcome="/faces/views/carguera"/>
+                <p:menuitem value="Agencias de Carga" outcome="/faces/views/carguera"/>
                 <p:menuitem value="Bodegas Carguera" outcome="/faces/views/bodegacarguera"/>
                 <p:menuitem value="Cuartos Frio Carguera" outcome="/faces/views/cuartofriocarguera"/>
             </p:submenu>
@@ -61,7 +62,7 @@
                 <p:menuitem value="Registro Causas" outcome="/faces/views/causaempaque"/>
                 <p:menuitem value="Registro Motivos" outcome="/faces/views/motivoempaque"/>
             </p:submenu>
-            
+
             <p:submenu label="Usuarios">
                 <p:menuitem value="Administrar Usuarios" outcome="/faces/views/usuario"/>
                 <p:menuitem value="Registrar Tipo/Rol Usuario" outcome="/faces/views/tipousuario"/>

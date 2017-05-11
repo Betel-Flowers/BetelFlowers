@@ -7,7 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        
+
         <h:form id="flist">
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtCli" value="#{clienteBean.clientes}"
@@ -20,6 +20,9 @@
                              rowKey="#{cli.codigo}">
                     <p:ajax event="rowSelect" listener="#{clienteBean.onRowSelect}"
                             update=":fcli:outCli, :fcli:outDetail"/>
+                    <f:facet name="header">
+                        <h:outputText value="Clientes"/>
+                    </f:facet>
                     <p:column headerText="Fecha" style="text-align: center">
                         <h:outputText value="#{cli.lastChange}">
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
@@ -399,7 +402,7 @@
                 </p:outputPanel>
             </p:dialog>
         </h:form>
-        
+
     </ui:define>
 
 </ui:composition>

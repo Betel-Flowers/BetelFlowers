@@ -16,7 +16,6 @@ import com.betel.flowers.service.BodegaCargueraService;
 import com.betel.flowers.service.CargueraService;
 import com.betel.flowers.service.CiudadService;
 import com.betel.flowers.service.PaisService;
-import com.betel.flowers.web.bean.util.Bodegas;
 import com.betel.flowers.web.bean.util.Correos;
 import com.betel.flowers.web.bean.util.Telefonos;
 import com.betel.flowers.web.util.FacesUtil;
@@ -44,13 +43,11 @@ public class CargueraBean implements Serializable {
     private List<Carguera> cargueras;
     private Telefonos telefono;
     private Correos correo;
-    private Bodegas bodega;
     private List<Ciudad> ciudades;
     private List<CuartoFrioCarguera> cuartosFrio;
     private Boolean AddModify;
     private List<Telefono> telefonos;
     private List<Correo> correos;
-    private List<BodegaCarguera> bodegas;
 
     @Inject
     private CargueraService cargueraService;
@@ -68,7 +65,6 @@ public class CargueraBean implements Serializable {
         this.selected = null;
         this.telefono = new Telefonos();
         this.correo = new Correos();
-        this.bodega = new Bodegas();
         this.ciudades = new ArrayList<>();
         this.cuartosFrio = new ArrayList<>();
         this.AddModify = Boolean.TRUE;
@@ -85,7 +81,8 @@ public class CargueraBean implements Serializable {
             if (this.correo.getCorreos() != null && !this.correo.getCorreos().isEmpty()) {
                 this.nuevo.setTelefonos(this.telefono.getTelefonos());
                 this.nuevo.setCorreos(this.correo.getCorreos());
-                this.nuevo.setBodegas(this.bodega.getBodegas());
+                BodegaCarguera bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
+                this.nuevo.setBodega(bodega);
                 Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevo.getCiudad());
                 this.nuevo.setCiudad(mciudad);
                 Boolean exito = this.cargueraService.insert(this.nuevo);
@@ -109,7 +106,8 @@ public class CargueraBean implements Serializable {
             if (this.correo.getCorreos() != null && !this.correo.getCorreos().isEmpty()) {
                 this.nuevo.setTelefonos(this.telefono.getTelefonos());
                 this.nuevo.setCorreos(this.correo.getCorreos());
-                this.nuevo.setBodegas(this.bodega.getBodegas());
+                BodegaCarguera bodega = this.bodegaService.findByCodigo(this.nuevo.getBodega());
+                this.nuevo.setBodega(bodega);
                 Ciudad mciudad = this.ciudadService.findByCodigo(this.nuevo.getCiudad());
                 this.nuevo.setCiudad(mciudad);
                 setSelected(this.nuevo);
@@ -169,14 +167,6 @@ public class CargueraBean implements Serializable {
         this.correos = list;
     }
 
-    public void viewListBodegas(ActionEvent evt, Carguera carguera) {
-        List<BodegaCarguera> list = new ArrayList<>();
-        if (carguera.getBodegas() != null && !carguera.getBodegas().isEmpty()) {
-            list = carguera.getBodegas();
-        }
-        this.bodegas = list;
-    }
-
     public void onRowSelect(ActionEvent evt, Carguera carguera) {
         this.nuevo = carguera;
         changePais();
@@ -222,14 +212,6 @@ public class CargueraBean implements Serializable {
         this.correo = correo;
     }
 
-    public Bodegas getBodega() {
-        return bodega;
-    }
-
-    public void setBodega(Bodegas bodega) {
-        this.bodega = bodega;
-    }
-
     public List<Ciudad> getCiudades() {
         return ciudades;
     }
@@ -268,14 +250,6 @@ public class CargueraBean implements Serializable {
 
     public void setCorreos(List<Correo> correos) {
         this.correos = correos;
-    }
-
-    public List<BodegaCarguera> getBodegas() {
-        return bodegas;
-    }
-
-    public void setBodegas(List<BodegaCarguera> bodegas) {
-        this.bodegas = bodegas;
     }
 
 }
