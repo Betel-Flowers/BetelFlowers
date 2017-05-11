@@ -17,7 +17,6 @@ public class ItemVenta {
     
     Integer cantidad;
     Double precio;
-    Double subTotal;
     @Reference
     Variedad variedad;
     @Reference

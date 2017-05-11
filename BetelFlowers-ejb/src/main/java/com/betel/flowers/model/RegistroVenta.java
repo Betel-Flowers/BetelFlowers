@@ -28,7 +28,8 @@ public class RegistroVenta extends BaseEntity {
     private Integer numberSRI;
     private Date fechaSRI;
     private String AWB;
-    private String HAW;
+    private String HAWB;
+    private String observacion;
     private String username;
     private Integer flag;
 
@@ -103,12 +104,20 @@ public class RegistroVenta extends BaseEntity {
         this.AWB = AWB;
     }
 
-    public String getHAW() {
-        return HAW;
+    public String getHAWB() {
+        return HAWB;
     }
 
-    public void setHAW(String HAW) {
-        this.HAW = HAW;
+    public void setHAWB(String HAWB) {
+        this.HAWB = HAWB;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
     }
 
     public String getUsername() {
@@ -226,6 +235,6 @@ public class RegistroVenta extends BaseEntity {
 
     @Override
     public String toString() {
-        return "RegistroVenta{" + "codigo=" + codigo + ", numberPaking=" + numberPaking + ", numberSRI=" + numberSRI + ", fechaSRI=" + fechaSRI + ", AWB=" + AWB + ", HAW=" + HAW + ", username=" + username + ", flag=" + flag + ", cliente=" + cliente + ", subCliente=" + subCliente + ", marcaCaja=" + marcaCaja + ", puertoEmbarque=" + puertoEmbarque + ", puertoDestino=" + puertoDestino + ", dae=" + dae + ", agenciaCarga=" + agenciaCarga + ", cuartoFrio=" + cuartoFrio + ", termino=" + termino + '}';
+        return "RegistroVenta{" + "codigo=" + codigo + ", numberPaking=" + numberPaking + ", numberSRI=" + numberSRI + ", fechaSRI=" + fechaSRI + ", AWB=" + AWB + ", HAW=" + HAWB + ", username=" + username + ", flag=" + flag + ", cliente=" + cliente + ", subCliente=" + subCliente + ", marcaCaja=" + marcaCaja + ", puertoEmbarque=" + puertoEmbarque + ", puertoDestino=" + puertoDestino + ", dae=" + dae + ", agenciaCarga=" + agenciaCarga + ", cuartoFrio=" + cuartoFrio + ", termino=" + termino + '}';
     }
 }
