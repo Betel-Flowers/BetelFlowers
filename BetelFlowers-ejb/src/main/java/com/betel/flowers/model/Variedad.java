@@ -9,6 +9,7 @@ import com.mongo.persistance.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -42,6 +43,8 @@ public class Variedad extends BaseEntity {
     private Especie especie;
     @Reference
     private List<Bloque> bloques;
+    @Embedded
+    private List<ItemPrecio> precios;
 
     public Variedad() {
         this.urlFoto = "/resources/img/flor.png";
@@ -50,6 +53,7 @@ public class Variedad extends BaseEntity {
         this.glongitudes = new ArrayList<>();
         this.puntosCorte = new ArrayList<>();
         this.especie = new Especie();
+        this.precios = new ArrayList<>();
         this.girasol = Boolean.FALSE;
     }
 
@@ -100,8 +104,6 @@ public class Variedad extends BaseEntity {
     public void setTiempoVida(Integer tiempoVida) {
         this.tiempoVida = tiempoVida;
     }
-
-   
 
     public Boolean getGirasol() {
         return girasol;
@@ -165,6 +167,14 @@ public class Variedad extends BaseEntity {
 
     public void setBloques(List<Bloque> bloques) {
         this.bloques = bloques;
+    }
+
+    public List<ItemPrecio> getPrecios() {
+        return precios;
+    }
+
+    public void setPrecios(List<ItemPrecio> precios) {
+        this.precios = precios;
     }
 
     public Especie getEspecie() {

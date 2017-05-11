@@ -5,6 +5,7 @@
  */
 package com.betel.flowers.model;
 
+import com.mongo.persistance.BaseEntity;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
@@ -18,7 +19,7 @@ import org.mongodb.morphia.annotations.Indexes;
 @Entity(value = "TerminoExportacion", noClassnameStored = true)
 @Indexes({
     @Index(fields = @Field("codigo"))})
-public class TerminoExportacion {
+public class TerminoExportacion extends BaseEntity{
     
     private Integer codigo;
     private String descripcion;

@@ -6,6 +6,7 @@
 package com.betel.flowers.service;
 
 import com.betel.flowers.model.Dae;
+import com.betel.flowers.model.Pais;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -81,7 +82,18 @@ public class DaeService implements Serializable{
     public Dae findByCodigo(Integer dae) {
         Dae find = new Dae();
         Query<Dae> result = this.ds.find(Dae.class).
-                field("codigo").equal(dae).
+                field("pais").equal(dae).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList().get(0);
+        }
+        return find;
+    }
+    
+    public Dae findByPais(Pais pais) {
+        Dae find = new Dae();
+        Query<Dae> result = this.ds.find(Dae.class).
+                field("pais").equal(pais).
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);

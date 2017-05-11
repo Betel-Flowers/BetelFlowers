@@ -6,6 +6,7 @@
 package com.betel.flowers.service;
 
 import com.betel.flowers.model.Bloque;
+import com.betel.flowers.model.ItemPrecio;
 import com.betel.flowers.model.Variedad;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
@@ -76,6 +77,35 @@ public class VariedadService implements Serializable {
             list = result.asList();
         }
         return list;
+    }
+
+    public List<Variedad> obtenerListPrecioLongitudFlag(Integer flag) {
+        List<Variedad> list = new ArrayList<>();
+        Query<Variedad> result = this.ds.find(Variedad.class).
+                field("flag").equal(flag);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        return this.loadPrecioLongitud(list);
+    }
+
+    private List<Variedad> loadPrecioLongitud(List<Variedad> variedades) {
+        if (variedades != null && !variedades.isEmpty()) {
+            for (int i = 0; i < variedades.size(); i++) {
+                if (variedades.get(i).getPrecios().isEmpty()) {
+                    if (variedades.get(i).getGirasol()) {
+                        for (String gl : variedades.get(i).getGlongitudes()) {
+                            variedades.get(i).getPrecios().add(new ItemPrecio(gl));
+                        }
+                    } else {
+                        for (Integer l : variedades.get(i).getLongitudes()) {
+                            variedades.get(i).getPrecios().add(new ItemPrecio(l));
+                        }
+                    }
+                }
+            }
+        }
+        return variedades;
     }
 
     public List<Variedad> obtenerListaBloque(Bloque bloque) {
@@ -154,6 +184,7 @@ public class VariedadService implements Serializable {
         UpdateOperations<Variedad> update = this.ds.createUpdateOperations(Variedad.class);
         update.set("especie", variedad.getEspecie()).
                 set("bloques", variedad.getBloques()).
+                set("precios", variedad.getPrecios()).
                 set("nombre", variedad.getNombre()).
                 set("color", variedad.getColor()).
                 set("urlFoto", variedad.getUrlFoto()).
