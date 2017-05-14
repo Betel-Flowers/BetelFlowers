@@ -21,6 +21,8 @@ import com.betel.flowers.service.CuartoFrioCargueraService;
 import com.betel.flowers.service.DaeService;
 import com.betel.flowers.service.PaisService;
 import com.betel.flowers.service.TerminoExportacionService;
+import com.betel.flowers.web.bean.util.DetalleCajaVenta;
+import com.betel.flowers.web.bean.util.DetalleVariedadVenta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,8 @@ public class RegistroVentaBean implements Serializable {
     private List<Ciudad> origen;
     private List<Ciudad> destino;
     private List<CuartoFrioCarguera> frios;
+    private DetalleCajaVenta detalleVenta;
+    private DetalleVariedadVenta contenedorVenta;
 
     @Inject
     private ClienteService clienteService;
@@ -215,6 +219,22 @@ public class RegistroVentaBean implements Serializable {
 
     public void setFrios(List<CuartoFrioCarguera> frios) {
         this.frios = frios;
+    }
+
+    public DetalleCajaVenta getDetalleVenta() {
+        return detalleVenta;
+    }
+
+    public void setDetalleVenta(DetalleCajaVenta detalleVenta) {
+        this.detalleVenta = detalleVenta;
+    }
+
+    public DetalleVariedadVenta getContenedorVenta() {
+        return contenedorVenta;
+    }
+
+    public void setContenedorVenta(DetalleVariedadVenta contenedorVenta) {
+        this.contenedorVenta = contenedorVenta;
     }
 
 }

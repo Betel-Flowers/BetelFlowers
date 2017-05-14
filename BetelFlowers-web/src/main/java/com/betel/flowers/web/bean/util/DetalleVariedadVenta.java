@@ -5,7 +5,7 @@
  */
 package com.betel.flowers.web.bean.util;
 
-import com.betel.flowers.model.ItemVariedadStock;
+import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.util.FacesUtil;
@@ -19,40 +19,42 @@ import javax.inject.Inject;
  *
  * @author luis
  */
-public class DetalleCajaStock implements Serializable {
+public class DetalleVariedadVenta implements Serializable {
 
-    private ItemVariedadStock nuevo;
-    private ItemVariedadStock selected;
-    private List<ItemVariedadStock> detalleCajaStock;
+    private static final long serialVersionUID = -5273352684512119259L;
+
+    private ItemVariedadVenta nuevo;
+    private ItemVariedadVenta selected;
+    private List<ItemVariedadVenta> detalle;
 
     @Inject
     private VariedadService variedadService;
 
-    public DetalleCajaStock() {
-        this.nuevo = new ItemVariedadStock();
+    public DetalleVariedadVenta() {
+        this.nuevo = new ItemVariedadVenta();
         this.selected = null;
-        this.detalleCajaStock = new ArrayList<>();
+        this.detalle = new ArrayList<>();
         this.variedadService = new VariedadService();
     }
 
     public void add(ActionEvent evt) {
-        if (this.nuevo != null && this.detalleCajaStock != null) {
-            Boolean exito = this.detalleCajaStock.add(nuevo);
+        if (this.nuevo != null && this.detalle != null) {
+            Boolean exito = this.detalle.add(nuevo);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
-                this.nuevo = new ItemVariedadStock();
+                this.nuevo = new ItemVariedadVenta();
             } else {
                 FacesUtil.addMessageError(null, "No se ha agregado.");
             }
         }
     }
 
-    public void remove(ActionEvent evt, ItemVariedadStock select) {
+    public void remove(ActionEvent evt, ItemVariedadVenta select) {
         this.selected = select;
         if (this.selected != null
-                && this.detalleCajaStock != null
-                && !this.detalleCajaStock.isEmpty()) {
-            Boolean exito = this.detalleCajaStock.remove(this.selected);
+                && this.detalle != null
+                && !this.detalle.isEmpty()) {
+            Boolean exito = this.detalle.remove(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado.");
                 this.selected = null;
@@ -76,27 +78,4 @@ public class DetalleCajaStock implements Serializable {
         }
     }
 
-    public ItemVariedadStock getNuevo() {
-        return nuevo;
-    }
-
-    public void setNuevo(ItemVariedadStock nuevo) {
-        this.nuevo = nuevo;
-    }
-
-    public ItemVariedadStock getSelected() {
-        return selected;
-    }
-
-    public void setSelected(ItemVariedadStock selected) {
-        this.selected = selected;
-    }
-
-    public List<ItemVariedadStock> getDetalleCajaStock() {
-        return detalleCajaStock;
-    }
-
-    public void setDetalleCajaStock(List<ItemVariedadStock> detalleCajaStock) {
-        this.detalleCajaStock = detalleCajaStock;
-    }
 }

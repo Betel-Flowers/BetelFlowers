@@ -5,7 +5,7 @@
  */
 package com.betel.flowers.web.bean;
 
-import com.betel.flowers.model.ItemCajaStock;
+import com.betel.flowers.model.ItemVariedadStock;
 import com.betel.flowers.model.StockVenta;
 import com.betel.flowers.model.TipoCaja;
 import com.betel.flowers.service.StockVentasService;
@@ -113,7 +113,7 @@ public class StockVentasBean implements Serializable {
                 FacesUtil.addMessageInfo("Ingrese un precio.");
             }
         } else {
-            FacesUtil.addMessageInfo("Agregar Variedades");
+            FacesUtil.addMessageInfo("Agregar variedades.");
         }
     }
 
@@ -261,8 +261,8 @@ public class StockVentasBean implements Serializable {
         }
     }
 
-    public List<ItemCajaStock> listBardodeInsideList(StockVenta barcodeItem) {
-        List<ItemCajaStock> list = new ArrayList<>();
+    public List<ItemVariedadStock> listBardodeInsideList(StockVenta barcodeItem) {
+        List<ItemVariedadStock> list = new ArrayList<>();
         if (barcodeItem != null) {
             if (barcodeItem.getDetalleCajaStock() != null && !barcodeItem.getDetalleCajaStock().isEmpty()) {
                 list = barcodeItem.getDetalleCajaStock();
