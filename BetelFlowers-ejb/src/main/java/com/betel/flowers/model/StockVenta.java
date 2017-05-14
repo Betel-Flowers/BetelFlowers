@@ -39,7 +39,7 @@ public class StockVenta extends BaseEntity {
     private Integer flag;
 
     @Embedded
-    private List<ItemCajaStock> detalleCajaStock;
+    private List<ItemVariedadStock> detalleCajaStock;
     @Reference
     private TipoCaja caja;
 
@@ -82,11 +82,11 @@ public class StockVenta extends BaseEntity {
         this.precio = precio;
     }
 
-    public List<ItemCajaStock> getDetalleCajaStock() {
+    public List<ItemVariedadStock> getDetalleCajaStock() {
         return detalleCajaStock;
     }
 
-    public void setDetalleCajaStock(List<ItemCajaStock> detalleCajaStock) {
+    public void setDetalleCajaStock(List<ItemVariedadStock> detalleCajaStock) {
         this.detalleCajaStock = detalleCajaStock;
     }
 
@@ -165,7 +165,7 @@ public class StockVenta extends BaseEntity {
     private Integer CalcularTotalTallos() {
         Integer total = 0;
         if (this.detalleCajaStock != null && !this.detalleCajaStock.isEmpty()) {
-            for (ItemCajaStock item : this.detalleCajaStock) {
+            for (ItemVariedadStock item : this.detalleCajaStock) {
                 total = total + item.getTotalTallos();
             }
         }

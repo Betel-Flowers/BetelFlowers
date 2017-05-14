@@ -5,7 +5,7 @@
  */
 package com.betel.flowers.xml.service;
 
-import com.betel.flowers.model.ItemCajaStock;
+import com.betel.flowers.model.ItemVariedadStock;
 import com.betel.flowers.model.StockVenta;
 import com.betel.flowers.xml.model.EtiquetaRegExpo;
 import com.betel.flowers.xml.model.ItemCajaStockVenta;
@@ -80,7 +80,7 @@ public class MailStockVentaXML implements Serializable {
         item.setCantidadCaja(itemStockVenta.getCantidadCajas() + "");
         item.setTipoCaja(itemStockVenta.getCaja().getTipo());
         List<ItemCajaStockVenta> itemsCaja = new ArrayList<>();
-        for (ItemCajaStock caja : itemStockVenta.getDetalleCajaStock()) {
+        for (ItemVariedadStock caja : itemStockVenta.getDetalleCajaStock()) {
             itemsCaja.add(createTextItemCajasStockVenta(caja));
         }
         item.setVariedades(itemsCaja);
@@ -89,7 +89,7 @@ public class MailStockVentaXML implements Serializable {
         return item;
     }
 
-    public ItemCajaStockVenta createTextItemCajasStockVenta(ItemCajaStock itemCajaStock) {
+    public ItemCajaStockVenta createTextItemCajasStockVenta(ItemVariedadStock itemCajaStock) {
         ItemCajaStockVenta item = new ItemCajaStockVenta();
         item.setUrlFoto(itemCajaStock.getVariedad().getUrlFoto());
         item.setVariedad(itemCajaStock.getVariedad().getNombre());

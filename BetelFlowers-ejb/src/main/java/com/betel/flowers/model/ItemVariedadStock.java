@@ -13,7 +13,7 @@ import org.mongodb.morphia.annotations.Reference;
  * @author luis
  */
 @Embedded
-public class ItemCajaStock {
+public class ItemVariedadStock {
 
     private Integer numeroRamos;
     private Integer numeroTallosRamo;
@@ -24,7 +24,7 @@ public class ItemCajaStock {
     @Reference
     private Variedad variedad;
 
-    public ItemCajaStock() {
+    public ItemVariedadStock() {
         this.numeroRamos = 1;
         this.variedad = new Variedad();
     }

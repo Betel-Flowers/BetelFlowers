@@ -6,8 +6,11 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -51,6 +54,8 @@ public class RegistroVenta extends BaseEntity {
     private CuartoFrioCarguera cuartoFrio;
     @Reference
     private TerminoExportacion termino;
+    @Embedded
+    private List<ItemDetalleVenta> detalle;
 
     public RegistroVenta() {
         this.cliente = new Cliente();
@@ -62,6 +67,7 @@ public class RegistroVenta extends BaseEntity {
         this.agenciaCarga = new Carguera();
         this.cuartoFrio = new CuartoFrioCarguera();
         this.termino = new TerminoExportacion();
+        this.detalle = new ArrayList<>();
     }
 
     public Integer getCodigo() {
@@ -206,6 +212,14 @@ public class RegistroVenta extends BaseEntity {
 
     public void setTermino(TerminoExportacion termino) {
         this.termino = termino;
+    }
+
+    public List<ItemDetalleVenta> getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(List<ItemDetalleVenta> detalle) {
+        this.detalle = detalle;
     }
 
     @Override
