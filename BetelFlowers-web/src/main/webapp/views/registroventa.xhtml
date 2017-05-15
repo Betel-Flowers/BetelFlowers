@@ -195,8 +195,30 @@
                 </p:tab>
                 <p:tab id="detalles" title="Detalle de Venta">
                     <p:panel header="Agrege veriedades para el detalle">
- 
-
+                        <h:panelGrid columns="10" cellpadding="5">
+                            <p:outputLabel for="mumCja" value="Cantidad Cajas:"/>
+                            <p:spinner id="mumCja" value="#{registroVentaBean.detalleVenta.nuevo.cantidadCaja}"
+                                       min="0" required="true"/>
+                            <p:message for="mumCja" display="tooltip" severity="error"/>
+                            
+                            <p:outputLabel for="tipCja" value="Tipo Caja"/>
+                            <p:selectOneMenu id="tipCja" rendered="true" 
+                                             value="#{registroVentaBean.detalleVenta.nuevo.cajaTipo.codigo}">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="tcja"
+                                               itemLabel="#{tcja.tipo}" itemValue="#{tcja.codigo}"/>
+                            </p:selectOneMenu>
+                            <p:message for="tipCja" display="tooltip" severity="error"/>
+                            
+                            <p:outputLabel for="mCja" value="Marca Caja"/>
+                            <p:selectOneMenu id="mCja" required="true"
+                                             value="#{registroVentaBean.detalleVenta.nuevo.marcaCaja.codigo}">
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{registroVentaBean.nuevo.cliente.cajas}" var="mrCja"
+                                               itemLabel="#{mrCja.nombre}" itemValue="#{mrCja.codigo}"/>
+                            </p:selectOneMenu>
+                            <p:message for="mCja" display="tooltip" severity="error"/>
+                        </h:panelGrid>
                     </p:panel>
                 </p:tab>
                 <p:tab id="generar" title="Generar Venta">

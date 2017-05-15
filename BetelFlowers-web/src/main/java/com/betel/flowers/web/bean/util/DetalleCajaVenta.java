@@ -5,7 +5,7 @@
  */
 package com.betel.flowers.web.bean.util;
 
-import com.betel.flowers.model.ItemDetalleVenta;
+import com.betel.flowers.model.DetalleVenta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,37 +16,37 @@ import java.util.List;
  */
 public class DetalleCajaVenta implements Serializable {
 
-    private ItemDetalleVenta nuevo;
-    private ItemDetalleVenta selected;
-    private List<ItemDetalleVenta> detalle;
+    private DetalleVenta nuevo;
+    private DetalleVenta selected;
+    private List<DetalleVenta> detalle;
 
     public DetalleCajaVenta() {
-        this.nuevo = new ItemDetalleVenta();
+        this.nuevo = new DetalleVenta();
         this.selected = null;
         this.detalle = new ArrayList<>();
     }
 
-    public ItemDetalleVenta getNuevo() {
+    public DetalleVenta getNuevo() {
         return nuevo;
     }
 
-    public void setNuevo(ItemDetalleVenta nuevo) {
+    public void setNuevo(DetalleVenta nuevo) {
         this.nuevo = nuevo;
     }
 
-    public ItemDetalleVenta getSelected() {
+    public DetalleVenta getSelected() {
         return selected;
     }
 
-    public void setSelected(ItemDetalleVenta selected) {
+    public void setSelected(DetalleVenta selected) {
         this.selected = selected;
     }
 
-    public List<ItemDetalleVenta> getDetalle() {
+    public List<DetalleVenta> getDetalle() {
         return detalle;
     }
 
-    public void setDetalle(List<ItemDetalleVenta> detalle) {
+    public void setDetalle(List<DetalleVenta> detalle) {
         this.detalle = detalle;
     }
 

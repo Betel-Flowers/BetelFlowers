@@ -97,20 +97,16 @@ public class StockVentasBean implements Serializable {
         this.nuevo.setCaja(caja);
         this.nuevo.setCodigo(this.generatedTempCode());
         if (this.detalle.getDetalleCajaStock() != null && !this.detalle.getDetalleCajaStock().isEmpty()) {
-            if (this.nuevo.getPrecio() != 0.0) {
-                this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
-                Boolean exito = this.stockVentas.add(this.nuevo);
-                if (exito) {
-                    FacesUtil.addMessageInfo("Exito.");
-                    this.nuevo = new StockVenta();
-                    this.nuevo.setUsername("usertest");//usertest
-                    this.detalle = new DetalleCajaStock();
-                    this.stateGenetated();
-                } else {
-                    FacesUtil.addMessageError(null, "Falló.");
-                }
+            this.nuevo.setDetalleCajaStock(this.detalle.getDetalleCajaStock());
+            Boolean exito = this.stockVentas.add(this.nuevo);
+            if (exito) {
+                FacesUtil.addMessageInfo("Exito.");
+                this.nuevo = new StockVenta();
+                this.nuevo.setUsername("usertest");//usertest
+                this.detalle = new DetalleCajaStock();
+                this.stateGenetated();
             } else {
-                FacesUtil.addMessageInfo("Ingrese un precio.");
+                FacesUtil.addMessageError(null, "Falló.");
             }
         } else {
             FacesUtil.addMessageInfo("Agregar variedades.");
@@ -280,7 +276,6 @@ public class StockVentasBean implements Serializable {
                 barcodes.setBarcode(registro.getBarcode());
                 barcodes.setUsername(registro.getUsername());
                 barcodes.setUrlHtml(registro.getUrlPdf().replace(".pdf", ".html"));
-                barcodes.setPrecio(registro.getPrecio());
                 for (int i = 0; i < this.stockVentasG.size(); i++) {
                     if (this.stockVentasG.get(i).getBarcode().equals(registro.getBarcode())) {
                         barcodes.getListBarcode().add(this.stockVentasG.get(i));

@@ -37,12 +37,16 @@ public class DetalleCajaStock implements Serializable {
 
     public void add(ActionEvent evt) {
         if (this.nuevo != null && this.detalleCajaStock != null) {
-            Boolean exito = this.detalleCajaStock.add(nuevo);
-            if (exito) {
-                FacesUtil.addMessageInfo("Se ha agregado.");
-                this.nuevo = new ItemVariedadStock();
+            if (this.nuevo.getPrecioUnit() > 0.0) {
+                Boolean exito = this.detalleCajaStock.add(nuevo);
+                if (exito) {
+                    FacesUtil.addMessageInfo("Se ha agregado.");
+                    this.nuevo = new ItemVariedadStock();
+                } else {
+                    FacesUtil.addMessageError(null, "No se ha agregado.");
+                }
             } else {
-                FacesUtil.addMessageError(null, "No se ha agregado.");
+                FacesUtil.addMessageInfo("Por favor ingrese un precio.");
             }
         }
     }

@@ -21,13 +21,11 @@ public class BarcodeStockVenta {
     private Integer totalTallosBarcode;
     private Integer totalCajasBarcode;
     private String urlHtml;
-    private Double precio;
     private String username;
     private List<StockVenta> listBarcode;
 
     public BarcodeStockVenta() {
         this.totalTallosBarcode = 0;
-        this.precio = 0.0;
         this.listBarcode = new ArrayList<>();
     }
 
@@ -69,14 +67,6 @@ public class BarcodeStockVenta {
 
     public void setUrlHtml(String urlHtml) {
         this.urlHtml = urlHtml;
-    }
-
-    public Double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(Double precio) {
-        this.precio = precio;
     }
 
     public String getUsername() {

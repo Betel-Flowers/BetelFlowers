@@ -84,6 +84,8 @@ public class RegistroVentaBean implements Serializable {
         this.origen = new ArrayList<>();
         this.destino = new ArrayList<>();
         this.frios = new ArrayList<>();
+        this.detalleVenta = new DetalleCajaVenta();
+        this.contenedorVenta = new DetalleVariedadVenta();
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
             this.subClientes = new ArrayList<>();

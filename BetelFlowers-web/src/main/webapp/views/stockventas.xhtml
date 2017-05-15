@@ -57,7 +57,7 @@
                         </h:panelGrid>
                     </p:outputPanel>
                     <p:outputPanel id="outlongsMx">
-                        <h:panelGrid columns="6" cellpadding="5">
+                        <h:panelGrid columns="9" cellpadding="5">
                             <p:outputLabel for="longitudMx" value="Longitud:" 
                                            rendered="#{not stockVentasBean.detalle.nuevo.variedad.girasol}"/>
                             <p:selectOneMenu id="longitudMx" value="#{stockVentasBean.detalle.nuevo.longitud}"
@@ -80,12 +80,12 @@
                             <p:message for="glongitudMx" display="tooltip" severity="error"
                                        rendered="#{stockVentasBean.detalle.nuevo.variedad.girasol}"/>
 
-                            <p:outputLabel for="precioMx" value="Precio:"/>
-                            <p:inputNumber id="precioMx" value="#{stockVentasBean.nuevo.precio}"
-                                           minValue="0" symbol="$" required="true">
-                                <p:ajax update="precioMx"/>
-                            </p:inputNumber>
-                            <p:message for="precioMx" display="tooltip" severity="error"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="vPrecio" value="Precio Unit."/>
+                            <p:inputNumber id="vPrecio" minValue="0" 
+                                           value="#{stockVentasBean.detalle.nuevo.precioUnit}"/>
+                            <p:message for="vPrecio" display="tooltip" severity="error"/>
                         </h:panelGrid>
                     </p:outputPanel>
                     <h:panelGrid>
@@ -132,11 +132,8 @@
                     <p:column style="text-align: center" headerText="Total Tallos" >
                         <h:outputText value="#{nstock.totalTallos}"/>
                     </p:column>
-                    <p:column style="text-align: center" headerText="Precio" >
-                        <h:outputText value="#{nstock.precio}"/>
-                    </p:column>
                     <p:rowExpansion>
-                        <h:panelGrid style="margin: 0 auto;">
+                        <p:panel style="align-content: center; text-align: center">
                             <p:dataTable value="#{stockVentasBean.listBardodeInsideList(nstock)}" 
                                          var="codeList" rows="5" tableStyle="width: auto"
                                          paginator="true" paginatorPosition="Bottom">
@@ -157,8 +154,13 @@
                                     <h:outputText value="#{codeList.longitud}" rendered="#{not codeList.variedad.girasol}"/>
                                     <h:outputText value="#{codeList.glongitud}" rendered="#{codeList.variedad.girasol}"/>
                                 </p:column>
+                                <p:column style="text-align: center" headerText="Precio Unit." >
+                                    <h:outputText value="#{codeList.precioUnit}">
+                                        <f:convertNumber minFractionDigits="2" />
+                                    </h:outputText>
+                                </p:column>
                             </p:dataTable>
-                        </h:panelGrid>
+                        </p:panel>
                     </p:rowExpansion>
                     <p:column style="text-align: center" headerText="Borrar" >
                         <p:commandButton value="Eliminar" update=":fstock:dtstock"
@@ -204,7 +206,7 @@
                     <p:column style="text-align: center" headerText="Total Cajas">
                         <h:outputText value="#{nstockV.totalCajasBarcode}"/>
                     </p:column>
-                    <p:column style="text-align: center" headerText="Total Tallos">
+                    <p:column style="text-align: center" headerText="Total Tallos Stock">
                         <h:outputText value="#{nstockV.totalTallosBarcode}"/>
                     </p:column>
                     <p:column style="text-align: center" headerText="Usuario" >
@@ -246,16 +248,18 @@
                                         <p:column style="text-align: center" headerText="Tallos">
                                             <h:outputText value="#{itemCajaStock.numeroTallosRamo}" />
                                         </p:column>
-                                        <p:column style="text-align: center" headerText="Total">
+                                        <p:column style="text-align: center" headerText="Precio Unit.">
+                                            <h:outputText value="#{itemCajaStock.precioUnit}">
+                                                <f:convertNumber minFractionDigits="2" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Total Tallos">
                                             <h:outputText value="#{itemCajaStock.totalTallos}" />
                                         </p:column>
                                     </p:dataTable>
                                 </p:column>
-                                <p:column style="text-align: center" headerText="Total Tallos" >
+                                <p:column style="text-align: center" headerText="Total Tallos Caja" >
                                     <h:outputText value="#{codeListV.totalTallos}"/>
-                                </p:column>
-                                <p:column style="text-align: center" headerText="Precio" >
-                                    <h:outputText value="#{codeListV.precio}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:panel>
