@@ -97,11 +97,22 @@ public class ItemVariedadVenta {
     }
 
     public Double getSubTotal() {
-        return this.getPrecio() * (double)(this.getTotalTallos());
+        return this.getPrecio() * (double) (this.getTotalTallos());
     }
 
     public void setSubTotal(Double subTotal) {
         this.subTotal = subTotal;
+    }
+
+    @Override
+    public String toString() {
+        String text = "";
+        if (variedad.getGirasol()) {
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + glongitud + ", Punto Corte: " + puntoCorte + " Total:" + this.getTotalTallos() + ", Precio Unit.: " + precio + ", subTotal: " + this.getSubTotal();
+        } else {
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + longitud + ", Punto Corte: " + puntoCorte + " Total:" + this.getTotalTallos() + ", Precio Unit.: " + precio + ", subTotal: " + this.getSubTotal();
+        }
+        return text;
     }
 
 }

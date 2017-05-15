@@ -28,7 +28,6 @@ public class StockVenta extends BaseEntity {
     private Integer codigo;
     private Integer cantidadCajas;
     private Integer totalTallos;
-    private Double precio;
     private String barcode;
     private String message;
     private String xml;
@@ -44,7 +43,6 @@ public class StockVenta extends BaseEntity {
     private TipoCaja caja;
 
     public StockVenta() {
-        this.precio = 0.0;
         this.cantidadCajas = 1;
         this.detalleCajaStock = new ArrayList<>();
         this.caja = new TipoCaja();
@@ -72,14 +70,6 @@ public class StockVenta extends BaseEntity {
 
     public void setTotalTallos(Integer totalTallos) {
         this.totalTallos = totalTallos;
-    }
-
-    public Double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(Double precio) {
-        this.precio = precio;
     }
 
     public List<ItemVariedadStock> getDetalleCajaStock() {
@@ -199,7 +189,7 @@ public class StockVenta extends BaseEntity {
 
     @Override
     public String toString() {
-        return "StockVenta{" + "codigo=" + codigo + ", cantidadCajas=" + cantidadCajas + ", totalTallos=" + totalTallos + ", precio=" + precio + ", barcode=" + barcode + ", message=" + message + ", xml=" + xml + ", html=" + html + ", pdf=" + pdf + ", urlPdf=" + urlPdf + ", username=" + username + ", flag=" + flag + ", detalleCajaStock=" + detalleCajaStock + ", caja=" + caja + '}';
+        return "StockVenta{" + "codigo=" + codigo + ", cantidadCajas=" + cantidadCajas + ", totalTallos=" + totalTallos + ", barcode=" + barcode + ", message=" + message + ", xml=" + xml + ", html=" + html + ", pdf=" + pdf + ", urlPdf=" + urlPdf + ", username=" + username + ", flag=" + flag + ", detalleCajaStock=" + detalleCajaStock + ", caja=" + caja + '}';
     }
 
 }

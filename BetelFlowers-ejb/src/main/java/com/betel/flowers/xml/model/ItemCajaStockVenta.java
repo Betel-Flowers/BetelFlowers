@@ -21,6 +21,7 @@ public class ItemCajaStockVenta {
     private String numeroRamos;
     private String numeroTallosRamo;
     private String totalTallos;
+    private String precio;
 
     public ItemCajaStockVenta() {
     }
@@ -77,6 +78,15 @@ public class ItemCajaStockVenta {
     @XmlElement
     public void setTotalTallos(String totalTallos) {
         this.totalTallos = totalTallos;
+    }
+
+    public String getPrecio() {
+        return precio;
+    }
+
+    @XmlElement
+    public void setPrecio(String precio) {
+        this.precio = precio;
     }
     
 }

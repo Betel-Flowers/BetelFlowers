@@ -7,7 +7,6 @@ package com.betel.flowers.xml.service;
 
 import com.betel.flowers.model.ItemVariedadStock;
 import com.betel.flowers.model.StockVenta;
-import com.betel.flowers.xml.model.EtiquetaRegExpo;
 import com.betel.flowers.xml.model.ItemCajaStockVenta;
 import com.betel.flowers.xml.model.ItemStockVenta;
 import com.betel.flowers.xml.model.MailStockVenta;
@@ -37,11 +36,11 @@ import javax.xml.bind.Marshaller;
 @Stateless
 @LocalBean
 public class MailStockVentaXML implements Serializable {
-
+    
     private static final long serialVersionUID = 3335818410368443745L;
     private static final Logger log = Logger.getLogger(MailStockVentaXML.class.getName());
-
-    public void generatedXML(String barcode, String url, String filename,String message, List<StockVenta> barcodeList) {
+    
+    public void generatedXML(String barcode, String url, String filename, String message, List<StockVenta> barcodeList) {
         Path path = Paths.get(url);
         if (!Files.exists(path)) {
             try {
@@ -51,14 +50,14 @@ public class MailStockVentaXML implements Serializable {
                 log.log(Level.SEVERE, "Failed to create directory! " + e.getMessage());
             }
         }
-
+        
         File fileDelete = new File(url + filename + "." + "xml");
         if (fileDelete.delete()) {
             log.log(Level.INFO, "Se elimino el archivo: " + url + filename + "." + "xml");
         } else {
             log.log(Level.INFO, "No se elimino el archivo: " + url + filename + "." + "xml");
         }
-
+        
         GregorianCalendar calendar = new GregorianCalendar();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss a");
         Date creationDate = calendar.getTime();
@@ -74,7 +73,7 @@ public class MailStockVentaXML implements Serializable {
         email.setDetalle(items);
         createXML(url, filename + ".xml", email);
     }
-
+    
     public ItemStockVenta createTextItemDetailStockVenta(StockVenta itemStockVenta) {
         ItemStockVenta item = new ItemStockVenta();
         item.setCantidadCaja(itemStockVenta.getCantidadCajas() + "");
@@ -85,10 +84,9 @@ public class MailStockVentaXML implements Serializable {
         }
         item.setVariedades(itemsCaja);
         item.setTotalTallos(itemStockVenta.getTotalTallos() + "");
-        item.setPrecio(itemStockVenta.getPrecio() + "");
         return item;
     }
-
+    
     public ItemCajaStockVenta createTextItemCajasStockVenta(ItemVariedadStock itemCajaStock) {
         ItemCajaStockVenta item = new ItemCajaStockVenta();
         item.setUrlFoto(itemCajaStock.getVariedad().getUrlFoto());
@@ -101,12 +99,13 @@ public class MailStockVentaXML implements Serializable {
         item.setNumeroRamos(itemCajaStock.getNumeroRamos() + "");
         item.setNumeroTallosRamo(itemCajaStock.getNumeroTallosRamo() + "");
         item.setTotalTallos(itemCajaStock.getTotalTallos() + "");
+        item.setPrecio("$ "+itemCajaStock.getPrecioUnit());
         return item;
     }
-
+    
     public void createXML(String url, String filename, MailStockVenta email) {
         try {
-
+            
             File file = new File(url + filename);
             JAXBContext jaxbContext = JAXBContext.newInstance(MailStockVenta.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -114,10 +113,10 @@ public class MailStockVentaXML implements Serializable {
             // output pretty printed
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
-
+            
             jaxbMarshaller.marshal(email, file);
             jaxbMarshaller.marshal(email, System.out);
-
+            
         } catch (JAXBException e) {
             log.log(Level.SEVERE, e.getMessage());
         }

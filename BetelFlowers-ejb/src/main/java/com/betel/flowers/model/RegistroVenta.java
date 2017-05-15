@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -33,6 +32,7 @@ public class RegistroVenta extends BaseEntity {
     private String AWB;
     private String HAWB;
     private String observacion;
+    private String barcodeDetalleVenta;
     private String username;
     private Integer flag;
 
@@ -54,8 +54,8 @@ public class RegistroVenta extends BaseEntity {
     private CuartoFrioCarguera cuartoFrio;
     @Reference
     private TerminoExportacion termino;
-    @Embedded
-    private List<ItemDetalleVenta> detalle;
+    @Reference
+    private List<DetalleVenta> detalle;
 
     public RegistroVenta() {
         this.cliente = new Cliente();
@@ -124,6 +124,14 @@ public class RegistroVenta extends BaseEntity {
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    }
+    
+    public String getBarcodeDetalleVenta() {
+        return barcodeDetalleVenta;
+    }
+
+    public void setBarcodeDetalleVenta(String barcodeDetalleVenta) {
+        this.barcodeDetalleVenta = barcodeDetalleVenta;
     }
 
     public String getUsername() {
@@ -214,11 +222,11 @@ public class RegistroVenta extends BaseEntity {
         this.termino = termino;
     }
 
-    public List<ItemDetalleVenta> getDetalle() {
+    public List<DetalleVenta> getDetalle() {
         return detalle;
     }
 
-    public void setDetalle(List<ItemDetalleVenta> detalle) {
+    public void setDetalle(List<DetalleVenta> detalle) {
         this.detalle = detalle;
     }
 

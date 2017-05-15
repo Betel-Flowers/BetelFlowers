@@ -20,11 +20,13 @@ public class ItemVariedadStock {
     private Integer totalTallos;
     private Integer longitud;
     private String glongitud;
+    private Double precioUnit;
 
     @Reference
     private Variedad variedad;
 
     public ItemVariedadStock() {
+        this.precioUnit = 0.0;
         this.numeroRamos = 1;
         this.variedad = new Variedad();
     }
@@ -77,13 +79,21 @@ public class ItemVariedadStock {
         this.glongitud = glongitud;
     }
 
+    public Double getPrecioUnit() {
+        return precioUnit;
+    }
+
+    public void setPrecioUnit(Double precioUnit) {
+        this.precioUnit = precioUnit;
+    }
+
     @Override
     public String toString() {
         String text = "";
         if (variedad.getGirasol()) {
-            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + glongitud + " Total:" + this.getTotalTallos() + " ";
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + glongitud + " Total Tallos: " + this.getTotalTallos() + " Precio: $ " + precioUnit;
         } else {
-            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + longitud + " Total:" + this.getTotalTallos() + " ";
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + longitud + " Total Tallos: " + this.getTotalTallos() + " Precio: $ " + precioUnit;
         }
         return text;
     }

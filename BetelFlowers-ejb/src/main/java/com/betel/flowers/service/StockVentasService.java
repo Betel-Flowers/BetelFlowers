@@ -113,7 +113,6 @@ public class StockVentasService implements Serializable {
                 set("totalTallos", stockVenta.getTotalTallos()).
                 set("detalleCajaStock", stockVenta.getDetalleCajaStock()).
                 set("caja", stockVenta.getCaja()).
-                set("precio", stockVenta.getPrecio()).
                 set("barcode", stockVenta.getBarcode()).
                 set("message", stockVenta.getMessage()).
                 set("xml", stockVenta.getXml()).
