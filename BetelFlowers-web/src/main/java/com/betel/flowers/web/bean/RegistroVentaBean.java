@@ -22,7 +22,6 @@ import com.betel.flowers.service.DaeService;
 import com.betel.flowers.service.PaisService;
 import com.betel.flowers.service.TerminoExportacionService;
 import com.betel.flowers.web.bean.util.DetalleCajaVenta;
-import com.betel.flowers.web.bean.util.DetalleVariedadVenta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ public class RegistroVentaBean implements Serializable {
     private static final long serialVersionUID = 630861283476011721L;
 
     private RegistroVenta nuevo;
+    //CLIENTE
     private Cliente selectedCliente;
     private SubCliente selectedSubCliente;
     private List<Cliente> clientes;
@@ -52,9 +52,10 @@ public class RegistroVentaBean implements Serializable {
     private List<SubCliente> filteredSubClientes;
     private List<Ciudad> origen;
     private List<Ciudad> destino;
+    //AGENCIA DE CARGA
     private List<CuartoFrioCarguera> frios;
-    private DetalleCajaVenta detalleVenta;
-    private DetalleVariedadVenta contenedorVenta;
+    //DETALLE DE VENTA  
+  
 
     @Inject
     private ClienteService clienteService;
@@ -84,8 +85,6 @@ public class RegistroVentaBean implements Serializable {
         this.origen = new ArrayList<>();
         this.destino = new ArrayList<>();
         this.frios = new ArrayList<>();
-        this.detalleVenta = new DetalleCajaVenta();
-        this.contenedorVenta = new DetalleVariedadVenta();
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
             this.subClientes = new ArrayList<>();
@@ -222,21 +221,4 @@ public class RegistroVentaBean implements Serializable {
     public void setFrios(List<CuartoFrioCarguera> frios) {
         this.frios = frios;
     }
-
-    public DetalleCajaVenta getDetalleVenta() {
-        return detalleVenta;
-    }
-
-    public void setDetalleVenta(DetalleCajaVenta detalleVenta) {
-        this.detalleVenta = detalleVenta;
-    }
-
-    public DetalleVariedadVenta getContenedorVenta() {
-        return contenedorVenta;
-    }
-
-    public void setContenedorVenta(DetalleVariedadVenta contenedorVenta) {
-        this.contenedorVenta = contenedorVenta;
-    }
-
 }

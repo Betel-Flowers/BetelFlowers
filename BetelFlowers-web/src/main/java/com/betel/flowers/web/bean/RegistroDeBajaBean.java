@@ -31,9 +31,9 @@ import javax.inject.Inject;
 @Named(value = "registroDeBajaBean")
 @ViewScoped
 public class RegistroDeBajaBean implements Serializable {
-    
+
     private static final long serialVersionUID = 5473862015518957692L;
-    
+
     private RegistroDeBaja nuevo;
     private RegistroDeBaja selected;
     private List<RegistroDeBaja> registrosEnBaja;
@@ -42,7 +42,7 @@ public class RegistroDeBajaBean implements Serializable {
     private List<RegistroExportacion> registrosBarcodeSelected;
     private Integer cantidadTotalContenedor;
     private Boolean findBarcode;
-    
+
     @Inject
     private RegistroDeBajaService registroBajaService;
     @Inject
@@ -51,7 +51,7 @@ public class RegistroDeBajaBean implements Serializable {
     private MotivoEmpaqueService motivoService;
     @Inject
     private RegistroExportacionService registroExportacionService;
-    
+
     @PostConstruct
     public void init() {
         this.nuevo = new RegistroDeBaja();
@@ -69,7 +69,7 @@ public class RegistroDeBajaBean implements Serializable {
             Collections.reverse(this.registrosEnBaja);
         }
     }
-    
+
     public void findRegistroExportacionBarcode(ActionEvent evt) {
         if (this.nuevo.getBarcode() != null && !this.nuevo.getBarcode().equals("")) {
             List<RegistroExportacion> registros = this.registroExportacionService.
@@ -85,24 +85,57 @@ public class RegistroDeBajaBean implements Serializable {
             }
         }
     }
-    
+
     public void add(ActionEvent evt) {
         if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
             this.asignarCodeMotivosForDetail();
             this.updateContentsBarcodeDown();
-            Boolean exito = this.registroBajaService.insert(this.nuevo);
-            if (exito) {
-                FacesUtil.addMessageInfo("Se ha guardado con exito.");
-                this.init();
-            } else {
-                FacesUtil.addMessageError(null, "No se ha guardado.");
-                this.init();
+            Boolean motivo = this.noMotivoDetalle();
+            Boolean zero = this.noCantidadZeroDetalle();
+            if (zero && motivo) {
+                Boolean exito = this.registroBajaService.insert(this.nuevo);
+                if (exito) {
+                    FacesUtil.addMessageInfo("Se ha guardado con exito.");
+                    this.init();
+                } else {
+                    FacesUtil.addMessageError(null, "No se ha guardado.");
+                    this.init();
+                }
             }
         } else {
             FacesUtil.addMessageInfo("Por favor seleccione motivos para la veriedad seleccionada.");
         }
     }
-    
+
+    private Boolean noMotivoDetalle() {
+        Boolean exist = Boolean.TRUE;
+        if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
+            for (int i = 0; i < this.nuevo.getDetalle().size(); i++) {
+                if (this.nuevo.getDetalle().get(i).getMotivo().getDescripcion() == null
+                        || this.nuevo.getDetalle().get(i).getMotivo().getDescripcion().equals("")) {
+                    exist = Boolean.FALSE;
+                    FacesUtil.addMessageInfo("Seleccione el motivo por el cual se dara de baja.");
+                    break;
+                }
+            }
+        }
+        return exist;
+    }
+
+    private Boolean noCantidadZeroDetalle() {
+        Boolean exist = Boolean.TRUE;
+        if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
+            for (int i = 0; i < this.nuevo.getDetalle().size(); i++) {
+                if (this.nuevo.getDetalle().get(i).getCantidad() == 0) {
+                    exist = Boolean.FALSE;
+                    FacesUtil.addMessageInfo("Por favor ingrese una cantidad mayor a cero, en el caso de que el stock este en cero no podra dar de baja.");
+                    break;
+                }
+            }
+        }
+        return exist;
+    }
+
     private void asignarCodeMotivosForDetail() {
         if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
             for (int i = 0; i < this.nuevo.getDetalle().size(); i++) {
@@ -112,11 +145,11 @@ public class RegistroDeBajaBean implements Serializable {
             }
         }
     }
-    
+
     private void updateContentsBarcodeDown() {
         if (this.nuevo.getDetalle() != null && !this.nuevo.getDetalle().isEmpty()) {
             for (DetalleDeBaja itemDetailBaja : this.nuevo.getDetalle()) {
-                Integer stock = itemDetailBaja.getItem().getTotalTallos() - itemDetailBaja.getCantidad();
+                Integer stock = itemDetailBaja.getItem().getStock() - itemDetailBaja.getCantidad();
                 RegistroExportacion registro = this.registroExportacionService.findByCodigo(itemDetailBaja.getItem());
                 registro.setStock(stock);
                 this.registroExportacionService.update(registro);
@@ -124,7 +157,7 @@ public class RegistroDeBajaBean implements Serializable {
             }
         }
     }
-    
+
     public void onClikListenerSelectList() {
         if (this.registrosBarcodeSelected != null && !this.registrosBarcodeSelected.isEmpty()) {
             for (RegistroExportacion item : this.registrosBarcodeSelected) {
@@ -138,7 +171,7 @@ public class RegistroDeBajaBean implements Serializable {
         this.registrosBarcodeSelected = null;
         this.cantidadTotalContenedor = 0;
     }
-    
+
     private void calculateTotalContenedor() {
         Integer total = 0;
         if (this.registrosBarcode != null && !this.registrosBarcode.isEmpty()) {
@@ -148,7 +181,7 @@ public class RegistroDeBajaBean implements Serializable {
         }
         this.setCantidadTotalContenedor(total);
     }
-    
+
     public List<DetalleDeBaja> listInsideExportacion(RegistroDeBaja registro) {
         List<DetalleDeBaja> list = new ArrayList<>();
         if (registro != null) {
@@ -158,69 +191,69 @@ public class RegistroDeBajaBean implements Serializable {
         }
         return list;
     }
-    
+
     public RegistroDeBaja getNuevo() {
         return nuevo;
     }
-    
+
     public void setNuevo(RegistroDeBaja nuevo) {
         this.nuevo = nuevo;
     }
-    
+
     public RegistroDeBaja getSelected() {
         return selected;
     }
-    
+
     public void setSelected(RegistroDeBaja selected) {
         this.selected = selected;
     }
-    
+
     public List<RegistroDeBaja> getRegistrosEnBaja() {
         return registrosEnBaja;
     }
-    
+
     public void setRegistrosEnBaja(List<RegistroDeBaja> registrosEnBaja) {
         this.registrosEnBaja = registrosEnBaja;
     }
-    
+
     public List<RegistroDeBaja> getFilteredRegistrosEnBaja() {
         return filteredRegistrosEnBaja;
     }
-    
+
     public void setFilteredRegistrosEnBaja(List<RegistroDeBaja> filteredRegistrosEnBaja) {
         this.filteredRegistrosEnBaja = filteredRegistrosEnBaja;
     }
-    
+
     public List<RegistroExportacion> getRegistrosBarcode() {
         return registrosBarcode;
     }
-    
+
     public void setRegistrosBarcode(List<RegistroExportacion> registrosBarcode) {
         this.registrosBarcode = registrosBarcode;
     }
-    
+
     public List<RegistroExportacion> getRegistrosBarcodeSelected() {
         return registrosBarcodeSelected;
     }
-    
+
     public void setRegistrosBarcodeSelected(List<RegistroExportacion> registrosBarcodeSelected) {
         this.registrosBarcodeSelected = registrosBarcodeSelected;
     }
-    
+
     public Integer getCantidadTotalContenedor() {
         return cantidadTotalContenedor;
     }
-    
+
     public void setCantidadTotalContenedor(Integer cantidadTotalContenedor) {
         this.cantidadTotalContenedor = cantidadTotalContenedor;
     }
-    
+
     public Boolean getFindBarcode() {
         return findBarcode;
     }
-    
+
     public void setFindBarcode(Boolean findBarcode) {
         this.findBarcode = findBarcode;
     }
-    
+
 }
