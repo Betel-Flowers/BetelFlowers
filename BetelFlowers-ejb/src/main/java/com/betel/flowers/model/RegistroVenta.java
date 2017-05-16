@@ -32,7 +32,7 @@ public class RegistroVenta extends BaseEntity {
     private String AWB;
     private String HAWB;
     private String observacion;
-    private String barcodeDetalleVenta;
+    private String barcode;
     private String username;
     private Integer flag;
 
@@ -126,12 +126,12 @@ public class RegistroVenta extends BaseEntity {
         this.observacion = observacion;
     }
     
-    public String getBarcodeDetalleVenta() {
-        return barcodeDetalleVenta;
+    public String getBarcode() {
+        return barcode;
     }
 
-    public void setBarcodeDetalleVenta(String barcodeDetalleVenta) {
-        this.barcodeDetalleVenta = barcodeDetalleVenta;
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public String getUsername() {

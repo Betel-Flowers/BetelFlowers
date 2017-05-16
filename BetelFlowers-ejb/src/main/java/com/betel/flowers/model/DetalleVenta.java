@@ -31,6 +31,8 @@ public class DetalleVenta extends BaseEntity{
     private String barcode;
     private Integer totalTallosCaja;
     private Double subTotalCaja;
+    private String username;
+    private Integer flag;
 
     @Reference
     private TipoCaja cajaTipo;
@@ -115,6 +117,22 @@ public class DetalleVenta extends BaseEntity{
 
     public void setDetalleCajaVenta(List<ItemVariedadVenta> detalleCajaVenta) {
         this.detalleCajaVenta = detalleCajaVenta;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
     }
 
     @Override

@@ -21,14 +21,14 @@ public class ItemVariedadVenta {
     private Integer longitud;
     private String glongitud;
     private String puntoCorte;
-    private Double precio;
+    private Double precioUnit;
     private Double subTotal;
 
     @Reference
     private Variedad variedad;
 
     public ItemVariedadVenta() {
-        this.precio = 0.0;
+        this.precioUnit = 0.0;
         this.variedad = new Variedad();
     }
 
@@ -80,12 +80,12 @@ public class ItemVariedadVenta {
         this.puntoCorte = puntoCorte;
     }
 
-    public Double getPrecio() {
-        return precio;
+    public Double getPrecioUnit() {
+        return precioUnit;
     }
 
-    public void setPrecio(Double precio) {
-        this.precio = precio;
+    public void setPrecioUnit(Double precioUnit) {
+        this.precioUnit = precioUnit;
     }
 
     public Variedad getVariedad() {
@@ -97,7 +97,7 @@ public class ItemVariedadVenta {
     }
 
     public Double getSubTotal() {
-        return this.getPrecio() * (double) (this.getTotalTallos());
+        return this.getPrecioUnit() * (double) (this.getTotalTallos());
     }
 
     public void setSubTotal(Double subTotal) {
@@ -108,9 +108,9 @@ public class ItemVariedadVenta {
     public String toString() {
         String text = "";
         if (variedad.getGirasol()) {
-            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + glongitud + ", Punto Corte: " + puntoCorte + " Total:" + this.getTotalTallos() + ", Precio Unit.: " + precio + ", subTotal: " + this.getSubTotal();
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + glongitud + ", Punto Corte: " + puntoCorte + " Total:" + this.getTotalTallos() + ", Precio Unit.: " + precioUnit + ", subTotal: " + this.getSubTotal();
         } else {
-            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + longitud + ", Punto Corte: " + puntoCorte + " Total:" + this.getTotalTallos() + ", Precio Unit.: " + precio + ", subTotal: " + this.getSubTotal();
+            text = "Variedad: " + variedad.getNombre() + " Ramos: " + numeroRamos + ", Tallos: " + numeroTallosRamo + ", Longitud: " + longitud + ", Punto Corte: " + puntoCorte + " Total:" + this.getTotalTallos() + ", Precio Unit.: " + precioUnit + ", subTotal: " + this.getSubTotal();
         }
         return text;
     }
