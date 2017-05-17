@@ -5,27 +5,35 @@
  */
 package com.betel.flowers.web.bean;
 
+import com.betel.flowers.model.BodegaVirtual;
 import com.betel.flowers.model.Carguera;
 import com.betel.flowers.model.Ciudad;
 import com.betel.flowers.model.Cliente;
 import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Dae;
+import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.Pais;
+import com.betel.flowers.model.RegistroExportacion;
 import com.betel.flowers.model.RegistroVenta;
 import com.betel.flowers.model.SubCliente;
 import com.betel.flowers.model.TerminoExportacion;
+import com.betel.flowers.model.Variedad;
+import com.betel.flowers.service.BodegaVirtualService;
 import com.betel.flowers.service.CargueraService;
 import com.betel.flowers.service.CiudadService;
 import com.betel.flowers.service.ClienteService;
 import com.betel.flowers.service.CuartoFrioCargueraService;
 import com.betel.flowers.service.DaeService;
 import com.betel.flowers.service.PaisService;
+import com.betel.flowers.service.RegistroExportacionService;
 import com.betel.flowers.service.TerminoExportacionService;
-import com.betel.flowers.web.bean.util.DetalleCajaVenta;
+import com.betel.flowers.service.VariedadService;
+import com.betel.flowers.web.bean.util.RegistroDetalleVenta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -54,8 +62,11 @@ public class RegistroVentaBean implements Serializable {
     private List<Ciudad> destino;
     //AGENCIA DE CARGA
     private List<CuartoFrioCarguera> frios;
-    //DETALLE DE VENTA  
-  
+    //STOCK'S REGISTRO EXPORTACION
+    private RegistroExportacion findStocksExportacion;
+    private List<ItemVariedadVenta> detalleRegistroSock;
+    private List<ItemVariedadVenta> selectDetalleRegistroSock;
+    private RegistroDetalleVenta detalleVenta;
 
     @Inject
     private ClienteService clienteService;
@@ -71,6 +82,12 @@ public class RegistroVentaBean implements Serializable {
     private CargueraService carqueraService;
     @Inject
     private CuartoFrioCargueraService frioService;
+    @Inject
+    private RegistroExportacionService registroExportacionservice;
+    @Inject
+    private VariedadService variedadService;
+    @Inject
+    private BodegaVirtualService bodegaService;
 
     @PostConstruct
     public void init() {
@@ -85,6 +102,9 @@ public class RegistroVentaBean implements Serializable {
         this.origen = new ArrayList<>();
         this.destino = new ArrayList<>();
         this.frios = new ArrayList<>();
+        this.findStocksExportacion = new RegistroExportacion();
+        this.detalleRegistroSock = new ArrayList<>();
+        this.detalleVenta = new RegistroDetalleVenta();
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
             this.subClientes = new ArrayList<>();
@@ -135,6 +155,29 @@ public class RegistroVentaBean implements Serializable {
         this.frios = this.frioService.obtenerListBodega(carguera.getBodega());
         if (this.frios == null) {
             this.frios = new ArrayList<>();
+        }
+    }
+
+    public void findDisponibilidadStock(ActionEvent evt) {
+        BodegaVirtual bodega = this.bodegaService.findByCodigo(this.findStocksExportacion.getBodega());
+        this.findStocksExportacion.setBodega(bodega);
+        this.detalleRegistroSock = this.registroExportacionservice.obtenerListDisponibilidadFlag(this.findStocksExportacion, 1);
+        if (this.detalleRegistroSock == null) {
+            this.detalleRegistroSock = new ArrayList<>();
+        }
+    }
+
+    public void loadVariedad() {
+        Variedad variedad = this.variedadService.findByCodigo(this.findStocksExportacion.getVariedad().getCodigo());
+        if (variedad.getCodigo() != null) {
+            this.findStocksExportacion.setVariedad(variedad);
+        }
+    }
+
+    public void loadVariedadSelected() {
+        Variedad variedad = this.variedadService.findByCodigo(this.findStocksExportacion.getVariedad().getCodigo());
+        if (variedad.getCodigo() != null) {
+            this.findStocksExportacion.setVariedad(variedad);
         }
     }
 
@@ -220,5 +263,37 @@ public class RegistroVentaBean implements Serializable {
 
     public void setFrios(List<CuartoFrioCarguera> frios) {
         this.frios = frios;
+    }
+
+    public RegistroExportacion getFindStocksExportacion() {
+        return findStocksExportacion;
+    }
+
+    public void setFindStocksExportacion(RegistroExportacion findStocksExportacion) {
+        this.findStocksExportacion = findStocksExportacion;
+    }
+
+    public List<ItemVariedadVenta> getDetalleRegistroSock() {
+        return detalleRegistroSock;
+    }
+
+    public void setDetalleRegistroSock(List<ItemVariedadVenta> detalleRegistroSock) {
+        this.detalleRegistroSock = detalleRegistroSock;
+    }
+
+    public List<ItemVariedadVenta> getSelectDetalleRegistroSock() {
+        return selectDetalleRegistroSock;
+    }
+
+    public void setSelectDetalleRegistroSock(List<ItemVariedadVenta> selectDetalleRegistroSock) {
+        this.selectDetalleRegistroSock = selectDetalleRegistroSock;
+    }
+
+    public RegistroDetalleVenta getDetalleVenta() {
+        return detalleVenta;
+    }
+
+    public void setDetalleVenta(RegistroDetalleVenta detalleVenta) {
+        this.detalleVenta = detalleVenta;
     }
 }
