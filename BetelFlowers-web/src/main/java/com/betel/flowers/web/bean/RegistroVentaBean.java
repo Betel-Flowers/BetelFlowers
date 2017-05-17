@@ -11,6 +11,7 @@ import com.betel.flowers.model.Ciudad;
 import com.betel.flowers.model.Cliente;
 import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Dae;
+import com.betel.flowers.model.ItemPrecio;
 import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.Pais;
 import com.betel.flowers.model.RegistroExportacion;
@@ -165,6 +166,46 @@ public class RegistroVentaBean implements Serializable {
         if (this.detalleRegistroSock == null) {
             this.detalleRegistroSock = new ArrayList<>();
         }
+    }
+
+    public Double minPrecioLongitudVariedad(RegistroExportacion registro) {
+        Double value = 0.0;
+        if (registro.getVariedad().getGirasol()) {
+            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
+                if (precioVariedad.getGlongitud().equals(registro.getGlongitud())) {
+                    value = precioVariedad.getMin();
+                    break;
+                }
+            }
+        } else {
+            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
+                if (precioVariedad.getLongitud().equals(registro.getLongitud())) {
+                    value = precioVariedad.getMin();
+                    break;
+                }
+            }
+        }
+        return value;
+    }
+
+    public Double maxPrecioLongitudVariedad(RegistroExportacion registro) {
+        Double value = 0.0;
+        if (registro.getVariedad().getGirasol()) {
+            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
+                if (precioVariedad.getGlongitud().equals(registro.getGlongitud())) {
+                    value = precioVariedad.getMax();
+                    break;
+                }
+            }
+        } else {
+            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
+                if (precioVariedad.getLongitud().equals(registro.getLongitud())) {
+                    value = precioVariedad.getMax();
+                    break;
+                }
+            }
+        }
+        return value;
     }
 
     public void loadVariedad() {

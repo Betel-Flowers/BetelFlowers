@@ -81,17 +81,16 @@
                                        rendered="#{stockVentasBean.detalle.nuevo.variedad.girasol}"/>
 
                         </h:panelGrid>
-                        <h:panelGrid columns="3" cellpadding="5">
+                        <h:panelGrid columns="4" cellpadding="5">
                             <p:outputLabel for="vPrecio" value="Precio Unit."/>
                             <p:inputNumber id="vPrecio" minValue="0" 
                                            value="#{stockVentasBean.detalle.nuevo.precioUnit}"/>
                             <p:message for="vPrecio" display="tooltip" severity="error"/>
+
+                            <p:commandButton value="Agregar" update=":faddMix:caja:outItems, :faddMix:caja:outVariMx, :faddMix:caja:outlongsMx"
+                                             actionListener="#{stockVentasBean.detalle.add(evt)}"/>
                         </h:panelGrid>
                     </p:outputPanel>
-                    <h:panelGrid>
-                        <p:commandButton value="Agregar" update=":faddMix:caja:outItems, :faddMix:caja:outVariMx, :faddMix:caja:outlongsMx"
-                                         actionListener="#{stockVentasBean.detalle.add(evt)}"/>
-                    </h:panelGrid>
                     <p:separator/>
                     <p:outputPanel id="outItems">
                         <p:dataList value="#{stockVentasBean.detalle.detalleCajaStock}" 
