@@ -5,6 +5,8 @@
  */
 package com.betel.flowers.service;
 
+import com.betel.flowers.model.ItemVariedadStock;
+import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.RegistroExportacion;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.Sort;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
 
@@ -85,6 +88,42 @@ public class RegistroExportacionService implements Serializable {
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             list = result.asList();
+        }
+        return list;
+    }
+
+    public List<ItemVariedadVenta> obtenerListDisponibilidadFlag(RegistroExportacion find, Integer flag) {
+        List<RegistroExportacion> list = new ArrayList<>();
+        Query<RegistroExportacion> result = null;
+        if (find.getVariedad().getGirasol()) {
+            result = this.ds.find(RegistroExportacion.class).
+                    field("bodega").equal(find.getBodega()).
+                    field("variedad").equal(find.getVariedad()).
+                    field("puntoCorte").equal(find.getPuntoCorte()).
+                    field("glongitud").equal(find.getGlongitud()).
+                    field("flag").equal(flag).
+                    order("-creationDate");
+        } else {
+            result = this.ds.find(RegistroExportacion.class).
+                    field("bodega").equal(find.getBodega()).
+                    field("variedad").equal(find.getVariedad()).
+                    field("puntoCorte").equal(find.getPuntoCorte()).
+                    field("longitud").equal(find.getLongitud()).
+                    field("flag").equal(flag).
+                    order("-creationDate");
+        }
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        return detailListVentaStock(list);
+    }
+
+    private List<ItemVariedadVenta> detailListVentaStock(List<RegistroExportacion> registros) {
+        List<ItemVariedadVenta> list = new ArrayList<>();
+        for (RegistroExportacion regExpo : registros) {
+            ItemVariedadVenta item = new ItemVariedadVenta();
+            item.setRegistro(regExpo);
+            list.add(item);
         }
         return list;
     }

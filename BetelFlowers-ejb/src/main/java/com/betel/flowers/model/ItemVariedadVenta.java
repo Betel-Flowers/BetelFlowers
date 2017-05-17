@@ -26,10 +26,13 @@ public class ItemVariedadVenta {
 
     @Reference
     private Variedad variedad;
+    @Reference
+    private RegistroExportacion registro;
 
     public ItemVariedadVenta() {
         this.precioUnit = 0.0;
         this.variedad = new Variedad();
+        this.registro = new RegistroExportacion();
     }
 
     public Integer getNumeroRamos() {
@@ -94,6 +97,14 @@ public class ItemVariedadVenta {
 
     public void setVariedad(Variedad variedad) {
         this.variedad = variedad;
+    }
+
+    public RegistroExportacion getRegistro() {
+        return registro;
+    }
+
+    public void setRegistro(RegistroExportacion registro) {
+        this.registro = registro;
     }
 
     public Double getSubTotal() {
