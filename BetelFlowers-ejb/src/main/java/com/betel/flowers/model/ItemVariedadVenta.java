@@ -44,7 +44,7 @@ public class ItemVariedadVenta {
     }
 
     public Integer getNumeroTallosRamo() {
-        return numeroTallosRamo;
+        return registro.getNumeroTallosRamo();
     }
 
     public void setNumeroTallosRamo(Integer numeroTallosRamo) {
@@ -60,7 +60,7 @@ public class ItemVariedadVenta {
     }
 
     public Integer getLongitud() {
-        return longitud;
+        return registro.getLongitud();
     }
 
     public void setLongitud(Integer longitud) {
@@ -68,7 +68,7 @@ public class ItemVariedadVenta {
     }
 
     public String getGlongitud() {
-        return glongitud;
+        return registro.getGlongitud();
     }
 
     public void setGlongitud(String glongitud) {
@@ -76,7 +76,7 @@ public class ItemVariedadVenta {
     }
 
     public String getPuntoCorte() {
-        return puntoCorte;
+        return registro.getPuntoCorte();
     }
 
     public void setPuntoCorte(String puntoCorte) {
@@ -92,7 +92,7 @@ public class ItemVariedadVenta {
     }
 
     public Variedad getVariedad() {
-        return variedad;
+        return registro.getVariedad();
     }
 
     public void setVariedad(Variedad variedad) {

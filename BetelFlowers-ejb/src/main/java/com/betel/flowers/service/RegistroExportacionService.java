@@ -102,7 +102,7 @@ public class RegistroExportacionService implements Serializable {
                     field("puntoCorte").equal(find.getPuntoCorte()).
                     field("glongitud").equal(find.getGlongitud()).
                     field("flag").equal(flag).
-                    order("-creationDate");
+                    order("creationDate");
         } else {
             result = this.ds.find(RegistroExportacion.class).
                     field("bodega").equal(find.getBodega()).
@@ -110,7 +110,7 @@ public class RegistroExportacionService implements Serializable {
                     field("puntoCorte").equal(find.getPuntoCorte()).
                     field("longitud").equal(find.getLongitud()).
                     field("flag").equal(flag).
-                    order("-creationDate");
+                    order("creationDate");
         }
         if (result.asList() != null && !result.asList().isEmpty()) {
             list = result.asList();
