@@ -107,7 +107,7 @@ public class BarcodeRegistroVenta {
     }
     
     private Double calcularSubTotalBarcode(){
-        Double total = 0.0;
+        Double total = 0d;
         if(this.listBarcode != null && ! this.listBarcode.isEmpty()){
             for(DetalleVenta registro : this.listBarcode){
                 total = total + registro.getSubTotalCaja();

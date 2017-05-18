@@ -37,7 +37,7 @@ public class DetalleCajaStock implements Serializable {
 
     public void add(ActionEvent evt) {
         if (this.nuevo != null && this.detalleCajaStock != null) {
-            if (this.nuevo.getPrecioUnit() > 0.0) {
+            if (this.nuevo.getPrecioUnit() > 0d) {
                 Boolean exito = this.detalleCajaStock.add(nuevo);
                 if (exito) {
                     FacesUtil.addMessageInfo("Se ha agregado.");

@@ -332,7 +332,7 @@
                                             <f:facet name="output"><h:outputText value="#{itemStockVenta.precioUnit}" /></f:facet>
                                             <f:facet name="input"><p:inputNumber id="mPrecio" required="true" value="#{itemStockVenta.precioUnit}" 
                                                                                  style="width:100%" label="Precio Unit."
-                                                                                 minValue="#{registroVentaBean.minPrecioLongitudVariedad(itemStockVenta.registro)}" 
+                                                                                 minValue="0.25" 
                                                                                  maxValue="#{registroVentaBean.maxPrecioLongitudVariedad(itemStockVenta.registro)}">
                                                     <p:ajax update="mPrecio"/>
                                                 </p:inputNumber></f:facet>

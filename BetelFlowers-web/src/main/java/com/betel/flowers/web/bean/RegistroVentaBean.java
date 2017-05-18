@@ -169,7 +169,7 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public Double minPrecioLongitudVariedad(RegistroExportacion registro) {
-        Double value = 0.0;
+        Double value = 00.01;
         if (registro.getVariedad().getGirasol()) {
             for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
                 if (precioVariedad.getGlongitud().equals(registro.getGlongitud())) {
@@ -189,7 +189,7 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public Double maxPrecioLongitudVariedad(RegistroExportacion registro) {
-        Double value = 0.0;
+        Double value = 01.00;
         if (registro.getVariedad().getGirasol()) {
             for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
                 if (precioVariedad.getGlongitud().equals(registro.getGlongitud())) {
