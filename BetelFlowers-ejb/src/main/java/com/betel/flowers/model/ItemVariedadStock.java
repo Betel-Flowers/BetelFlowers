@@ -26,7 +26,7 @@ public class ItemVariedadStock {
     private Variedad variedad;
 
     public ItemVariedadStock() {
-        this.precioUnit = 0.0;
+        this.precioUnit = 0d;
         this.numeroRamos = 1;
         this.variedad = new Variedad();
     }

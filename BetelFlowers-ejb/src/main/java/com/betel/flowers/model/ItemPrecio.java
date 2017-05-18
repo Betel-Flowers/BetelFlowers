@@ -20,20 +20,20 @@ public class ItemPrecio {
     private Double max;
 
     public ItemPrecio() {
-        this.min = 0.0;
-        this.max = 0.0;
+        this.min = 0d;
+        this.max = 0d;
     }
 
     public ItemPrecio(String glongitud) {
         this.glongitud = glongitud;
-        this.min = 0.0;
-        this.max = 0.0;
+        this.min = 0d;
+        this.max = 0d;
     }
 
     public ItemPrecio(Integer longitud) {
         this.longitud = longitud;
-        this.min = 0.0;
-        this.max = 0.0;
+        this.min = 0d;
+        this.max = 0d;
     }
 
     public Integer getLongitud() {
