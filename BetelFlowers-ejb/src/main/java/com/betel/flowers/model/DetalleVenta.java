@@ -39,7 +39,7 @@ public class DetalleVenta extends BaseEntity{
     @Reference
     private MarcaCaja marcaCaja;
     @Embedded
-    private List<ItemVariedadVenta> detalleCajaVenta;
+    private List<ItemVariedadVentaEmpaque> detalleCajaVenta;
 
     public DetalleVenta() {
         this.cajaTipo = new TipoCaja();
@@ -111,11 +111,11 @@ public class DetalleVenta extends BaseEntity{
         this.marcaCaja = marcaCaja;
     }
 
-    public List<ItemVariedadVenta> getDetalleCajaVenta() {
+    public List<ItemVariedadVentaEmpaque> getDetalleCajaVenta() {
         return detalleCajaVenta;
     }
 
-    public void setDetalleCajaVenta(List<ItemVariedadVenta> detalleCajaVenta) {
+    public void setDetalleCajaVenta(List<ItemVariedadVentaEmpaque> detalleCajaVenta) {
         this.detalleCajaVenta = detalleCajaVenta;
     }
 
