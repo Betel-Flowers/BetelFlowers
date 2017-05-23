@@ -168,46 +168,6 @@ public class RegistroVentaBean implements Serializable {
         }
     }
 
-    public Double minPrecioLongitudVariedad(RegistroExportacion registro) {
-        Double value = 00.01;
-        if (registro.getVariedad().getGirasol()) {
-            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
-                if (precioVariedad.getGlongitud().equals(registro.getGlongitud())) {
-                    value = precioVariedad.getMin();
-                    break;
-                }
-            }
-        } else {
-            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
-                if (precioVariedad.getLongitud().equals(registro.getLongitud())) {
-                    value = precioVariedad.getMin();
-                    break;
-                }
-            }
-        }
-        return value;
-    }
-
-    public Double maxPrecioLongitudVariedad(RegistroExportacion registro) {
-        Double value = 01.00;
-        if (registro.getVariedad().getGirasol()) {
-            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
-                if (precioVariedad.getGlongitud().equals(registro.getGlongitud())) {
-                    value = precioVariedad.getMax();
-                    break;
-                }
-            }
-        } else {
-            for (ItemPrecio precioVariedad : registro.getVariedad().getPrecios()) {
-                if (precioVariedad.getLongitud().equals(registro.getLongitud())) {
-                    value = precioVariedad.getMax();
-                    break;
-                }
-            }
-        }
-        return value;
-    }
-
     public void loadVariedad() {
         Variedad variedad = this.variedadService.findByCodigo(this.findStocksExportacion.getVariedad().getCodigo());
         if (variedad.getCodigo() != null) {
