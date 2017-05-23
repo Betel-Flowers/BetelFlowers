@@ -6,7 +6,6 @@
 package com.betel.flowers.web.bean.util;
 
 import com.betel.flowers.model.DetalleVenta;
-import com.betel.flowers.model.Variedad;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;

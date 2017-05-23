@@ -237,7 +237,7 @@
                                     <f:selectItems value="#{variedadBean.variedades}" var="va" itemLabel="#{va.nombre}"
                                                    itemValue="#{va.codigo}"/>
                                     <p:ajax listener="#{registroVentaBean.loadVariedad}" 
-                                            update=":fventa:outDetVari" />
+                                            update=":fventa:outDetVari, :fventa:outPrice" />
                                 </p:selectOneMenu>
                                 <p:message for="variedad" display="tooltip" severity="error"/>
                             </h:panelGrid>
@@ -246,22 +246,28 @@
                             <h:panelGrid columns="6" cellpadding="5">
                                 <p:outputLabel for="longitud" value="Longitud:" 
                                                rendered="#{not registroVentaBean.findStocksExportacion.variedad.girasol}"/>
+
                                 <p:selectOneMenu id="longitud" value="#{registroVentaBean.findStocksExportacion.longitud}"
                                                  rendered="#{not registroVentaBean.findStocksExportacion.variedad.girasol}">
                                     <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                     <f:selectItems value="#{registroVentaBean.findStocksExportacion.variedad.longitudes}"
                                                    var="mxlo" itemLabel="#{mxlo}" itemValue="#{mxlo}"/>
+                                    <p:ajax update=":fventa:outPrice" 
+                                            listener="#{registroVentaBean.loadPrcioUnitVariedadLongitud}"/>
                                 </p:selectOneMenu>
                                 <p:message for="longitud" display="tooltip" severity="error"
                                            rendered="#{not registroVentaBean.findStocksExportacion.variedad.girasol}"/>
 
                                 <p:outputLabel for="glongitud" value="Longitud:" 
                                                rendered="#{registroVentaBean.findStocksExportacion.variedad.girasol}"/>
+
                                 <p:selectOneMenu id="glongitud" value="#{registroVentaBean.findStocksExportacion.glongitud}"
                                                  rendered="#{registroVentaBean.findStocksExportacion.variedad.girasol}">
                                     <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                     <f:selectItems value="#{registroVentaBean.findStocksExportacion.variedad.glongitudes}"
                                                    var="mxglo" itemLabel="#{mxglo}" itemValue="#{mxglo}"/>
+                                    <p:ajax update=":fventa:outPrice" 
+                                            listener="#{registroVentaBean.loadPrcioUnitVariedadLongitud}"/>
                                 </p:selectOneMenu>
                                 <p:message for="glongitud" display="tooltip" severity="error"
                                            rendered="#{registroVentaBean.findStocksExportacion.variedad.girasol}"/>
@@ -277,10 +283,27 @@
                         </p:outputPanel>
                         <h:panelGrid cellpadding="5">
                             <p:commandButton value="Buscar" 
-                                             update=":fventa:outItems, :fventa:outVari, :fventa:outDetVari"
+                                             update=":fventa:outItems, :fventa:outPrice"
                                              actionListener="#{registroVentaBean.findDisponibilidadStock(evt)}"/>
                         </h:panelGrid>
                         <p:separator/>
+                        <p:outputPanel id="outPrice">
+                            <h:panelGrid cellpadding="5">
+                                <p:outputLabel for="mPrecioVari" value="Precio Unit. Tallo por Variedad:"
+                                               rendered="#{registroVentaBean.addPriceflowersTallo}"/>
+                                <p:inputNumber id="mPrecioVari" value="#{registroVentaBean.priceUnit}"
+                                               minValue="0.00" maxValue="100.00" decimalPlaces="6"
+                                               rendered="#{registroVentaBean.addPriceflowersTallo}">
+                                    <p:ajax event="keyup" update=":fventa:rangePrice, :fventa:outItems" 
+                                            listener="#{registroVentaBean.enableAgregarTallos}"/>
+                                </p:inputNumber>
+                                <p:outputLabel id="rangePrice" rendered="#{registroVentaBean.addPriceflowersTallo}"
+                                               value="Por favor ingrese un valor en el rango, Valor Minimo: #{registroVentaBean.priceMin}, Valor Maximo: #{registroVentaBean.priceMax}"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                        <p:panel header="Intrucciones" style="align-content: center; text-align: center">
+                            <h:outputText value="Para establecer la cantidad de ramos de click sobre la celda correspondiente."/>
+                        </p:panel>
                         <p:outputPanel id="outItems">
                             <h:panelGrid style="margin: 0 auto;">
                                 <p:dataTable id="dtSelectStock" var="itemStockVenta" tableStyle="width: auto" 
@@ -328,12 +351,49 @@
                                         </p:cellEditor>
                                     </p:column>
                                     <f:facet name="footer">
-                                        <p:commandButton value="Agregar"/>
+                                        <p:commandButton id="btnAddTallos" disabled="#{registroVentaBean.addflowersCaja}" 
+                                                         value="Agregar" process="dtSelectStock" update="fventa:dtSelectStock, :fventa:configCaja"
+                                                         action="#{registroVentaBean.onClikListenerSelectList()}"/>
+
                                     </f:facet>
                                 </p:dataTable>
                             </h:panelGrid>
                         </p:outputPanel>
                         <p:separator/>
+                        <h:panelGrid style="margin: 0 auto;">
+                            <p:dataTable id="configCaja"  var="itemConfigCaja"
+                                         value="#{registroVentaBean.variedadesCaja}" tableStyle="width: auto">
+                                <f:facet name="header">
+                                    <h:outputText value="Variedades en Caja"/>
+                                </f:facet>
+                                <p:column headerText="Foto" style="text-align: center">
+                                    <p:graphicImage value="#{itemConfigCaja.variedad.urlFoto}"
+                                                    width="40px" height="40px"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Variedad" >
+                                    <h:outputText value="#{itemConfigCaja.variedad.nombre}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Longitud" >
+                                    <h:outputText value="#{itemConfigCaja.longitud}" rendered="#{not itemConfigCaja.variedad.girasol}"/>
+                                    <h:outputText value="#{itemConfigCaja.glongitud}" rendered="#{itemConfigCaja.variedad.girasol}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Ramos" >
+                                    <h:outputText value="#{itemConfigCaja.numeroRamos}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Precio Unit." >
+                                    <h:outputText value="$ #{itemConfigCaja.precioUnit}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Punto Corte" >
+                                    <h:outputText value="#{itemConfigCaja.puntoCorte}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="Total Tallos" >
+                                    <h:outputText value="#{itemConfigCaja.totalTallos}"/>
+                                </p:column>
+                                <p:column style="text-align: center" headerText="SubTotal" >
+                                    <h:outputText value="$ #{itemConfigCaja.subTotal}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
                     </p:panel>
                 </p:tab>
                 <p:tab id="generar" title="Generar Venta">
