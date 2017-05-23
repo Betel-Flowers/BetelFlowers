@@ -395,7 +395,9 @@
                                     <h:outputText value="#{itemConfigCaja.totalTallos}"/>
                                 </p:column>
                                 <p:column style="text-align: center" headerText="SubTotal" >
-                                    <h:outputText value="$ #{itemConfigCaja.subTotal}"/>
+                                    <h:outputText value="$ #{itemConfigCaja.subTotal}">
+                                        <f:convertNumber minFractionDigits="2"/>
+                                    </h:outputText>
                                 </p:column>
                                 <p:column style="width:32px;text-align: center">
                                     <p:commandButton update=":fventa:configCaja, :fventa:messages"
@@ -403,10 +405,13 @@
                                                      actionListener="#{registroVentaBean.removeItemVariedadCaja(evt, itemConfigCaja)}">
                                     </p:commandButton>
                                 </p:column>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Crear Caja" 
+                                                     update=":fventa:configCaja, :fventa:outDetalleFinal, :fventa:messages"
+                                                     actionListener="#{registroVentaBean.addCajasToDetalle(evt)}"/>
+                                </f:facet>
                             </p:dataTable>
                         </h:panelGrid>
-                        <p:commandButton value="Crear Caja" update=":fventa:configCaja, :fventa:messages"/>
-                        <p:separator/>
                         <p:outputPanel id="outDetalleFinal">
                             <h:panelGrid style="margin: 0 auto;">
                                 <p:dataTable id="dtVentaFinal"  var="itemDetalleVenta"
@@ -432,7 +437,42 @@
                                         <h:outputText value="#{itemDetalleVenta.subTotalCaja}"/>
                                     </p:column>                          
                                     <p:rowExpansion>
-
+                                        <p:panel style="align-content: center; text-align: center">
+                                            <p:dataTable id="dtSubVentaFinal"  var="itemSubConfigCaja"
+                                                         paginator="true" tableStyle="width: auto"
+                                                         paginatorPosition="Bottom" rows="10"
+                                                         value="#{registroVentaBean.subListCajaVariedades(itemDetalleVenta)}">
+                                                <f:facet name="header">
+                                                    <h:outputText value="Variedades en Caja"/>
+                                                </f:facet>
+                                                <p:column headerText="Foto" style="text-align: center">
+                                                    <p:graphicImage value="#{itemSubConfigCaja.variedad.urlFoto}"
+                                                                    width="40px" height="40px"/>
+                                                </p:column>
+                                                <p:column style="text-align: center" headerText="Variedad" >
+                                                    <h:outputText value="#{itemSubConfigCaja.variedad.nombre}"/>
+                                                </p:column>
+                                                <p:column style="text-align: center" headerText="Longitud" >
+                                                    <h:outputText value="#{itemSubConfigCaja.longitud}" rendered="#{not itemSubConfigCaja.variedad.girasol}"/>
+                                                    <h:outputText value="#{itemSubConfigCaja.glongitud}" rendered="#{itemSubConfigCaja.variedad.girasol}"/>
+                                                </p:column>
+                                                <p:column style="text-align: center" headerText="Ramos" >
+                                                    <h:outputText value="#{itemSubConfigCaja.numeroRamos}"/>
+                                                </p:column>
+                                                <p:column style="text-align: center" headerText="Precio Unit." >
+                                                    <h:outputText value="$ #{itemSubConfigCaja.precioUnit}"/>
+                                                </p:column>
+                                                <p:column style="text-align: center" headerText="Punto Corte" >
+                                                    <h:outputText value="#{itemSubConfigCaja.puntoCorte}"/>
+                                                </p:column>
+                                                <p:column style="text-align: center" headerText="Total Tallos" >
+                                                    <h:outputText value="#{itemSubConfigCaja.totalTallos}"/>
+                                                </p:column>
+                                                <p:column style="text-align: center" headerText="SubTotal" >
+                                                    <h:outputText value="$ #{itemSubConfigCaja.subTotal}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:panel>
                                     </p:rowExpansion>
                                     <f:facet name="footer">
                                         <p:outputLabel value="SubTotal"/>

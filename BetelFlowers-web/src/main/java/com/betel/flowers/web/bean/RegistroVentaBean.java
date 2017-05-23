@@ -11,6 +11,7 @@ import com.betel.flowers.model.Ciudad;
 import com.betel.flowers.model.Cliente;
 import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Dae;
+import com.betel.flowers.model.DetalleVenta;
 import com.betel.flowers.model.ItemPrecio;
 import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.ItemVariedadVentaEmpaque;
@@ -51,9 +52,9 @@ import org.primefaces.event.SelectEvent;
 @Named(value = "registroVentaBean")
 @ViewScoped
 public class RegistroVentaBean implements Serializable {
-
+    
     private static final long serialVersionUID = 630861283476011721L;
-
+    
     private RegistroVenta nuevo;
     //CLIENTE
     private Cliente selectedCliente;
@@ -78,7 +79,7 @@ public class RegistroVentaBean implements Serializable {
     private Boolean AddPriceflowersTallo;
     private Double priceMax = new Double(0);
     private Double priceMin = new Double(0);
-
+    
     @Inject
     private ClienteService clienteService;
     @Inject
@@ -99,7 +100,7 @@ public class RegistroVentaBean implements Serializable {
     private VariedadService variedadService;
     @Inject
     private BodegaVirtualService bodegaService;
-
+    
     @PostConstruct
     public void init() {
         this.nuevo = new RegistroVenta();
@@ -127,7 +128,7 @@ public class RegistroVentaBean implements Serializable {
             this.subClientes = new ArrayList<>();
         }
     }
-
+    
     public void onRowSelect(SelectEvent event) {
         this.selectedCliente = (Cliente) event.getObject();
         if (this.selectedCliente != null) {
@@ -135,14 +136,14 @@ public class RegistroVentaBean implements Serializable {
             this.nuevo.setCliente(this.selectedCliente);
         }
     }
-
+    
     public void onRowSelectSubCliente(SelectEvent event) {
         this.selectedSubCliente = (SubCliente) event.getObject();
         if (this.selectedSubCliente != null) {
             this.nuevo.setSubCliente(this.selectedSubCliente);
         }
     }
-
+    
     public void findDaeByPaisDestino() {
         Pais pais = this.paisService.findByCodigo(this.nuevo.getPuertoDestino().getPais());
         Dae dae = this.daeService.findByPais(pais);
@@ -152,7 +153,7 @@ public class RegistroVentaBean implements Serializable {
             this.destino = new ArrayList<>();
         }
     }
-
+    
     public void chancePaisOrigen() {
         Pais pais = this.paisService.findByCodigo(this.nuevo.getPuertoEmbarque().getPais());
         this.origen = this.ciudadService.obtenerListPais(pais);
@@ -160,12 +161,12 @@ public class RegistroVentaBean implements Serializable {
             this.origen = new ArrayList<>();
         }
     }
-
+    
     public void findTerminoExportacion() {
         TerminoExportacion termino = this.terminoService.findByCodigo(this.nuevo.getTermino());
         this.nuevo.setTermino(termino);
     }
-
+    
     public void changeAgenciaCarga() {
         Carguera carguera = this.carqueraService.findByCodigo(this.nuevo.getAgenciaCarga());
         this.nuevo.setAgenciaCarga(carguera);
@@ -174,7 +175,7 @@ public class RegistroVentaBean implements Serializable {
             this.frios = new ArrayList<>();
         }
     }
-
+    
     public void findDisponibilidadStock(ActionEvent evt) {
         BodegaVirtual bodega = this.bodegaService.findByCodigo(this.findStocksExportacion.getBodega());
         this.findStocksExportacion.setBodega(bodega);
@@ -188,7 +189,7 @@ public class RegistroVentaBean implements Serializable {
         }
         this.setAddflowersCaja(Boolean.TRUE);
     }
-
+    
     public void loadVariedad() {
         Variedad variedad = this.variedadService.findByCodigo(this.findStocksExportacion.getVariedad().getCodigo());
         if (variedad.getCodigo() != null) {
@@ -197,7 +198,7 @@ public class RegistroVentaBean implements Serializable {
             this.priceUnit = 0d;
         }
     }
-
+    
     public void loadPrcioUnitVariedadLongitud() {
         if (this.findStocksExportacion.getVariedad() != null) {
             if (this.findStocksExportacion.getVariedad().getGirasol()) {
@@ -222,7 +223,7 @@ public class RegistroVentaBean implements Serializable {
             }
         }
     }
-
+    
     public void onClikListenerSelectList() {
         Boolean conValores = Boolean.FALSE;
         if (this.selectDetalleRegistroSock != null && !this.selectDetalleRegistroSock.isEmpty()) {
@@ -255,6 +256,21 @@ public class RegistroVentaBean implements Serializable {
         }
     }
     
+    public void addCajasToDetalle(ActionEvent evt) {
+        if (this.variedadesCaja != null && !this.variedadesCaja.isEmpty()) {
+            this.detalleVenta.getNuevo().setDetalleCajaVenta(this.variedadesCaja);
+            this.detalleVenta.add(evt);
+        }
+    }
+    
+    public List<ItemVariedadVentaEmpaque> subListCajaVariedades(DetalleVenta subList) {
+        List<ItemVariedadVentaEmpaque> list = new ArrayList<>();
+        if (subList.getDetalleCajaVenta() != null && !subList.getDetalleCajaVenta().isEmpty()) {
+            list = subList.getDetalleCajaVenta();
+        }
+        return list;
+    }
+    
     public void removeItemVariedadCaja(ActionEvent evt, ItemVariedadVentaEmpaque select) {
         if (select != null
                 && this.variedadesCaja != null
@@ -267,7 +283,7 @@ public class RegistroVentaBean implements Serializable {
             }
         }
     }
-
+    
     public void enableAgregarTallos() {
         if (this.priceUnit <= this.priceMax && this.priceUnit >= this.priceMin) {
             this.setAddflowersCaja(Boolean.FALSE);
@@ -275,167 +291,167 @@ public class RegistroVentaBean implements Serializable {
             this.setAddflowersCaja(Boolean.TRUE);
         }
     }
-
+    
     public String onFlowProcess(FlowEvent event) {
         return event.getNewStep();
     }
-
+    
     public Cliente getSelectedCliente() {
         return selectedCliente;
     }
-
+    
     public void setSelectedCliente(Cliente selectedCliente) {
         this.selectedCliente = selectedCliente;
     }
-
+    
     public List<Cliente> getClientes() {
         return clientes;
     }
-
+    
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-
+    
     public List<Cliente> getFilteredClientes() {
         return filteredClientes;
     }
-
+    
     public void setFilteredClientes(List<Cliente> filteredClientes) {
         this.filteredClientes = filteredClientes;
     }
-
+    
     public List<SubCliente> getSubClientes() {
         return subClientes;
     }
-
+    
     public void setSubClientes(List<SubCliente> subClientes) {
         this.subClientes = subClientes;
     }
-
+    
     public SubCliente getSelectedSubCliente() {
         return selectedSubCliente;
     }
-
+    
     public void setSelectedSubCliente(SubCliente selectedSubCliente) {
         this.selectedSubCliente = selectedSubCliente;
     }
-
+    
     public List<SubCliente> getFilteredSubClientes() {
         return filteredSubClientes;
     }
-
+    
     public void setFilteredSubClientes(List<SubCliente> filteredSubClientes) {
         this.filteredSubClientes = filteredSubClientes;
     }
-
+    
     public RegistroVenta getNuevo() {
         return nuevo;
     }
-
+    
     public void setNuevo(RegistroVenta nuevo) {
         this.nuevo = nuevo;
     }
-
+    
     public List<Ciudad> getOrigen() {
         return origen;
     }
-
+    
     public void setOrigen(List<Ciudad> origen) {
         this.origen = origen;
     }
-
+    
     public List<Ciudad> getDestino() {
         return destino;
     }
-
+    
     public void setDestino(List<Ciudad> destino) {
         this.destino = destino;
     }
-
+    
     public List<CuartoFrioCarguera> getFrios() {
         return frios;
     }
-
+    
     public void setFrios(List<CuartoFrioCarguera> frios) {
         this.frios = frios;
     }
-
+    
     public RegistroExportacion getFindStocksExportacion() {
         return findStocksExportacion;
     }
-
+    
     public void setFindStocksExportacion(RegistroExportacion findStocksExportacion) {
         this.findStocksExportacion = findStocksExportacion;
     }
-
+    
     public List<ItemVariedadVenta> getDetalleRegistroSock() {
         return detalleRegistroSock;
     }
-
+    
     public void setDetalleRegistroSock(List<ItemVariedadVenta> detalleRegistroSock) {
         this.detalleRegistroSock = detalleRegistroSock;
     }
-
+    
     public List<ItemVariedadVenta> getSelectDetalleRegistroSock() {
         return selectDetalleRegistroSock;
     }
-
+    
     public void setSelectDetalleRegistroSock(List<ItemVariedadVenta> selectDetalleRegistroSock) {
         this.selectDetalleRegistroSock = selectDetalleRegistroSock;
     }
-
+    
     public RegistroDetalleVenta getDetalleVenta() {
         return detalleVenta;
     }
-
+    
     public void setDetalleVenta(RegistroDetalleVenta detalleVenta) {
         this.detalleVenta = detalleVenta;
     }
-
+    
     public Double getPriceUnit() {
         return priceUnit;
     }
-
+    
     public void setPriceUnit(Double priceUnit) {
         this.priceUnit = priceUnit;
     }
-
+    
     public Boolean getAddflowersCaja() {
         return AddflowersCaja;
     }
-
+    
     public void setAddflowersCaja(Boolean AddflowersCaja) {
         this.AddflowersCaja = AddflowersCaja;
     }
-
+    
     public Double getPriceMax() {
         return priceMax;
     }
-
+    
     public void setPriceMax(Double priceMax) {
         this.priceMax = priceMax;
     }
-
+    
     public Double getPriceMin() {
         return priceMin;
     }
-
+    
     public void setPriceMin(Double priceMin) {
         this.priceMin = priceMin;
     }
-
+    
     public Boolean getAddPriceflowersTallo() {
         return AddPriceflowersTallo;
     }
-
+    
     public void setAddPriceflowersTallo(Boolean AddPriceflowersTallo) {
         this.AddPriceflowersTallo = AddPriceflowersTallo;
     }
-
+    
     public List<ItemVariedadVentaEmpaque> getVariedadesCaja() {
         return variedadesCaja;
     }
-
+    
     public void setVariedadesCaja(List<ItemVariedadVentaEmpaque> variedadesCaja) {
         this.variedadesCaja = variedadesCaja;
     }
