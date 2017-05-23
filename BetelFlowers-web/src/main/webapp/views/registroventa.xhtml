@@ -292,7 +292,7 @@
                                 <p:outputLabel for="mPrecioVari" value="Precio Unit. Tallo por Variedad:"
                                                rendered="#{registroVentaBean.addPriceflowersTallo}"/>
                                 <p:inputNumber id="mPrecioVari" value="#{registroVentaBean.priceUnit}"
-                                               minValue="0.00" maxValue="100.00" decimalPlaces="6"
+                                               minValue="0.00" maxValue="100.00" decimalPlaces="2"
                                                rendered="#{registroVentaBean.addPriceflowersTallo}">
                                     <p:ajax event="keyup" update=":fventa:rangePrice, :fventa:outItems" 
                                             listener="#{registroVentaBean.enableAgregarTallos}"/>
@@ -304,9 +304,12 @@
                         <p:panel header="Intrucciones" style="align-content: center; text-align: center">
                             <h:outputText value="Para establecer la cantidad de ramos de click sobre la celda correspondiente."/>
                         </p:panel>
+                        <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                         <p:outputPanel id="outItems">
                             <h:panelGrid style="margin: 0 auto;">
-                                <p:dataTable id="dtSelectStock" var="itemStockVenta" tableStyle="width: auto" 
+                                <p:dataTable id="dtSelectStock" var="itemStockVenta"
+                                             paginator="true" tableStyle="width: auto"
+                                             paginatorPosition="Bottom" rows="10" 
                                              value="#{registroVentaBean.detalleRegistroSock}" 
                                              selection="#{registroVentaBean.selectDetalleRegistroSock}"
                                              editable="true" editMode="cell" widgetVar="cellVenta"
@@ -352,17 +355,19 @@
                                     </p:column>
                                     <f:facet name="footer">
                                         <p:commandButton id="btnAddTallos" disabled="#{registroVentaBean.addflowersCaja}" 
-                                                         value="Agregar" process="dtSelectStock" update="fventa:dtSelectStock, :fventa:configCaja"
+                                                         value="Agregar" process="dtSelectStock" 
+                                                         update=":fventa:dtSelectStock, :fventa:configCaja, :fventa:messages"
                                                          action="#{registroVentaBean.onClikListenerSelectList()}"/>
 
                                     </f:facet>
                                 </p:dataTable>
                             </h:panelGrid>
                         </p:outputPanel>
-                        <p:separator/>
                         <h:panelGrid style="margin: 0 auto;">
                             <p:dataTable id="configCaja"  var="itemConfigCaja"
-                                         value="#{registroVentaBean.variedadesCaja}" tableStyle="width: auto">
+                                         paginator="true" tableStyle="width: auto"
+                                         paginatorPosition="Bottom" rows="10"
+                                         value="#{registroVentaBean.variedadesCaja}">
                                 <f:facet name="header">
                                     <h:outputText value="Variedades en Caja"/>
                                 </f:facet>
@@ -392,8 +397,49 @@
                                 <p:column style="text-align: center" headerText="SubTotal" >
                                     <h:outputText value="$ #{itemConfigCaja.subTotal}"/>
                                 </p:column>
+                                <p:column style="width:32px;text-align: center">
+                                    <p:commandButton update=":fventa:configCaja, :fventa:messages"
+                                                     icon="ui-icon-close" title="Eliminar"
+                                                     actionListener="#{registroVentaBean.removeItemVariedadCaja(evt, itemConfigCaja)}">
+                                    </p:commandButton>
+                                </p:column>
                             </p:dataTable>
                         </h:panelGrid>
+                        <p:commandButton value="Crear Caja" update=":fventa:configCaja, :fventa:messages"/>
+                        <p:separator/>
+                        <p:outputPanel id="outDetalleFinal">
+                            <h:panelGrid style="margin: 0 auto;">
+                                <p:dataTable id="dtVentaFinal"  var="itemDetalleVenta"
+                                             paginator="true" tableStyle="width: auto"
+                                             paginatorPosition="Bottom" rows="10"
+                                             value="#{registroVentaBean.detalleVenta.itemsDetalleVenta}">
+                                    <f:facet name="header">
+                                        <h:outputText value="Detalle de Venta"/>
+                                    </f:facet>
+                                    <p:column style="width:16px">
+                                        <p:rowToggler />
+                                    </p:column>
+                                    <p:column style="text-align: center" headerText="Cantidad Cajas" >
+                                        <h:outputText value="#{itemDetalleVenta.cantidadCajas}"/>
+                                    </p:column>
+                                    <p:column style="text-align: center" headerText="Tipo Caja" >
+                                        <h:outputText value="#{itemDetalleVenta.cajaTipo.tipo}"/>
+                                    </p:column>
+                                    <p:column style="text-align: center" headerText="Marca Caja" >
+                                        <h:outputText value="#{itemDetalleVenta.marcaCaja.nombre}"/>
+                                    </p:column>
+                                    <p:column style="text-align: center" headerText="SubTotal" >
+                                        <h:outputText value="#{itemDetalleVenta.subTotalCaja}"/>
+                                    </p:column>                          
+                                    <p:rowExpansion>
+
+                                    </p:rowExpansion>
+                                    <f:facet name="footer">
+                                        <p:outputLabel value="SubTotal"/>
+                                    </f:facet>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:outputPanel>
                     </p:panel>
                 </p:tab>
                 <p:tab id="generar" title="Generar Venta">

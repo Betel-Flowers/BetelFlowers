@@ -24,7 +24,7 @@ public class RegistroDetalleVenta implements Serializable {
 
     private DetalleVenta nuevo;
     private DetalleVenta selected;
-    private List<DetalleVenta> detalleCajaVenta;
+    private List<DetalleVenta> itemsDetalleVenta;
 
     @Inject
     private VariedadService variedadService;
@@ -32,13 +32,13 @@ public class RegistroDetalleVenta implements Serializable {
     public RegistroDetalleVenta() {
         this.nuevo = new DetalleVenta();
         this.selected = null;
-        this.detalleCajaVenta = new ArrayList<>();
+        this.itemsDetalleVenta = new ArrayList<>();
         this.variedadService = new VariedadService();
     }
 
     public void add(ActionEvent evt) {
-        if (this.nuevo != null && this.detalleCajaVenta != null) {
-            Boolean exito = this.detalleCajaVenta.add(nuevo);
+        if (this.nuevo != null && this.itemsDetalleVenta != null) {
+            Boolean exito = this.itemsDetalleVenta.add(nuevo);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha agregado.");
                 this.nuevo = new DetalleVenta();
@@ -51,9 +51,9 @@ public class RegistroDetalleVenta implements Serializable {
     public void remove(ActionEvent evt, DetalleVenta select) {
         this.selected = select;
         if (this.selected != null
-                && this.detalleCajaVenta != null
-                && !this.detalleCajaVenta.isEmpty()) {
-            Boolean exito = this.detalleCajaVenta.remove(this.selected);
+                && this.itemsDetalleVenta != null
+                && !this.itemsDetalleVenta.isEmpty()) {
+            Boolean exito = this.itemsDetalleVenta.remove(this.selected);
             if (exito) {
                 FacesUtil.addMessageInfo("Se ha eliminado.");
                 this.selected = null;
@@ -83,12 +83,12 @@ public class RegistroDetalleVenta implements Serializable {
         this.selected = selected;
     }
 
-    public List<DetalleVenta> getDetalleCajaVenta() {
-        return detalleCajaVenta;
+    public List<DetalleVenta> getItemsDetalleVenta() {
+        return itemsDetalleVenta;
     }
 
-    public void setDetalleCajaVenta(List<DetalleVenta> detalleCajaVenta) {
-        this.detalleCajaVenta = detalleCajaVenta;
+    public void setItemsDetalleVenta(List<DetalleVenta> itemsDetalleVenta) {
+        this.itemsDetalleVenta = itemsDetalleVenta;
     }
 
 }

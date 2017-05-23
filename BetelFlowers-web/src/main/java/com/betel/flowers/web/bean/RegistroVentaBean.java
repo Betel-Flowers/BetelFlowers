@@ -32,6 +32,7 @@ import com.betel.flowers.service.RegistroExportacionService;
 import com.betel.flowers.service.TerminoExportacionService;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.bean.util.RegistroDetalleVenta;
+import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -223,26 +224,47 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public void onClikListenerSelectList() {
+        Boolean conValores = Boolean.FALSE;
         if (this.selectDetalleRegistroSock != null && !this.selectDetalleRegistroSock.isEmpty()) {
             Integer totalRamos = 0;
             ItemVariedadVentaEmpaque itemVentaSelectStock = new ItemVariedadVentaEmpaque();
             for (ItemVariedadVenta itemVariTotalRamos : this.selectDetalleRegistroSock) {
-                totalRamos = totalRamos + itemVariTotalRamos.getNumeroRamos();
-                itemVentaSelectStock.getRegistrosOrdenEmpaque().
-                        add(new OrdenPreEmpaque(itemVariTotalRamos.getNumeroRamos(), itemVariTotalRamos.getNumeroTallosRamo(), itemVariTotalRamos.getRegistro()));
+                if (itemVariTotalRamos.getNumeroRamos() != null) {
+                    totalRamos = totalRamos + itemVariTotalRamos.getNumeroRamos();
+                    itemVentaSelectStock.getRegistrosOrdenEmpaque().
+                            add(new OrdenPreEmpaque(itemVariTotalRamos.getNumeroRamos(), itemVariTotalRamos.getNumeroTallosRamo(), itemVariTotalRamos.getRegistro()));
+                    conValores = Boolean.TRUE;
+                }
             }
-            itemVentaSelectStock.setVariedad(this.selectDetalleRegistroSock.get(0).getVariedad());
-            itemVentaSelectStock.setNumeroRamos(totalRamos);
-            itemVentaSelectStock.setPrecioUnit(this.getPriceUnit());
-            itemVentaSelectStock.setPuntoCorte(this.selectDetalleRegistroSock.get(0).getPuntoCorte());
-            if (this.selectDetalleRegistroSock.get(0).getVariedad().getGirasol()) {
-                itemVentaSelectStock.setGlongitud(this.selectDetalleRegistroSock.get(0).getGlongitud());
+            if (conValores) {
+                itemVentaSelectStock.setVariedad(this.selectDetalleRegistroSock.get(0).getVariedad());
+                itemVentaSelectStock.setNumeroRamos(totalRamos);
+                itemVentaSelectStock.setPrecioUnit(this.getPriceUnit());
+                itemVentaSelectStock.setPuntoCorte(this.selectDetalleRegistroSock.get(0).getPuntoCorte());
+                if (this.selectDetalleRegistroSock.get(0).getVariedad().getGirasol()) {
+                    itemVentaSelectStock.setGlongitud(this.selectDetalleRegistroSock.get(0).getGlongitud());
+                } else {
+                    itemVentaSelectStock.setLongitud(this.selectDetalleRegistroSock.get(0).getLongitud());
+                }
+                this.getVariedadesCaja().add(itemVentaSelectStock);
+                this.detalleRegistroSock = new ArrayList<>();
+                this.selectDetalleRegistroSock = new ArrayList<>();
             } else {
-                itemVentaSelectStock.setLongitud(this.selectDetalleRegistroSock.get(0).getLongitud());
+                FacesUtil.addMessageInfo("Por favor ingrese la cantidad de ramos.");
             }
-            this.getVariedadesCaja().add(itemVentaSelectStock);
-            this.detalleRegistroSock = new ArrayList<>();
-            this.selectDetalleRegistroSock = new ArrayList<>();
+        }
+    }
+    
+    public void removeItemVariedadCaja(ActionEvent evt, ItemVariedadVentaEmpaque select) {
+        if (select != null
+                && this.variedadesCaja != null
+                && !this.variedadesCaja.isEmpty()) {
+            Boolean exito = this.variedadesCaja.remove(select);
+            if (exito) {
+                FacesUtil.addMessageInfo("Se ha eliminado.");
+            } else {
+                FacesUtil.addMessageError(null, "No se ha eliminado.");
+            }
         }
     }
 
