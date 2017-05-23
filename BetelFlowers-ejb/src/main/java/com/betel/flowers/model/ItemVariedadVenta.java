@@ -30,7 +30,7 @@ public class ItemVariedadVenta {
     private RegistroExportacion registro;
 
     public ItemVariedadVenta() {
-        this.precioUnit = 00.00;
+        this.precioUnit = 0d;
         this.variedad = new Variedad();
         this.registro = new RegistroExportacion();
     }
