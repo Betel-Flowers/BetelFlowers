@@ -20,7 +20,7 @@
         <div class="ui-g">
             <p:panel header="Registrarse" styleClass="panel-login">
                 <div align="left">
-                    <h:form id="register">
+                    <h:form id="fregister">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel for="user" value="Username:"/>
                             <p:inputText id="user" required="true" 
@@ -73,7 +73,8 @@
                         <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                     </h:form>
                 </div>
-                <p:commandButton id="loginButton" value="Registrarse" update=":register, :register:messages"
+                <p:commandButton id="loginButton" value="Registrarse" 
+                                 update=":fregister, :fregister:messages"
                                  actionListener="#{registerBean.add(evt)}"/>
             </p:panel>
             <div class="ui-g-12 footer-login">
@@ -89,14 +90,5 @@
         </style>
 
         <h:outputStylesheet name="css/layout-green.css" library="icarus-layout" />
-        <script type="text/javascript">
-            function handleLoginRequest(xhr, status, args) {
-                if (args.validationFailed || !args.loggedIn) {
-                    jQuery('#login-form').effect("shake", {times: 5}, 100);
-                } else {
-                    location.href = args.ruta;
-                }
-            }
-        </script>
     </h:body>
 </html>

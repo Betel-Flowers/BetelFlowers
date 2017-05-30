@@ -13,7 +13,9 @@
 
             <div class="top-bar-profile">
                 <div class="profile-name">
-                    <span><h:outputText value="#{credencialBean.userSession.infoPersonal.nombres} #{credencialBean.userSession.infoPersonal.apellidos}"/></span><br/>
+                    <span><h:outputText value="#{credencialBean.userSession.infoPersonal.nombres}"/>
+                    <h:outputText value="#{credencialBean.userSession.infoPersonal.apellidos}"/>
+                    </span><br/>
                     <h:outputText value="#{credencialBean.userSession.tipoUsuario.nombre}"/>
                 </div>
                 <a href="#" id="profile-image">

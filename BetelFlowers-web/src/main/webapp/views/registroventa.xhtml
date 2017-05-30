@@ -195,30 +195,32 @@
                 </p:tab>
                 <p:tab id="detalles" title="Detalle de Venta">
                     <p:panel header="Agrege veriedades para el detalle">
-                        <h:panelGrid columns="10" cellpadding="5">
-                            <p:outputLabel for="mumCja" value="Cantidad Cajas:"/>
-                            <p:spinner id="mumCja" value="#{registroVentaBean.detalleVenta.nuevo.cantidadCajas}"
-                                       min="0" />
-                            <p:message for="mumCja" display="tooltip" severity="error"/>
+                        <p:outputPanel id="outDataCaja">
+                            <h:panelGrid columns="10" cellpadding="5">
+                                <p:outputLabel for="mumCja" value="Cantidad Cajas:"/>
+                                <p:spinner id="mumCja" value="#{registroVentaBean.detalleVenta.nuevo.cantidadCajas}"
+                                           min="0" />
+                                <p:message for="mumCja" display="tooltip" severity="error"/>
 
-                            <p:outputLabel for="tipCja" value="Tipo Caja"/>
-                            <p:selectOneMenu id="tipCja" rendered="true" 
-                                             value="#{registroVentaBean.detalleVenta.nuevo.cajaTipo.codigo}">
-                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="tcja"
-                                               itemLabel="#{tcja.tipo}" itemValue="#{tcja.codigo}"/>
-                            </p:selectOneMenu>
-                            <p:message for="tipCja" display="tooltip" severity="error"/>
+                                <p:outputLabel for="tipCja" value="Tipo Caja"/>
+                                <p:selectOneMenu id="tipCja" rendered="true" 
+                                                 value="#{registroVentaBean.detalleVenta.nuevo.cajaTipo.codigo}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{tipoCajaBean.tipoCajas}" var="tcja"
+                                                   itemLabel="#{tcja.tipo}" itemValue="#{tcja.codigo}"/>
+                                </p:selectOneMenu>
+                                <p:message for="tipCja" display="tooltip" severity="error"/>
 
-                            <p:outputLabel for="mCja" value="Marca Caja"/>
-                            <p:selectOneMenu id="mCja" 
-                                             value="#{registroVentaBean.detalleVenta.nuevo.marcaCaja.codigo}">
-                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                <f:selectItems value="#{registroVentaBean.nuevo.cliente.cajas}" var="mrCja"
-                                               itemLabel="#{mrCja.nombre}" itemValue="#{mrCja.codigo}"/>
-                            </p:selectOneMenu>
-                            <p:message for="mCja" display="tooltip" severity="error"/>
-                        </h:panelGrid>
+                                <p:outputLabel for="mCja" value="Marca Caja"/>
+                                <p:selectOneMenu id="mCja" 
+                                                 value="#{registroVentaBean.detalleVenta.nuevo.marcaCaja.codigo}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{registroVentaBean.nuevo.cliente.cajas}" var="mrCja"
+                                                   itemLabel="#{mrCja.nombre}" itemValue="#{mrCja.codigo}"/>
+                                </p:selectOneMenu>
+                                <p:message for="mCja" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
                         <p:separator/>
                         <p:outputPanel id="outVari">
                             <h:panelGrid columns="6" cellpadding="5">
@@ -357,7 +359,7 @@
                                         <p:commandButton id="btnAddTallos" disabled="#{registroVentaBean.addflowersCaja}" 
                                                          value="Agregar" process="dtSelectStock" 
                                                          update=":fventa:dtSelectStock, :fventa:configCaja, :fventa:messages"
-                                                         action="#{registroVentaBean.onClikListenerSelectList()}"/>
+                                                         action="#{registroVentaBean.onClikListenerSelectList}"/>
 
                                     </f:facet>
                                 </p:dataTable>
@@ -407,7 +409,7 @@
                                 </p:column>
                                 <f:facet name="footer">
                                     <p:commandButton value="Crear Caja" 
-                                                     update=":fventa:configCaja, :fventa:outDetalleFinal, :fventa:messages"
+                                                     update=":fventa:configCaja, :fventa:outDataCaja, :fventa:outDetalleFinal, :fventa:messages"
                                                      actionListener="#{registroVentaBean.addCajasToDetalle(evt)}"/>
                                 </f:facet>
                             </p:dataTable>
@@ -432,10 +434,7 @@
                                     </p:column>
                                     <p:column style="text-align: center" headerText="Marca Caja" >
                                         <h:outputText value="#{itemDetalleVenta.marcaCaja.nombre}"/>
-                                    </p:column>
-                                    <p:column style="text-align: center" headerText="SubTotal" >
-                                        <h:outputText value="#{itemDetalleVenta.subTotalCaja}"/>
-                                    </p:column>                          
+                                    </p:column>                         
                                     <p:rowExpansion>
                                         <p:panel style="align-content: center; text-align: center">
                                             <p:dataTable id="dtSubVentaFinal"  var="itemSubConfigCaja"
@@ -484,7 +483,16 @@
                 </p:tab>
                 <p:tab id="generar" title="Generar Venta">
                     <p:panel>
-                        <p:commandButton value="Submit" update=":fventa" process="@this"/>
+                        <h:panelGrid columns="4" cellpadding="5">
+                            <p:outputLabel value="Cliente:"/>
+                            <p:outputLabel value="#{registroVentaBean.selectedCliente.empresa}"/>
+                            <p:outputLabel value="Sub-Cliente:"/>
+                            <p:outputLabel value="#{registroVentaBean.selectedSubCliente.empresa}"/>
+                            <p:outputLabel value="Agencia de Carga:"/>
+
+
+                        </h:panelGrid>
+                        <p:commandButton value="Generar Venta" update=":fventa" process="@this"/>
                     </p:panel>
                 </p:tab>
             </p:wizard>

@@ -25,6 +25,8 @@ import javax.inject.Inject;
 @ViewScoped
 public class RegisterBean implements Serializable {
 
+    private static final long serialVersionUID = 6241000695875455822L;
+
     private Usuario nuevo;
     private String cpassword;
 
