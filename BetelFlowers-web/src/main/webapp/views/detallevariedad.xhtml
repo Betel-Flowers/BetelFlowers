@@ -10,7 +10,7 @@
         <h:form id="fadd">
             <p:dataTable id="dtvari" var="variedad"
                          rows="5" paginator="true"
-                         paginatorPosition="Bottom"
+                         paginatorPosition="bottom"
                          value="#{detalleVariedadBean.variedades}" 
                          selectionMode="single"
                          selection="#{detalleVariedadBean.selected}" 
@@ -73,7 +73,7 @@
                         <p:tab title="Puntos de Corte">
                             <p:dataTable id="dtpc" var="pc" rows="5"
                                          paginator="true"
-                                         paginatorPosition="Bottom"
+                                         paginatorPosition="bottom"
                                          value="#{detalleVariedadBean.selected.puntosCorte}">
 
                                 <f:facet name="header">
@@ -102,7 +102,7 @@
                         <p:tab title="Longitud / Grado">
                             <p:dataTable id="dtlo" var="lo" rows="5"
                                          paginator="true" rendered="#{not detalleVariedadBean.selected.girasol}"
-                                         paginatorPosition="Bottom"
+                                         paginatorPosition="bottom"
                                          value="#{detalleVariedadBean.selected.longitudes}">
 
                                 <f:facet name="header">
@@ -130,7 +130,7 @@
 
                             <p:dataTable id="dtglo" var="glo" rows="5"
                                          paginator="true" rendered="#{detalleVariedadBean.selected.girasol}"
-                                         paginatorPosition="Bottom"
+                                         paginatorPosition="bottom"
                                          value="#{detalleVariedadBean.selected.glongitudes}">
 
                                 <f:facet name="header">
@@ -159,7 +159,7 @@
                         <p:tab title="Ramos">
                             <p:dataTable id="dtrm" var="rm" rows="5"
                                          paginator="true"
-                                         paginatorPosition="Bottom"
+                                         paginatorPosition="bottom"
                                          value="#{detalleVariedadBean.selected.ramos}">
 
                                 <f:facet name="header">

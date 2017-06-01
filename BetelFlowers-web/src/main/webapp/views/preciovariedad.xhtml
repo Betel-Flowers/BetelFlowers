@@ -10,7 +10,7 @@
         <h:form id="fadd">
             <p:dataTable id="dtvari" var="variedad"
                          rows="5" paginator="true"
-                         paginatorPosition="Bottom"
+                         paginatorPosition="bottom"
                          value="#{precioVariedadBean.variedades}" 
                          selectionMode="single"
                          selection="#{precioVariedadBean.selected}" 
@@ -84,7 +84,7 @@
                         <p:tab title="Control de Precios - Longitud / Grado">
                             <p:dataTable id="dtlo" var="lo" rows="5"
                                          paginator="true" rendered="#{not precioVariedadBean.selected.girasol}"
-                                         paginatorPosition="Bottom"
+                                         paginatorPosition="bottom"
                                          value="#{precioVariedadBean.selected.precios}"
                                          editable="true" editMode="cell" widgetVar="cellLong">
 
@@ -119,7 +119,7 @@
 
                             <p:dataTable id="dtglo" var="glo" rows="5"
                                          paginator="true" rendered="#{precioVariedadBean.selected.girasol}"
-                                         paginatorPosition="Bottom"
+                                         paginatorPosition="bottom"
                                          value="#{precioVariedadBean.selected.precios}"
                                          editable="true" editMode="cell" widgetVar="cellGlong">
 

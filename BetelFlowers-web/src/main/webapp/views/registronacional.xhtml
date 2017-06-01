@@ -44,7 +44,7 @@
                     <p:outputPanel id="outSelectMot">
                         <p:dataTable id="dtselectMot" var="selectMot" rows="5"
                                      paginator="true" tableStyle="width: auto"
-                                     paginatorPosition="Bottom" 
+                                     paginatorPosition="bottom" 
                                      rendered="#{not empty registroNacionalBean.selectionMotivos}"
                                      value="#{registroNacionalBean.selectionMotivos}">
                             <p:column headerText="Cantidad">
@@ -76,7 +76,7 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtdet" var="det" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom"
+                             paginatorPosition="bottom"
                              value="#{registroNacionalBean.nuevo.detalle}">
                     <f:facet name="header">
                         <h:outputText value="Detalle"/>
@@ -101,7 +101,7 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtregNac" var="regNac" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom"
+                             paginatorPosition="bottom"
                              value="#{registroNacionalBean.registrosNacional}">
 
                     <f:facet name="header">
@@ -154,7 +154,7 @@
                       modal="true" showEffect="fade" hideEffect="fade">
                 <h:panelGrid style="margin: 0 auto;">
                     <p:dataTable id="chekMot" var="mots" rows="5" 
-                                 widgetVar="chekMotTable" paginatorPosition="Bottom"
+                                 widgetVar="chekMotTable" paginatorPosition="bottom"
                                  paginator="true" tableStyle="width: auto"
                                  editable="true" editMode="cell"
                                  value="#{registroNacionalBean.motivos}" 

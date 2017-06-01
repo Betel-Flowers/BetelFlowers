@@ -113,7 +113,7 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtstock" var="nstock" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom"
+                             paginatorPosition="bottom"
                              value="#{stockVentasBean.stockVentas}">
 
                     <f:facet name="header">
@@ -135,7 +135,7 @@
                         <p:panel style="align-content: center; text-align: center">
                             <p:dataTable value="#{stockVentasBean.listBardodeInsideList(nstock)}" 
                                          var="codeList" rows="5" tableStyle="width: auto"
-                                         paginator="true" paginatorPosition="Bottom">
+                                         paginator="true" paginatorPosition="bottom">
                                 <p:column headerText="Foto" style="text-align: center">
                                     <p:graphicImage value="#{codeList.variedad.urlFoto}"
                                                     width="40px" height="40px"/>
@@ -189,7 +189,7 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtstockV" var="nstockV" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom" style="table-layout: auto"
+                             paginatorPosition="bottom" style="table-layout: auto"
                              value="#{stockVentasBean.barcodeList}">
                     <f:facet name="header">
                         <h:outputText value="Registro de Stock de Ventas Enviados"/>
@@ -220,7 +220,7 @@
                         <p:panel style="align-content: center; text-align: center">
                             <p:dataTable value="#{stockVentasBean.listBardodeInsideListStockVenta(nstockV)}" 
                                          var="codeListV" rows="5" tableStyle="width: auto"
-                                         paginator="true" paginatorPosition="Bottom">
+                                         paginator="true" paginatorPosition="bottom">
                                 <p:column headerText="Cantidad Cajas" style="text-align: center">
                                     <h:outputText value="#{codeListV.cantidadCajas}"/>
                                 </p:column>

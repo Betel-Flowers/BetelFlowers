@@ -16,7 +16,7 @@
                             <p:dataTable id="dtCli" value="#{registroVentaBean.clientes}"
                                          filteredValue="#{registroVentaBean.filteredClientes}"
                                          var="cli" rows="5" paginator="true"
-                                         paginatorPosition="Bottom" selectionMode="single"
+                                         paginatorPosition="bottom" selectionMode="single"
                                          selection="#{registroVentaBean.selectedCliente}"
                                          rowKey="#{cli.codigo}">
                                 <p:ajax event="rowSelect" listener="#{registroVentaBean.onRowSelect}" 
@@ -48,7 +48,7 @@
                                 </p:column>
                             </p:dataTable>
                             <p:dataTable id="dtSubCli" var="subCliSelect" rows="5"
-                                         paginator="true" paginatorPosition="Bottom"
+                                         paginator="true" paginatorPosition="bottom"
                                          value="#{registroVentaBean.subClientes}"
                                          filteredValue="#{registroVentaBean.filteredSubClientes}"
                                          selectionMode="single"
@@ -311,7 +311,7 @@
                             <h:panelGrid style="margin: 0 auto;">
                                 <p:dataTable id="dtSelectStock" var="itemStockVenta"
                                              paginator="true" tableStyle="width: auto"
-                                             paginatorPosition="Bottom" rows="10" 
+                                             paginatorPosition="bottom" rows="10" 
                                              value="#{registroVentaBean.detalleRegistroSock}" 
                                              selection="#{registroVentaBean.selectDetalleRegistroSock}"
                                              editable="true" editMode="cell" widgetVar="cellVenta"
@@ -368,7 +368,7 @@
                         <h:panelGrid style="margin: 0 auto;">
                             <p:dataTable id="configCaja"  var="itemConfigCaja"
                                          paginator="true" tableStyle="width: auto"
-                                         paginatorPosition="Bottom" rows="10"
+                                         paginatorPosition="bottom" rows="10"
                                          value="#{registroVentaBean.variedadesCaja}">
                                 <f:facet name="header">
                                     <h:outputText value="Variedades en Caja"/>
@@ -418,7 +418,7 @@
                             <h:panelGrid style="margin: 0 auto;">
                                 <p:dataTable id="dtVentaFinal"  var="itemDetalleVenta"
                                              paginator="true" tableStyle="width: auto"
-                                             paginatorPosition="Bottom" rows="10"
+                                             paginatorPosition="bottom" rows="10"
                                              value="#{registroVentaBean.detalleVenta.itemsDetalleVenta}">
                                     <f:facet name="header">
                                         <h:outputText value="Detalle de Venta"/>
@@ -439,7 +439,7 @@
                                         <p:panel style="align-content: center; text-align: center">
                                             <p:dataTable id="dtSubVentaFinal"  var="itemSubConfigCaja"
                                                          paginator="true" tableStyle="width: auto"
-                                                         paginatorPosition="Bottom" rows="10"
+                                                         paginatorPosition="bottom" rows="10"
                                                          value="#{registroVentaBean.subListCajaVariedades(itemDetalleVenta)}">
                                                 <f:facet name="header">
                                                     <h:outputText value="Variedades en Caja"/>

@@ -12,7 +12,7 @@
                 <p:dataTable id="dtCli" value="#{subClienteBean.subClientes}"
                              var="cli" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom"
+                             paginatorPosition="bottom"
                              selectionMode="single"
                              selection="#{subClienteBean.selected}"
                              rowKey="#{cli.codigo}">
@@ -95,7 +95,7 @@
                                 <h:panelGrid style="margin: 0 auto;">
                                     <p:dataTable id="telefonos" var="tlf" rows="4"
                                                  paginator="true"
-                                                 paginatorPosition="Bottom"
+                                                 paginatorPosition="bottom"
                                                  value="#{subClienteBean.telefono.telefonos}">
                                         <f:facet name="header">
                                             <h:outputText value="Lista"/>
@@ -125,7 +125,7 @@
                                 <h:panelGrid style="margin: 0 auto;">
                                     <p:dataTable id="correos" var="email" rows="4"
                                                  paginator="true"
-                                                 paginatorPosition="Bottom"
+                                                 paginatorPosition="bottom"
                                                  value="#{subClienteBean.correo.correos}">
                                         <f:facet name="header">
                                             <h:outputText value="Lista"/>

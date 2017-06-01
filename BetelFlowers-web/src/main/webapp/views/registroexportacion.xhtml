@@ -94,7 +94,7 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtregExp" var="regExp" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom"
+                             paginatorPosition="bottom"
                              value="#{registroExportacionBean.registrosExportacion}">
 
                     <f:facet name="header">
@@ -150,7 +150,7 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtRendList" var="rend" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom"
+                             paginatorPosition="bottom"
                              value="#{registroExportacionBean.rendiminetoServiceList.rendimientos}">
 
                     <f:facet name="header">
@@ -197,7 +197,7 @@
             <h:panelGrid style="margin: 0 auto;">
                 <p:dataTable id="dtregExpG" var="regExpG" rows="5"
                              paginator="true" tableStyle="width: auto"
-                             paginatorPosition="Bottom" style="table-layout: auto"
+                             paginatorPosition="bottom" style="table-layout: auto"
                              value="#{registroExportacionBean.barcodeList}"
                              filteredValue="#{registroExportacionBean.filteredbarcodeList}">
 
@@ -239,7 +239,7 @@
                         <p:panel style="align-content: center; text-align: center">
                             <p:dataTable value="#{registroExportacionBean.listBardodeInsideList(regExpG)}" 
                                          var="codeList" rows="5"
-                                         paginator="true" paginatorPosition="Bottom">
+                                         paginator="true" paginatorPosition="bottom">
                                 <p:column style="text-align: center" headerText="Fecha" >
                                     <h:outputText value="#{codeList.lastChange}">
                                         <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
