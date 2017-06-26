@@ -12,6 +12,7 @@ import com.betel.flowers.model.Cliente;
 import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Dae;
 import com.betel.flowers.model.DetalleVenta;
+import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.ItemPrecio;
 import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.ItemVariedadVentaEmpaque;
@@ -28,6 +29,7 @@ import com.betel.flowers.service.CiudadService;
 import com.betel.flowers.service.ClienteService;
 import com.betel.flowers.service.CuartoFrioCargueraService;
 import com.betel.flowers.service.DaeService;
+import com.betel.flowers.service.EspecieService;
 import com.betel.flowers.service.MarcaCajaService;
 import com.betel.flowers.service.PaisService;
 import com.betel.flowers.service.RegistroExportacionService;
@@ -81,6 +83,8 @@ public class RegistroVentaBean implements Serializable {
     private Boolean AddPriceflowersTallo;
     private Double priceMax = new Double(0);
     private Double priceMin = new Double(0);
+    //SKIP
+    private Boolean skip;
 
     @Inject
     private ClienteService clienteService;
@@ -100,6 +104,8 @@ public class RegistroVentaBean implements Serializable {
     private RegistroExportacionService registroExportacionservice;
     @Inject
     private VariedadService variedadService;
+    @Inject
+    private EspecieService especieService;
     @Inject
     private BodegaVirtualService bodegaService;
     @Inject
@@ -128,6 +134,7 @@ public class RegistroVentaBean implements Serializable {
         this.priceMax = 100.00;
         this.AddflowersCaja = Boolean.TRUE;
         this.AddPriceflowersTallo = Boolean.FALSE;
+        this.skip = Boolean.FALSE;
         this.variedadesCaja = new ArrayList<>();
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
@@ -184,7 +191,9 @@ public class RegistroVentaBean implements Serializable {
 
     public void findDisponibilidadStock(ActionEvent evt) {
         BodegaVirtual bodega = this.bodegaService.findByCodigo(this.findStocksExportacion.getBodega());
+        Especie especie = this.especieService.findByCodigo(this.findStocksExportacion.getVariedad().getEspecie());
         this.findStocksExportacion.setBodega(bodega);
+        this.findStocksExportacion.getVariedad().setEspecie(especie);
         this.detalleRegistroSock = this.registroExportacionservice.obtenerListDisponibilidadFlag(this.findStocksExportacion, 1);
         if (this.detalleRegistroSock == null || this.detalleRegistroSock.isEmpty()) {
             this.detalleRegistroSock = new ArrayList<>();
@@ -305,7 +314,12 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
+        if (skip) {
+            skip = false;
+            return "venta";
+        } else {
+            return event.getNewStep();
+        }
     }
 
     public Cliente getSelectedCliente() {
@@ -467,4 +481,13 @@ public class RegistroVentaBean implements Serializable {
     public void setVariedadesCaja(List<ItemVariedadVentaEmpaque> variedadesCaja) {
         this.variedadesCaja = variedadesCaja;
     }
+
+    public Boolean getSkip() {
+        return skip;
+    }
+
+    public void setSkip(Boolean skip) {
+        this.skip = skip;
+    }
+
 }

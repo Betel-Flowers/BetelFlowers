@@ -1,0 +1,349 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <h:outputScript name="js/nanoscroller.js" library="icarus-layout" />
+        <h:outputScript name="js/layout.js" library="icarus-layout" />
+        <ui:insert name="head"/>
+    </h:head>
+
+    <h:body>
+        <div class="wrapper">
+            <h:form id="fventa">
+                <p:wizard flowListener="#{registroVentaBean.onFlowProcess}" showStepStatus="true"
+                          nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
+                    <p:tab id="clientes" title="Clientes">
+                        <p:panel header="Seleccione Cliente y/o Sub-Cliente">
+                            <h:panelGrid style="margin: 0 auto;">
+                                <p:dataTable id="dtCli" value="#{registroVentaBean.clientes}"
+                                             filteredValue="#{registroVentaBean.filteredClientes}"
+                                             var="cli" rows="5" paginator="true"
+                                             paginatorPosition="bottom" selectionMode="single"
+                                             selection="#{registroVentaBean.selectedCliente}"
+                                             rowKey="#{cli.codigo}">
+                                    <p:ajax event="rowSelect" listener="#{registroVentaBean.onRowSelect}" 
+                                            update=":fventa:dtSubCli, :fventa:cliSelect"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="Clientes"/>
+                                    </f:facet>
+                                    <p:column headerText="Fecha" style="text-align: center">
+                                        <h:outputText value="#{cli.lastChange}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column filterBy="#{cli.codigo}" headerText="Codigo" filterMatchMode="contains" style="text-align: center">
+                                        <h:outputText value="#{cli.codigo}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{cli.empresa}" headerText="Empresa" filterMatchMode="contains" style="text-align: center">
+                                        <h:outputText value="#{cli.empresa}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{cli.nombreContacto}" headerText="Nombre de Contacto" filterMatchMode="contains" style="text-align: center">
+                                        <h:outputText value="#{cli.nombreContacto}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{cli.ruc}" headerText="Cedula/RUC/Pasaporte" filterMatchMode="contains" style="text-align: center">
+                                        <h:outputText value="#{cli.ruc}"/>
+                                    </p:column>
+                                    <p:column headerText="Tipo" style="text-align: center">
+                                        <h:outputText value="Comercializadora" rendered="#{cli.comercializadora}"/>
+                                        <h:outputText value="Local" rendered="#{cli.local}"/>
+                                        <h:outputText value="Exterior" rendered="#{cli.exterior}"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dataTable id="dtSubCli" var="subCliSelect" rows="5"
+                                             paginator="true" paginatorPosition="bottom"
+                                             value="#{registroVentaBean.subClientes}"
+                                             filteredValue="#{registroVentaBean.filteredSubClientes}"
+                                             selectionMode="single"
+                                             selection="#{registroVentaBean.selectedSubCliente}"
+                                             rowKey="#{subCliSelect.codigo}">
+                                    <p:ajax event="rowSelect" listener="#{registroVentaBean.onRowSelectSubCliente}"
+                                            update=":fventa:subCliSelect"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="Sub-Clientes"/>
+                                    </f:facet>
+                                    <p:column headerText="Fecha" style="text-align: center">
+                                        <h:outputText value="#{subCliSelect.lastChange}">
+                                            <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column filterBy="#{subCliSelect.codigo}" headerText="Codigo" filterMatchMode="contains" style="text-align: center">
+                                        <h:outputText value="#{subCliSelect.codigo}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{subCliSelect.empresa}" headerText="Empresa" filterMatchMode="contains" style="text-align: center">
+                                        <h:outputText value="#{subCliSelect.empresa}"/>
+                                    </p:column>
+                                    <p:column filterBy="#{subCliSelect.nombreContacto}" headerText="Nombre de Contacto" filterMatchMode="contains" style="text-align: center">
+                                        <h:outputText value="#{subCliSelect.nombreContacto}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                            <h:panelGrid columns="3" cellpadding="5">
+                                <p:outputLabel for="cliSelect" value="Cliente:"/>
+                                <p:inputText id="cliSelect" required="true" value="#{registroVentaBean.nuevo.cliente.empresa}"/>
+                                <p:message for="cliSelect" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="subCliSelect" value="Sub-Cliente:"/>
+                                <p:inputText id="subCliSelect" value="#{registroVentaBean.nuevo.subCliente.empresa}"/>
+                                <p:message for="subCliSelect" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <p:outputLabel value="Directo a Venta: " />
+                                    <p:selectBooleanCheckbox value="#{registroVentaBean.skip}" />
+                                </h:panelGrid>
+                            </f:facet>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="destinos" title="Destino">
+                        <p:panel header="Seleccione los Puertos y complete la informacion">
+                            <h:panelGrid>
+                                <p:outputLabel value="Puerto de Embarque"/>
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:outputLabel for="pEmb" value="Pais:"/>
+                                    <p:selectOneMenu id="pEmb" required="true" 
+                                                     value="#{registroVentaBean.nuevo.puertoEmbarque.pais.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{paisBean.paices}" var="pass"
+                                                       itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
+                                        <p:ajax update=":fventa:cEmb" listener="#{registroVentaBean.chancePaisOrigen}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="pEmb" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="cEmb" value="Ciudad:"/>
+                                    <p:selectOneMenu id="cEmb" required="true" 
+                                                     value="#{registroVentaBean.nuevo.puertoEmbarque.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{registroVentaBean.origen}" var="ciud"
+                                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="cEmb" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                                <p:outputLabel value="Puerto de Destino"/>
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:outputLabel for="pDes" value="Pais:"/>
+                                    <p:selectOneMenu id="pDes" required="true" 
+                                                     value="#{registroVentaBean.nuevo.puertoDestino.pais.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{paisBean.paices}" var="passd"
+                                                       itemLabel="#{passd.nombre}" itemValue="#{passd.codigo}"/>
+                                        <p:ajax update=":fventa:dae, :fventa:cDes" listener="#{registroVentaBean.findDaeByPaisDestino}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="pDes" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="cDes" value="Ciudad:"/>
+                                    <p:selectOneMenu id="cDes" required="true" 
+                                                     value="#{registroVentaBean.nuevo.puertoDestino.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{registroVentaBean.destino}" var="ciud"
+                                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="cDes" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="3" cellpadding="5">
+                                    <p:outputLabel for="dae" value="DAE:"/>
+                                    <p:inputText id="dae" required="true" value="#{registroVentaBean.nuevo.dae.codigoDAE}"/>
+                                    <p:message for="dae" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:outputLabel for="terExp" value="Terminos de Exportacion:"/>
+                                    <p:selectOneMenu id="terExp" required="true" 
+                                                     value="#{registroVentaBean.nuevo.termino.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{terminoExportacionBean.terminos}" var="ter"
+                                                       itemLabel="#{ter.descripcion}" itemValue="#{ter.codigo}"/>
+                                        <p:ajax update=":fventa:valTerExp" listener="#{registroVentaBean.findTerminoExportacion}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="terExp" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="valTerExp" value="Valor:"/>
+                                    <p:inputText id="valTerExp" required="true" value="#{registroVentaBean.nuevo.termino.valor}"/>
+                                    <p:message for="valTerExp" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <p:outputLabel value="Directo a Venta: " />
+                                    <p:selectBooleanCheckbox value="#{registroVentaBean.skip}" />
+                                </h:panelGrid>
+                            </f:facet>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="agencias" title="Agencia de Carga">
+                        <p:panel header="Seleccione la Agencia de Carga y complete la informacion">
+                            <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel for="ageC" value="Agencia de Carga"/>
+                                <p:selectOneMenu id="ageC" required="true" 
+                                                 value="#{registroVentaBean.nuevo.agenciaCarga.codigo}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{cargueraBean.cargueras}" var="acarg"
+                                                   itemLabel="#{acarg.nombre}" itemValue="#{acarg.codigo}"/>
+                                    <p:ajax update=":fventa:cfrio" listener="#{registroVentaBean.changeAgenciaCarga}"/>
+                                </p:selectOneMenu>
+                                <p:message for="ageC" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="cfrio" value="Cuarto Frio:"/>
+                                <p:selectOneMenu id="cfrio" required="true" 
+                                                 value="#{registroVentaBean.nuevo.cuartoFrio.codigo}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{registroVentaBean.frios}" var="cfrios"
+                                                   itemLabel="#{cfrios.descripcion}" itemValue="#{cfrios.codigo}"/>
+                                </p:selectOneMenu>
+                                <p:message for="cfrio" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel for="awb" value="AWB:" />
+                                <p:inputMask id="awb" required="true" value="#{registroVentaBean.nuevo.AWB}" mask="999-99999999"/>
+                                <p:message for="awb" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="hawb" value="HAWB:" />
+                                <p:inputText id="hawb" required="true" value="#{registroVentaBean.nuevo.HAWB}"/>
+                                <p:message for="hawb" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                            <h:panelGrid cellpadding="5">
+                                <p:outputLabel for="obser" value="Observacion:" />
+                                <p:inputTextarea id="obser" cols="70" rows="5"  
+                                                 value="#{registroVentaBean.nuevo.observacion}"/>
+                                <p:message for="obser" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="venta" title="Venta">
+                        <p:panel header="Agrege veriedades para esta venta">
+                            <p:outputPanel id="outVari">
+                                <h:panelGrid columns="7" cellpadding="5">
+                                    <p:outputLabel for="bod" value="Bodega:"/>
+                                    <p:selectOneMenu id="bod"  value="#{registroVentaBean.findStocksExportacion.bodega.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{bodegaBean.bodegas}" var="bodRV"
+                                                       itemLabel="#{bodRV.nombre}" itemValue="#{bodRV.codigo}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="bod" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="especie" value="Especie:"/>
+                                    <p:selectOneMenu id="especie" 
+                                                     value="#{registroVentaBean.findStocksExportacion.variedad.especie.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{especieBean.especies}" var="esp" itemLabel="#{esp.nombre}"
+                                                       itemValue="#{esp.codigo}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="especie" display="tooltip" severity="error"/>
+                                    
+                                    <p:commandButton value="Buscar" 
+                                                 update=":fventa:outItems"
+                                                 actionListener="#{registroVentaBean.findDisponibilidadStock(evt)}"/>
+                                </h:panelGrid>
+                            </p:outputPanel>
+                            <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
+                            <p:outputPanel id="outItems">
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="dtSelectStock" var="itemStockVenta"
+                                                 paginator="true" tableStyle="width: auto"
+                                                 paginatorPosition="bottom" rows="10" 
+                                                 value="#{registroVentaBean.detalleRegistroSock}" 
+                                                 selection="#{registroVentaBean.selectDetalleRegistroSock}"
+                                                 editable="true" editMode="cell" widgetVar="cellVenta"
+                                                 rowKey="#{itemStockVenta.registro.codigo}" style="margin-bottom:0">
+                                        <f:facet name="header">
+                                            <h:outputText value="Flor en Bodega"/>
+                                        </f:facet>
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                        <p:column style="text-align: center" headerText="Fecha" >
+                                            <h:outputText value="#{itemStockVenta.registro.creationDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Barcode" style="text-align: center">
+                                            <p:barcode value="#{itemStockVenta.registro.barcode}" 
+                                                       type="code39" width="50%" height="50%"/>
+                                        </p:column>
+                                        <p:column headerText="Foto" style="text-align: center">
+                                            <p:graphicImage value="#{itemStockVenta.registro.variedad.urlFoto}"
+                                                            width="40px" height="40px"/>
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Variedad" >
+                                            <h:outputText value="#{itemStockVenta.registro.variedad.nombre}"/>
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Ramos" >
+                                            <h:outputText value="#{itemStockVenta.registro.numeroRamos}"/>
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Tallos" >
+                                            <h:outputText value="#{itemStockVenta.registro.numeroTallosRamo}"/>
+                                        </p:column>
+                                        <p:column style="text-align: center" headerText="Stock Tallos" >
+                                            <h:outputText value="#{itemStockVenta.registro.stock}"/>
+                                        </p:column>
+                                        <p:column headerText="Cantidad Ramos">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{itemStockVenta.numeroRamos}" /></f:facet>
+                                                <f:facet name="input"><p:inputNumber id="mNumRamos" required="true" value="#{itemStockVenta.numeroRamos}" 
+                                                                                     style="width:100%" label="Cantidad Ramos"
+                                                                                     minValue="0" maxValue="#{itemStockVenta.registro.numeroRamos}">
+                                                        <p:ajax update="mNumRamos"/>
+                                                    </p:inputNumber></f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                        <f:facet name="footer">
+                                            <p:commandButton id="btnAddTallos" disabled="#{registroVentaBean.addflowersCaja}" 
+                                                             value="Agregar" process="dtSelectStock" 
+                                                             update=":fventa:dtSelectStock, :fventa:messages"
+                                                             action="#{registroVentaBean.onClikListenerSelectList}"/>
+
+                                        </f:facet>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:outputPanel>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="final" title="Finalizar">
+                        <p:panel>
+                            <h:panelGrid columns="4" cellpadding="5">
+                                <p:outputLabel value="Cliente:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.empresa}"/>
+                                <p:outputLabel value="Sub-Cliente:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedSubCliente.empresa}"/>
+                                <p:outputLabel value="Agencia de Carga:"/>
+
+
+                            </h:panelGrid>
+                            <p:commandButton value="Generar Venta" update=":fventa" process="@this"/>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </h:form>
+        </div>
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.loggerOut) {
+                    location.href = args.ruta;
+                }
+            }
+        </script>
+
+        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="icarus-layout" style="width: 32px;"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/animate.css" library="icarus-layout" />
+        <h:outputStylesheet name="css/nanoscroller.css" library="icarus-layout" />
+        <h:outputStylesheet name="css/layout-green.css" library="icarus-layout" />
+        <h:outputStylesheet name="css/betel.css" library="icarus-layout" />
+    </h:body>
+
+</html>
