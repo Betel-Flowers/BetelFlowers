@@ -5,7 +5,6 @@
  */
 package com.betel.flowers.service;
 
-import com.betel.flowers.model.ItemVariedadStock;
 import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.RegistroExportacion;
 import com.mongo.persistance.MongoPersistence;
@@ -16,7 +15,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.Sort;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
 
@@ -26,7 +24,7 @@ import org.mongodb.morphia.query.UpdateResults;
  */
 @Stateless
 @LocalBean
-public class RegistroExportacionService implements Serializable {
+public class VentaService implements Serializable {
 
     private static final long serialVersionUID = -3815859191463165721L;
 
