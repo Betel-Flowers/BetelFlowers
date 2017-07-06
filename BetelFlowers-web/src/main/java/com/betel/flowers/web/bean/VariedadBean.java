@@ -47,6 +47,7 @@ public class VariedadBean implements Serializable {
     private Variedad nuevo;
     private Variedad selected;
     private List<Variedad> variedades;
+    private List<Integer> ramosExists;
 
     private static final Integer sizeImage = 5500000;
     private UploadedFile file;
@@ -68,8 +69,12 @@ public class VariedadBean implements Serializable {
         this.selected = null;
         this.file = null;
         this.variedades = this.variedadService.obtenerListFlag(1);
+        this.ramosExists = this.variedadService.obtenerRamos();
         if (this.variedades == null) {
             this.variedades = new ArrayList<>();
+        }
+        if (this.ramosExists == null) {
+            this.ramosExists = new ArrayList<>();
         }
     }
 
@@ -308,6 +313,14 @@ public class VariedadBean implements Serializable {
 
     public void setUrlSelected(String urlSelected) {
         this.urlSelected = urlSelected;
+    }
+
+    public List<Integer> getRamosExists() {
+        return ramosExists;
+    }
+
+    public void setRamosExists(List<Integer> ramosExists) {
+        this.ramosExists = ramosExists;
     }
 
 }

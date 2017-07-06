@@ -14,9 +14,8 @@ import com.betel.flowers.model.Dae;
 import com.betel.flowers.model.DetalleVenta;
 import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.ItemPrecio;
-import com.betel.flowers.model.ItemVariedadVenta;
 import com.betel.flowers.model.ItemVariedadVentaEmpaque;
-import com.betel.flowers.model.OrdenPreEmpaque;
+import com.betel.flowers.model.MatrizDisponibilidad;
 import com.betel.flowers.model.Pais;
 import com.betel.flowers.model.RegistroExportacion;
 import com.betel.flowers.model.RegistroVenta;
@@ -36,6 +35,8 @@ import com.betel.flowers.service.RegistroExportacionService;
 import com.betel.flowers.service.TerminoExportacionService;
 import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.service.VariedadService;
+import com.betel.flowers.web.bean.util.ClasificarMalla;
+import com.betel.flowers.web.bean.util.Malla;
 import com.betel.flowers.web.bean.util.RegistroDetalleVenta;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
@@ -73,8 +74,6 @@ public class RegistroVentaBean implements Serializable {
     private List<CuartoFrioCarguera> frios;
     //STOCK'S REGISTRO EXPORTACION
     private RegistroExportacion findStocksExportacion;
-    private List<ItemVariedadVenta> detalleRegistroSock;
-    private List<ItemVariedadVenta> selectDetalleRegistroSock;
     private List<ItemVariedadVentaEmpaque> variedadesCaja;
     private RegistroDetalleVenta detalleVenta;
     //CONTROL DE PRECIOS VARIEDAD LONGITUD
@@ -83,6 +82,9 @@ public class RegistroVentaBean implements Serializable {
     private Boolean AddPriceflowersTallo;
     private Double priceMax = new Double(0);
     private Double priceMin = new Double(0);
+    //MATRIX
+    private MatrizDisponibilidad dataMatrix;
+    private List<Malla> malla;
     //SKIP
     private Boolean skip;
 
@@ -127,7 +129,6 @@ public class RegistroVentaBean implements Serializable {
         this.destino = new ArrayList<>();
         this.frios = new ArrayList<>();
         this.findStocksExportacion = new RegistroExportacion();
-        this.detalleRegistroSock = new ArrayList<>();
         this.detalleVenta = new RegistroDetalleVenta();
         this.priceUnit = 0d;
         this.priceMin = 0d;
@@ -136,6 +137,8 @@ public class RegistroVentaBean implements Serializable {
         this.AddPriceflowersTallo = Boolean.FALSE;
         this.skip = Boolean.FALSE;
         this.variedadesCaja = new ArrayList<>();
+        this.dataMatrix = new MatrizDisponibilidad();
+        this.malla = new ArrayList<>();
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
             this.subClientes = new ArrayList<>();
@@ -194,15 +197,16 @@ public class RegistroVentaBean implements Serializable {
         Especie especie = this.especieService.findByCodigo(this.findStocksExportacion.getVariedad().getEspecie());
         this.findStocksExportacion.setBodega(bodega);
         this.findStocksExportacion.getVariedad().setEspecie(especie);
-        this.detalleRegistroSock = this.registroExportacionservice.obtenerListDisponibilidadFlag(this.findStocksExportacion, 1);
-        if (this.detalleRegistroSock == null || this.detalleRegistroSock.isEmpty()) {
-            this.detalleRegistroSock = new ArrayList<>();
-            this.setAddPriceflowersTallo(Boolean.FALSE);
-            this.priceUnit = 0d;
-        } else {
-            this.setAddPriceflowersTallo(Boolean.TRUE);
+        this.dataMatrix = new MatrizDisponibilidad();
+        this.malla = new ArrayList<>();
+        this.dataMatrix = this.registroExportacionservice.obtenerMatrixDisponibilidadFlag(this.findStocksExportacion, 1);
+        //PROCESO NUEVO
+        if (this.dataMatrix != null) {
+            ClasificarMalla clasf = new ClasificarMalla();
+            clasf.setMatriz(dataMatrix);
+            clasf.clasificar();
+            this.malla = clasf.getMallas();
         }
-        this.setAddflowersCaja(Boolean.TRUE);
     }
 
     public void loadVariedad() {
@@ -235,38 +239,6 @@ public class RegistroVentaBean implements Serializable {
                         break;
                     }
                 }
-            }
-        }
-    }
-
-    public void onClikListenerSelectList() {
-        Boolean conValores = Boolean.FALSE;
-        if (this.selectDetalleRegistroSock != null && !this.selectDetalleRegistroSock.isEmpty()) {
-            Integer totalRamos = 0;
-            ItemVariedadVentaEmpaque itemVentaSelectStock = new ItemVariedadVentaEmpaque();
-            for (ItemVariedadVenta itemVariTotalRamos : this.selectDetalleRegistroSock) {
-                if (itemVariTotalRamos.getNumeroRamos() != null) {
-                    totalRamos = totalRamos + itemVariTotalRamos.getNumeroRamos();
-                    itemVentaSelectStock.getRegistrosOrdenEmpaque().
-                            add(new OrdenPreEmpaque(itemVariTotalRamos.getNumeroRamos(), itemVariTotalRamos.getNumeroTallosRamo(), itemVariTotalRamos.getRegistro()));
-                    conValores = Boolean.TRUE;
-                }
-            }
-            if (conValores) {
-                itemVentaSelectStock.setVariedad(this.selectDetalleRegistroSock.get(0).getVariedad());
-                itemVentaSelectStock.setNumeroRamos(totalRamos);
-                itemVentaSelectStock.setPrecioUnit(this.getPriceUnit());
-                itemVentaSelectStock.setPuntoCorte(this.selectDetalleRegistroSock.get(0).getPuntoCorte());
-                if (this.selectDetalleRegistroSock.get(0).getVariedad().getGirasol()) {
-                    itemVentaSelectStock.setGlongitud(this.selectDetalleRegistroSock.get(0).getGlongitud());
-                } else {
-                    itemVentaSelectStock.setLongitud(this.selectDetalleRegistroSock.get(0).getLongitud());
-                }
-                this.getVariedadesCaja().add(itemVentaSelectStock);
-                this.detalleRegistroSock = new ArrayList<>();
-                this.selectDetalleRegistroSock = new ArrayList<>();
-            } else {
-                FacesUtil.addMessageInfo("Por favor ingrese la cantidad de ramos.");
             }
         }
     }
@@ -410,22 +382,6 @@ public class RegistroVentaBean implements Serializable {
         this.findStocksExportacion = findStocksExportacion;
     }
 
-    public List<ItemVariedadVenta> getDetalleRegistroSock() {
-        return detalleRegistroSock;
-    }
-
-    public void setDetalleRegistroSock(List<ItemVariedadVenta> detalleRegistroSock) {
-        this.detalleRegistroSock = detalleRegistroSock;
-    }
-
-    public List<ItemVariedadVenta> getSelectDetalleRegistroSock() {
-        return selectDetalleRegistroSock;
-    }
-
-    public void setSelectDetalleRegistroSock(List<ItemVariedadVenta> selectDetalleRegistroSock) {
-        this.selectDetalleRegistroSock = selectDetalleRegistroSock;
-    }
-
     public RegistroDetalleVenta getDetalleVenta() {
         return detalleVenta;
     }
@@ -488,6 +444,22 @@ public class RegistroVentaBean implements Serializable {
 
     public void setSkip(Boolean skip) {
         this.skip = skip;
+    }
+
+    public MatrizDisponibilidad getDataMatrix() {
+        return dataMatrix;
+    }
+
+    public void setDataMatrix(MatrizDisponibilidad dataMatrix) {
+        this.dataMatrix = dataMatrix;
+    }
+
+    public List<Malla> getMalla() {
+        return malla;
+    }
+
+    public void setMalla(List<Malla> malla) {
+        this.malla = malla;
     }
 
 }

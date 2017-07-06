@@ -221,7 +221,7 @@
                     <p:tab id="venta" title="Venta">
                         <p:panel header="Agrege veriedades para esta venta">
                             <p:outputPanel id="outVari">
-                                <h:panelGrid columns="7" cellpadding="5">
+                                <h:panelGrid columns="12" cellpadding="5">
                                     <p:outputLabel for="bod" value="Bodega:"/>
                                     <p:selectOneMenu id="bod"  value="#{registroVentaBean.findStocksExportacion.bodega.codigo}">
                                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
@@ -229,6 +229,15 @@
                                                        itemLabel="#{bodRV.nombre}" itemValue="#{bodRV.codigo}"/>
                                     </p:selectOneMenu>
                                     <p:message for="bod" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="ramo" value="Ramos de:"/>
+                                    <p:selectOneMenu id="ramo" 
+                                                     value="#{registroVentaBean.findStocksExportacion.numeroTallosRamo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{variedadBean.ramosExists}" var="rms" itemLabel="#{rms}"
+                                                       itemValue="#{rms}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="ramo" display="tooltip" severity="error"/>
 
                                     <p:outputLabel for="especie" value="Especie:"/>
                                     <p:selectOneMenu id="especie" 
@@ -238,68 +247,92 @@
                                                        itemValue="#{esp.codigo}"/>
                                     </p:selectOneMenu>
                                     <p:message for="especie" display="tooltip" severity="error"/>
-                                    
+
                                     <p:commandButton value="Buscar" 
-                                                 update=":fventa:outItems"
-                                                 actionListener="#{registroVentaBean.findDisponibilidadStock(evt)}"/>
+                                                     update=":fventa:outItems"
+                                                     actionListener="#{registroVentaBean.findDisponibilidadStock(evt)}"/>
                                 </h:panelGrid>
                             </p:outputPanel>
                             <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                             <p:outputPanel id="outItems">
                                 <h:panelGrid style="margin: 0 auto;">
-                                    <p:dataTable id="dtSelectStock" var="itemStockVenta"
-                                                 paginator="true" tableStyle="width: auto"
-                                                 paginatorPosition="bottom" rows="10" 
-                                                 value="#{registroVentaBean.detalleRegistroSock}" 
-                                                 selection="#{registroVentaBean.selectDetalleRegistroSock}"
-                                                 editable="true" editMode="cell" widgetVar="cellVenta"
-                                                 rowKey="#{itemStockVenta.registro.codigo}" style="margin-bottom:0">
+                                    <p:dataTable id="matrix" value="#{registroVentaBean.malla}" var="mat"
+                                                 tableStyle="width:auto">
+                                        <p:ajax event="rowSelect" listener="#{dtSelectionView.onRowSelect}"/>
                                         <f:facet name="header">
-                                            <h:outputText value="Flor en Bodega"/>
+                                            <h:outputText value="FLOR EN BODEGA"/>
                                         </f:facet>
-                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-                                        <p:column style="text-align: center" headerText="Fecha" >
-                                            <h:outputText value="#{itemStockVenta.registro.creationDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyy HH:mm:ss a" timeZone="#{calendarioBean.calenadario.timeZone}"/>
-                                            </h:outputText>
+                                        <p:column headerText="Variedad" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.variedad.nombre}"/>
                                         </p:column>
-                                        <p:column headerText="Barcode" style="text-align: center">
-                                            <p:barcode value="#{itemStockVenta.registro.barcode}" 
-                                                       type="code39" width="50%" height="50%"/>
+                                        <p:column headerText="20" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p20.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p20.value}"/>
                                         </p:column>
-                                        <p:column headerText="Foto" style="text-align: center">
-                                            <p:graphicImage value="#{itemStockVenta.registro.variedad.urlFoto}"
-                                                            width="40px" height="40px"/>
+                                        <p:column headerText="25" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p25.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p25.value}"/>
                                         </p:column>
-                                        <p:column style="text-align: center" headerText="Variedad" >
-                                            <h:outputText value="#{itemStockVenta.registro.variedad.nombre}"/>
+                                        <p:column headerText="30" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p30.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"   size="4" value="#{mat.p30.value}"/>
                                         </p:column>
-                                        <p:column style="text-align: center" headerText="Ramos" >
-                                            <h:outputText value="#{itemStockVenta.registro.numeroRamos}"/>
+                                        <p:column headerText="35" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p35.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p35.value}"/>
                                         </p:column>
-                                        <p:column style="text-align: center" headerText="Tallos" >
-                                            <h:outputText value="#{itemStockVenta.registro.numeroTallosRamo}"/>
+                                        <p:column headerText="40" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p40.value}   "/>
+                                            <p:inputNumber decimalPlaces="0" size="4" value="#{mat.p40.value}"/>
                                         </p:column>
-                                        <p:column style="text-align: center" headerText="Stock Tallos" >
-                                            <h:outputText value="#{itemStockVenta.registro.stock}"/>
+                                        <p:column headerText="45" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p45.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p45.value}"/>
                                         </p:column>
-                                        <p:column headerText="Cantidad Ramos">
-                                            <p:cellEditor>
-                                                <f:facet name="output"><h:outputText value="#{itemStockVenta.numeroRamos}" /></f:facet>
-                                                <f:facet name="input"><p:inputNumber id="mNumRamos" required="true" value="#{itemStockVenta.numeroRamos}" 
-                                                                                     style="width:100%" label="Cantidad Ramos"
-                                                                                     minValue="0" maxValue="#{itemStockVenta.registro.numeroRamos}">
-                                                        <p:ajax update="mNumRamos"/>
-                                                    </p:inputNumber></f:facet>
-                                            </p:cellEditor>
+                                        <p:column headerText="50" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p50.value}     "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p50.value}"/>
                                         </p:column>
-                                        <f:facet name="footer">
-                                            <p:commandButton id="btnAddTallos" disabled="#{registroVentaBean.addflowersCaja}" 
-                                                             value="Agregar" process="dtSelectStock" 
-                                                             update=":fventa:dtSelectStock, :fventa:messages"
-                                                             action="#{registroVentaBean.onClikListenerSelectList}"/>
-
-                                        </f:facet>
+                                        <p:column headerText="55" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p55.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p55.value}"/>
+                                        </p:column>
+                                        <p:column headerText="60" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p60.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p60.value}"/>
+                                        </p:column>
+                                        <p:column headerText="65" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p65.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p65.value}"/>
+                                        </p:column>
+                                        <p:column headerText="70" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p70.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p70.value}"/>
+                                        </p:column>
+                                        <p:column headerText="75" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p75.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p75.value}"/>
+                                        </p:column>
+                                        <p:column headerText="80" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p80.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p80.value}"/>
+                                        </p:column>
+                                        <p:column headerText="85" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p85.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p85.value}"/>
+                                        </p:column>
+                                        <p:column headerText="90" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p90.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p90.value}"/>
+                                        </p:column>
+                                        <p:column headerText="95" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p95.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p95.value}"/>
+                                        </p:column>
+                                        <p:column headerText="100" style="text-align: center; width: auto">
+                                            <h:outputText value="#{mat.p100.value}   "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p100.value}"/>
+                                        </p:column>
                                     </p:dataTable>
                                 </h:panelGrid>
                             </p:outputPanel>
