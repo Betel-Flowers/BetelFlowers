@@ -6,11 +6,13 @@
 package com.betel.flowers.service;
 
 import com.betel.flowers.model.Bloque;
+import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.ItemPrecio;
 import com.betel.flowers.model.Variedad;
 import com.mongo.persistance.MongoPersistence;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -89,6 +91,31 @@ public class VariedadService implements Serializable {
         return this.loadPrecioLongitud(list);
     }
 
+    public List<Integer> obtenerRamos() {
+        List<Integer> ramos = new ArrayList<>();
+        List<Variedad> list = new ArrayList<>();
+        Query<Variedad> result = this.ds.find(Variedad.class).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+            for (Variedad var : list) {
+                ramos.addAll(var.getRamos());
+            }
+            if (!ramos.isEmpty()) {
+                ramos = uniqueInteger(ramos);
+            }
+        }
+        return ramos;
+    }
+
+    private List<Integer> uniqueInteger(List<Integer> lista) {
+        HashSet<Integer> hs = new HashSet<Integer>();
+        hs.addAll(lista);
+        lista.clear();
+        lista.addAll(hs);
+        return lista;
+    }
+
     private List<Variedad> loadPrecioLongitud(List<Variedad> variedades) {
         if (variedades != null && !variedades.isEmpty()) {
             for (int i = 0; i < variedades.size(); i++) {
@@ -142,6 +169,17 @@ public class VariedadService implements Serializable {
                 field("flag").equal(1);
         if (result.asList() != null && !result.asList().isEmpty()) {
             find = result.asList().get(0);
+        }
+        return find;
+    }
+
+    public List<Variedad> findByEspecie(Especie especie) {
+        List<Variedad> find = new ArrayList<>();
+        Query<Variedad> result = this.ds.find(Variedad.class).
+                field("especie").equal(especie).
+                field("flag").equal(1);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            find = result.asList();
         }
         return find;
     }
