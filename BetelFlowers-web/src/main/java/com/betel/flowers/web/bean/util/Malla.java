@@ -37,28 +37,16 @@ public class Malla implements Serializable {
 
     public Malla() {
         this.variedad = new Variedad();
-        this.p20 = new PointMatrix();
-        this.p25 = new PointMatrix();
-        this.p30 = new PointMatrix();
-        this.p35 = new PointMatrix();
-        this.p40 = new PointMatrix();
-        this.p45 = new PointMatrix();
-        this.p50 = new PointMatrix();
-        this.p55 = new PointMatrix();
-        this.p60 = new PointMatrix();
-        this.p65 = new PointMatrix();
-        this.p70 = new PointMatrix();
-        this.p75 = new PointMatrix();
-        this.p80 = new PointMatrix();
-        this.p85 = new PointMatrix();
-        this.p90 = new PointMatrix();
-        this.p95 = new PointMatrix();
-        this.p100 = new PointMatrix();
+        this.contructMatrix();
 
     }
 
     public Malla(Variedad variedad) {
         this.variedad = variedad;
+        this.contructMatrix();
+    }
+
+    private void contructMatrix() {
         this.p20 = new PointMatrix();
         this.p25 = new PointMatrix();
         this.p30 = new PointMatrix();
@@ -76,6 +64,63 @@ public class Malla implements Serializable {
         this.p90 = new PointMatrix();
         this.p95 = new PointMatrix();
         this.p100 = new PointMatrix();
+    }
+
+    public void updatePoint(PointMatrix px) {
+        switch (px.getGradoLogitud()) {
+            case "20":
+                this.setP20(px);
+                break;
+            case "25":
+                this.setP25(px);
+                break;
+            case "30":
+                this.setP30(px);
+                break;
+            case "35":
+                this.setP35(px);
+                break;
+            case "40":
+                this.setP40(px);
+                break;
+            case "45":
+                this.setP45(px);
+                break;
+            case "50":
+                this.setP50(px);
+                break;
+            case "55":
+                this.setP55(px);
+                break;
+            case "60":
+                this.setP60(px);
+                break;
+            case "65":
+                this.setP65(px);
+                break;
+            case "70":
+                this.setP70(px);
+                break;
+            case "75":
+                this.setP75(px);
+                break;
+            case "80":
+                this.setP80(px);
+                break;
+            case "85":
+                this.setP85(px);
+                break;
+            case "90":
+                this.setP90(px);
+                break;
+            case "95":
+                this.setP95(px);
+                break;
+            case "100":
+                this.setP100(px);
+                break;
+            default:
+        }
     }
 
     public Variedad getVariedad() {
@@ -221,5 +266,4 @@ public class Malla implements Serializable {
     public void setP100(PointMatrix p100) {
         this.p100 = p100;
     }
-
 }

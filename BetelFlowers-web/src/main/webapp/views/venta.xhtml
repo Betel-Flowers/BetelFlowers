@@ -257,111 +257,160 @@
                             <p:outputPanel id="outItems">
                                 <h:panelGrid style="margin: 0 auto;">
                                     <p:dataTable id="matrix" value="#{registroVentaBean.malla}" var="mat"
-                                                 tableStyle="width:auto">
-                                        <p:ajax event="rowSelect" listener="#{dtSelectionView.onRowSelect}"/>
+                                                 rowIndexVar="mxi" tableStyle="width:auto">
                                         <f:facet name="header">
-                                            <h:outputText value="FLOR EN BODEGA"/>
+                                            <h:outputText value="DISPONIBILIDAD DE FLOR EN BODEGA"/>
                                         </f:facet>
+                                        <p:column style="width:16px;text-align: center">
+                                            <h:outputText value="#{mxi +1}"/>
+                                        </p:column>
                                         <p:column headerText="Variedad" style="text-align: center; width: auto">
                                             <h:outputText value="#{mat.variedad.nombre}"/>
                                         </p:column>
                                         <p:column headerText="20" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p20.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p20.value}"/>
+                                            <h:outputText value="#{mat.p20.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p20.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p20, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="25" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p25.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p25.value}"/>
+                                            <h:outputText value="#{mat.p25.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p25.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p25, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="30" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p30.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"   size="4" value="#{mat.p30.value}"/>
+                                            <h:outputText value="#{mat.p30.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"   size="4" value="#{mat.p30.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p30, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="35" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p35.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p35.value}"/>
+                                            <h:outputText value="#{mat.p35.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p35.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p35, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="40" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p40.value}   "/>
-                                            <p:inputNumber decimalPlaces="0" size="4" value="#{mat.p40.value}"/>
+                                            <h:outputText value="#{mat.p40.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0" size="4" value="#{mat.p40.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p40, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="45" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p45.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p45.value}"/>
+                                            <h:outputText value="#{mat.p45.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p45.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p45, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="50" style="text-align: center; width: auto">
                                             <h:outputText value="#{mat.p50.value}     "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p50.value}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p50.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p50, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="55" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p55.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p55.value}"/>
+                                            <h:outputText value="#{mat.p55.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p55.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p55, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="60" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p60.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p60.value}"/>
+                                            <h:outputText value="#{mat.p60.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p60.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p60, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="65" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p65.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p65.value}"/>
+                                            <h:outputText value="#{mat.p65.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p65.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p65, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="70" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p70.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p70.value}"/>
+                                            <h:outputText value="#{mat.p70.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p70.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p70, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="75" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p75.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p75.value}"/>
+                                            <h:outputText value="#{mat.p75.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p75.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p75, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="80" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p80.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p80.value}"/>
+                                            <h:outputText value="#{mat.p80.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p80.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p80, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="85" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p85.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p85.value}"/>
+                                            <h:outputText value="#{mat.p85.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p85.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p85, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="90" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p90.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p90.value}"/>
+                                            <h:outputText value="#{mat.p90.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p90.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p90, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="95" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p95.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p95.value}"/>
+                                            <h:outputText value="#{mat.p95.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p95.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p95, mxi)}"/>
+                                            </p:inputNumber>
                                         </p:column>
                                         <p:column headerText="100" style="text-align: center; width: auto">
-                                            <h:outputText value="#{mat.p100.value}   "/>
-                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p100.value}"/>
+                                            <h:outputText value="#{mat.p100.valorNodo.cantidad}"/>
+                                            <h:outputText value="       "/>
+                                            <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p100.value}">
+                                                <p:ajax event="click" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p100, mxi)}"/>
+                                            </p:inputNumber>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                                <h:panelGrid style="margin: 0 auto;">
+                                    <p:dataTable id="dtMtxPoints" value="#{registroVentaBean.selectDataMatrix}"
+                                                 var="point" tableStyle="width:auto">
+                                        <f:facet name="header">
+                                            <h:outputText value="DETALLE DE VENTA"/>
+                                        </f:facet>
+                                        <p:column style="text-align: center; width: auto">
+                                            <h:outputText value="#{point.variedad}"/>
+                                        </p:column>
+                                        <p:column style="text-align: center; width: auto">
+                                            <h:outputText value="#{point.value}"/>
+                                        </p:column>
+                                        <p:column style="text-align: center; width: auto">
+                                            <h:outputText value="#{point.gradoLogitud}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </h:panelGrid>
                             </p:outputPanel>
                         </p:panel>
                     </p:tab>
-                    <p:tab id="final" title="Finalizar">
-                        <p:panel>
-                            <h:panelGrid columns="4" cellpadding="5">
-                                <p:outputLabel value="Cliente:"/>
-                                <p:outputLabel value="#{registroVentaBean.selectedCliente.empresa}"/>
-                                <p:outputLabel value="Sub-Cliente:"/>
-                                <p:outputLabel value="#{registroVentaBean.selectedSubCliente.empresa}"/>
-                                <p:outputLabel value="Agencia de Carga:"/>
-
-
-                            </h:panelGrid>
-                            <p:commandButton value="Generar Venta" update=":fventa" process="@this"/>
-                        </p:panel>
-                    </p:tab>
                 </p:wizard>
             </h:form>
         </div>
-        <script type="text/javascript">
-            function handleLoginRequest(xhr, status, args) {
-                if (args.loggerOut) {
-                    location.href = args.ruta;
-                }
-            }
-        </script>
 
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
             <f:facet name="start">

@@ -37,6 +37,7 @@ import com.betel.flowers.service.TipoCajaService;
 import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.bean.util.ClasificarMalla;
 import com.betel.flowers.web.bean.util.Malla;
+import com.betel.flowers.web.bean.util.PointMatrix;
 import com.betel.flowers.web.bean.util.RegistroDetalleVenta;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
@@ -47,6 +48,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import org.apache.commons.lang3.ObjectUtils;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 
@@ -85,6 +87,7 @@ public class RegistroVentaBean implements Serializable {
     //MATRIX
     private MatrizDisponibilidad dataMatrix;
     private List<Malla> malla;
+    private List<PointMatrix> selectDataMatrix;
     //SKIP
     private Boolean skip;
 
@@ -139,9 +142,22 @@ public class RegistroVentaBean implements Serializable {
         this.variedadesCaja = new ArrayList<>();
         this.dataMatrix = new MatrizDisponibilidad();
         this.malla = new ArrayList<>();
+        this.selectDataMatrix = new ArrayList<>();
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
             this.subClientes = new ArrayList<>();
+        }
+    }
+
+    public void addDetailPointMatrix(PointMatrix px, int mxi) {
+        if (px.getValue() != 0 && px.getValue() != px.getValorNodo().getCantidad()) {
+            Integer value = px.getValue();
+            Integer cantidad = px.getValorNodo().getCantidad();
+            this.selectDataMatrix.add(px);
+            px.getValorNodo().setCantidad(cantidad - value);
+            if (mxi >= 0 && mxi < this.malla.size()) {
+                this.malla.get(mxi).updatePoint(px);
+            }
         }
     }
 
@@ -460,6 +476,14 @@ public class RegistroVentaBean implements Serializable {
 
     public void setMalla(List<Malla> malla) {
         this.malla = malla;
+    }
+
+    public List<PointMatrix> getSelectDataMatrix() {
+        return selectDataMatrix;
+    }
+
+    public void setSelectDataMatrix(List<PointMatrix> selectDataMatrix) {
+        this.selectDataMatrix = selectDataMatrix;
     }
 
 }

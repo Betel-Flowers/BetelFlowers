@@ -38,7 +38,7 @@ public class ClasificarMalla implements Serializable {
                 for (ValorNodo value : node.getValoresNodo()) {
                     this.points.add(new PointMatrix(node.getVariedad().getNombre(),
                             value.getLongitud() + "",
-                            value.getCantidad(),
+                            0,
                             value));
                 }
             }
