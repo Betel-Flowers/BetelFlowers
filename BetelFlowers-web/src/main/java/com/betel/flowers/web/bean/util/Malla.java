@@ -7,6 +7,8 @@ package com.betel.flowers.web.bean.util;
 
 import com.betel.flowers.model.Variedad;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -35,10 +37,12 @@ public class Malla implements Serializable {
     private PointMatrix p95;
     private PointMatrix p100;
 
+    private List<PointMatrix> points;
+
     public Malla() {
         this.variedad = new Variedad();
+        this.points = new ArrayList<>();
         this.contructMatrix();
-
     }
 
     public Malla(Variedad variedad) {
@@ -64,6 +68,56 @@ public class Malla implements Serializable {
         this.p90 = new PointMatrix();
         this.p95 = new PointMatrix();
         this.p100 = new PointMatrix();
+    }
+
+    public void loadVariedadList(Variedad variedad) {
+        this.p20.setVariadad(variedad);
+        this.p20.setGradoLogitud("20");
+        
+        this.p25.setVariadad(variedad);
+        this.p25.setGradoLogitud("25");
+        
+        this.p30.setVariadad(variedad);
+        this.p30.setGradoLogitud("30");
+        
+        this.p35.setVariadad(variedad);
+        this.p35.setGradoLogitud("35");
+        
+        this.p40.setVariadad(variedad);
+        this.p40.setGradoLogitud("40");
+        
+        this.p45.setVariadad(variedad);
+        this.p45.setGradoLogitud("45");
+        
+        this.p50.setVariadad(variedad);
+        this.p50.setGradoLogitud("50");
+        
+        this.p55.setVariadad(variedad);
+        this.p55.setGradoLogitud("55");
+        
+        this.p60.setVariadad(variedad);
+        this.p60.setGradoLogitud("60");
+        
+        this.p65.setVariadad(variedad);
+        this.p65.setGradoLogitud("65");
+        
+        this.p70.setVariadad(variedad);
+        this.p70.setGradoLogitud("70");
+        
+        this.p75.setVariadad(variedad);
+        this.p75.setGradoLogitud("75");
+        
+        this.p80.setVariadad(variedad);
+        this.p80.setGradoLogitud("80");
+        
+        this.p85.setVariadad(variedad);
+        this.p85.setGradoLogitud("85");
+        
+        this.p90.setVariadad(variedad);
+        this.p90.setGradoLogitud("90");
+        
+        this.p100.setVariadad(variedad);
+        this.p100.setGradoLogitud("100");
     }
 
     public void updatePoint(PointMatrix px) {
@@ -265,5 +319,13 @@ public class Malla implements Serializable {
 
     public void setP100(PointMatrix p100) {
         this.p100 = p100;
+    }
+
+    public List<PointMatrix> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<PointMatrix> points) {
+        this.points = points;
     }
 }

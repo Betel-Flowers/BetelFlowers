@@ -17,35 +17,46 @@ import java.util.List;
  * @author luis
  */
 public class ClasificarMalla implements Serializable {
-
+    
     private static final long serialVersionUID = -3632171759644997376L;
-
+    
     private List<Malla> mallas;
     private MatrizDisponibilidad matriz;
     private List<PointMatrix> points;
-
+    
     public ClasificarMalla() {
         this.mallas = new ArrayList<>();
         this.matriz = new MatrizDisponibilidad();
         this.points = new ArrayList<>();
     }
-
+    
     public void clasificar() {
         this.matriz.calcularColumms();
         if (!this.matriz.getColummsLongitud().isEmpty()) {
             for (NodoDisponibilidad node : this.matriz.getVariedades()) {
                 this.mallas.add(new Malla(node.getVariedad()));
                 for (ValorNodo value : node.getValoresNodo()) {
-                    this.points.add(new PointMatrix(node.getVariedad().getNombre(),
-                            value.getLongitud() + "",
-                            0,
-                            value));
+                    PointMatrix pxy = new PointMatrix();
+                    pxy.setVariadad(node.getVariedad());
+                    pxy.setVariadad(node.getVariedad());
+                    pxy.setGradoLogitud(value.getLongitud() + "");
+                    pxy.setValue(0);
+                    pxy.setValorNodo(value);
+                    this.points.add(pxy);
                 }
             }
         }
+        
+        for (int i = 0; i < this.matriz.getVariedades().size(); i++) {
+            if (this.mallas.size() == this.matriz.getVariedades().size()) {
+                this.mallas.get(i).setVariedad(this.matriz.getVariedades().get(i).getVariedad());
+                this.mallas.get(i).loadVariedadList(this.matriz.getVariedades().get(i).getVariedad());
+            }
+        }
+        
         for (int i = 0; i < this.mallas.size(); i++) {
             for (int j = 0; j < this.points.size(); j++) {
-                if (this.mallas.get(i).getVariedad().getNombre().equals(this.points.get(j).getVariedad())) {
+                if (this.mallas.get(i).getVariedad().getNombre().equals(this.points.get(j).getVariadad().getNombre())) {
                     switch (this.points.get(j).getGradoLogitud()) {
                         case "20":
                             this.mallas.get(i).setP20(this.points.get(j));
@@ -104,13 +115,13 @@ public class ClasificarMalla implements Serializable {
             }
         }
     }
-
+    
     public void setMatriz(MatrizDisponibilidad matriz) {
         this.matriz = matriz;
     }
-
+    
     public List<Malla> getMallas() {
         return mallas;
     }
-
+    
 }

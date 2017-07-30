@@ -48,7 +48,6 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import org.apache.commons.lang3.ObjectUtils;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 
@@ -150,12 +149,13 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public void addDetailPointMatrix(PointMatrix px, int mxi) {
-        if (px.getValue() != 0 && px.getValue() != px.getValorNodo().getCantidad()) {
-            Integer value = px.getValue();
+        if (px.getValue() != 0) {
+            Integer value = Math.abs(px.getValue());
             Integer cantidad = px.getValorNodo().getCantidad();
             this.selectDataMatrix.add(px);
             px.getValorNodo().setCantidad(cantidad - value);
             if (mxi >= 0 && mxi < this.malla.size()) {
+                px.setNumeroTallosRamo(this.findStocksExportacion.getNumeroTallosRamo());
                 this.malla.get(mxi).updatePoint(px);
             }
         }
@@ -276,6 +276,14 @@ public class RegistroVentaBean implements Serializable {
         List<ItemVariedadVentaEmpaque> list = new ArrayList<>();
         if (subList.getDetalleCajaVenta() != null && !subList.getDetalleCajaVenta().isEmpty()) {
             list = subList.getDetalleCajaVenta();
+        }
+        return list;
+    }
+
+    public List<String> extractPuntosCorteNode(List<RegistroExportacion> registros) {
+        List<String> list = new ArrayList<>();
+        for(RegistroExportacion item : registros){
+            list.add(item.getPuntoCorte());
         }
         return list;
     }
