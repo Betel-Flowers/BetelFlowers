@@ -17,23 +17,19 @@ public class ItemPrecio {
     private Integer longitud;
     private String glongitud;
     private Double min;
-    private Double max;
 
     public ItemPrecio() {
         this.min = 0d;
-        this.max = 0d;
     }
 
     public ItemPrecio(String glongitud) {
         this.glongitud = glongitud;
         this.min = 0d;
-        this.max = 0d;
     }
 
     public ItemPrecio(Integer longitud) {
         this.longitud = longitud;
         this.min = 0d;
-        this.max = 0d;
     }
 
     public Integer getLongitud() {
@@ -58,14 +54,6 @@ public class ItemPrecio {
 
     public void setMin(Double min) {
         this.min = min;
-    }
-
-    public Double getMax() {
-        return max;
-    }
-
-    public void setMax(Double max) {
-        this.max = max;
     }
 
 }
