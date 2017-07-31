@@ -17,20 +17,36 @@ public class PointMatrix implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private int co;
+    private int cf;
+    private String tipoCaja;
+    private String marcaCaja;
     private Variedad variadad;
     private String gradoLogitud;//nombre de la columna
     private String puntoCorte;
     private Integer numeroTallosRamo;
     private Integer value; // numero de tallos
+    private Double precioUnit;
+    private Double precioMin;
+    private Double subTotal;
     private ValorNodo valorNodo;
 
     public PointMatrix() {
+        this.co = 0;
+        this.cf = 0;
+        this.tipoCaja = "";
+        this.marcaCaja = "";
         this.gradoLogitud = "";
         this.value = 0;
+        this.precioUnit = 0.0;
+        this.precioMin =0.0;
+        this.subTotal = 0.0;
         this.valorNodo = new ValorNodo();
     }
 
     public PointMatrix(Variedad variadad, String gradoLogitud, Integer value, ValorNodo valorNodo) {
+        this.co = 0;
+        this.cf = 0;
         this.variadad = variadad;
         this.gradoLogitud = gradoLogitud;
         this.value = value;
@@ -38,11 +54,15 @@ public class PointMatrix implements Serializable {
     }
 
     public PointMatrix(String gradoLogitud, Integer value) {
+        this.co = 0;
+        this.cf = 0;
         this.gradoLogitud = gradoLogitud;
         this.value = value;
     }
 
     public PointMatrix(Variedad variedad) {
+        this.co = 0;
+        this.cf = 0;
         this.variadad = variedad;
         this.gradoLogitud = "";
         this.value = 0;
@@ -94,6 +114,62 @@ public class PointMatrix implements Serializable {
 
     public void setNumeroTallosRamo(Integer numeroTallosRamo) {
         this.numeroTallosRamo = numeroTallosRamo;
+    }
+
+    public int getCo() {
+        return co;
+    }
+
+    public void setCo(int co) {
+        this.co = co;
+    }
+
+    public int getCf() {
+        return cf;
+    }
+
+    public void setCf(int cf) {
+        this.cf = cf;
+    }
+
+    public Double getPrecioUnit() {
+        return precioUnit;
+    }
+
+    public void setPrecioUnit(Double precioUnit) {
+        this.precioUnit = precioUnit;
+    }
+
+    public Double getPrecioMin() {
+        return precioMin;
+    }
+
+    public void setPrecioMin(Double precioMin) {
+        this.precioMin = precioMin;
+    }
+
+    public Double getSubTotal() {
+        return subTotal = this.precioUnit * (double)(this.value);
+    }
+
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public String getTipoCaja() {
+        return tipoCaja;
+    }
+
+    public void setTipoCaja(String tipoCaja) {
+        this.tipoCaja = tipoCaja;
+    }
+
+    public String getMarcaCaja() {
+        return marcaCaja;
+    }
+
+    public void setMarcaCaja(String marcaCaja) {
+        this.marcaCaja = marcaCaja;
     }
 
 }

@@ -309,7 +309,7 @@
                                         </p:inputNumber>
                                     </p:column>
                                     <p:column headerText="50" style="text-align: center; width: auto">
-                                        <h:outputText value="#{mat.p50.value}     "/>
+                                        <h:outputText value="#{mat.p50.valorNodo.cantidad}     "/>
                                         <h:outputText value="       "/>
                                         <p:inputNumber decimalPlaces="0"  size="4" value="#{mat.p50.value}">
                                             <p:ajax event="dblclick" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p50, mxi)}"/>
@@ -385,17 +385,50 @@
                                             <p:ajax event="dblclick" update=":fventa:dtMtxPoints, :fventa:matrix" listener="#{registroVentaBean.addDetailPointMatrix(mat.p100, mxi)}"/>
                                         </p:inputNumber>
                                     </p:column>
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Nueva Caja" 
+                                                         actionListener="#{registroVentaBean.newCajaMark(evt)}"/>
+                                    </f:facet>
                                 </p:dataTable>
+                                <h:outputText value="&lt;br/&gt;" escape="false" />
                                 <p:dataTable id="dtMtxPoints" value="#{registroVentaBean.selectDataMatrix}"
                                              var="point" editable="true" editMode="cell" tableStyle="width:auto">
                                     <f:facet name="header">
                                         <h:outputText value="DETALLE DE VENTA"/>
                                     </f:facet>
+                                    <p:column headerText="Inicio" style="text-align: center; width: auto">
+                                        <h:outputText value="#{point.co}"/>
+                                    </p:column>
+                                    <p:column headerText="Fin" style="text-align: center; width: auto">
+                                        <h:outputText value="#{point.cf}"/>
+                                    </p:column>
+                                    <p:column headerText="Tipo Caja">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{point.tipoCaja}" /></f:facet>
+                                            <f:facet name="input">
+                                                <h:selectOneMenu value="#{point.tipoCaja}">
+                                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{tipoCajaBean.tipoCajas}" 
+                                                                   var="tipCja" itemLabel="#{tipCja.tipo}" itemValue="#{tipCja.tipo}" />
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
                                     <p:column headerText="Variedad" style="text-align: center; width: auto">
                                         <h:outputText value="#{point.variadad.nombre}"/>
                                     </p:column>
                                     <p:column headerText="Cantidad" style="text-align: center; width: auto">
                                         <h:outputText value="#{point.value}"/>
+                                    </p:column>
+                                    <p:column headerText="Precio Unit.">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{point.precioUnit}" /></f:facet>
+                                            <f:facet name="input"><p:inputNumber value="#{point.precioUnit}" 
+                                                                                 minValue="#{point.precioMin}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Tallos Ramo" style="text-align: center; width: auto">
+                                        <h:outputText value="#{point.numeroTallosRamo}"/>
                                     </p:column>
                                     <p:column headerText="Longitud" style="text-align: center; width: auto">
                                         <h:outputText value="#{point.gradoLogitud}"/>

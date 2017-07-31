@@ -15,9 +15,9 @@ import java.util.List;
  * @author luis
  */
 public class Malla implements Serializable {
-
+    
     private static final long serialVersionUID = 5682312087842209261L;
-
+    
     private Variedad variedad;
     private PointMatrix p20;
     private PointMatrix p25;
@@ -36,20 +36,20 @@ public class Malla implements Serializable {
     private PointMatrix p90;
     private PointMatrix p95;
     private PointMatrix p100;
-
+    
     private List<PointMatrix> points;
-
+    
     public Malla() {
         this.variedad = new Variedad();
         this.points = new ArrayList<>();
         this.contructMatrix();
     }
-
+    
     public Malla(Variedad variedad) {
         this.variedad = variedad;
         this.contructMatrix();
     }
-
+    
     private void contructMatrix() {
         this.p20 = new PointMatrix();
         this.p25 = new PointMatrix();
@@ -69,7 +69,7 @@ public class Malla implements Serializable {
         this.p95 = new PointMatrix();
         this.p100 = new PointMatrix();
     }
-
+    
     public void loadVariedadList(Variedad variedad) {
         this.p20.setVariadad(variedad);
         this.p20.setGradoLogitud("20");
@@ -118,8 +118,10 @@ public class Malla implements Serializable {
         
         this.p100.setVariadad(variedad);
         this.p100.setGradoLogitud("100");
+        
+        this.loadPrecioMin(variedad);
     }
-
+    
     public void updatePoint(PointMatrix px) {
         switch (px.getGradoLogitud()) {
             case "20":
@@ -176,155 +178,216 @@ public class Malla implements Serializable {
             default:
         }
     }
-
+    
+    private void loadPrecioMin(Variedad variedad) {
+        if (variedad.getPrecios() != null && !variedad.getPrecios().isEmpty()) {
+            for (int i = 0; i < variedad.getPrecios().size(); i++) {
+                switch (variedad.getPrecios().get(i).getLongitud() + "") {
+                    case "20":
+                        this.getP20().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "25":
+                        this.getP25().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "30":
+                        this.getP30().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "35":
+                        this.getP35().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "40":
+                        this.getP40().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "45":
+                        this.getP45().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "50":
+                        this.getP50().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "55":
+                        this.getP55().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "60":
+                        this.getP60().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "65":
+                        this.getP65().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "70":
+                        this.getP70().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "75":
+                        this.getP75().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "80":
+                        this.getP80().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "85":
+                        this.getP85().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "90":
+                        this.getP90().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "95":
+                        this.getP95().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    case "100":
+                        this.getP100().setPrecioMin(variedad.getPrecios().get(i).getMin());
+                        break;
+                    default:
+                }
+            }
+        }
+    }
+    
     public Variedad getVariedad() {
         return variedad;
     }
-
+    
     public void setVariedad(Variedad variedad) {
         this.variedad = variedad;
     }
-
+    
     public PointMatrix getP20() {
         return p20;
     }
-
+    
     public void setP20(PointMatrix p20) {
         this.p20 = p20;
     }
-
+    
     public PointMatrix getP25() {
         return p25;
     }
-
+    
     public void setP25(PointMatrix p25) {
         this.p25 = p25;
     }
-
+    
     public PointMatrix getP30() {
         return p30;
     }
-
+    
     public void setP30(PointMatrix p30) {
         this.p30 = p30;
     }
-
+    
     public PointMatrix getP35() {
         return p35;
     }
-
+    
     public void setP35(PointMatrix p35) {
         this.p35 = p35;
     }
-
+    
     public PointMatrix getP40() {
         return p40;
     }
-
+    
     public void setP40(PointMatrix p40) {
         this.p40 = p40;
     }
-
+    
     public PointMatrix getP45() {
         return p45;
     }
-
+    
     public void setP45(PointMatrix p45) {
         this.p45 = p45;
     }
-
+    
     public PointMatrix getP50() {
         return p50;
     }
-
+    
     public void setP50(PointMatrix p50) {
         this.p50 = p50;
     }
-
+    
     public PointMatrix getP55() {
         return p55;
     }
-
+    
     public void setP55(PointMatrix p55) {
         this.p55 = p55;
     }
-
+    
     public PointMatrix getP60() {
         return p60;
     }
-
+    
     public void setP60(PointMatrix p60) {
         this.p60 = p60;
     }
-
+    
     public PointMatrix getP65() {
         return p65;
     }
-
+    
     public void setP65(PointMatrix p65) {
         this.p65 = p65;
     }
-
+    
     public PointMatrix getP70() {
         return p70;
     }
-
+    
     public void setP70(PointMatrix p70) {
         this.p70 = p70;
     }
-
+    
     public PointMatrix getP75() {
         return p75;
     }
-
+    
     public void setP75(PointMatrix p75) {
         this.p75 = p75;
     }
-
+    
     public PointMatrix getP80() {
         return p80;
     }
-
+    
     public void setP80(PointMatrix p80) {
         this.p80 = p80;
     }
-
+    
     public PointMatrix getP85() {
         return p85;
     }
-
+    
     public void setP85(PointMatrix p85) {
         this.p85 = p85;
     }
-
+    
     public PointMatrix getP90() {
         return p90;
     }
-
+    
     public void setP90(PointMatrix p90) {
         this.p90 = p90;
     }
-
+    
     public PointMatrix getP95() {
         return p95;
     }
-
+    
     public void setP95(PointMatrix p95) {
         this.p95 = p95;
     }
-
+    
     public PointMatrix getP100() {
         return p100;
     }
-
+    
     public void setP100(PointMatrix p100) {
         this.p100 = p100;
     }
-
+    
     public List<PointMatrix> getPoints() {
         return points;
     }
-
+    
     public void setPoints(List<PointMatrix> points) {
         this.points = points;
     }

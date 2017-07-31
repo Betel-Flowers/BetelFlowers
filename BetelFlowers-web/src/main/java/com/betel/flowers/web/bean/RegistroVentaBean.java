@@ -13,7 +13,6 @@ import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Dae;
 import com.betel.flowers.model.DetalleVenta;
 import com.betel.flowers.model.Especie;
-import com.betel.flowers.model.ItemPrecio;
 import com.betel.flowers.model.ItemVariedadVentaEmpaque;
 import com.betel.flowers.model.MatrizDisponibilidad;
 import com.betel.flowers.model.Pais;
@@ -42,6 +41,7 @@ import com.betel.flowers.web.bean.util.RegistroDetalleVenta;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -77,16 +77,13 @@ public class RegistroVentaBean implements Serializable {
     private RegistroExportacion findStocksExportacion;
     private List<ItemVariedadVentaEmpaque> variedadesCaja;
     private RegistroDetalleVenta detalleVenta;
-    //CONTROL DE PRECIOS VARIEDAD LONGITUD
-    private Double priceUnit = new Double(0);
-    private Boolean AddflowersCaja;
-    private Boolean AddPriceflowersTallo;
-    private Double priceMax = new Double(0);
-    private Double priceMin = new Double(0);
     //MATRIX
     private MatrizDisponibilidad dataMatrix;
     private List<Malla> malla;
     private List<PointMatrix> selectDataMatrix;
+    //CAJAS
+    private int co;
+    private int cf;
     //SKIP
     private Boolean skip;
 
@@ -132,11 +129,6 @@ public class RegistroVentaBean implements Serializable {
         this.frios = new ArrayList<>();
         this.findStocksExportacion = new RegistroExportacion();
         this.detalleVenta = new RegistroDetalleVenta();
-        this.priceUnit = 0d;
-        this.priceMin = 0d;
-        this.priceMax = 100.00;
-        this.AddflowersCaja = Boolean.TRUE;
-        this.AddPriceflowersTallo = Boolean.FALSE;
         this.skip = Boolean.FALSE;
         this.variedadesCaja = new ArrayList<>();
         this.dataMatrix = new MatrizDisponibilidad();
@@ -149,13 +141,19 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public void addDetailPointMatrix(PointMatrix px, int mxi) {
+        if (this.co == 0) {
+            this.co++;
+        }
         if (px.getValue() != 0) {
-            Integer value = Math.abs(px.getValue());
+            Integer value = px.getValue();
             Integer cantidad = px.getValorNodo().getCantidad();
             this.selectDataMatrix.add(px);
             px.getValorNodo().setCantidad(cantidad - value);
             if (mxi >= 0 && mxi < this.malla.size()) {
+                this.cf++;
                 px.setNumeroTallosRamo(this.findStocksExportacion.getNumeroTallosRamo());
+                px.setCo(this.co);
+                px.setCf(this.cf);
                 this.malla.get(mxi).updatePoint(px);
             }
         }
@@ -225,40 +223,6 @@ public class RegistroVentaBean implements Serializable {
         }
     }
 
-    public void loadVariedad() {
-        Variedad variedad = this.variedadService.findByCodigo(this.findStocksExportacion.getVariedad().getCodigo());
-        if (variedad.getCodigo() != null) {
-            this.findStocksExportacion.setVariedad(variedad);
-            loadPrcioUnitVariedadLongitud();
-            this.priceUnit = 0d;
-        }
-    }
-
-    public void loadPrcioUnitVariedadLongitud() {
-        if (this.findStocksExportacion.getVariedad() != null) {
-            if (this.findStocksExportacion.getVariedad().getGirasol()) {
-                if (this.findStocksExportacion.getGlongitud() != null
-                        && !this.findStocksExportacion.getGlongitud().equals("")) {
-                    for (ItemPrecio gPrice : this.findStocksExportacion.getVariedad().getPrecios()) {
-                        if (this.findStocksExportacion.getGlongitud().equals(gPrice.getGlongitud())) {
-                            this.setPriceMin(gPrice.getMin());
-                            this.setPriceMax(gPrice.getMax());
-                            break;
-                        }
-                    }
-                }
-            } else {
-                for (ItemPrecio lPrice : this.findStocksExportacion.getVariedad().getPrecios()) {
-                    if (this.findStocksExportacion.getLongitud() == lPrice.getLongitud()) {
-                        this.setPriceMin(lPrice.getMin());
-                        this.setPriceMax(lPrice.getMax());
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     public void addCajasToDetalle(ActionEvent evt) {
         if (this.variedadesCaja != null && !this.variedadesCaja.isEmpty()) {
             this.detalleVenta.getNuevo().setDetalleCajaVenta(this.variedadesCaja);
@@ -282,10 +246,29 @@ public class RegistroVentaBean implements Serializable {
 
     public List<String> extractPuntosCorteNode(List<RegistroExportacion> registros) {
         List<String> list = new ArrayList<>();
-        for(RegistroExportacion item : registros){
+        Variedad variedad = new Variedad();
+        for (RegistroExportacion item : registros) {
             list.add(item.getPuntoCorte());
+            variedad = item.getVariedad();
+        }
+        list = this.uniqueString(list);
+        if (list.isEmpty()) {
+            list = variedad.getPuntosCorte();
         }
         return list;
+    }
+
+    public void newCajaMark(ActionEvent evt) {
+        this.co++;
+        this.cf = 0;
+    }
+
+    private List<String> uniqueString(List<String> lista) {
+        HashSet<String> hs = new HashSet<String>();
+        hs.addAll(lista);
+        lista.clear();
+        lista.addAll(hs);
+        return lista;
     }
 
     public void removeItemVariedadCaja(ActionEvent evt, ItemVariedadVentaEmpaque select) {
@@ -298,14 +281,6 @@ public class RegistroVentaBean implements Serializable {
             } else {
                 FacesUtil.addMessageError(null, "No se ha eliminado.");
             }
-        }
-    }
-
-    public void enableAgregarTallos() {
-        if (this.priceUnit <= this.priceMax && this.priceUnit >= this.priceMin) {
-            this.setAddflowersCaja(Boolean.FALSE);
-        } else {
-            this.setAddflowersCaja(Boolean.TRUE);
         }
     }
 
@@ -414,46 +389,6 @@ public class RegistroVentaBean implements Serializable {
         this.detalleVenta = detalleVenta;
     }
 
-    public Double getPriceUnit() {
-        return priceUnit;
-    }
-
-    public void setPriceUnit(Double priceUnit) {
-        this.priceUnit = priceUnit;
-    }
-
-    public Boolean getAddflowersCaja() {
-        return AddflowersCaja;
-    }
-
-    public void setAddflowersCaja(Boolean AddflowersCaja) {
-        this.AddflowersCaja = AddflowersCaja;
-    }
-
-    public Double getPriceMax() {
-        return priceMax;
-    }
-
-    public void setPriceMax(Double priceMax) {
-        this.priceMax = priceMax;
-    }
-
-    public Double getPriceMin() {
-        return priceMin;
-    }
-
-    public void setPriceMin(Double priceMin) {
-        this.priceMin = priceMin;
-    }
-
-    public Boolean getAddPriceflowersTallo() {
-        return AddPriceflowersTallo;
-    }
-
-    public void setAddPriceflowersTallo(Boolean AddPriceflowersTallo) {
-        this.AddPriceflowersTallo = AddPriceflowersTallo;
-    }
-
     public List<ItemVariedadVentaEmpaque> getVariedadesCaja() {
         return variedadesCaja;
     }
@@ -492,6 +427,22 @@ public class RegistroVentaBean implements Serializable {
 
     public void setSelectDataMatrix(List<PointMatrix> selectDataMatrix) {
         this.selectDataMatrix = selectDataMatrix;
+    }
+
+    public int getCo() {
+        return co;
+    }
+
+    public void setCo(int co) {
+        this.co = co;
+    }
+
+    public int getCf() {
+        return cf;
+    }
+
+    public void setCf(int cf) {
+        this.cf = cf;
     }
 
 }
