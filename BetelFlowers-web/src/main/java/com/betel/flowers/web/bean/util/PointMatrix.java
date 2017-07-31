@@ -19,6 +19,7 @@ public class PointMatrix implements Serializable {
 
     private int co;
     private int cf;
+    private String codeMark;
     private String tipoCaja;
     private String marcaCaja;
     private Variedad variadad;
@@ -38,8 +39,8 @@ public class PointMatrix implements Serializable {
         this.marcaCaja = "";
         this.gradoLogitud = "";
         this.value = 0;
-        this.precioUnit = 0.0;
         this.precioMin =0.0;
+        this.precioUnit = 0.0;
         this.subTotal = 0.0;
         this.valorNodo = new ValorNodo();
     }
@@ -149,7 +150,7 @@ public class PointMatrix implements Serializable {
     }
 
     public Double getSubTotal() {
-        return subTotal = this.precioUnit * (double)(this.value);
+        return subTotal = (double)(value) * precioUnit;
     }
 
     public void setSubTotal(Double subTotal) {
@@ -170,6 +171,14 @@ public class PointMatrix implements Serializable {
 
     public void setMarcaCaja(String marcaCaja) {
         this.marcaCaja = marcaCaja;
+    }
+
+    public String getCodeMark() {
+        return codeMark;
+    }
+
+    public void setCodeMark(String codeMark) {
+        this.codeMark = codeMark;
     }
 
 }

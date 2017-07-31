@@ -256,7 +256,7 @@
                             <p:messages id="messages"  globalOnly="true" showDetail="true" severity="info, error, warning"/>
                             <p:outputPanel id="outItems">
                                 <p:dataTable id="matrix" value="#{registroVentaBean.malla}" var="mat"
-                                             rowIndexVar="mxi" tableStyle="width:auto">
+                                             rowIndexVar="mxi">
                                     <f:facet name="header">
                                         <h:outputText value="DISPONIBILIDAD DE FLOR EN BODEGA"/>
                                     </f:facet>
@@ -392,7 +392,7 @@
                                 </p:dataTable>
                                 <h:outputText value="&lt;br/&gt;" escape="false" />
                                 <p:dataTable id="dtMtxPoints" value="#{registroVentaBean.selectDataMatrix}"
-                                             var="point" editable="true" editMode="cell" tableStyle="width:auto">
+                                             var="point" editable="true" editMode="cell">
                                     <f:facet name="header">
                                         <h:outputText value="DETALLE DE VENTA"/>
                                     </f:facet>
@@ -414,6 +414,18 @@
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
+                                    <p:column headerText="Marca Caja">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{point.marcaCaja}" /></f:facet>
+                                            <f:facet name="input">
+                                                <h:selectOneMenu value="#{point.marcaCaja}">
+                                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{registroVentaBean.selectedCliente.cajas}" var="imarCja"
+                                                                   itemLabel="#{imarCja.nombre}" itemValue="#{imarCja.nombre}"/>
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
                                     <p:column headerText="Variedad" style="text-align: center; width: auto">
                                         <h:outputText value="#{point.variadad.nombre}"/>
                                     </p:column>
@@ -424,7 +436,9 @@
                                         <p:cellEditor>
                                             <f:facet name="output"><h:outputText value="#{point.precioUnit}" /></f:facet>
                                             <f:facet name="input"><p:inputNumber value="#{point.precioUnit}" 
-                                                                                 minValue="#{point.precioMin}"/></f:facet>
+                                                                                 minValue="#{point.precioMin}">
+                                                    <p:ajax update=":fventa:dtMtxPoints"/>
+                                                </p:inputNumber></f:facet>
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column headerText="Tallos Ramo" style="text-align: center; width: auto">
@@ -439,11 +453,23 @@
                                             <f:facet name="input">
                                                 <h:selectOneMenu value="#{point.puntoCorte}">
                                                     <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                                    <f:selectItems value="#{registroVentaBean.extractPuntosCorteNode(point.valorNodo.registros)}" 
+                                                    <f:selectItems value="#{registroVentaBean.extractPuntosCorteNode(point.valorNodo.registros,point.variadad)}" 
                                                                    var="ptCort" itemLabel="#{ptCort}" itemValue="#{ptCort}" />
                                                 </h:selectOneMenu>
                                             </f:facet>
                                         </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Codigo" style="text-align: center; width: auto">
+                                        <h:outputText value="#{point.codeMark}"/>
+                                    </p:column>
+                                    <p:column headerText="SubTotal" style="text-align: center; width: auto">
+                                        <h:outputText value="#{point.subTotal}"/>
+                                    </p:column>
+                                    <p:column headerText="Borrar" style="text-align: center;width: auto">
+                                        <p:commandButton value="Eliminar" update=":fventa:dtMtxPoints"
+                                                         actionListener="#{registroVentaBean.deleteItemDetail(evt)}">
+                                            <f:setPropertyActionListener value="#{point}" target="#{registroVentaBean.selectPointMatrix}" />
+                                        </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
                             </p:outputPanel>

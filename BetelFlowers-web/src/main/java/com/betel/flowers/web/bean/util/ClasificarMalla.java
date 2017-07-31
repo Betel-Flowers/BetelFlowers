@@ -17,19 +17,19 @@ import java.util.List;
  * @author luis
  */
 public class ClasificarMalla implements Serializable {
-    
+
     private static final long serialVersionUID = -3632171759644997376L;
-    
+
     private List<Malla> mallas;
     private MatrizDisponibilidad matriz;
     private List<PointMatrix> points;
-    
+
     public ClasificarMalla() {
         this.mallas = new ArrayList<>();
         this.matriz = new MatrizDisponibilidad();
         this.points = new ArrayList<>();
     }
-    
+
     public void clasificar() {
         this.matriz.calcularColumms();
         if (!this.matriz.getColummsLongitud().isEmpty()) {
@@ -46,14 +46,14 @@ public class ClasificarMalla implements Serializable {
                 }
             }
         }
-        
+
         for (int i = 0; i < this.matriz.getVariedades().size(); i++) {
             if (this.mallas.size() == this.matriz.getVariedades().size()) {
                 this.mallas.get(i).setVariedad(this.matriz.getVariedades().get(i).getVariedad());
                 this.mallas.get(i).loadVariedadList(this.matriz.getVariedades().get(i).getVariedad());
             }
         }
-        
+
         for (int i = 0; i < this.mallas.size(); i++) {
             for (int j = 0; j < this.points.size(); j++) {
                 if (this.mallas.get(i).getVariedad().getNombre().equals(this.points.get(j).getVariadad().getNombre())) {
@@ -114,14 +114,18 @@ public class ClasificarMalla implements Serializable {
                 }
             }
         }
+
+        for (int i = 0; i < this.mallas.size(); i++) {
+            this.mallas.get(i).loadPrecioMin(this.mallas.get(i).getVariedad());
+        }
     }
-    
+
     public void setMatriz(MatrizDisponibilidad matriz) {
         this.matriz = matriz;
     }
-    
+
     public List<Malla> getMallas() {
         return mallas;
     }
-    
+
 }

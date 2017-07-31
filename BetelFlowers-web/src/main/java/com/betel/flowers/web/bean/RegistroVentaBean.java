@@ -11,7 +11,6 @@ import com.betel.flowers.model.Ciudad;
 import com.betel.flowers.model.Cliente;
 import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Dae;
-import com.betel.flowers.model.DetalleVenta;
 import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.ItemVariedadVentaEmpaque;
 import com.betel.flowers.model.MatrizDisponibilidad;
@@ -28,16 +27,12 @@ import com.betel.flowers.service.ClienteService;
 import com.betel.flowers.service.CuartoFrioCargueraService;
 import com.betel.flowers.service.DaeService;
 import com.betel.flowers.service.EspecieService;
-import com.betel.flowers.service.MarcaCajaService;
 import com.betel.flowers.service.PaisService;
 import com.betel.flowers.service.RegistroExportacionService;
 import com.betel.flowers.service.TerminoExportacionService;
-import com.betel.flowers.service.TipoCajaService;
-import com.betel.flowers.service.VariedadService;
 import com.betel.flowers.web.bean.util.ClasificarMalla;
 import com.betel.flowers.web.bean.util.Malla;
 import com.betel.flowers.web.bean.util.PointMatrix;
-import com.betel.flowers.web.bean.util.RegistroDetalleVenta;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -76,11 +71,11 @@ public class RegistroVentaBean implements Serializable {
     //STOCK'S REGISTRO EXPORTACION
     private RegistroExportacion findStocksExportacion;
     private List<ItemVariedadVentaEmpaque> variedadesCaja;
-    private RegistroDetalleVenta detalleVenta;
     //MATRIX
     private MatrizDisponibilidad dataMatrix;
     private List<Malla> malla;
     private List<PointMatrix> selectDataMatrix;
+    private PointMatrix selectPointMatrix;
     //CAJAS
     private int co;
     private int cf;
@@ -104,15 +99,9 @@ public class RegistroVentaBean implements Serializable {
     @Inject
     private RegistroExportacionService registroExportacionservice;
     @Inject
-    private VariedadService variedadService;
-    @Inject
     private EspecieService especieService;
     @Inject
     private BodegaVirtualService bodegaService;
-    @Inject
-    private TipoCajaService tipoCajaService;
-    @Inject
-    private MarcaCajaService marcaCajaService;
 
     @PostConstruct
     public void init() {
@@ -128,11 +117,11 @@ public class RegistroVentaBean implements Serializable {
         this.destino = new ArrayList<>();
         this.frios = new ArrayList<>();
         this.findStocksExportacion = new RegistroExportacion();
-        this.detalleVenta = new RegistroDetalleVenta();
         this.skip = Boolean.FALSE;
         this.variedadesCaja = new ArrayList<>();
         this.dataMatrix = new MatrizDisponibilidad();
         this.malla = new ArrayList<>();
+        this.selectPointMatrix = null;
         this.selectDataMatrix = new ArrayList<>();
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
@@ -147,14 +136,34 @@ public class RegistroVentaBean implements Serializable {
         if (px.getValue() != 0) {
             Integer value = px.getValue();
             Integer cantidad = px.getValorNodo().getCantidad();
-            this.selectDataMatrix.add(px);
+            PointMatrix point = new PointMatrix();
             px.getValorNodo().setCantidad(cantidad - value);
+            String code = this.selectedCliente.getCodigo() + "" + px.getVariadad().getCodigo() + "" + value + "" + px.getGradoLogitud() + "" + co + "" + cf;
             if (mxi >= 0 && mxi < this.malla.size()) {
                 this.cf++;
-                px.setNumeroTallosRamo(this.findStocksExportacion.getNumeroTallosRamo());
-                px.setCo(this.co);
-                px.setCf(this.cf);
+                point.setVariadad(px.getVariadad());
+                point.setGradoLogitud(px.getGradoLogitud());
+                point.setValue(value);
+                point.getValorNodo().setCantidad(px.getValorNodo().getCantidad());
+                point.getValorNodo().setGlongitud(px.getValorNodo().getGlongitud());
+                point.getValorNodo().setLongitud(px.getValorNodo().getLongitud());
+                point.getValorNodo().setRegistros(px.getValorNodo().getRegistros());
+                point.setPrecioMin(px.getPrecioMin());
+                point.setNumeroTallosRamo(this.findStocksExportacion.getNumeroTallosRamo());
+                point.setCo(this.co);
+                point.setCf(this.cf);
+                point.setCodeMark(code);
+                this.selectDataMatrix.add(point);
                 this.malla.get(mxi).updatePoint(px);
+            }
+        }
+    }
+
+    public void deleteItemDetail(ActionEvent evt) {
+        if (this.selectPointMatrix != null) {
+            Boolean exito = this.selectDataMatrix.remove(this.selectPointMatrix);
+            if (exito) {
+                this.selectPointMatrix = null;
             }
         }
     }
@@ -223,33 +232,10 @@ public class RegistroVentaBean implements Serializable {
         }
     }
 
-    public void addCajasToDetalle(ActionEvent evt) {
-        if (this.variedadesCaja != null && !this.variedadesCaja.isEmpty()) {
-            this.detalleVenta.getNuevo().setDetalleCajaVenta(this.variedadesCaja);
-            Integer codeTpCaja = this.detalleVenta.getNuevo().getCajaTipo().getCodigo();
-            Integer codeMrCaja = this.detalleVenta.getNuevo().getMarcaCaja().getCodigo();
-            this.detalleVenta.getNuevo().setCajaTipo(this.tipoCajaService.findByCodigo(codeTpCaja));
-            this.detalleVenta.getNuevo().setMarcaCaja(this.marcaCajaService.findByCodigo(codeMrCaja));
-            this.detalleVenta.add(evt);
-            this.variedadesCaja = new ArrayList<>();
-            this.detalleVenta.setNuevo(new DetalleVenta());
-        }
-    }
-
-    public List<ItemVariedadVentaEmpaque> subListCajaVariedades(DetalleVenta subList) {
-        List<ItemVariedadVentaEmpaque> list = new ArrayList<>();
-        if (subList.getDetalleCajaVenta() != null && !subList.getDetalleCajaVenta().isEmpty()) {
-            list = subList.getDetalleCajaVenta();
-        }
-        return list;
-    }
-
-    public List<String> extractPuntosCorteNode(List<RegistroExportacion> registros) {
+    public List<String> extractPuntosCorteNode(List<RegistroExportacion> registros, Variedad variedad) {
         List<String> list = new ArrayList<>();
-        Variedad variedad = new Variedad();
         for (RegistroExportacion item : registros) {
             list.add(item.getPuntoCorte());
-            variedad = item.getVariedad();
         }
         list = this.uniqueString(list);
         if (list.isEmpty()) {
@@ -381,14 +367,6 @@ public class RegistroVentaBean implements Serializable {
         this.findStocksExportacion = findStocksExportacion;
     }
 
-    public RegistroDetalleVenta getDetalleVenta() {
-        return detalleVenta;
-    }
-
-    public void setDetalleVenta(RegistroDetalleVenta detalleVenta) {
-        this.detalleVenta = detalleVenta;
-    }
-
     public List<ItemVariedadVentaEmpaque> getVariedadesCaja() {
         return variedadesCaja;
     }
@@ -443,6 +421,14 @@ public class RegistroVentaBean implements Serializable {
 
     public void setCf(int cf) {
         this.cf = cf;
+    }
+
+    public PointMatrix getSelectPointMatrix() {
+        return selectPointMatrix;
+    }
+
+    public void setSelectPointMatrix(PointMatrix selectPointMatrix) {
+        this.selectPointMatrix = selectPointMatrix;
     }
 
 }

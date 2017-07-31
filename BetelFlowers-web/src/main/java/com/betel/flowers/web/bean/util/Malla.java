@@ -119,7 +119,6 @@ public class Malla implements Serializable {
         this.p100.setVariadad(variedad);
         this.p100.setGradoLogitud("100");
         
-        this.loadPrecioMin(variedad);
     }
     
     public void updatePoint(PointMatrix px) {
@@ -179,7 +178,7 @@ public class Malla implements Serializable {
         }
     }
     
-    private void loadPrecioMin(Variedad variedad) {
+    public void loadPrecioMin(Variedad variedad) {
         if (variedad.getPrecios() != null && !variedad.getPrecios().isEmpty()) {
             for (int i = 0; i < variedad.getPrecios().size(); i++) {
                 switch (variedad.getPrecios().get(i).getLongitud() + "") {
