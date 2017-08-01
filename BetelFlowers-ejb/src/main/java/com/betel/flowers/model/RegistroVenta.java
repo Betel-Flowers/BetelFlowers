@@ -6,9 +6,7 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
@@ -38,36 +36,21 @@ public class RegistroVenta extends BaseEntity {
 
     @Reference
     private Cliente cliente;
-    @Reference
+
     private SubCliente subCliente;
-    @Reference
-    private MarcaCaja marcaCaja;
-    @Reference
     private Ciudad puertoEmbarque;
-    @Reference
     private Ciudad puertoDestino;
-    @Reference
     private Dae dae;
-    @Reference
     private Carguera agenciaCarga;
-    @Reference
-    private CuartoFrioCarguera cuartoFrio;
-    @Reference
+    private CuartoFrio cuartoFrio;
     private TerminoExportacion termino;
-    @Reference
-    private List<DetalleVenta> detalle;
 
     public RegistroVenta() {
         this.cliente = new Cliente();
         this.subCliente = new SubCliente();
-        this.marcaCaja = new MarcaCaja();
-        this.puertoEmbarque = new Ciudad();
-        this.puertoDestino = new Ciudad();
         this.dae = new Dae();
         this.agenciaCarga = new Carguera();
-        this.cuartoFrio = new CuartoFrioCarguera();
         this.termino = new TerminoExportacion();
-        this.detalle = new ArrayList<>();
     }
 
     public Integer getCodigo() {
@@ -125,7 +108,7 @@ public class RegistroVenta extends BaseEntity {
     public void setObservacion(String observacion) {
         this.observacion = observacion;
     }
-    
+
     public String getBarcode() {
         return barcode;
     }
@@ -166,14 +149,6 @@ public class RegistroVenta extends BaseEntity {
         this.subCliente = subCliente;
     }
 
-    public MarcaCaja getMarcaCaja() {
-        return marcaCaja;
-    }
-
-    public void setMarcaCaja(MarcaCaja marcaCaja) {
-        this.marcaCaja = marcaCaja;
-    }
-
     public Ciudad getPuertoEmbarque() {
         return puertoEmbarque;
     }
@@ -206,11 +181,11 @@ public class RegistroVenta extends BaseEntity {
         this.agenciaCarga = agenciaCarga;
     }
 
-    public CuartoFrioCarguera getCuartoFrio() {
+    public CuartoFrio getCuartoFrio() {
         return cuartoFrio;
     }
 
-    public void setCuartoFrio(CuartoFrioCarguera cuartoFrio) {
+    public void setCuartoFrio(CuartoFrio cuartoFrio) {
         this.cuartoFrio = cuartoFrio;
     }
 
@@ -222,18 +197,10 @@ public class RegistroVenta extends BaseEntity {
         this.termino = termino;
     }
 
-    public List<DetalleVenta> getDetalle() {
-        return detalle;
-    }
-
-    public void setDetalle(List<DetalleVenta> detalle) {
-        this.detalle = detalle;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.codigo);
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -257,6 +224,6 @@ public class RegistroVenta extends BaseEntity {
 
     @Override
     public String toString() {
-        return "RegistroVenta{" + "codigo=" + codigo + ", numberPaking=" + numberPaking + ", numberSRI=" + numberSRI + ", fechaSRI=" + fechaSRI + ", AWB=" + AWB + ", HAW=" + HAWB + ", username=" + username + ", flag=" + flag + ", cliente=" + cliente + ", subCliente=" + subCliente + ", marcaCaja=" + marcaCaja + ", puertoEmbarque=" + puertoEmbarque + ", puertoDestino=" + puertoDestino + ", dae=" + dae + ", agenciaCarga=" + agenciaCarga + ", cuartoFrio=" + cuartoFrio + ", termino=" + termino + '}';
+        return "RegistroVenta{" + "codigo=" + codigo + ", numberPaking=" + numberPaking + ", numberSRI=" + numberSRI + ", fechaSRI=" + fechaSRI + ", AWB=" + AWB + ", HAWB=" + HAWB + ", observacion=" + observacion + ", barcode=" + barcode + ", username=" + username + ", flag=" + flag + ", cliente=" + cliente + ", subCliente=" + subCliente + ", puertoEmbarque=" + puertoEmbarque + ", puertoDestino=" + puertoDestino + ", dae=" + dae + ", agenciaCarga=" + agenciaCarga + ", cuartoFrio=" + cuartoFrio + ", termino=" + termino + '}';
     }
 }
