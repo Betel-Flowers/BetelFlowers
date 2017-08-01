@@ -139,6 +139,8 @@ public class RegistroVentaBean implements Serializable {
             PointMatrix point = new PointMatrix();
             px.getValorNodo().setCantidad(cantidad - value);
             String code = this.selectedCliente.getCodigo() + "" + px.getVariadad().getCodigo() + "" + value + "" + px.getGradoLogitud() + "" + co + "" + cf;
+            code = code.replaceAll("BETEL", "");
+            code = code.replace("-", "");
             if (mxi >= 0 && mxi < this.malla.size()) {
                 this.cf++;
                 point.setVariadad(px.getVariadad());
@@ -159,7 +161,8 @@ public class RegistroVentaBean implements Serializable {
         }
     }
 
-    public void deleteItemDetail(ActionEvent evt) {
+    public void deleteItemDetail(ActionEvent evt,PointMatrix point) {
+        this.selectPointMatrix = point;
         if (this.selectPointMatrix != null) {
             Boolean exito = this.selectDataMatrix.remove(this.selectPointMatrix);
             if (exito) {

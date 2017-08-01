@@ -459,7 +459,7 @@
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
-                                    <p:column headerText="Codigo" style="text-align: center; width: auto">
+                                    <p:column headerText="Codigo" style="text-align: center; width: auto; font-size: 10px">
                                         <h:outputText value="#{point.codeMark}"/>
                                     </p:column>
                                     <p:column headerText="SubTotal" style="text-align: center; width: auto">
@@ -467,12 +467,93 @@
                                     </p:column>
                                     <p:column headerText="Borrar" style="text-align: center;width: auto">
                                         <p:commandButton value="Eliminar" update=":fventa:dtMtxPoints"
-                                                         actionListener="#{registroVentaBean.deleteItemDetail(evt)}">
+                                                         actionListener="#{registroVentaBean.deleteItemDetail(evt,point)}">
                                             <f:setPropertyActionListener value="#{point}" target="#{registroVentaBean.selectPointMatrix}" />
                                         </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
                             </p:outputPanel>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="finally" title="Finalizar">
+                        <p:panel header="Verifique los datos de la Venta">
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-edit" value="Cliente"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel value="Contacto:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.nombreContacto}"/>
+
+                                <p:outputLabel value="Empresa:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.empresa}"/>
+
+                                <p:outputLabel value="Cedula/RUC/Pasaporte:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.ruc}"/>
+
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="Local" rendered="#{registroVentaBean.selectedCliente.local}"/>
+                                <p:outputLabel value="Comercializadora" rendered="#{registroVentaBean.selectedCliente.comercializadora}"/>
+                                <p:outputLabel value="Exterior" rendered="#{registroVentaBean.selectedCliente.exterior}"/>
+
+                                <p:outputLabel value="Zona Geografica:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.zona.nombre}"/>
+
+                                <p:outputLabel value="Pais:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.ciudad.pais.nombre}"/>
+
+                                <p:outputLabel value="Ciudad:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.ciudad.nombre}"/>
+
+                                <p:outputLabel value="Dirección:"/>
+                                <p:outputLabel value="#{registroVentaBean.selectedCliente.direccion}"/>
+                            </h:panelGrid>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <p:commandButton icon="fa fa-fw fa-edit" value="Detalle de Venta"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <h:panelGrid columns="5" cellpadding="5">
+                                <p:dataTable value="#{registroVentaBean.selectDataMatrix}"
+                                             var="poxy">
+                                    <f:facet name="header">
+                                        <h:outputText value="DETALLE DE VENTA"/>
+                                    </f:facet>
+                                    <p:column headerText="Inicio" style="text-align: center; width: auto">
+                                        <h:outputText value="#{poxy.co}"/>
+                                    </p:column>
+                                    <p:column headerText="Fin" style="text-align: center; width: auto">
+                                        <h:outputText value="#{poxy.cf}"/>
+                                    </p:column>
+                                    <p:column headerText="Tipo Caja">
+                                        <h:outputText value="#{poxy.tipoCaja}" />
+                                    </p:column>
+                                    <p:column headerText="Marca Caja">
+                                        <h:outputText value="#{poxy.marcaCaja}" />         
+                                    </p:column>
+                                    <p:column headerText="Variedad" style="text-align: center; width: auto">
+                                        <h:outputText value="#{poxy.variadad.nombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Cantidad" style="text-align: center; width: auto">
+                                        <h:outputText value="#{poxy.value}"/>
+                                    </p:column>
+                                    <p:column headerText="Precio Unit.">
+                                        <h:outputText value="#{poxy.precioUnit}" />
+                                    </p:column>
+                                    <p:column headerText="Tallos Ramo" style="text-align: center; width: auto">
+                                        <h:outputText value="#{poxy.numeroTallosRamo}"/>
+                                    </p:column>
+                                    <p:column headerText="Longitud" style="text-align: center; width: auto">
+                                        <h:outputText value="#{poxy.gradoLogitud}"/>
+                                    </p:column>
+                                    <p:column headerText="Punto Corte">
+                                        <h:outputText value="#{poxy.puntoCorte}" />
+                                    </p:column>
+                                    <p:column headerText="Codigo" style="text-align: center; width: auto; font-size: 10px">
+                                        <h:outputText value="#{poxy.codeMark}"/>
+                                    </p:column>
+                                    <p:column headerText="SubTotal" style="text-align: center; width: auto">
+                                        <h:outputText value="#{poxy.subTotal}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
                         </p:panel>
                     </p:tab>
                 </p:wizard>
