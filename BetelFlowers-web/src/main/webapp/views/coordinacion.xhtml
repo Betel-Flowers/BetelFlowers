@@ -19,6 +19,8 @@
                          paginatorPosition="bottom" selectionMode="single"
                          selection="#{coordinacionBean.selected}"
                          rowKey="#{cor.codigo}">
+                <p:ajax event="rowSelect" listener="#{coordinacionBean.onRowSelect}" 
+                        update=":fcord:coord"/>
                 <f:facet name="header">
                     <h:outputText value="VENTAS REALIZADAS"/>
                 </f:facet>
@@ -39,17 +41,17 @@
                     <h:outputText value="#{cor.cliente.nombreContacto}"/>
                 </p:column>
                 <p:column headerText="Sub-Cliente" style="text-align: center; font-size: 10px">
-                    <h:outputText value="#{cor.subCliente.empresa}" rendered="#{not empty cor.subCliente}"/>
+                    <h:outputText value="#{cor.subCliente.empresa}" rendered="#{cor.addSubCli}"/>
                     <h:outputText value=" - "/>
-                    <h:outputText value="#{cor.subCliente.empresa}" rendered="#{not empty cor.subCliente}"/>
+                    <h:outputText value="#{cor.subCliente.empresa}" rendered="#{cor.addSubCli}"/>
                 </p:column>
                 <p:column headerText="Pais" style="text-align: center; font-size: 10px">
-                    <h:outputText value="#{cor.cliente.ciudad.pais.nombre}" rendered="#{empty cor.subCliente}"/>
-                    <h:outputText value="#{cor.subCliente.ciudad.pais.nombre}" rendered="#{not empty cor.subCliente}"/>
+                    <h:outputText value="#{cor.cliente.ciudad.pais.nombre}" rendered="#{coordinacionBean.existSubCli(cor.addSubCli)}"/>
+                    <h:outputText value="#{cor.subCliente.ciudad.pais.nombre}" rendered="#{cor.addSubCli}"/>
                 </p:column>
                 <p:column headerText="Ciudad" style="text-align: center; font-size: 10px">
-                    <h:outputText value="#{cor.cliente.ciudad.nombre}" rendered="#{empty cor.subCliente}"/>
-                    <h:outputText value="#{cor.subCliente.ciudad.nombre}" rendered="#{not empty cor.subCliente}"/>
+                    <h:outputText value="#{cor.cliente.ciudad.nombre}" rendered="#{coordinacionBean.existSubCli(cor.addSubCli)}"/>
+                    <h:outputText value="#{cor.subCliente.ciudad.nombre}" rendered="#{cor.addSubCli}"/>
                 </p:column>
                 <p:column headerText="N# Cajas" style="text-align: center; font-size: 10px">
                     <h:outputText value="#{cor.numeroCajas}"/>
@@ -61,6 +63,118 @@
                     <h:outputText value="#{cor.username}"/>
                 </p:column>
             </p:dataTable>
+            <p:outputPanel id="coord" rendered="#{coordinacionBean.selectedShow}">
+                <p:wizard id="wizard" flowListener="#{coordinacionBean.onFlowProcess(event)}" showStepStatus="true"
+                          nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
+                    <p:tab id="destinos" title="Destino">
+                        <p:panel header="Seleccione los Puertos y complete la informacion">
+                            <h:panelGrid>
+                                <p:outputLabel value="Puerto de Embarque"/>
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:outputLabel for="pEmb" value="Pais:"/>
+                                    <p:selectOneMenu id="pEmb" required="true" 
+                                                     value="#{coordinacionBean.selected.data.puertoEmbarque.pais.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{paisBean.paices}" var="pass"
+                                                       itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
+                                        <p:ajax update=":fventa:cEmb" listener="#{CoordinacionBean.chancePaisOrigen}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="pEmb" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="cEmb" value="Ciudad:"/>
+                                    <p:selectOneMenu id="cEmb" required="true" 
+                                                     value="#{coordinacionBean.selected.data.puertoEmbarque.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{CoordinacionBean.origen}" var="ciud"
+                                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="cEmb" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                                <p:outputLabel value="Puerto de Destino"/>
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:outputLabel for="pDes" value="Pais:"/>
+                                    <p:selectOneMenu id="pDes" required="true" 
+                                                     value="#{coordinacionBean.selected.data.puertoDestino.pais.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{paisBean.paices}" var="passd"
+                                                       itemLabel="#{passd.nombre}" itemValue="#{passd.codigo}"/>
+                                        <p:ajax update=":fventa:dae, :fventa:cDes" listener="#{CoordinacionBean.findDaeByPaisDestino}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="pDes" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="cDes" value="Ciudad:"/>
+                                    <p:selectOneMenu id="cDes" required="true" 
+                                                     value="#{coordinacionBean.selected.data.puertoDestino.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{CoordinacionBean.destino}" var="ciud"
+                                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="cDes" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="3" cellpadding="5">
+                                    <p:outputLabel for="dae" value="DAE:"/>
+                                    <p:inputText id="dae" required="true" value="#{coordinacionBean.selected.data.dae.codigoDAE}"/>
+                                    <p:message for="dae" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:outputLabel for="terExp" value="Terminos de Exportacion:"/>
+                                    <p:selectOneMenu id="terExp" required="true"
+                                                     value="#{coordinacionBean.selected.data.termino.codigo}">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{terminoExportacionBean.terminos}" var="ter"
+                                                       itemLabel="#{ter.descripcion}" itemValue="#{ter.codigo}"/>
+                                        <p:ajax update=":fventa:valTerExp" listener="#{coordinacionBean.findTerminoExportacion}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="terExp" display="tooltip" severity="error"/>
+
+                                    <p:outputLabel for="valTerExp" value="Valor:"/>
+                                    <p:inputText id="valTerExp" required="true" value="#{coordinacionBean.selected.data.termino.valor}"/>
+                                    <p:message for="valTerExp" display="tooltip" severity="error"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="agencias" title="Agencia de Carga">
+                        <p:panel header="Seleccione la Agencia de Carga y complete la informacion">
+                            <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel for="ageC" value="Agencia de Carga"/>
+                                <p:selectOneMenu id="ageC" required="true" 
+                                                 value="#{coordinacionBean.selected.data.agenciaCarga.codigo}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{cargueraBean.cargueras}" var="acarg"
+                                                   itemLabel="#{acarg.nombre}" itemValue="#{acarg.codigo}"/>
+                                    <p:ajax update=":fventa:cfrio" listener="#{CoordinacionBean.changeAgenciaCarga}"/>
+                                </p:selectOneMenu>
+                                <p:message for="ageC" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="cfrio" value="Cuarto Frio:"/>
+                                <p:selectOneMenu id="cfrio" required="true" 
+                                                 value="#{coordinacionBean.selected.data.cuartoFrio.codigo}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{CoordinacionBean.frios}" var="cfrios"
+                                                   itemLabel="#{cfrios.descripcion}" itemValue="#{cfrios.codigo}"/>
+                                </p:selectOneMenu>
+                                <p:message for="cfrio" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="6" cellpadding="5">
+                                <p:outputLabel for="awb" value="AWB:" />
+                                <p:inputMask id="awb" required="true" value="#{coordinacionBean.selected.AWB}" mask="999-99999999"/>
+                                <p:message for="awb" display="tooltip" severity="error"/>
+
+                                <p:outputLabel for="hawb" value="HAWB:" />
+                                <p:inputText id="hawb" required="true" value="#{coordinacionBean.selected.HAWB}"/>
+                                <p:message for="hawb" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                            <h:panelGrid cellpadding="5">
+                                <p:outputLabel for="obser" value="Observacion:" />
+                                <p:inputTextarea id="obser" cols="70" rows="5"  
+                                                 value="#{coordinacionBean.selected.observacion}"/>
+                                <p:message for="obser" display="tooltip" severity="error"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 
