@@ -38,8 +38,8 @@ public class ClasificarMalla implements Serializable {
                 this.mallas.add(new Malla(node.getVariedad()));
                 for (ValorNodo value : node.getValoresNodo()) {
                     PointMatrix pxy = new PointMatrix();
-                    pxy.setVariadad(node.getVariedad());
-                    pxy.setVariadad(node.getVariedad());
+                    pxy.setVariedad(node.getVariedad());
+                    pxy.setVariedad(node.getVariedad());
                     pxy.setGradoLogitud(value.getLongitud() + "");
                     pxy.setValue(0);
                     pxy.setValorNodo(value);
@@ -57,7 +57,7 @@ public class ClasificarMalla implements Serializable {
 
         for (int i = 0; i < this.mallas.size(); i++) {
             for (int j = 0; j < this.points.size(); j++) {
-                if (this.mallas.get(i).getVariedad().getNombre().equals(this.points.get(j).getVariadad().getNombre())) {
+                if (this.mallas.get(i).getVariedad().getNombre().equals(this.points.get(j).getVariedad().getNombre())) {
                     switch (this.points.get(j).getGradoLogitud()) {
                         case "20":
                             this.mallas.get(i).setP20(this.points.get(j));

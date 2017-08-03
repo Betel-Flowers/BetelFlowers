@@ -11,7 +11,6 @@ import com.betel.flowers.model.CuartoFrioCarguera;
 import com.betel.flowers.model.Dae;
 import com.betel.flowers.model.Pais;
 import com.betel.flowers.model.RegistroVenta;
-import com.betel.flowers.model.SubCliente;
 import com.betel.flowers.model.TerminoExportacion;
 import com.betel.flowers.service.CargueraService;
 import com.betel.flowers.service.CiudadService;
@@ -20,9 +19,12 @@ import com.betel.flowers.service.DaeService;
 import com.betel.flowers.service.PaisService;
 import com.betel.flowers.service.RegistroVentaService;
 import com.betel.flowers.service.TerminoExportacionService;
+import com.betel.flowers.web.bean.util.CalendarioBean;
+import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -67,7 +69,7 @@ public class CoordinacionBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.registros = this.ventaService.obtenerListFlag(1);
+        this.registros = this.ventaService.obtenerListCoordinacionFlag(1, Boolean.FALSE);
         Collections.reverse(this.registros);
         this.selectedShow = Boolean.FALSE;
         this.origen = new ArrayList<>();
@@ -78,7 +80,14 @@ public class CoordinacionBean implements Serializable {
         RegistroVenta registro = (RegistroVenta) event.getObject();
         if (this.selected != null) {
             this.selected = registro;
+            this.selected.getData().setPuertoDestino(registro.getCliente().getCiudad());
             this.selectedShow = Boolean.TRUE;
+            if (registro.getAddSubCli()) {
+                this.selected.getData().setPuertoDestino(registro.getSubcli().getSubCliente().getCiudad());
+            }else{
+                this.selected.getSubcli().setSubCliente(null);
+            }
+            findDaeByPaisDestino();
         }
     }
 
@@ -127,8 +136,27 @@ public class CoordinacionBean implements Serializable {
         return exist;
     }
 
+    public void guardarCambios(ActionEvent evt) {
+        Ciudad ori = this.ciudadService.findByCodigo(this.selected.getData().getPuertoEmbarque());
+        this.selected.getData().setPuertoEmbarque(ori);
+        Ciudad des = this.ciudadService.findByCodigo(this.selected.getData().getPuertoDestino());
+        this.selected.getData().setPuertoDestino(des);
+        Carguera carguera = this.carqueraService.findByCodigo(this.selected.getData().getAgenciaCarga());
+        this.selected.getData().setAgenciaCarga(carguera);
+        CuartoFrioCarguera frio = this.frioService.findByCodigo(this.selected.getData().getCuartoFrio());
+        this.selected.getData().setCuartoFrio(frio);
+        this.selected.setCoordinada(Boolean.TRUE);
+        this.selected.setEmpacada(Boolean.FALSE);
+        this.selected.getData().setUsername("usertest");
+        this.selected.getData().setFechaCoordinacion(new Date());
+        Boolean exito = this.ventaService.update(this.selected);
+        if (exito) {
+            this.init();
+        }
+    }
+
     public void updateLitsVentas(ActionEvent evt) {
-        this.registros = this.ventaService.obtenerListFlag(1);
+        this.registros = this.ventaService.obtenerListCoordinacionFlag(1, Boolean.FALSE);
         Collections.reverse(this.registros);
     }
 
@@ -162,6 +190,30 @@ public class CoordinacionBean implements Serializable {
 
     public void setSelectedShow(Boolean selectedShow) {
         this.selectedShow = selectedShow;
+    }
+
+    public List<Ciudad> getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(List<Ciudad> origen) {
+        this.origen = origen;
+    }
+
+    public List<Ciudad> getDestino() {
+        return destino;
+    }
+
+    public void setDestino(List<Ciudad> destino) {
+        this.destino = destino;
+    }
+
+    public List<CuartoFrioCarguera> getFrios() {
+        return frios;
+    }
+
+    public void setFrios(List<CuartoFrioCarguera> frios) {
+        this.frios = frios;
     }
 
 }

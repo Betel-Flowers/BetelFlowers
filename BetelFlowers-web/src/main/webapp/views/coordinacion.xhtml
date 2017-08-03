@@ -20,7 +20,7 @@
                          selection="#{coordinacionBean.selected}"
                          rowKey="#{cor.codigo}">
                 <p:ajax event="rowSelect" listener="#{coordinacionBean.onRowSelect}" 
-                        update=":fcord:coord"/>
+                        update=":fdata:coord"/>
                 <f:facet name="header">
                     <h:outputText value="VENTAS REALIZADAS"/>
                 </f:facet>
@@ -32,26 +32,23 @@
                 <p:column headerText="N# Packing" style="text-align: center; font-size: 10px">
                     <h:outputText value="#{cor.numberPaking}"/>
                 </p:column>
-                <p:column headerText="Barcode" style="text-align: center; font-size: 10px">
-                    <h:outputText value="#{cor.barcode}"/>
-                </p:column>
                 <p:column headerText="Cliente" style="text-align: center; font-size: 10px">
                     <h:outputText value="#{cor.cliente.empresa}"/>
                     <h:outputText value=" - "/>
                     <h:outputText value="#{cor.cliente.nombreContacto}"/>
                 </p:column>
                 <p:column headerText="Sub-Cliente" style="text-align: center; font-size: 10px">
-                    <h:outputText value="#{cor.subCliente.empresa}" rendered="#{cor.addSubCli}"/>
+                    <h:outputText value="#{cor.subcli.subCliente.empresa}" rendered="#{cor.addSubCli}"/>
                     <h:outputText value=" - "/>
-                    <h:outputText value="#{cor.subCliente.empresa}" rendered="#{cor.addSubCli}"/>
+                    <h:outputText value="#{cor.subcli.subCliente.empresa}" rendered="#{cor.addSubCli}"/>
                 </p:column>
                 <p:column headerText="Pais" style="text-align: center; font-size: 10px">
                     <h:outputText value="#{cor.cliente.ciudad.pais.nombre}" rendered="#{coordinacionBean.existSubCli(cor.addSubCli)}"/>
-                    <h:outputText value="#{cor.subCliente.ciudad.pais.nombre}" rendered="#{cor.addSubCli}"/>
+                    <h:outputText value="#{cor.subcli.subCliente.ciudad.pais.nombre}" rendered="#{cor.addSubCli}"/>
                 </p:column>
                 <p:column headerText="Ciudad" style="text-align: center; font-size: 10px">
                     <h:outputText value="#{cor.cliente.ciudad.nombre}" rendered="#{coordinacionBean.existSubCli(cor.addSubCli)}"/>
-                    <h:outputText value="#{cor.subCliente.ciudad.nombre}" rendered="#{cor.addSubCli}"/>
+                    <h:outputText value="#{cor.subcli.subCliente.ciudad.nombre}" rendered="#{cor.addSubCli}"/>
                 </p:column>
                 <p:column headerText="N# Cajas" style="text-align: center; font-size: 10px">
                     <h:outputText value="#{cor.numeroCajas}"/>
@@ -63,8 +60,12 @@
                     <h:outputText value="#{cor.username}"/>
                 </p:column>
             </p:dataTable>
-            <p:outputPanel id="coord" rendered="#{coordinacionBean.selectedShow}">
-                <p:wizard id="wizard" flowListener="#{coordinacionBean.onFlowProcess(event)}" showStepStatus="true"
+        </h:form>
+        <h:outputText value="&lt;br/&gt;" escape="false"/>
+        <h:form id="fdata">
+            <p:outputPanel id="coord">
+                <p:wizard rendered="#{coordinacionBean.selectedShow}" 
+                          flowListener="#{coordinacionBean.onFlowProcess}" showStepStatus="true"
                           nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
                     <p:tab id="destinos" title="Destino">
                         <p:panel header="Seleccione los Puertos y complete la informacion">
@@ -77,7 +78,7 @@
                                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                         <f:selectItems value="#{paisBean.paices}" var="pass"
                                                        itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
-                                        <p:ajax update=":fventa:cEmb" listener="#{CoordinacionBean.chancePaisOrigen}"/>
+                                        <p:ajax update=":fdata:cEmb" listener="#{coordinacionBean.chancePaisOrigen}"/>
                                     </p:selectOneMenu>
                                     <p:message for="pEmb" display="tooltip" severity="error"/>
 
@@ -85,7 +86,7 @@
                                     <p:selectOneMenu id="cEmb" required="true" 
                                                      value="#{coordinacionBean.selected.data.puertoEmbarque.codigo}">
                                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItems value="#{CoordinacionBean.origen}" var="ciud"
+                                        <f:selectItems value="#{coordinacionBean.origen}" var="ciud"
                                                        itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
                                     </p:selectOneMenu>
                                     <p:message for="cEmb" display="tooltip" severity="error"/>
@@ -98,7 +99,7 @@
                                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                         <f:selectItems value="#{paisBean.paices}" var="passd"
                                                        itemLabel="#{passd.nombre}" itemValue="#{passd.codigo}"/>
-                                        <p:ajax update=":fventa:dae, :fventa:cDes" listener="#{CoordinacionBean.findDaeByPaisDestino}"/>
+                                        <p:ajax update=":fdata:dae, :fdata:cDes" listener="#{coordinacionBean.findDaeByPaisDestino}"/>
                                     </p:selectOneMenu>
                                     <p:message for="pDes" display="tooltip" severity="error"/>
 
@@ -106,7 +107,7 @@
                                     <p:selectOneMenu id="cDes" required="true" 
                                                      value="#{coordinacionBean.selected.data.puertoDestino.codigo}">
                                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItems value="#{CoordinacionBean.destino}" var="ciud"
+                                        <f:selectItems value="#{coordinacionBean.destino}" var="ciud"
                                                        itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
                                     </p:selectOneMenu>
                                     <p:message for="cDes" display="tooltip" severity="error"/>
@@ -123,7 +124,7 @@
                                         <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                         <f:selectItems value="#{terminoExportacionBean.terminos}" var="ter"
                                                        itemLabel="#{ter.descripcion}" itemValue="#{ter.codigo}"/>
-                                        <p:ajax update=":fventa:valTerExp" listener="#{coordinacionBean.findTerminoExportacion}"/>
+                                        <p:ajax update=":fdata:valTerExp" listener="#{coordinacionBean.findTerminoExportacion}"/>
                                     </p:selectOneMenu>
                                     <p:message for="terExp" display="tooltip" severity="error"/>
 
@@ -143,7 +144,7 @@
                                     <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
                                     <f:selectItems value="#{cargueraBean.cargueras}" var="acarg"
                                                    itemLabel="#{acarg.nombre}" itemValue="#{acarg.codigo}"/>
-                                    <p:ajax update=":fventa:cfrio" listener="#{CoordinacionBean.changeAgenciaCarga}"/>
+                                    <p:ajax update=":fdata:cfrio" listener="#{coordinacionBean.changeAgenciaCarga}"/>
                                 </p:selectOneMenu>
                                 <p:message for="ageC" display="tooltip" severity="error"/>
 
@@ -151,7 +152,7 @@
                                 <p:selectOneMenu id="cfrio" required="true" 
                                                  value="#{coordinacionBean.selected.data.cuartoFrio.codigo}">
                                     <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                    <f:selectItems value="#{CoordinacionBean.frios}" var="cfrios"
+                                    <f:selectItems value="#{coordinacionBean.frios}" var="cfrios"
                                                    itemLabel="#{cfrios.descripcion}" itemValue="#{cfrios.codigo}"/>
                                 </p:selectOneMenu>
                                 <p:message for="cfrio" display="tooltip" severity="error"/>
@@ -171,6 +172,27 @@
                                                  value="#{coordinacionBean.selected.observacion}"/>
                                 <p:message for="obser" display="tooltip" severity="error"/>
                             </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="detalle" title="Detalle">
+                        <p:panel header="Datos adicionales de coordinación">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel value="Fecha de Vuelo:"/>
+                                <p:calendar pattern="dd/MM/yyy" 
+                                    value="#{coordinacionBean.selected.data.fechaVuelo}" showOn="button" />
+
+                                <p:outputLabel value="Festividad:"/>
+                                <p:selectOneMenu value="#{coordinacionBean.selected.data.festividad}">
+                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="SAN VALENTIN" itemValue="SAN VALENTIN"/>
+                                    <f:selectItem itemLabel="DIA MADRES" itemValue="DIA MADRES"/>
+                                    <f:selectItem itemLabel="NAVIDAD" itemValue="NAVIDAD"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Actualizar" update=":fdata:coord, :fcord:dtventas"
+                                                 actionListener="#{coordinacionBean.guardarCambios(evt)}"/>
+                            </f:facet>
                         </p:panel>
                     </p:tab>
                 </p:wizard>

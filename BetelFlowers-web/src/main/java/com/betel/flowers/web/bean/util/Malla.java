@@ -72,52 +72,52 @@ public class Malla implements Serializable {
     }
     
     public void loadVariedadList(Variedad variedad) {
-        this.p20.setVariadad(variedad);
+        this.p20.setVariedad(variedad);
         this.p20.setGradoLogitud("20");
         
-        this.p25.setVariadad(variedad);
+        this.p25.setVariedad(variedad);
         this.p25.setGradoLogitud("25");
         
-        this.p30.setVariadad(variedad);
+        this.p30.setVariedad(variedad);
         this.p30.setGradoLogitud("30");
         
-        this.p35.setVariadad(variedad);
+        this.p35.setVariedad(variedad);
         this.p35.setGradoLogitud("35");
         
-        this.p40.setVariadad(variedad);
+        this.p40.setVariedad(variedad);
         this.p40.setGradoLogitud("40");
         
-        this.p45.setVariadad(variedad);
+        this.p45.setVariedad(variedad);
         this.p45.setGradoLogitud("45");
         
-        this.p50.setVariadad(variedad);
+        this.p50.setVariedad(variedad);
         this.p50.setGradoLogitud("50");
         
-        this.p55.setVariadad(variedad);
+        this.p55.setVariedad(variedad);
         this.p55.setGradoLogitud("55");
         
-        this.p60.setVariadad(variedad);
+        this.p60.setVariedad(variedad);
         this.p60.setGradoLogitud("60");
         
-        this.p65.setVariadad(variedad);
+        this.p65.setVariedad(variedad);
         this.p65.setGradoLogitud("65");
         
-        this.p70.setVariadad(variedad);
+        this.p70.setVariedad(variedad);
         this.p70.setGradoLogitud("70");
         
-        this.p75.setVariadad(variedad);
+        this.p75.setVariedad(variedad);
         this.p75.setGradoLogitud("75");
         
-        this.p80.setVariadad(variedad);
+        this.p80.setVariedad(variedad);
         this.p80.setGradoLogitud("80");
         
-        this.p85.setVariadad(variedad);
+        this.p85.setVariedad(variedad);
         this.p85.setGradoLogitud("85");
         
-        this.p90.setVariadad(variedad);
+        this.p90.setVariedad(variedad);
         this.p90.setGradoLogitud("90");
         
-        this.p100.setVariadad(variedad);
+        this.p100.setVariedad(variedad);
         this.p100.setGradoLogitud("100");
         
     }

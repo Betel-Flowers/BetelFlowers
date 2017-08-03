@@ -103,12 +103,12 @@ public class RegistroVentaBean implements Serializable {
     public void saveVenta(ActionEvent evt) {
         if (this.nuevo != null) {
             this.nuevo.setCliente(this.selectedCliente);
-            this.nuevo.setSubCliente(this.selectedSubCliente);
+            this.nuevo.getSubcli().setSubCliente(this.selectedSubCliente);
             this.nuevo.setMatrixVenta(this.selectDataMatrix);
             this.nuevo.setNumeroCajas(this.co);
             this.nuevo.setSubTotal(calcularSubTotal());
             if (!this.selectedSubCli) {
-                this.nuevo.setSubCliente(null);
+                this.nuevo.getSubcli().setSubCliente(null);
             }
             Boolean exito = this.ventaService.insert(this.nuevo);
             if (exito) {
@@ -126,12 +126,12 @@ public class RegistroVentaBean implements Serializable {
             Integer cantidad = px.getValorNodo().getCantidad();
             PointMatrix point = new PointMatrix();
             px.getValorNodo().setCantidad(cantidad - value);
-            String code = this.selectedCliente.getCodigo() + "" + px.getVariadad().getCodigo() + "" + value + "" + px.getGradoLogitud() + "" + co + "" + cf;
+            String code = this.selectedCliente.getCodigo() + "" + px.getVariedad().getCodigo() + "" + value + "" + px.getGradoLogitud() + "" + co + "" + cf;
             code = code.replaceAll("BETEL", "");
             code = code.replace("-", "");
             if (mxi >= 0 && mxi < this.malla.size()) {
                 this.cf++;
-                point.setVariadad(px.getVariadad());
+                point.setVariedad(px.getVariedad());
                 point.setGradoLogitud(px.getGradoLogitud());
                 point.setValue(value);
                 point.getValorNodo().setCantidad(px.getValorNodo().getCantidad());
@@ -180,7 +180,7 @@ public class RegistroVentaBean implements Serializable {
     public void onRowSelectSubCliente(SelectEvent event) {
         this.selectedSubCliente = (SubCliente) event.getObject();
         if (this.selectedSubCliente != null) {
-            this.nuevo.setSubCliente(this.selectedSubCliente);
+            this.nuevo.getSubcli().setSubCliente(this.selectedSubCliente);
             this.selectedSubCli = Boolean.TRUE;
             this.nuevo.setAddSubCli(this.selectedSubCli);
         }
