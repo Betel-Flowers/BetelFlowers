@@ -6,8 +6,11 @@
 package com.betel.flowers.model;
 
 import com.mongo.persistance.BaseEntity;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
@@ -25,32 +28,37 @@ public class RegistroVenta extends BaseEntity {
 
     private Integer codigo;
     private Integer numberPaking;
-    private Integer numberSRI;
+    private String secuencialSRI;
     private Date fechaSRI;
     private String AWB;
     private String HAWB;
     private String observacion;
     private String barcode;
+    private Integer numeroCajas;
+    private Double subTotal;
     private String username;
     private Integer flag;
 
     @Reference
     private Cliente cliente;
-
     private SubCliente subCliente;
-    private Ciudad puertoEmbarque;
-    private Ciudad puertoDestino;
-    private Dae dae;
-    private Carguera agenciaCarga;
-    private CuartoFrio cuartoFrio;
-    private TerminoExportacion termino;
+    
+    @Embedded
+    private Coordinacion data;
+    @Embedded
+    private List<PointMatrix> matrixVenta;
 
     public RegistroVenta() {
+        this.numberPaking = 0;
+        this.secuencialSRI = "";
+        this.fechaSRI = new Date();
+        this.AWB = "";
+        this.HAWB = "";
+        this.observacion = "";
+        this.barcode = "";
         this.cliente = new Cliente();
         this.subCliente = new SubCliente();
-        this.dae = new Dae();
-        this.agenciaCarga = new Carguera();
-        this.termino = new TerminoExportacion();
+        this.matrixVenta = new ArrayList<>();
     }
 
     public Integer getCodigo() {
@@ -69,12 +77,12 @@ public class RegistroVenta extends BaseEntity {
         this.numberPaking = numberPaking;
     }
 
-    public Integer getNumberSRI() {
-        return numberSRI;
+    public String getSecuencialSRI() {
+        return secuencialSRI;
     }
 
-    public void setNumberSRI(Integer numberSRI) {
-        this.numberSRI = numberSRI;
+    public void setSecuencialSRI(String secuencialSRI) {
+        this.secuencialSRI = secuencialSRI;
     }
 
     public Date getFechaSRI() {
@@ -117,6 +125,22 @@ public class RegistroVenta extends BaseEntity {
         this.barcode = barcode;
     }
 
+    public Integer getNumeroCajas() {
+        return numeroCajas;
+    }
+
+    public Double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setNumeroCajas(Integer numeroCajas) {
+        this.numeroCajas = numeroCajas;
+    }
+
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -149,58 +173,26 @@ public class RegistroVenta extends BaseEntity {
         this.subCliente = subCliente;
     }
 
-    public Ciudad getPuertoEmbarque() {
-        return puertoEmbarque;
+    public Coordinacion getData() {
+        return data;
     }
 
-    public void setPuertoEmbarque(Ciudad puertoEmbarque) {
-        this.puertoEmbarque = puertoEmbarque;
+    public void setData(Coordinacion data) {
+        this.data = data;
     }
 
-    public Ciudad getPuertoDestino() {
-        return puertoDestino;
+    public List<PointMatrix> getMatrixVenta() {
+        return matrixVenta;
     }
 
-    public void setPuertoDestino(Ciudad puertoDestino) {
-        this.puertoDestino = puertoDestino;
-    }
-
-    public Dae getDae() {
-        return dae;
-    }
-
-    public void setDae(Dae dae) {
-        this.dae = dae;
-    }
-
-    public Carguera getAgenciaCarga() {
-        return agenciaCarga;
-    }
-
-    public void setAgenciaCarga(Carguera agenciaCarga) {
-        this.agenciaCarga = agenciaCarga;
-    }
-
-    public CuartoFrio getCuartoFrio() {
-        return cuartoFrio;
-    }
-
-    public void setCuartoFrio(CuartoFrio cuartoFrio) {
-        this.cuartoFrio = cuartoFrio;
-    }
-
-    public TerminoExportacion getTermino() {
-        return termino;
-    }
-
-    public void setTermino(TerminoExportacion termino) {
-        this.termino = termino;
+    public void setMatrixVenta(List<PointMatrix> matrixVenta) {
+        this.matrixVenta = matrixVenta;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 23 * hash + Objects.hashCode(this.codigo);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.codigo);
         return hash;
     }
 
@@ -224,6 +216,7 @@ public class RegistroVenta extends BaseEntity {
 
     @Override
     public String toString() {
-        return "RegistroVenta{" + "codigo=" + codigo + ", numberPaking=" + numberPaking + ", numberSRI=" + numberSRI + ", fechaSRI=" + fechaSRI + ", AWB=" + AWB + ", HAWB=" + HAWB + ", observacion=" + observacion + ", barcode=" + barcode + ", username=" + username + ", flag=" + flag + ", cliente=" + cliente + ", subCliente=" + subCliente + ", puertoEmbarque=" + puertoEmbarque + ", puertoDestino=" + puertoDestino + ", dae=" + dae + ", agenciaCarga=" + agenciaCarga + ", cuartoFrio=" + cuartoFrio + ", termino=" + termino + '}';
+        return "RegistroVenta{" + "codigo=" + codigo + ", numberPaking=" + numberPaking + ", numberSRI=" + secuencialSRI + ", fechaSRI=" + fechaSRI + ", AWB=" + AWB + ", HAWB=" + HAWB + ", observacion=" + observacion + ", barcode=" + barcode + ", username=" + username + ", flag=" + flag + ", cliente=" + cliente + ", data=" + data + ", matrixVenta=" + matrixVenta + '}';
     }
+
 }
