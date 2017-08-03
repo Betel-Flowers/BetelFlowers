@@ -5,6 +5,7 @@
  */
 package com.betel.flowers.web.bean.util;
 
+import com.betel.flowers.model.PointMatrix;
 import com.betel.flowers.model.Variedad;
 import java.io.Serializable;
 import java.util.ArrayList;

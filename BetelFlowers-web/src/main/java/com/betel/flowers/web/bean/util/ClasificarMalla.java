@@ -7,6 +7,7 @@ package com.betel.flowers.web.bean.util;
 
 import com.betel.flowers.model.MatrizDisponibilidad;
 import com.betel.flowers.model.NodoDisponibilidad;
+import com.betel.flowers.model.PointMatrix;
 import com.betel.flowers.model.ValorNodo;
 import java.io.Serializable;
 import java.util.ArrayList;

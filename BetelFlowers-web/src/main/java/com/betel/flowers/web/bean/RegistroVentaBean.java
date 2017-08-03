@@ -15,6 +15,7 @@ import com.betel.flowers.model.Especie;
 import com.betel.flowers.model.ItemVariedadVentaEmpaque;
 import com.betel.flowers.model.MatrizDisponibilidad;
 import com.betel.flowers.model.Pais;
+import com.betel.flowers.model.PointMatrix;
 import com.betel.flowers.model.RegistroExportacion;
 import com.betel.flowers.model.RegistroVenta;
 import com.betel.flowers.model.SubCliente;
@@ -29,10 +30,10 @@ import com.betel.flowers.service.DaeService;
 import com.betel.flowers.service.EspecieService;
 import com.betel.flowers.service.PaisService;
 import com.betel.flowers.service.RegistroExportacionService;
+import com.betel.flowers.service.RegistroVentaService;
 import com.betel.flowers.service.TerminoExportacionService;
 import com.betel.flowers.web.bean.util.ClasificarMalla;
 import com.betel.flowers.web.bean.util.Malla;
-import com.betel.flowers.web.bean.util.PointMatrix;
 import com.betel.flowers.web.util.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class RegistroVentaBean implements Serializable {
     //CLIENTE
     private Cliente selectedCliente;
     private SubCliente selectedSubCliente;
+    private Boolean selectedSubCli;
     private List<Cliente> clientes;
     private List<Cliente> filteredClientes;
     private List<SubCliente> subClientes;
@@ -102,6 +104,8 @@ public class RegistroVentaBean implements Serializable {
     private EspecieService especieService;
     @Inject
     private BodegaVirtualService bodegaService;
+    @Inject
+    private RegistroVentaService ventaService;
 
     @PostConstruct
     public void init() {
@@ -109,6 +113,7 @@ public class RegistroVentaBean implements Serializable {
         this.nuevo.setUsername("usertest");
         this.selectedCliente = null;
         this.selectedSubCliente = null;
+        this.selectedSubCli = Boolean.FALSE;
         this.filteredClientes = null;
         this.filteredSubClientes = null;
         this.clientes = this.clienteService.obtenerListFlag(1);
@@ -126,6 +131,23 @@ public class RegistroVentaBean implements Serializable {
         if (this.clientes == null) {
             this.clientes = new ArrayList<>();
             this.subClientes = new ArrayList<>();
+        }
+    }
+    
+    public void saveVenta(ActionEvent evt){
+        if(this.nuevo != null){
+            this.nuevo.setCliente(this.selectedCliente);
+            this.nuevo.setSubCliente(this.selectedSubCliente);
+            this.nuevo.setMatrixVenta(this.selectDataMatrix);
+            this.nuevo.setNumeroCajas(this.co);
+            this.nuevo.setSubTotal(calcularSubTotal());
+            if(!this.selectedSubCli){
+                this.nuevo.setSubCliente(null);
+            }
+            Boolean exito = this.ventaService.insert(this.nuevo);
+            if(exito){
+                this.init();
+            }
         }
     }
 
@@ -161,7 +183,17 @@ public class RegistroVentaBean implements Serializable {
         }
     }
 
-    public void deleteItemDetail(ActionEvent evt,PointMatrix point) {
+    public Double calcularSubTotal() {
+        Double total = 0.0;
+        if (this.selectDataMatrix != null && !this.selectDataMatrix.isEmpty()) {
+            for (PointMatrix po : this.selectDataMatrix) {
+                total = total + po.getSubTotal();
+            }
+        }
+        return total;
+    }
+
+    public void deleteItemDetail(ActionEvent evt, PointMatrix point) {
         this.selectPointMatrix = point;
         if (this.selectPointMatrix != null) {
             Boolean exito = this.selectDataMatrix.remove(this.selectPointMatrix);
@@ -183,13 +215,14 @@ public class RegistroVentaBean implements Serializable {
         this.selectedSubCliente = (SubCliente) event.getObject();
         if (this.selectedSubCliente != null) {
             this.nuevo.setSubCliente(this.selectedSubCliente);
+            this.selectedSubCli = Boolean.TRUE;
         }
     }
 
     public void findDaeByPaisDestino() {
-        Pais pais = this.paisService.findByCodigo(this.nuevo.getPuertoDestino().getPais());
+        Pais pais = this.paisService.findByCodigo(this.nuevo.getData().getPuertoDestino().getPais());
         Dae dae = this.daeService.findByPais(pais);
-        this.nuevo.setDae(dae);
+        this.nuevo.getData().setDae(dae);
         this.destino = this.ciudadService.obtenerListPais(pais);
         if (this.destino == null) {
             this.destino = new ArrayList<>();
@@ -197,7 +230,7 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public void chancePaisOrigen() {
-        Pais pais = this.paisService.findByCodigo(this.nuevo.getPuertoEmbarque().getPais());
+        Pais pais = this.paisService.findByCodigo(this.nuevo.getData().getPuertoEmbarque().getPais());
         this.origen = this.ciudadService.obtenerListPais(pais);
         if (this.origen == null) {
             this.origen = new ArrayList<>();
@@ -205,13 +238,13 @@ public class RegistroVentaBean implements Serializable {
     }
 
     public void findTerminoExportacion() {
-        TerminoExportacion termino = this.terminoService.findByCodigo(this.nuevo.getTermino());
-        this.nuevo.setTermino(termino);
+        TerminoExportacion termino = this.terminoService.findByCodigo(this.nuevo.getData().getTermino());
+        this.nuevo.getData().setTermino(termino);
     }
 
     public void changeAgenciaCarga() {
-        Carguera carguera = this.carqueraService.findByCodigo(this.nuevo.getAgenciaCarga());
-        this.nuevo.setAgenciaCarga(carguera);
+        Carguera carguera = this.carqueraService.findByCodigo(this.nuevo.getData().getAgenciaCarga());
+        this.nuevo.getData().setAgenciaCarga(carguera);
         this.frios = this.frioService.obtenerListBodega(carguera.getBodega());
         if (this.frios == null) {
             this.frios = new ArrayList<>();

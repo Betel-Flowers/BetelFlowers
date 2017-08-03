@@ -21,7 +21,7 @@
     <h:body>
         <div class="wrapper">
             <h:form id="fventa">
-                <p:wizard flowListener="#{registroVentaBean.onFlowProcess}" showStepStatus="true"
+                <p:wizard id="wizard" flowListener="#{registroVentaBean.onFlowProcess}" showStepStatus="true"
                           nextLabel="Siguiente" backLabel="Atras" showNavBar="true">
                     <p:tab id="clientes" title="Clientes">
                         <p:panel header="Seleccione Cliente y/o Sub-Cliente">
@@ -96,125 +96,6 @@
                                 <p:outputLabel for="subCliSelect" value="Sub-Cliente:"/>
                                 <p:inputText id="subCliSelect" value="#{registroVentaBean.nuevo.subCliente.empresa}"/>
                                 <p:message for="subCliSelect" display="tooltip" severity="error"/>
-                            </h:panelGrid>
-                            <f:facet name="footer">
-                                <h:panelGrid columns="2" cellpadding="5">
-                                    <p:outputLabel value="Directo a Venta: " />
-                                    <p:selectBooleanCheckbox value="#{registroVentaBean.skip}" />
-                                </h:panelGrid>
-                            </f:facet>
-                        </p:panel>
-                    </p:tab>
-                    <p:tab id="destinos" title="Destino">
-                        <p:panel header="Seleccione los Puertos y complete la informacion">
-                            <h:panelGrid>
-                                <p:outputLabel value="Puerto de Embarque"/>
-                                <h:panelGrid columns="6" cellpadding="5">
-                                    <p:outputLabel for="pEmb" value="Pais:"/>
-                                    <p:selectOneMenu id="pEmb" required="true" 
-                                                     value="#{registroVentaBean.nuevo.puertoEmbarque.pais.codigo}">
-                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItems value="#{paisBean.paices}" var="pass"
-                                                       itemLabel="#{pass.nombre}" itemValue="#{pass.codigo}"/>
-                                        <p:ajax update=":fventa:cEmb" listener="#{registroVentaBean.chancePaisOrigen}"/>
-                                    </p:selectOneMenu>
-                                    <p:message for="pEmb" display="tooltip" severity="error"/>
-
-                                    <p:outputLabel for="cEmb" value="Ciudad:"/>
-                                    <p:selectOneMenu id="cEmb" required="true" 
-                                                     value="#{registroVentaBean.nuevo.puertoEmbarque.codigo}">
-                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItems value="#{registroVentaBean.origen}" var="ciud"
-                                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
-                                    </p:selectOneMenu>
-                                    <p:message for="cEmb" display="tooltip" severity="error"/>
-                                </h:panelGrid>
-                                <p:outputLabel value="Puerto de Destino"/>
-                                <h:panelGrid columns="6" cellpadding="5">
-                                    <p:outputLabel for="pDes" value="Pais:"/>
-                                    <p:selectOneMenu id="pDes" required="true" 
-                                                     value="#{registroVentaBean.nuevo.puertoDestino.pais.codigo}">
-                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItems value="#{paisBean.paices}" var="passd"
-                                                       itemLabel="#{passd.nombre}" itemValue="#{passd.codigo}"/>
-                                        <p:ajax update=":fventa:dae, :fventa:cDes" listener="#{registroVentaBean.findDaeByPaisDestino}"/>
-                                    </p:selectOneMenu>
-                                    <p:message for="pDes" display="tooltip" severity="error"/>
-
-                                    <p:outputLabel for="cDes" value="Ciudad:"/>
-                                    <p:selectOneMenu id="cDes" required="true" 
-                                                     value="#{registroVentaBean.nuevo.puertoDestino.codigo}">
-                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItems value="#{registroVentaBean.destino}" var="ciud"
-                                                       itemLabel="#{ciud.nombre}" itemValue="#{ciud.codigo}"/>
-                                    </p:selectOneMenu>
-                                    <p:message for="cDes" display="tooltip" severity="error"/>
-                                </h:panelGrid>
-                                <h:panelGrid columns="3" cellpadding="5">
-                                    <p:outputLabel for="dae" value="DAE:"/>
-                                    <p:inputText id="dae" required="true" value="#{registroVentaBean.nuevo.dae.codigoDAE}"/>
-                                    <p:message for="dae" display="tooltip" severity="error"/>
-                                </h:panelGrid>
-                                <h:panelGrid columns="6" cellpadding="5">
-                                    <p:outputLabel for="terExp" value="Terminos de Exportacion:"/>
-                                    <p:selectOneMenu id="terExp" required="true" 
-                                                     value="#{registroVentaBean.nuevo.termino.codigo}">
-                                        <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItems value="#{terminoExportacionBean.terminos}" var="ter"
-                                                       itemLabel="#{ter.descripcion}" itemValue="#{ter.codigo}"/>
-                                        <p:ajax update=":fventa:valTerExp" listener="#{registroVentaBean.findTerminoExportacion}"/>
-                                    </p:selectOneMenu>
-                                    <p:message for="terExp" display="tooltip" severity="error"/>
-
-                                    <p:outputLabel for="valTerExp" value="Valor:"/>
-                                    <p:inputText id="valTerExp" required="true" value="#{registroVentaBean.nuevo.termino.valor}"/>
-                                    <p:message for="valTerExp" display="tooltip" severity="error"/>
-                                </h:panelGrid>
-                            </h:panelGrid>
-                            <f:facet name="footer">
-                                <h:panelGrid columns="2" cellpadding="5">
-                                    <p:outputLabel value="Directo a Venta: " />
-                                    <p:selectBooleanCheckbox value="#{registroVentaBean.skip}" />
-                                </h:panelGrid>
-                            </f:facet>
-                        </p:panel>
-                    </p:tab>
-                    <p:tab id="agencias" title="Agencia de Carga">
-                        <p:panel header="Seleccione la Agencia de Carga y complete la informacion">
-                            <h:panelGrid columns="6" cellpadding="5">
-                                <p:outputLabel for="ageC" value="Agencia de Carga"/>
-                                <p:selectOneMenu id="ageC" required="true" 
-                                                 value="#{registroVentaBean.nuevo.agenciaCarga.codigo}">
-                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                    <f:selectItems value="#{cargueraBean.cargueras}" var="acarg"
-                                                   itemLabel="#{acarg.nombre}" itemValue="#{acarg.codigo}"/>
-                                    <p:ajax update=":fventa:cfrio" listener="#{registroVentaBean.changeAgenciaCarga}"/>
-                                </p:selectOneMenu>
-                                <p:message for="ageC" display="tooltip" severity="error"/>
-
-                                <p:outputLabel for="cfrio" value="Cuarto Frio:"/>
-                                <p:selectOneMenu id="cfrio" required="true" 
-                                                 value="#{registroVentaBean.nuevo.cuartoFrio.codigo}">
-                                    <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
-                                    <f:selectItems value="#{registroVentaBean.frios}" var="cfrios"
-                                                   itemLabel="#{cfrios.descripcion}" itemValue="#{cfrios.codigo}"/>
-                                </p:selectOneMenu>
-                                <p:message for="cfrio" display="tooltip" severity="error"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="6" cellpadding="5">
-                                <p:outputLabel for="awb" value="AWB:" />
-                                <p:inputMask id="awb" required="true" value="#{registroVentaBean.nuevo.AWB}" mask="999-99999999"/>
-                                <p:message for="awb" display="tooltip" severity="error"/>
-
-                                <p:outputLabel for="hawb" value="HAWB:" />
-                                <p:inputText id="hawb" required="true" value="#{registroVentaBean.nuevo.HAWB}"/>
-                                <p:message for="hawb" display="tooltip" severity="error"/>
-                            </h:panelGrid>
-                            <h:panelGrid cellpadding="5">
-                                <p:outputLabel for="obser" value="Observacion:" />
-                                <p:inputTextarea id="obser" cols="70" rows="5"  
-                                                 value="#{registroVentaBean.nuevo.observacion}"/>
-                                <p:message for="obser" display="tooltip" severity="error"/>
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
@@ -491,9 +372,9 @@
                                 <p:outputLabel value="#{registroVentaBean.selectedCliente.ruc}"/>
 
                                 <p:outputLabel value="Tipo:"/>
-                                <p:outputLabel value="Local" rendered="#{registroVentaBean.selectedCliente.local}"/>
-                                <p:outputLabel value="Comercializadora" rendered="#{registroVentaBean.selectedCliente.comercializadora}"/>
-                                <p:outputLabel value="Exterior" rendered="#{registroVentaBean.selectedCliente.exterior}"/>
+                                <p:outputLabel value="LOCAL" rendered="#{registroVentaBean.selectedCliente.local}"/>
+                                <p:outputLabel value="COMERCIALIZADORA" rendered="#{registroVentaBean.selectedCliente.comercializadora}"/>
+                                <p:outputLabel value="EXTERIROR" rendered="#{registroVentaBean.selectedCliente.exterior}"/>
 
                                 <p:outputLabel value="Zona Geografica:"/>
                                 <p:outputLabel value="#{registroVentaBean.selectedCliente.zona.nombre}"/>
@@ -554,9 +435,30 @@
                                     </p:column>
                                 </p:dataTable>
                             </h:panelGrid>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel value="SubTotal:"/>
+                                <h:outputText value="#{registroVentaBean.calcularSubTotal()}">
+                                    <f:convertNumber minFractionDigits="2"/>
+                                </h:outputText>
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton icon="fa fa-fw fa-save" value="Guardar" update=":fconfirm"
+                                                 actionListener="#{registroVentaBean.saveVenta(evt)}"
+                                                 oncomplete="PF('dlgConfirm').show()"/>
+                            </f:facet>
                         </p:panel>
                     </p:tab>
                 </p:wizard>
+            </h:form>
+            <h:form id="fconfirm">
+                <p:dialog header="Basic Dialog" widgetVar="dlgConfirm" resizable="false">
+                    <h:outputText value="Se ha registrado su venta exitosamente." />
+                    <f:facet name="footer">
+                        <p:commandButton icon="fa fa-fw fa-save" value="Aceptar" update=":fventa"
+                                         onclick="window.close()"/>
+                    </f:facet>
+                </p:dialog>
             </h:form>
         </div>
 
