@@ -41,6 +41,7 @@ public class RegistroVenta extends BaseEntity {
 
     @Reference
     private Cliente cliente;
+    private Boolean addSubCli;
     private SubCliente subCliente;
     
     @Embedded
@@ -57,6 +58,7 @@ public class RegistroVenta extends BaseEntity {
         this.observacion = "";
         this.barcode = "";
         this.cliente = new Cliente();
+        this.addSubCli = Boolean.FALSE;
         this.subCliente = new SubCliente();
         this.matrixVenta = new ArrayList<>();
     }
@@ -163,6 +165,14 @@ public class RegistroVenta extends BaseEntity {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Boolean getAddSubCli() {
+        return addSubCli;
+    }
+
+    public void setAddSubCli(Boolean addSubCli) {
+        this.addSubCli = addSubCli;
     }
 
     public SubCliente getSubCliente() {
