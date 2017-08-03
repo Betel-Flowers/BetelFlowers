@@ -5,7 +5,9 @@
  */
 package com.betel.flowers.model;
 
+import java.util.Date;
 import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
@@ -14,20 +16,33 @@ import org.mongodb.morphia.annotations.Embedded;
 @Embedded
 public class Coordinacion {
 
+    @Reference
     private Ciudad puertoEmbarque;
+    @Reference
     private Ciudad puertoDestino;
+    @Reference
     private Dae dae;
+    @Reference
     private Carguera agenciaCarga;
-    private CuartoFrio cuartoFrio;
+    @Reference
+    private CuartoFrioCarguera cuartoFrio;
+    @Reference
     private TerminoExportacion termino;
+
+    private String festividad;
+    private Date fechaVuelo;
+    private Date fechaCoordinacion;
+
+    private String username; //coordinacion
 
     public Coordinacion() {
         this.puertoEmbarque = new Ciudad();
         this.puertoDestino = new Ciudad();
         this.dae = new Dae();
         this.agenciaCarga = new Carguera();
-        this.cuartoFrio = new CuartoFrio();
+        this.cuartoFrio = new CuartoFrioCarguera();
         this.termino = new TerminoExportacion();
+        this.festividad = "";
     }
 
     public Ciudad getPuertoEmbarque() {
@@ -62,11 +77,11 @@ public class Coordinacion {
         this.agenciaCarga = agenciaCarga;
     }
 
-    public CuartoFrio getCuartoFrio() {
+    public CuartoFrioCarguera getCuartoFrio() {
         return cuartoFrio;
     }
 
-    public void setCuartoFrio(CuartoFrio cuartoFrio) {
+    public void setCuartoFrio(CuartoFrioCarguera cuartoFrio) {
         this.cuartoFrio = cuartoFrio;
     }
 
@@ -76,6 +91,38 @@ public class Coordinacion {
 
     public void setTermino(TerminoExportacion termino) {
         this.termino = termino;
+    }
+
+    public String getFestividad() {
+        return festividad;
+    }
+
+    public void setFestividad(String festividad) {
+        this.festividad = festividad;
+    }
+
+    public Date getFechaVuelo() {
+        return fechaVuelo;
+    }
+
+    public void setFechaVuelo(Date fechaVuelo) {
+        this.fechaVuelo = fechaVuelo;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Date getFechaCoordinacion() {
+        return fechaCoordinacion;
+    }
+
+    public void setFechaCoordinacion(Date fechaCoordinacion) {
+        this.fechaCoordinacion = fechaCoordinacion;
     }
 
 }

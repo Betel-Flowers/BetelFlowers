@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import org.apache.commons.codec.binary.StringUtils;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
@@ -38,6 +37,15 @@ public class RegistroVentaService implements Serializable {
             venta.setNumberPaking(this.obtenerCodigo() * 10);
             venta.setBarcode(obtenerBarcode());
             venta.setFlag(1);
+            this.ds.save(venta);
+            exito = Boolean.TRUE;
+        }
+        return exito;
+    }
+    
+    public Boolean add(RegistroVenta venta) {
+        Boolean exito = Boolean.FALSE;
+        if (venta.getId() == null) {
             this.ds.save(venta);
             exito = Boolean.TRUE;
         }
@@ -80,6 +88,33 @@ public class RegistroVentaService implements Serializable {
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).setData(new Coordinacion());
             }
+        }
+        return list;
+    }
+    
+    public List<RegistroVenta> obtenerListCoordinacionFlag(Integer flag, Boolean estado) {
+        List<RegistroVenta> list = new ArrayList<>();
+        Query<RegistroVenta> result = this.ds.find(RegistroVenta.class).
+                field("coordinada").equal(estado).
+                field("flag").equal(flag);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
+        }
+        if (!list.isEmpty()) {
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setData(new Coordinacion());
+            }
+        }
+        return list;
+    }
+    
+    public List<RegistroVenta> obtenerListEmpaqueFlag(Integer flag, Boolean estado) {
+        List<RegistroVenta> list = new ArrayList<>();
+        Query<RegistroVenta> result = this.ds.find(RegistroVenta.class).
+                field("empacada").equal(estado).
+                field("flag").equal(flag);
+        if (result.asList() != null && !result.asList().isEmpty()) {
+            list = result.asList();
         }
         return list;
     }
@@ -129,15 +164,22 @@ public class RegistroVentaService implements Serializable {
         );
         UpdateOperations<RegistroVenta> update = this.ds.createUpdateOperations(RegistroVenta.class);
         update.set("numberPaking", venta.getNumberPaking()).
-                set("numberSRI", venta.getSecuencialSRI()).
+                set("secuencialSRI", venta.getSecuencialSRI()).
                 set("fechaSRI", venta.getFechaSRI()).
                 set("AWB", venta.getAWB()).
                 set("HAWB", venta.getHAWB()).
                 set("observacion", venta.getObservacion()).
                 set("barcode", venta.getBarcode()).
+                set("numeroCajas", venta.getNumeroCajas()).
+                set("subTotal", venta.getSubTotal()).
                 set("username", venta.getUsername()).
+                set("flag", venta.getFlag()).
                 set("cliente", venta.getCliente()).
+                set("addSubCli", venta.getAddSubCli()).
+                set("subcli", venta.getSubcli()).                
                 set("data", venta.getData()).
+                set("coordinada", venta.getCoordinada()).
+                set("empacada", venta.getEmpacada()).
                 set("matrixVenta", venta.getMatrixVenta());
         UpdateResults results = this.ds.update(query, update);
         return results.getUpdatedExisting();

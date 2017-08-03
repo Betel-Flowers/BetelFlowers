@@ -36,16 +36,22 @@ public class RegistroVenta extends BaseEntity {
     private String barcode;
     private Integer numeroCajas;
     private Double subTotal;
-    private String username;
+    private String username;//ventas
     private Integer flag;
 
     @Reference
     private Cliente cliente;
     private Boolean addSubCli;
-    private SubCliente subCliente;
     
     @Embedded
+    private SubCli subcli;
+
+    @Embedded
     private Coordinacion data;
+
+    private Boolean coordinada; //false sin coordinar
+    private Boolean empacada; // false sin empacar
+
     @Embedded
     private List<PointMatrix> matrixVenta;
 
@@ -59,7 +65,9 @@ public class RegistroVenta extends BaseEntity {
         this.barcode = "";
         this.cliente = new Cliente();
         this.addSubCli = Boolean.FALSE;
-        this.subCliente = new SubCliente();
+        this.subcli = new SubCli();
+        this.coordinada = Boolean.FALSE;
+        this.empacada = Boolean.FALSE;
         this.matrixVenta = new ArrayList<>();
     }
 
@@ -175,14 +183,6 @@ public class RegistroVenta extends BaseEntity {
         this.addSubCli = addSubCli;
     }
 
-    public SubCliente getSubCliente() {
-        return subCliente;
-    }
-
-    public void setSubCliente(SubCliente subCliente) {
-        this.subCliente = subCliente;
-    }
-
     public Coordinacion getData() {
         return data;
     }
@@ -197,6 +197,30 @@ public class RegistroVenta extends BaseEntity {
 
     public void setMatrixVenta(List<PointMatrix> matrixVenta) {
         this.matrixVenta = matrixVenta;
+    }
+
+    public Boolean getCoordinada() {
+        return coordinada;
+    }
+
+    public void setCoordinada(Boolean coordinada) {
+        this.coordinada = coordinada;
+    }
+
+    public Boolean getEmpacada() {
+        return empacada;
+    }
+
+    public void setEmpacada(Boolean empacada) {
+        this.empacada = empacada;
+    }
+    
+        public SubCli getSubcli() {
+        return subcli;
+    }
+
+    public void setSubcli(SubCli subcli) {
+        this.subcli = subcli;
     }
 
     @Override
@@ -228,5 +252,4 @@ public class RegistroVenta extends BaseEntity {
     public String toString() {
         return "RegistroVenta{" + "codigo=" + codigo + ", numberPaking=" + numberPaking + ", numberSRI=" + secuencialSRI + ", fechaSRI=" + fechaSRI + ", AWB=" + AWB + ", HAWB=" + HAWB + ", observacion=" + observacion + ", barcode=" + barcode + ", username=" + username + ", flag=" + flag + ", cliente=" + cliente + ", data=" + data + ", matrixVenta=" + matrixVenta + '}';
     }
-
 }

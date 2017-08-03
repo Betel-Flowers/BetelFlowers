@@ -5,7 +5,9 @@
  */
 package com.betel.flowers.model;
 
+import java.util.Date;
 import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Reference;
 
 /**
  *
@@ -19,15 +21,25 @@ public class PointMatrix {
     private String codeMark;
     private String tipoCaja;
     private String marcaCaja;
-    private Variedad variadad;
+    
+    @Reference
+    private Variedad variedad;
+    
     private String gradoLogitud;//nombre de la columna
     private String puntoCorte;
     private Integer numeroTallosRamo;
-    private Integer value; // numero de tallos
+    private Integer numeroRamosCaja;
+    private Integer value; // numero de tallos = Cantidad total x item seleccionado
     private Double precioUnit;
     private Double precioMin;
     private Double subTotal;
     private ValorNodo valorNodo;
+    
+    private Boolean estadoItemEmpaque; // true listo
+    private String comentarioItemEmpaque;
+    private Date fechaItemEmpaque;
+    
+    private String username; //empaque
 
     public PointMatrix() {
         this.co = 0;
@@ -40,12 +52,14 @@ public class PointMatrix {
         this.precioUnit = 0.0;
         this.subTotal = 0.0;
         this.valorNodo = new ValorNodo();
+        this.estadoItemEmpaque = Boolean.FALSE;
+        this.comentarioItemEmpaque = "";
     }
 
     public PointMatrix(Variedad variadad, String gradoLogitud, Integer value, ValorNodo valorNodo) {
         this.co = 0;
         this.cf = 0;
-        this.variadad = variadad;
+        this.variedad = variadad;
         this.gradoLogitud = gradoLogitud;
         this.value = value;
         this.valorNodo = valorNodo;
@@ -61,7 +75,7 @@ public class PointMatrix {
     public PointMatrix(Variedad variedad) {
         this.co = 0;
         this.cf = 0;
-        this.variadad = variedad;
+        this.variedad = variedad;
         this.gradoLogitud = "";
         this.value = 0;
     }
@@ -106,12 +120,12 @@ public class PointMatrix {
         this.marcaCaja = marcaCaja;
     }
 
-    public Variedad getVariadad() {
-        return variadad;
+    public Variedad getVariedad() {
+        return variedad;
     }
 
-    public void setVariadad(Variedad variadad) {
-        this.variadad = variadad;
+    public void setVariedad(Variedad variedad) {
+        this.variedad = variedad;
     }
 
     public String getGradoLogitud() {
@@ -163,7 +177,7 @@ public class PointMatrix {
     }
 
     public Double getSubTotal() {
-        return subTotal = (double)(value) * precioUnit;
+        return subTotal = (double) (value) * precioUnit;
     }
 
     public void setSubTotal(Double subTotal) {
@@ -177,5 +191,45 @@ public class PointMatrix {
     public void setValorNodo(ValorNodo valorNodo) {
         this.valorNodo = valorNodo;
     }
-    
+
+    public Boolean getEstadoItemEmpaque() {
+        return estadoItemEmpaque;
+    }
+
+    public void setEstadoItemEmpaque(Boolean estadoItemEmpaque) {
+        this.estadoItemEmpaque = estadoItemEmpaque;
+    }
+
+    public String getComentarioItemEmpaque() {
+        return comentarioItemEmpaque;
+    }
+
+    public void setComentarioItemEmpaque(String comentarioItemEmpaque) {
+        this.comentarioItemEmpaque = comentarioItemEmpaque;
+    }
+
+    public Date getFechaItemEmpaque() {
+        return fechaItemEmpaque;
+    }
+
+    public void setFechaItemEmpaque(Date fechaItemEmpaque) {
+        this.fechaItemEmpaque = fechaItemEmpaque;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Integer getNumeroRamosCaja() {
+        return numeroRamosCaja;
+    }
+
+    public void setNumeroRamosCaja(Integer numeroRamosCaja) {
+        this.numeroRamosCaja = numeroRamosCaja;
+    }
+
 }

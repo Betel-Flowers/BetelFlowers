@@ -7,6 +7,7 @@ package com.betel.flowers.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.mongodb.morphia.annotations.Embedded;
 
 /**
  *
